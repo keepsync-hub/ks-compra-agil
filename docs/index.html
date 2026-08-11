@@ -186,6 +186,11 @@
         <div><div class="name">Identidad real de KeepSync</div><div class="desc">Falta RUT, razón social, dirección y representante legal reales en <code>config/company.json</code> (hoy solo existe el <code>.example</code> con el pricing ya resuelto). Las cotizaciones generadas quedan marcadas <strong>BORRADOR</strong> mientras esto no se confirme.</div></div>
         <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/config/company.json.example">Ver plantilla</a>
       </div>
+      <div class="status-row">
+        <span class="badge warn">Necesita un ajuste manual</span>
+        <div><div class="name">Publicación de esta misma página en GitHub Pages</div><div class="desc">El workflow (<code>.github/workflows/pages.yml</code>) corrió pero GitHub lo rechazó: <em>"Branch 'claude/revisar-contexto-plan-ttaumn' is not allowed to deploy to github-pages due to environment protection rules."</em> Se arregla en <strong>Settings → Environments → github-pages → Deployment branches and tags</strong>, agregando esta rama (o permitiendo todas) — no hay forma de cambiar esa regla desde la API con los permisos de este agente.</div></div>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/settings/environments">Ir a Settings</a>
+      </div>
     </div>
   </section>
 

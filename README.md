@@ -9,8 +9,13 @@ bloqueante (fulfillment) y guardrails: ver `CLAUDE.md`.
 
 **Página de estado (GitHub Pages)**: `docs/index.html` resume qué está funcionando, las
 oportunidades abiertas con sus cotizaciones, el bloqueador conocido del portal y los pendientes.
-Se publica automáticamente vía `.github/workflows/pages.yml` — activar una vez en el repo
-**Settings → Pages → Build and deployment → Source: GitHub Actions** si no está seteado ya.
+Se publica vía `.github/workflows/pages.yml`, pero el primer run falló con: *"Branch
+'claude/revisar-contexto-plan-ttaumn' is not allowed to deploy to github-pages due to
+environment protection rules."* — hace falta un ajuste manual único en **Settings →
+Environments → github-pages → Deployment branches and tags** (agregar esta rama, o permitir
+todas) y en **Settings → Pages → Build and deployment → Source: GitHub Actions** si no está
+seteado. No hay API disponible para este agente para cambiar esa regla — es de administración
+del repo.
 
 ## Setup
 
