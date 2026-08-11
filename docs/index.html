@@ -152,8 +152,8 @@
     <div class="stat-grid">
       <div class="stat"><div class="num">47</div><div class="label">casos históricos con mención real de "Claude"/"Anthropic"</div></div>
       <div class="stat"><div class="num">79%</div><div class="label">termina desierto o cancelado</div></div>
-      <div class="stat"><div class="num">3</div><div class="label">oportunidades abiertas ahora mismo</div></div>
-      <div class="stat"><div class="num">2 / 3</div><div class="label">cotizables bajo el tope con precio público real</div></div>
+      <div class="stat"><div class="num">5</div><div class="label">oportunidades en la última corrida del radar</div></div>
+      <div class="stat"><div class="num">3 / 5</div><div class="label">con cotización lista bajo el tope, precio público real</div></div>
     </div>
   </section>
 
@@ -163,7 +163,7 @@
     <div class="status-grid">
       <div class="status-row">
         <span class="badge ok">Funcionando</span>
-        <div><div class="name">Radar (<code>compra-agil-radar-claude</code>)</div><div class="desc">Encuentra las 3 oportunidades abiertas reales, extrae tope/plan/usuarios/documentos exigidos/excluyentes, detecta recompradores.</div></div>
+        <div><div class="name">Radar (<code>compra-agil-radar-claude</code>)</div><div class="desc">Encuentra las 5 oportunidades de la última corrida, extrae tope/plan/usuarios/documentos exigidos/excluyentes, detecta recompradores. Ahora reintenta fallos transitorios de la API (5xx) con backoff y tolera variantes que fallan sin abortar la corrida.</div></div>
         <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/.claude/skills/compra-agil-radar-claude/scripts/radar.ts">Ver código</a>
       </div>
       <div class="status-row">
@@ -212,21 +212,22 @@
     <div class="card-grid">
 
       <div class="opp-card">
-        <span class="codigo">1614-47-COT26</span>
-        <span class="org">Superintendencia de Electricidad y Combustibles</span>
-        <span class="nombre">SC-182 Suscripción de Claude Pro por 12 meses</span>
+        <span class="codigo">2427-851-COT26</span>
+        <span class="org">I. Municipalidad de Valparaíso</span>
+        <span class="nombre">Adquisición y activación de licencias anuales Claude Pro (SECPLA)</span>
         <dl>
-          <dt>Plan</dt><dd>Claude Pro, 4 usuarios</dd>
-          <dt>Tope</dt><dd>$1.300.000 CLP</dd>
-          <dt>Cotizado</dt><dd>$934.252 CLP (dentro del tope)</dd>
-          <dt>Cierre</dt><dd>2026-08-11 15:00</dd>
-          <dt>Competencia</dt><dd>5 ofertas recibidas</dd>
+          <dt>Plan</dt><dd>Claude Pro, 3 usuarios</dd>
+          <dt>Tope</dt><dd>$1.200.000 CLP</dd>
+          <dt>Cotizado</dt><dd>$700.689 CLP (dentro del tope)</dd>
+          <dt>Cierre</dt><dd>2026-08-13 10:30</dd>
+          <dt>Competencia</dt><dd>0 ofertas recibidas</dd>
+          <dt>Exige</dt><dd>Patente municipal vigente (adjuntar)</dd>
         </dl>
         <div class="cta">
           <span class="badge ok">Cotización lista</span>
         </div>
-        <a class="btn" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/1614-47-COT26/Q-20260811-SuperintendenciaDeElectricidadYCombustibles.pdf">Descargar cotización (PDF)</a>
-        <a class="btn secondary" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/1614-47-COT26/Q-20260811-SuperintendenciaDeElectricidadYCombustibles.pptx">Fuente editable (.pptx)</a>
+        <a class="btn" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/2427-851-COT26/Q-20260811-IMunicipalidadDeValparaiso.pdf">Descargar cotización (PDF)</a>
+        <a class="btn secondary" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/2427-851-COT26/Q-20260811-IMunicipalidadDeValparaiso.pptx">Fuente editable (.pptx)</a>
       </div>
 
       <div class="opp-card">
@@ -245,6 +246,40 @@
         </div>
         <a class="btn" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/2759-474-COT26/Q-20260811-IMunicipalidadDeCoronel.pdf">Descargar cotización (PDF)</a>
         <a class="btn secondary" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/2759-474-COT26/Q-20260811-IMunicipalidadDeCoronel.pptx">Fuente editable (.pptx)</a>
+      </div>
+
+      <div class="opp-card">
+        <span class="codigo">1614-47-COT26</span>
+        <span class="org">Superintendencia de Electricidad y Combustibles</span>
+        <span class="nombre">SC-182 Suscripción de Claude Pro por 12 meses</span>
+        <dl>
+          <dt>Plan</dt><dd>Claude Pro, 4 usuarios</dd>
+          <dt>Tope</dt><dd>$1.300.000 CLP</dd>
+          <dt>Cotizado</dt><dd>$934.252 CLP (dentro del tope)</dd>
+          <dt>Cierre</dt><dd>2026-08-11 15:00 (ya cerró)</dd>
+          <dt>Competencia</dt><dd>10 ofertas recibidas</dd>
+        </dl>
+        <div class="cta">
+          <span class="badge warn">Cotización lista — plazo cerrado</span>
+        </div>
+        <a class="btn secondary" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/1614-47-COT26/Q-20260811-SuperintendenciaDeElectricidadYCombustibles.pdf">Descargar cotización (PDF)</a>
+      </div>
+
+      <div class="opp-card">
+        <span class="codigo">5586-1980-COT26</span>
+        <span class="org">Universidad de La Frontera</span>
+        <span class="nombre">Bundle SaaS: 3 Canva Business + 5 Cursor Pro + 5 Claude Pro</span>
+        <dl>
+          <dt>Plan</dt><dd>Bundle 13 licencias, 3 fabricantes</dd>
+          <dt>Tope</dt><dd>$3.500.000 CLP</dd>
+          <dt>Porción Claude</dt><dd>5 × Claude Pro ≈ $1.167.815 CLP</dd>
+          <dt>Cierre</dt><dd>2026-08-13 12:30</dd>
+          <dt>Competencia</dt><dd>1 oferta recibida</dd>
+        </dl>
+        <div class="cta">
+          <span class="badge warn">Requiere decisión — bundle multi-fabricante</span>
+        </div>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/output/5586-1980-COT26/nota.md">Ver la nota</a>
       </div>
 
       <div class="opp-card" id="5769-102-COT26">
