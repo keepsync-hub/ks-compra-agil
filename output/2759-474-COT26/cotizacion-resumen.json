@@ -13,5 +13,7 @@
   "total_clp_unitario": 233563,
   "total_clp_total": 1868504,
   "tope_clp": 2200000,
-  "archivo": "Q-20260811-IMunicipalidadDeCoronel.pptx"
+  "archivo_pptx": "Q-20260811-IMunicipalidadDeCoronel.pptx",
+  "archivo_pdf": "Q-20260811-IMunicipalidadDeCoronel.pdf",
+  "archivo_publicable": "Q-20260811-IMunicipalidadDeCoronel.pdf"
 }

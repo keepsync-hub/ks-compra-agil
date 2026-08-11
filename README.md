@@ -1,34 +1,31 @@
 # ks-compra-agil
 
 Agente que monitorea Compras Ágiles en mercadopublico.cl que piden licencias Claude/Anthropic,
-prepara una cotización dentro del tope presupuestario, y deja lista una oferta (formulario +
-adjunto) para revisión y envío manual de un humano.
+prepara una cotización dentro del tope presupuestario, y deja lista una oferta (PDF + formulario)
+para revisión y envío manual de un humano.
 
 Diseño completo y hallazgos verificados contra la API real: ver `PLAN.md`. Estado del insumo
 bloqueante (fulfillment) y guardrails: ver `CLAUDE.md`.
 
-**Página de estado (GitHub Pages)**: `docs/index.html` resume qué está funcionando, las
-oportunidades abiertas con sus cotizaciones, el bloqueador conocido del portal y los pendientes.
-Se publica vía `.github/workflows/pages.yml`, pero el primer run falló con: *"Branch
-'claude/revisar-contexto-plan-ttaumn' is not allowed to deploy to github-pages due to
-environment protection rules."* — hace falta un ajuste manual único en **Settings →
-Environments → github-pages → Deployment branches and tags** (agregar esta rama, o permitir
-todas) y en **Settings → Pages → Build and deployment → Source: GitHub Actions** si no está
-seteado. No hay API disponible para este agente para cambiar esa regla — es de administración
-del repo.
+**Página de estado (GitHub Pages)**: `docs/index.html` (+ `docs/informe-nicho.html`) resume qué
+está funcionando, las oportunidades abiertas con sus cotizaciones, y los pendientes. Se publica
+vía `.github/workflows/pages.yml`. El primer intento de deploy falló por una regla de protección
+del entorno `github-pages` restringida a la rama por defecto — se resuelve mergeando a esa rama
+(ver sección de estado más abajo para el detalle si vuelve a fallar).
 
 ## Setup
 
 ```bash
 npm install
-cp .env.example .env   # completar COMPRA_AGIL_API_TICKET (y CLAVE_UNICA_* si vas a ofertar)
-cp config/company.json.example config/company.json   # completar RUT, razón social, contacto
+cp .env.example .env   # completar COMPRA_AGIL_API_TICKET (y CLAVE_UNICA_* si vas a ofertar desde una máquina local)
 ```
 
-`config/company.json` es secreto (gitignored) y el agente rechaza usarlo mientras tenga
-placeholders `"COMPLETAR"` sin llenar. La sección `pricing` ya viene con la fórmula real
-(precio público de Anthropic en USD → CLP con dólar observado en vivo → +5% margen → +19% IVA)
-— solo faltan los datos de identidad de la empresa.
+`config/company.json` (gitignored) ya tiene la identidad real de KeepSync (RUT 78.441.121-4,
+confirmada con la ficha del proveedor de Mercado Público) y el pricing real (precio público de
+Anthropic en USD → CLP con dólar observado en vivo → +5% margen → +19% IVA). Si se pierde o hay
+que recrearlo, copiar `config/company.json.example` y completar los campos — el agente rechaza
+el archivo mientras tenga placeholders `"COMPLETAR"` sin llenar o `identidad_confirmada: false`
+(las cotizaciones quedan marcadas BORRADOR en ese caso).
 
 ## Comandos
 
@@ -36,29 +33,29 @@ placeholders `"COMPLETAR"` sin llenar. La sección `pricing` ya viene con la fó
 |---|---|
 | `npm run radar` | Busca Compras Ágiles "Claude" abiertas, extrae condiciones, detecta recompradores. Solo lectura. |
 | `npm run informe` | Regenera `output/informe-nicho-claude.md` con el barrido histórico completo (tasa de fracaso, motivos, recompradores). |
-| `npm run cotizar -- <codigo>` | Genera la cotización (`.pptx`) para una compra específica, validando el tope. No envía nada. |
-| `npx tsx .claude/skills/compra-agil-ofertar/scripts/login.ts --diagnostico` | Verifica si el portal es alcanzable desde el navegador headless antes de intentar login real. |
-| `npm run form-fill -- <codigo>` | Completa el formulario de oferta en el portal y adjunta la cotización, sin enviar. Requiere login previo. |
+| `npm run cotizar -- <codigo>` | Genera la cotización (`.pptx` fuente + `.pdf` publicable) para una compra específica, validando el tope. No envía nada. |
+| `npx tsx .claude/skills/compra-agil-ofertar/scripts/login.ts --diagnostico` | Verifica si el portal es alcanzable desde el navegador antes de intentar login real. |
+| `npm run form-fill -- <codigo>` | Completa el formulario de oferta en el portal y adjunta el PDF, sin enviar. Requiere login previo. |
 | `npm run typecheck` | `tsc --noEmit`. |
 
 ## Estado y pendientes
 
-- **Radar e informe del nicho: funcionando de punta a punta contra la API real** (probado en
-  esta sesión: encuentra las oportunidades abiertas reales y reproduce la tasa de fracaso
-  medida en `PLAN.md`, ~79-80%).
-- **Cotización (`cotizar.ts`): funcionando de punta a punta**, probado generando un `.pptx` real
-  y validado con el validador de esquema del skill `pptx`. Falta que `config/company.json`
-  tenga los datos reales de identidad de KeepSync (RUT, razón social, dirección, representante
-  legal, contacto) para poder cotizar en serio — hoy solo existe `company.json.example`.
-- **Login + formulario (`login.ts`, `form-fill.ts`): sin verificar contra el DOM real.** En el
-  entorno donde se escribió este código, tanto `claveunica.gob.cl` como `mercadopublico.cl`
-  rechazaron la conexión de Chromium headless (`ERR_CONNECTION_RESET`) aunque `curl` sí
-  conectaba — parece un bloqueo de fingerprint/WAF del portal. Los selectores están escritos
-  con la mejor información disponible pero marcados `TODO(verificar en vivo)` donde no se
-  pudieron confirmar. Correr el diagnóstico (`--diagnostico`) antes de depender de este flujo
-  para una oferta real, y probar desde un entorno con navegador real si el bloqueo persiste.
-- **Respaldo por el bloqueo del portal**: como el login automatizado no funciona todavía,
-  `output/` (cotizaciones `.pptx`, resúmenes y notas) se versiona en el repo a propósito —
-  son las ofertas listas para que un humano las suba manualmente al portal si hace falta.
-  Las cotizaciones quedan marcadas **BORRADOR** mientras `config/company.json` no tenga la
-  identidad real de KeepSync.
+- **Radar e informe del nicho: funcionando de punta a punta contra la API real** — encuentra las
+  oportunidades abiertas reales y reproduce la tasa de fracaso medida en `PLAN.md` (~79-80%).
+- **Cotización (`cotizar.ts`): funcionando de punta a punta**, con la identidad real de KeepSync
+  ya cargada. Genera `.pptx` (fuente editable) y `.pdf` (artefacto final a publicar/enviar,
+  `archivo_publicable` en `cotizacion-resumen.json`). El PDF se renderiza con Chromium/Playwright
+  a partir de HTML (`src/lib/cotizacion-html.ts`), no convirtiendo el `.pptx` con LibreOffice:
+  `soffice` no funciona en el entorno donde se escribió este código (falla incluso con un `.txt`
+  vacío — diagnosticado con `strace`, no es un problema de los archivos).
+- **Login + formulario (`login.ts`, `form-fill.ts`): con toda la lógica escrita pero diferidos a
+  propósito.** `claveunica.gob.cl` y `mercadopublico.cl` devuelven `ERR_CONNECTION_RESET` a
+  Chromium headless en un sandbox en la nube (confirmado repetidas veces; `curl` sí conecta con
+  el mismo User-Agent — bloqueo de fingerprint/WAF del portal, no un bug del código). Por
+  decisión del usuario, este paso no se reintenta desde acá: se completa en otra sesión con
+  **Claude Cowork en una máquina local**, usando los PDF de `output/` como insumo. Los
+  selectores están marcados `TODO(verificar en vivo)` donde no se pudieron confirmar contra el
+  DOM real — revisarlos con `page.pause()` en modo no-headless en esa sesión local.
+- **`output/` se versiona en el repo a propósito** (cotizaciones `.pptx`/`.pdf`, resúmenes,
+  notas, informes) — es el respaldo completo para la sesión local de Cowork y para cualquiera
+  que necesite revisar el trabajo sin correr nada.

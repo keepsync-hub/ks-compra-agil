@@ -26,7 +26,9 @@ interface CotizacionResumen {
   meses: number;
   total_clp_total: number;
   tope_clp: number;
-  archivo: string;
+  archivo_pptx: string;
+  archivo_pdf: string;
+  archivo_publicable: string;
 }
 
 function cargarResumen(codigo: string): CotizacionResumen {
@@ -40,7 +42,9 @@ function cargarResumen(codigo: string): CotizacionResumen {
 
 function rutaArchivoCotizacion(codigo: string, resumen: CotizacionResumen): string {
   const dir = path.join(ROOT_DIR, "output", codigo);
-  const ruta = path.join(dir, resumen.archivo);
+  // El PDF es el artefacto final a publicar (pedido explícito del usuario) — el .pptx queda
+  // como fuente editable en la misma carpeta si hace falta ajustar algo a mano.
+  const ruta = path.join(dir, resumen.archivo_publicable);
   if (!existsSync(ruta)) {
     throw new Error(`No se encontró el archivo de cotización esperado: ${ruta}`);
   }

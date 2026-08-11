@@ -1,6 +1,6 @@
 # Radar Compra Ágil — Claude
 
-Corrida: 2026-08-11T06:05:04.447Z
+Corrida: 2026-08-11T11:44:52.292Z
 
 ## Oportunidades abiertas (3)
 

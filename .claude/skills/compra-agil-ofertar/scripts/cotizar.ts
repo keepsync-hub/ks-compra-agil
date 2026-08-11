@@ -5,6 +5,7 @@ import { obtenerDetalleCompraAgil, type CompraAgilDetalle } from "../../../../sr
 import { extraerCondiciones } from "../../../../src/lib/condiciones.js";
 import { obtenerTipoCambioUsdClp, cotizarLinea, mapearPlanAClavePricing } from "../../../../src/lib/pricing.js";
 import { generarCotizacionPptx, type LineaCotizacionDisplay } from "../../../../src/lib/cotizacion-pptx.js";
+import { generarCotizacionPdf } from "../../../../src/lib/cotizacion-pdf.js";
 import { nombreArchivoCotizacion } from "../../../../src/lib/nombre-archivo.js";
 
 async function cargarDetalle(codigo: string): Promise<CompraAgilDetalle> {
@@ -106,44 +107,59 @@ async function main() {
   const fecha = new Date();
   const dirSalida = path.join(ROOT_DIR, "output", codigo);
   mkdirSync(dirSalida, { recursive: true });
-  const nombreArchivo = nombreArchivoCotizacion(fecha, detalle.institucion.organismo_comprador) + ".pptx";
-  const rutaSalida = path.join(dirSalida, nombreArchivo);
+  const nombreBase = nombreArchivoCotizacion(fecha, detalle.institucion.organismo_comprador);
+  const nombreArchivoPptx = `${nombreBase}.pptx`;
+  const nombreArchivoPdf = `${nombreBase}.pdf`;
+  const rutaPptx = path.join(dirSalida, nombreArchivoPptx);
+  const rutaPdf = path.join(dirSalida, nombreArchivoPdf);
 
-  await generarCotizacionPptx(
-    {
-      codigo,
-      nombreCompra: detalle.nombre,
-      organismoComprador: detalle.institucion.organismo_comprador,
-      direccionEntrega: detalle.entrega?.direccion_entrega,
-      planPrincipal: linea.plan,
-      cantidadUsuarios: condiciones.cantidad_usuarios,
-      mesesVigencia: meses,
-      lineas: lineasDisplay,
-      netoClp: linea.neto_clp_total,
-      ivaClp: linea.iva_clp_total,
-      totalClp: linea.total_clp_total,
-      topeClp: condiciones.tope_clp,
-      plazoEntregaDias: condiciones.plazo_entrega_dias,
-      documentosExigidos: condiciones.documentos_exigidos,
-      condicionesComerciales,
-      fecha,
-      company,
-    },
-    rutaSalida,
-  );
+  const datosCotizacion = {
+    codigo,
+    nombreCompra: detalle.nombre,
+    organismoComprador: detalle.institucion.organismo_comprador,
+    direccionEntrega: detalle.entrega?.direccion_entrega,
+    planPrincipal: linea.plan,
+    cantidadUsuarios: condiciones.cantidad_usuarios,
+    mesesVigencia: meses,
+    lineas: lineasDisplay,
+    netoClp: linea.neto_clp_total,
+    ivaClp: linea.iva_clp_total,
+    totalClp: linea.total_clp_total,
+    topeClp: condiciones.tope_clp,
+    plazoEntregaDias: condiciones.plazo_entrega_dias,
+    documentosExigidos: condiciones.documentos_exigidos,
+    condicionesComerciales,
+    fecha,
+    company,
+  };
+
+  // El .pptx es la fuente editable; el .pdf (renderizado con Chromium, no con LibreOffice —
+  // ver notas en src/lib/cotizacion-pdf.ts) es el artefacto final que se publica y se sube al
+  // portal.
+  await generarCotizacionPptx(datosCotizacion, rutaPptx);
+  await generarCotizacionPdf(datosCotizacion, rutaPdf);
 
   const resumenPath = path.join(dirSalida, "cotizacion-resumen.json");
   writeFileSync(
     resumenPath,
     JSON.stringify(
-      { codigo, fx: fx.valor, ...linea, tope_clp: condiciones.tope_clp, archivo: nombreArchivo },
+      {
+        codigo,
+        fx: fx.valor,
+        ...linea,
+        tope_clp: condiciones.tope_clp,
+        archivo_pptx: nombreArchivoPptx,
+        archivo_pdf: nombreArchivoPdf,
+        archivo_publicable: nombreArchivoPdf,
+      },
       null,
       2,
     ),
     "utf-8",
   );
 
-  console.log(`\nCotización generada: ${rutaSalida}`);
+  console.log(`\nCotización generada: ${rutaPptx}`);
+  console.log(`PDF (artefacto final a publicar): ${rutaPdf}`);
   console.log(`Total: $${linea.total_clp_total.toLocaleString("es-CL")} CLP (tope: $${condiciones.tope_clp.toLocaleString("es-CL")} CLP) — dentro del tope.`);
   console.log(`\nEsto NO envía nada. Revisar el archivo y luego usar el flujo de formulario (login + form-fill) para dejar la oferta lista; el envío final lo confirma un humano.`);
 }

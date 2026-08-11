@@ -141,7 +141,7 @@
       revisión y envío manual de un humano. Esta página resume qué está construido, probado
       contra la API real, y qué sigue pendiente.
     </p>
-    <p class="meta">Generado 2026-08-11 · repo <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a>, rama <code>claude/revisar-contexto-plan-ttaumn</code></p>
+    <p class="meta">Generado 2026-08-11 · repo <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a>, rama <code>claude/mercadopublico-agente-compras-pgyedf</code></p>
   </div>
 </header>
 
@@ -164,27 +164,27 @@
       <div class="status-row">
         <span class="badge ok">Funcionando</span>
         <div><div class="name">Radar (<code>compra-agil-radar-claude</code>)</div><div class="desc">Encuentra las 3 oportunidades abiertas reales, extrae tope/plan/usuarios/documentos exigidos/excluyentes, detecta recompradores.</div></div>
-        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/.claude/skills/compra-agil-radar-claude/scripts/radar.ts">Ver código</a>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/.claude/skills/compra-agil-radar-claude/scripts/radar.ts">Ver código</a>
       </div>
       <div class="status-row">
         <span class="badge ok">Funcionando</span>
         <div><div class="name">Informe del nicho</div><div class="desc">Barrido histórico completo: 47 casos, tasa de fracaso, motivos declarados y recompradores.</div></div>
-        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/output/informe-nicho-claude.md">Ver informe</a>
+        <a class="btn secondary" href="informe-nicho.html">Ver informe</a>
       </div>
       <div class="status-row">
         <span class="badge ok">Funcionando</span>
         <div><div class="name">Cotizador (<code>compra-agil-ofertar</code> → cotizar.ts)</div><div class="desc">Precio público Anthropic (USD) → CLP con dólar observado en vivo → +5% margen → +19% IVA. Nunca cotiza sobre el tope — se detiene si no cabe.</div></div>
-        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/.claude/skills/compra-agil-ofertar/scripts/cotizar.ts">Ver código</a>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/.claude/skills/compra-agil-ofertar/scripts/cotizar.ts">Ver código</a>
       </div>
       <div class="status-row">
-        <span class="badge bad">Bloqueado</span>
-        <div><div class="name">Login (ClaveÚnica) + formulario del portal</div><div class="desc"><code>claveunica.gob.cl</code> y <code>mercadopublico.cl</code> resetean la conexión del navegador automatizado (<code>ERR_CONNECTION_RESET</code>) — confirmado dos veces en esta sesión. <code>curl</code> sí conecta, así que no es un bloqueo de red: parece un WAF/anti-bot del portal.</div></div>
-        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/.claude/skills/compra-agil-ofertar/scripts/login.ts">Ver código</a>
+        <span class="badge warn">Diferido a sesión local</span>
+        <div><div class="name">Login (ClaveÚnica) + formulario del portal</div><div class="desc">Decisión del usuario: no se intenta automatizar el login/formulario desde este entorno. <code>claveunica.gob.cl</code> y <code>mercadopublico.cl</code> resetean la conexión del navegador headless de este sandbox (<code>ERR_CONNECTION_RESET</code>, confirmado dos veces); ese paso se hará en otra sesión con <strong>Claude Cowork en una máquina local</strong>, usando las cotizaciones de este repo como insumo.</div></div>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/.claude/skills/compra-agil-ofertar/scripts/login.ts">Ver código</a>
       </div>
       <div class="status-row">
-        <span class="badge warn">Pendiente</span>
-        <div><div class="name">Identidad real de KeepSync</div><div class="desc">Falta RUT, razón social, dirección y representante legal reales en <code>config/company.json</code> (hoy solo existe el <code>.example</code> con el pricing ya resuelto). Las cotizaciones generadas quedan marcadas <strong>BORRADOR</strong> mientras esto no se confirme.</div></div>
-        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/config/company.json.example">Ver plantilla</a>
+        <span class="badge ok">Confirmado</span>
+        <div><div class="name">Identidad real de KeepSync</div><div class="desc">RUT 78.441.121-4, KEEPSYNC SPA, EMT, estado HÁBIL — confirmado con la ficha del proveedor de Mercado Público (Registro de Proveedores). Las cotizaciones ya no llevan marca BORRADOR.</div></div>
+        <a class="btn secondary" href="https://www.mercadopublico.cl/Proveedores/Ficha?rutProveedor=78441121-4">Ficha pública</a>
       </div>
       <div class="status-row">
         <span class="badge warn">Necesita un ajuste manual</span>
@@ -197,11 +197,12 @@
   <section>
     <h2>Por qué esta página existe</h2>
     <p class="section-sub">
-      El objetivo del agente es dejar una oferta completa en el formulario del portal para que
-      un humano la revise y confirme el envío. Como el login automatizado está bloqueado ahora
-      mismo (ver arriba), <strong>las cotizaciones para las 3 oportunidades abiertas se generaron
-      igual y quedaron versionadas en el repo</strong> como respaldo — listas para que un humano
-      las suba manualmente al portal si el flujo de formulario sigue sin poder completarse solo.
+      Decisión explícita: este entorno (sandbox en la nube) no intenta completar el login ni el
+      formulario del portal — <code>claveunica.gob.cl</code> y <code>mercadopublico.cl</code> le
+      resetean la conexión al navegador automatizado de todos modos (ver más abajo). En cambio,
+      <strong>toda la información — cotizaciones, informe del nicho, código — queda lista y
+      versionada en el repo</strong>, y el paso de login + formulario se hace en otra sesión con
+      <strong>Claude Cowork en una máquina local</strong>, usando estos archivos como insumo.
     </p>
   </section>
 
@@ -222,9 +223,10 @@
           <dt>Competencia</dt><dd>5 ofertas recibidas</dd>
         </dl>
         <div class="cta">
-          <span class="badge ok">Cotización lista (borrador)</span>
+          <span class="badge ok">Cotización lista</span>
         </div>
-        <a class="btn" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/revisar-contexto-plan-ttaumn/output/1614-47-COT26/Q-20260811-SuperintendenciaDeElectricidadYCombustibles.pptx">Descargar cotización (.pptx)</a>
+        <a class="btn" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/1614-47-COT26/Q-20260811-SuperintendenciaDeElectricidadYCombustibles.pdf">Descargar cotización (PDF)</a>
+        <a class="btn secondary" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/1614-47-COT26/Q-20260811-SuperintendenciaDeElectricidadYCombustibles.pptx">Fuente editable (.pptx)</a>
       </div>
 
       <div class="opp-card">
@@ -239,12 +241,13 @@
           <dt>Competencia</dt><dd>3 ofertas recibidas</dd>
         </dl>
         <div class="cta">
-          <span class="badge ok">Cotización lista (borrador)</span>
+          <span class="badge ok">Cotización lista</span>
         </div>
-        <a class="btn" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/revisar-contexto-plan-ttaumn/output/2759-474-COT26/Q-20260811-IMunicipalidadDeCoronel.pptx">Descargar cotización (.pptx)</a>
+        <a class="btn" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/2759-474-COT26/Q-20260811-IMunicipalidadDeCoronel.pdf">Descargar cotización (PDF)</a>
+        <a class="btn secondary" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/2759-474-COT26/Q-20260811-IMunicipalidadDeCoronel.pptx">Fuente editable (.pptx)</a>
       </div>
 
-      <div class="opp-card">
+      <div class="opp-card" id="5769-102-COT26">
         <span class="codigo">5769-102-COT26</span>
         <span class="org">Universidad de Chile</span>
         <span class="nombre">Suscripción anual a plataforma Claude Max 5x</span>
@@ -258,21 +261,22 @@
         <div class="cta">
           <span class="badge bad">Inadmisible — no se generó oferta</span>
         </div>
-        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/output/5769-102-COT26/nota.md">Ver por qué</a>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/output/5769-102-COT26/nota.md">Ver por qué</a>
       </div>
 
     </div>
-    <p class="note" style="margin-top:1rem;">
-      Las cotizaciones descargables llevan una marca <strong>BORRADOR</strong> visible porque
-      <code>config/company.json</code> todavía no tiene el RUT ni la razón social reales de
-      KeepSync confirmados — el precio y el cálculo del tope ya son reales, pero el documento no
-      está listo para enviarse a un organismo comprador hasta completar esos datos.
+    <p class="note ok" style="margin-top:1rem;">
+      Las cotizaciones ya usan la identidad real de KeepSync (RUT 78.441.121-4, confirmado con
+      la ficha del proveedor de Mercado Público) — no llevan marca BORRADOR. El PDF es el
+      artefacto final a publicar; el <code>.pptx</code> queda como fuente editable en el mismo
+      directorio. Completar el formulario del portal y confirmar el envío queda para la sesión
+      con Claude Cowork en máquina local (ver más abajo) — este agente no lo intenta desde aquí.
     </p>
   </section>
 
   <section>
     <h2>El nicho: 47 casos, 79% de fracaso</h2>
-    <p class="section-sub">Barrido histórico completo contra la API (todas las Compras Ágiles que mencionan Claude/Anthropic desde el primer registro encontrado, sep. 2025). Detalle completo en el <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/output/informe-nicho-claude.md">informe del nicho</a>.</p>
+    <p class="section-sub">Barrido histórico completo contra la API (todas las Compras Ágiles que mencionan Claude/Anthropic desde el primer registro encontrado, sep. 2025). Detalle completo en el <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/output/informe-nicho-claude.md">informe del nicho</a>.</p>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Desenlace</th><th>Casos</th><th>%</th></tr></thead>
@@ -312,30 +316,30 @@
   </section>
 
   <section>
-    <h2>Bloqueador conocido: el portal rechaza el navegador automatizado</h2>
-    <p class="section-sub">Diagnóstico corrido dos veces en esta sesión (<code>npx tsx .claude/skills/compra-agil-ofertar/scripts/login.ts --diagnostico</code>), mismo resultado ambas veces.</p>
+    <h2>Login y formulario del portal: diferido a una sesión local con Claude Cowork</h2>
+    <p class="section-sub">Diagnóstico corrido dos veces desde este sandbox en la nube (<code>npx tsx .claude/skills/compra-agil-ofertar/scripts/login.ts --diagnostico</code>), mismo resultado ambas veces — y decisión explícita de no seguir intentándolo desde acá.</p>
     <div class="note bad">
       <strong>claveunica.gob.cl</strong> y <strong>mercadopublico.cl</strong> devuelven
-      <code>ERR_CONNECTION_RESET</code> a Chromium headless (Playwright), incluso con un
-      User-Agent de navegador real. <code>curl</code> con el mismo User-Agent sí conecta
+      <code>ERR_CONNECTION_RESET</code> a Chromium headless (Playwright) en este entorno, incluso
+      con un User-Agent de navegador real. <code>curl</code> con el mismo User-Agent sí conecta
       (200/302) — no es un problema de red ni de credenciales, es el portal rechazando el
       fingerprint del navegador automatizado antes de llegar a la pantalla de login.
     </div>
     <p class="section-sub" style="margin-top:1rem;">
       <code>login.ts</code> y <code>form-fill.ts</code> tienen toda la lógica de negocio escrita
       (2FA vía Gmail, guardado de sesión, llenado de formulario, captura de pantalla sin enviar),
-      pero sus selectores no se pudieron verificar contra el DOM real por este bloqueo. Siguiente
-      paso para destrabarlo: correr el mismo diagnóstico desde un entorno con navegador real
-      (no headless) o desde la red del usuario, en vez de este sandbox.
+      pero sus selectores no se pudieron verificar contra el DOM real por este bloqueo. El plan
+      acordado: completar el login y el formulario en <strong>otra sesión con Claude Cowork en
+      una máquina local</strong> (navegador real, red del usuario), usando los PDF de
+      <code>output/</code> como la cotización a adjuntar. Esta sesión no reintenta el login.
     </p>
   </section>
 
   <section>
     <h2>Qué falta para operar en serio</h2>
     <ol>
-      <li><strong>Identidad real de KeepSync en <code>config/company.json</code></strong> — RUT, razón social, dirección, representante legal. Sin esto las cotizaciones quedan marcadas BORRADOR.</li>
-      <li><strong>Destrabar el login del portal</strong> (ver bloqueador arriba) — sin esto, el formulario debe completarse a mano usando las cotizaciones ya generadas como respaldo.</li>
-      <li><strong>Credenciales ClaveÚnica</strong> (<code>CLAVE_UNICA_RUN</code> / <code>CLAVE_UNICA_CLAVE</code>) en <code>.env</code>, una vez el login esté destrabado.</li>
+      <li><strong>Sesión con Claude Cowork en máquina local</strong> — completar login ClaveÚnica + formulario de cada oportunidad abierta, adjuntando el PDF correspondiente de <code>output/</code>, y detenerse antes de enviar para revisión humana.</li>
+      <li><strong>Credenciales ClaveÚnica</strong> (<code>CLAVE_UNICA_RUN</code> / <code>CLAVE_UNICA_CLAVE</code>) en <code>.env</code>, disponibles para esa sesión local.</li>
     </ol>
   </section>
 
@@ -346,9 +350,9 @@
     <p>Página generada automáticamente a partir del estado del repo en la fecha indicada arriba — no se actualiza sola. Volver a correr <code>npm run radar</code> / <code>npm run informe</code> / <code>npm run cotizar</code> y regenerar esta página para refrescar los números.</p>
     <div class="links-row">
       <a href="https://github.com/keepsync-hub/ks-compra-agil">Repositorio</a>
-      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/PLAN.md">PLAN.md</a>
-      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/CLAUDE.md">CLAUDE.md</a>
-      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/README.md">README.md</a>
+      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/PLAN.md">PLAN.md</a>
+      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/CLAUDE.md">CLAUDE.md</a>
+      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/README.md">README.md</a>
     </div>
   </div>
 </footer>

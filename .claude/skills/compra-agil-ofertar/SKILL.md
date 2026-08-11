@@ -38,40 +38,35 @@ Qué hace (`scripts/cotizar.ts`):
    IVA (la fórmula exacta la definió el usuario, no está inventada).
 5. **Si el total supera el tope presupuestario de la compra, no genera ninguna oferta** — lo
    reporta como inadmisible y se detiene. Esto no es negociable (ver `CLAUDE.md`).
-6. Si cabe bajo el tope, genera `output/<codigo>/Q-AAAAMMDD-NombreCliente.pptx` — una
-   propuesta comercial de 4 láminas (portada, solución, marco normativo Ley 21.180, cotización
-   formal con la tabla de precios) siguiendo el formato de referencia del usuario. También
-   guarda `cotizacion-resumen.json` con los números para el paso de formulario.
+6. Si cabe bajo el tope, genera dos archivos en `output/<codigo>/`:
+   - `Q-AAAAMMDD-NombreCliente.pptx` — la propuesta comercial de 4 láminas (portada, solución,
+     marco normativo Ley 21.180, cotización formal con tabla de precios), fuente editable.
+   - `Q-AAAAMMDD-NombreCliente.pdf` — **el artefacto final a publicar/enviar** (`archivo_publicable`
+     en `cotizacion-resumen.json`). Se genera renderizando HTML con Chromium/Playwright
+     (`src/lib/cotizacion-html.ts` + `cotizacion-pdf.ts`), no convirtiendo el `.pptx` con
+     LibreOffice: `soffice` no funciona en el sandbox donde se escribió este skill (falla incluso
+     con un `.txt` vacío, diagnosticado con `strace`) — si se corre en un entorno con LibreOffice
+     sano, se podría volver a esa vía, pero la de Chromium es robusta y no depende de eso.
+   También guarda `cotizacion-resumen.json` con los números para el paso de formulario.
 
-## Paso 2 — Login (una vez, reutilizable)
+## Paso 2 — Login y formulario (diferido a sesión local)
 
-`scripts/login.ts` hace login a mercadopublico.cl vía ClaveÚnica + 2FA (el código lo lee el
-agente desde Gmail vía `mcp__Gmail__*`) y guarda `data/storageState.json` para no repetir login
-en cada corrida.
+`scripts/login.ts` (login a mercadopublico.cl vía ClaveÚnica + 2FA, el código se lee de Gmail
+vía `mcp__Gmail__*`, guarda `data/storageState.json`) y `scripts/form-fill.ts` (completa el
+formulario y adjunta el `.pdf` de `archivo_publicable`, **nunca hace click en enviar**) tienen
+toda la lógica de negocio escrita, pero **no se ejecutan desde un sandbox en la nube**:
+`claveunica.gob.cl` y `mercadopublico.cl` devuelven `ERR_CONNECTION_RESET` a Chromium headless
+ahí (confirmado repetidas veces con `npx tsx .claude/skills/compra-agil-ofertar/scripts/login.ts
+--diagnostico`; `curl` con el mismo User-Agent sí conecta — es un bloqueo de fingerprint/WAF del
+portal, no un bug del script). Por decisión del usuario, este paso se hace en otra sesión con
+**Claude Cowork en una máquina local** (navegador real, red del usuario), usando los PDF de
+`output/` como insumo. No reintentar el login desde un sandbox — correr el diagnóstico primero.
 
-**Estado conocido**: en el entorno donde se escribió este skill, tanto `claveunica.gob.cl` como
-`mercadopublico.cl` devolvieron `ERR_CONNECTION_RESET` a Chromium headless (mientras que `curl`
-con el mismo User-Agent sí conectó) — parece un bloqueo de fingerprint/WAF del portal, no un bug
-del script. Antes de usarlo: `npx tsx .claude/skills/compra-agil-ofertar/scripts/login.ts
---diagnostico` para confirmar que el portal es alcanzable desde el entorno actual. Si sigue
-bloqueado, es un caso de "bloqueo del portal" → **detenerse y pedir intervención humana** (no
-reintentar a ciegas), y considerar correr este skill desde un entorno con navegador real en vez
-de este sandbox.
-
-Los selectores de ClaveÚnica y del formulario de oferta (`login.ts`, `form-fill.ts`) están
-marcados `TODO(verificar en vivo)` donde no se pudieron confirmar contra el DOM real por el
-mismo bloqueo — revisarlos la primera vez con `page.pause()` en modo no-headless antes de
-confiar en una corrida desatendida.
-
-## Paso 3 — Formulario (sin enviar)
-
-```bash
-npx tsx .claude/skills/compra-agil-ofertar/scripts/form-fill.ts <codigo>
-```
-
-Completa el formulario de oferta con los datos de `cotizacion-resumen.json` y adjunta el
-`.pptx` generado en el paso 1. Guarda `output/<codigo>/formulario-listo.png`. **Nunca busca ni
-hace click en un botón de enviar/confirmar** — ese es el punto de entrega a un humano.
+Los selectores de ClaveÚnica y del formulario de oferta están marcados
+`TODO(verificar en vivo)` donde no se pudieron confirmar contra el DOM real por el mismo
+bloqueo — revisarlos la primera vez con `page.pause()` en modo no-headless en la sesión local
+antes de confiar en una corrida desatendida. `form-fill.ts` **nunca busca ni hace click en un
+botón de enviar/confirmar** — ese es el punto de entrega a un humano.
 
 ## Guardrails (no negociables)
 

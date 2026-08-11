@@ -13,5 +13,7 @@
   "total_clp_unitario": 233563,
   "total_clp_total": 934252,
   "tope_clp": 1300000,
-  "archivo": "Q-20260811-SuperintendenciaDeElectricidadYCombustibles.pptx"
+  "archivo_pptx": "Q-20260811-SuperintendenciaDeElectricidadYCombustibles.pptx",
+  "archivo_pdf": "Q-20260811-SuperintendenciaDeElectricidadYCombustibles.pdf",
+  "archivo_publicable": "Q-20260811-SuperintendenciaDeElectricidadYCombustibles.pdf"
 }

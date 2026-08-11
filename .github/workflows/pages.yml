@@ -3,6 +3,7 @@ name: Publicar página de estado (GitHub Pages)
 on:
   push:
     branches:
+      - claude/mercadopublico-agente-compras-pgyedf
       - claude/revisar-contexto-plan-ttaumn
       - main
       - master
