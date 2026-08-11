@@ -14,6 +14,14 @@ está prácticamente todo este nicho.
 
 ## Medición real del nicho (con el ticket, sobre datos de producción)
 
+> **Nota de coherencia**: las cifras de esta sección son la medición inicial que motivó este
+> plan, hecha a mano antes de que existiera el pipeline final. El informe generado por el
+> código ya implementado (`npm run informe` → `output/informe-nicho-claude.md`, con
+> verificación local de mención de marca sobre el detalle y un rango temporal más amplio desde
+> 2025-09) mide **47 casos / 79% de fracaso** — más bajo que los 55/80% de abajo pero la misma
+> conclusión. Para cifras vigentes, usar siempre `output/informe-nicho-claude.md` (se
+> regenera en cada corrida), no esta sección.
+
 **El nicho existe y está creciendo.** 55 Compras Ágiles mencionan "Claude" desde marzo 2026:
 
 | Mes | 2026-03 | 2026-04 | 2026-05 | 2026-06 | 2026-07 | 2026-08 |

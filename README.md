@@ -8,10 +8,10 @@ Diseño completo y hallazgos verificados contra la API real: ver `PLAN.md`. Esta
 bloqueante (fulfillment) y guardrails: ver `CLAUDE.md`.
 
 **Página de estado (GitHub Pages)**: `docs/index.html` (+ `docs/informe-nicho.html`) resume qué
-está funcionando, las oportunidades abiertas con sus cotizaciones, y los pendientes. Se publica
-vía `.github/workflows/pages.yml`. El primer intento de deploy falló por una regla de protección
-del entorno `github-pages` restringida a la rama por defecto — se resuelve mergeando a esa rama
-(ver sección de estado más abajo para el detalle si vuelve a fallar).
+está funcionando, las oportunidades abiertas con sus cotizaciones, y los pendientes. `docs/flujo.html`
+es el diagrama del flujo completo paso a paso — qué hace cada skill y en qué puntos exactos se
+detiene para que una persona actúe (incluida la sesión de Claude Cowork local para login +
+formulario). Se publica vía `.github/workflows/pages.yml` en cada push a la rama por defecto.
 
 ## Setup
 
@@ -24,8 +24,9 @@ cp .env.example .env   # completar COMPRA_AGIL_API_TICKET (y CLAVE_UNICA_* si va
 confirmada con la ficha del proveedor de Mercado Público) y el pricing real (precio público de
 Anthropic en USD → CLP con dólar observado en vivo → +5% margen → +19% IVA). Si se pierde o hay
 que recrearlo, copiar `config/company.json.example` y completar los campos — el agente rechaza
-el archivo mientras tenga placeholders `"COMPLETAR"` sin llenar o `identidad_confirmada: false`
-(las cotizaciones quedan marcadas BORRADOR en ese caso).
+el archivo (lanza error y no cotiza) mientras tenga placeholders `"COMPLETAR"` sin llenar. Si en
+cambio el archivo está completo pero `identidad_confirmada` queda en `false`, sí se usa para
+cotizar, pero cada PDF/PPTX generado queda marcado BORRADOR hasta que se confirme.
 
 ## Comandos
 
@@ -55,7 +56,8 @@ el archivo mientras tenga placeholders `"COMPLETAR"` sin llenar o `identidad_con
   decisión del usuario, este paso no se reintenta desde acá: se completa en otra sesión con
   **Claude Cowork en una máquina local**, usando los PDF de `output/` como insumo. Los
   selectores están marcados `TODO(verificar en vivo)` donde no se pudieron confirmar contra el
-  DOM real — revisarlos con `page.pause()` en modo no-headless en esa sesión local.
+  DOM real — revisarlos con `page.pause()` en modo no-headless en esa sesión local. Ver
+  `docs/flujo.html` para el diagrama de dónde exactamente entra la persona en todo esto.
 - **`output/` se versiona en el repo a propósito** (cotizaciones `.pptx`/`.pdf`, resúmenes,
   notas, informes) — es el respaldo completo para la sesión local de Cowork y para cualquiera
   que necesite revisar el trabajo sin correr nada.
