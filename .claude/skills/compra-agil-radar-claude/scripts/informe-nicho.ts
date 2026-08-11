@@ -170,9 +170,10 @@ ${
 - Búsqueda por las variantes de \`config/marcas.json\` (${marcas.variantes.map((v) => `\`${v}\``).join(", ")})
   contra los 4 estados de Compra Ágil (\`publicada\`, \`desierta\`, \`cancelada\`, \`cerrada\`),
   verificando localmente que \`nombre\` mencione la marca de verdad (descarta ruido de \`q\`).
-- \`total_ofertas_recibidas\` en el listado es preliminar; el detalle de cada proceso da el
-  número real (ver \`compra-agil-radar-claude\`). Este informe usa el valor del listado para no
-  gastar cuota de API en un barrido histórico completo.
+- \`total_ofertas_recibidas\` en el listado siempre reporta 0 para procesos abiertos (hallazgo
+  verificado en \`PLAN.md\`); para los casos históricos (cerrados) el listado sí es representativo.
+  Las oportunidades abiertas de la sección anterior muestran el número real, obtenido del
+  detalle de cada una.
 - \`q\` no busca dentro de adjuntos: una compra que solo mencione Claude en un PDF adjunto no
   aparece acá.
 `;

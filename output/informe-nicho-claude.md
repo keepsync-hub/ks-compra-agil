@@ -1,6 +1,6 @@
 # Informe del nicho: Compras Ágiles que piden Claude/Anthropic
 
-Generado: 2026-08-11T05:51:12.111Z. Medición en vivo contra `api2.mercadopublico.cl`, no una
+Generado: 2026-08-11T05:59:59.518Z. Medición en vivo contra `api2.mercadopublico.cl`, no una
 foto fija — volver a correr `npm run informe` para refrescar estas cifras.
 
 ## Tamaño y ritmo
@@ -144,7 +144,7 @@ de interés de oferentes.
   verificando localmente que `nombre` mencione la marca de verdad (descarta ruido de `q`).
 - `total_ofertas_recibidas` en el listado siempre reporta 0 para procesos abiertos (hallazgo
   verificado en `PLAN.md`); para los casos históricos (cerrados) el listado sí es representativo.
-  Las 3 oportunidades abiertas de la sección anterior muestran el número real, obtenido del
+  Las oportunidades abiertas de la sección anterior muestran el número real, obtenido del
   detalle de cada una.
 - `q` no busca dentro de adjuntos: una compra que solo mencione Claude en un PDF adjunto no
   aparece acá.
