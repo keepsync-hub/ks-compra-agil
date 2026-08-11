@@ -1,0 +1,21 @@
+node_modules/
+dist/
+
+# secretos
+.env
+.env.*
+!.env.example
+config/company.json
+data/storageState.json
+
+# cache de la API (regenerable con `npm run radar`, no se versiona)
+data/*
+!data/.gitkeep
+
+# output/ SÍ se versiona a propósito: son las cotizaciones y reportes listos para revisión
+# humana, incluido como respaldo si el portal de Mercado Público no permite guardar un borrador
+# (ver docs/index.html). Quedan marcadas BORRADOR mientras config/company.json no tenga la
+# identidad real de la empresa confirmada.
+
+*.log
+.DS_Store

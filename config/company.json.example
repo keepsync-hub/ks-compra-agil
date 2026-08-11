@@ -1,0 +1,57 @@
+{
+  "razon_social": "COMPLETAR: razón social exacta de KeepSync",
+  "rut": "COMPLETAR: RUT de KeepSync, formato 12.345.678-9",
+  "es_emt": true,
+  "giro": "COMPLETAR: giro declarado ante SII",
+  "direccion": "COMPLETAR: dirección comercial",
+  "representante_legal": "COMPLETAR: nombre del representante legal",
+  "identidad_confirmada": false,
+  "contacto": {
+    "nombre": "COMPLETAR",
+    "email": "COMPLETAR",
+    "telefono": "COMPLETAR"
+  },
+  "pricing": {
+    "moneda_lista": "USD",
+    "margen_pct": 5,
+    "iva_pct": 19,
+    "fx_fuente": "mindicador.cl (dólar observado, Banco Central de Chile) — consultado en vivo por src/lib/pricing.ts en cada cotización",
+    "fx_fallback_clp_por_usd": 916,
+    "_fx_fallback_nota": "Respaldo si mindicador.cl falla. Actualizado manualmente el 2026-08-11 con el dólar observado oficial (SII/Banco Central, ~$916). No usar como precio final si el fetch en vivo funcionó.",
+    "planes": {
+      "pro": {
+        "nombre": "Claude Pro",
+        "precio_lista_usd_mes": 17,
+        "facturacion": "anual",
+        "notas": "Precio publicado por Anthropic (claude.com/pricing) para facturación anual, USD 17/mes ($204/año). Facturación mensual sería USD 20/mes; se usa el anual por ser el costo real más bajo para un compromiso de 12 meses, que es como se piden estas licencias. Revisar precio vigente antes de cotizar: puede cambiar."
+      },
+      "max5x": {
+        "nombre": "Claude Max 5x",
+        "precio_lista_usd_mes": 100,
+        "facturacion": "mensual",
+        "notas": "Anthropic no publica tarifa anual con descuento para Max; el precio es mensual (USD 100/mes) incluso para compromisos de 12 meses."
+      },
+      "max20x": {
+        "nombre": "Claude Max 20x",
+        "precio_lista_usd_mes": 200,
+        "facturacion": "mensual",
+        "notas": "Igual que Max 5x: solo hay tarifa mensual publicada (USD 200/mes)."
+      },
+      "team_standard": {
+        "nombre": "Claude Team (asiento estándar)",
+        "precio_lista_usd_mes": 20,
+        "facturacion": "anual",
+        "notas": "USD 20/mes por asiento con facturación anual (mensual sería USD 25/mes). Mínimo 2 asientos según Anthropic."
+      },
+      "team_premium": {
+        "nombre": "Claude Team (asiento premium)",
+        "precio_lista_usd_mes": 100,
+        "facturacion": "anual",
+        "notas": "USD 100/mes por asiento con facturación anual (mensual sería USD 125/mes)."
+      }
+    }
+  },
+  "documentos_estandar": [
+    "COMPLETAR: lista de documentos que KeepSync puede adjuntar sin pedir nada al usuario (ej. certificado de vigencia, patente municipal) — dejar vacío si no hay ninguno preparado de antemano"
+  ]
+}

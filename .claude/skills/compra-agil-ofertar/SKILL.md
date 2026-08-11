@@ -1,0 +1,76 @@
+---
+name: compra-agil-ofertar
+description: Prepara una oferta (cotización + formulario) para una Compra Ágil de licencias Claude ya detectada por el radar. Usar cuando el usuario pida cotizar o preparar una oferta para un código de Compra Ágil específico. Nunca envía la oferta — se detiene en revisión humana.
+---
+
+# Ofertar en Compra Ágil — Claude
+
+Genera la cotización de licencias (respetando el tope presupuestario) y deja el formulario del
+portal completo con la cotización adjunta, **sin enviarlo nunca**. El envío final es un acto
+público y vinculante ante el organismo comprador — lo confirma un humano.
+
+## Cuándo usar
+
+- El usuario pide cotizar o preparar una oferta para un código de Compra Ágil (ej.
+  `1614-47-COT26`), normalmente uno que ya salió en `compra-agil-radar-claude`.
+
+## Requisitos
+
+- `config/company.json` con datos reales de la empresa y pricing (copiar y completar
+  `config/company.json.example` — **nunca** usarlo con placeholders "COMPLETAR" sin llenar; el
+  loader lo rechaza a propósito).
+- `.env`: `COMPRA_AGIL_API_TICKET` (cotización) y `CLAVE_UNICA_RUN`/`CLAVE_UNICA_CLAVE` (login,
+  solo si se va a completar el formulario en el portal).
+
+## Paso 1 — Cotización
+
+```bash
+npm run cotizar -- <codigo>
+```
+
+Qué hace (`scripts/cotizar.ts`):
+1. Usa `data/<codigo>/detalle.json` si el radar ya lo descargó; si no, consulta la API directo.
+2. Verifica que la compra siga `publicada` y no haya cerrado.
+3. Detecta el plan (Pro/Max 5x/Max 20x/Team) y la cantidad de usuarios desde el texto. Si no
+   puede determinarlos con confianza, **se detiene y pide revisión manual** — no adivina.
+4. Cotiza con `src/lib/pricing.ts`: precio público de Anthropic (USD) → CLP con el dólar
+   observado en vivo (mindicador.cl, con fallback fijo en `company.json`) → +5% margen → +19%
+   IVA (la fórmula exacta la definió el usuario, no está inventada).
+5. **Si el total supera el tope presupuestario de la compra, no genera ninguna oferta** — lo
+   reporta como inadmisible y se detiene. Esto no es negociable (ver `CLAUDE.md`).
+6. Si cabe bajo el tope, genera dos archivos en `output/<codigo>/`:
+   - `Q-AAAAMMDD-NombreCliente.pptx` — la propuesta comercial de 4 láminas (portada, solución,
+     marco normativo Ley 21.180, cotización formal con tabla de precios), fuente editable.
+   - `Q-AAAAMMDD-NombreCliente.pdf` — **el artefacto final a publicar/enviar** (`archivo_publicable`
+     en `cotizacion-resumen.json`). Se genera renderizando HTML con Chromium/Playwright
+     (`src/lib/cotizacion-html.ts` + `cotizacion-pdf.ts`), no convirtiendo el `.pptx` con
+     LibreOffice: `soffice` no funciona en el sandbox donde se escribió este skill (falla incluso
+     con un `.txt` vacío, diagnosticado con `strace`) — si se corre en un entorno con LibreOffice
+     sano, se podría volver a esa vía, pero la de Chromium es robusta y no depende de eso.
+   También guarda `cotizacion-resumen.json` con los números para el paso de formulario.
+
+## Paso 2 — Login y formulario (diferido a sesión local)
+
+`scripts/login.ts` (login a mercadopublico.cl vía ClaveÚnica + 2FA, el código se lee de Gmail
+vía `mcp__Gmail__*`, guarda `data/storageState.json`) y `scripts/form-fill.ts` (completa el
+formulario y adjunta el `.pdf` de `archivo_publicable`, **nunca hace click en enviar**) tienen
+toda la lógica de negocio escrita, pero **no se ejecutan desde un sandbox en la nube**:
+`claveunica.gob.cl` y `mercadopublico.cl` devuelven `ERR_CONNECTION_RESET` a Chromium headless
+ahí (confirmado repetidas veces con `npx tsx .claude/skills/compra-agil-ofertar/scripts/login.ts
+--diagnostico`; `curl` con el mismo User-Agent sí conecta — es un bloqueo de fingerprint/WAF del
+portal, no un bug del script). Por decisión del usuario, este paso se hace en otra sesión con
+**Claude Cowork en una máquina local** (navegador real, red del usuario), usando los PDF de
+`output/` como insumo. No reintentar el login desde un sandbox — correr el diagnóstico primero.
+
+Los selectores de ClaveÚnica y del formulario de oferta están marcados
+`TODO(verificar en vivo)` donde no se pudieron confirmar contra el DOM real por el mismo
+bloqueo — revisarlos la primera vez con `page.pause()` en modo no-headless en la sesión local
+antes de confiar en una corrida desatendida. `form-fill.ts` **nunca busca ni hace click en un
+botón de enviar/confirmar** — ese es el punto de entrega a un humano.
+
+## Guardrails (no negociables)
+
+1. Nunca se envía nada automáticamente.
+2. Nunca se cotiza por sobre el tope presupuestario.
+3. No se inventan precios: sin `config/company.json` real, no hay cotización.
+4. CAPTCHA o bloqueo del portal → detenerse, avisar, no reintentar a ciegas.

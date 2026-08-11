@@ -1,0 +1,61 @@
+# ks-compra-agil
+
+Agente que monitorea Compras Ágiles en mercadopublico.cl que piden licencias Claude/Anthropic,
+prepara una cotización dentro del tope presupuestario, y deja lista una oferta (PDF + formulario)
+para revisión y envío manual de un humano.
+
+Diseño completo y hallazgos verificados contra la API real: ver `PLAN.md`. Estado del insumo
+bloqueante (fulfillment) y guardrails: ver `CLAUDE.md`.
+
+**Página de estado (GitHub Pages)**: `docs/index.html` (+ `docs/informe-nicho.html`) resume qué
+está funcionando, las oportunidades abiertas con sus cotizaciones, y los pendientes. Se publica
+vía `.github/workflows/pages.yml`. El primer intento de deploy falló por una regla de protección
+del entorno `github-pages` restringida a la rama por defecto — se resuelve mergeando a esa rama
+(ver sección de estado más abajo para el detalle si vuelve a fallar).
+
+## Setup
+
+```bash
+npm install
+cp .env.example .env   # completar COMPRA_AGIL_API_TICKET (y CLAVE_UNICA_* si vas a ofertar desde una máquina local)
+```
+
+`config/company.json` (gitignored) ya tiene la identidad real de KeepSync (RUT 78.441.121-4,
+confirmada con la ficha del proveedor de Mercado Público) y el pricing real (precio público de
+Anthropic en USD → CLP con dólar observado en vivo → +5% margen → +19% IVA). Si se pierde o hay
+que recrearlo, copiar `config/company.json.example` y completar los campos — el agente rechaza
+el archivo mientras tenga placeholders `"COMPLETAR"` sin llenar o `identidad_confirmada: false`
+(las cotizaciones quedan marcadas BORRADOR en ese caso).
+
+## Comandos
+
+| Comando | Qué hace |
+|---|---|
+| `npm run radar` | Busca Compras Ágiles "Claude" abiertas, extrae condiciones, detecta recompradores. Solo lectura. |
+| `npm run informe` | Regenera `output/informe-nicho-claude.md` con el barrido histórico completo (tasa de fracaso, motivos, recompradores). |
+| `npm run cotizar -- <codigo>` | Genera la cotización (`.pptx` fuente + `.pdf` publicable) para una compra específica, validando el tope. No envía nada. |
+| `npx tsx .claude/skills/compra-agil-ofertar/scripts/login.ts --diagnostico` | Verifica si el portal es alcanzable desde el navegador antes de intentar login real. |
+| `npm run form-fill -- <codigo>` | Completa el formulario de oferta en el portal y adjunta el PDF, sin enviar. Requiere login previo. |
+| `npm run typecheck` | `tsc --noEmit`. |
+
+## Estado y pendientes
+
+- **Radar e informe del nicho: funcionando de punta a punta contra la API real** — encuentra las
+  oportunidades abiertas reales y reproduce la tasa de fracaso medida en `PLAN.md` (~79-80%).
+- **Cotización (`cotizar.ts`): funcionando de punta a punta**, con la identidad real de KeepSync
+  ya cargada. Genera `.pptx` (fuente editable) y `.pdf` (artefacto final a publicar/enviar,
+  `archivo_publicable` en `cotizacion-resumen.json`). El PDF se renderiza con Chromium/Playwright
+  a partir de HTML (`src/lib/cotizacion-html.ts`), no convirtiendo el `.pptx` con LibreOffice:
+  `soffice` no funciona en el entorno donde se escribió este código (falla incluso con un `.txt`
+  vacío — diagnosticado con `strace`, no es un problema de los archivos).
+- **Login + formulario (`login.ts`, `form-fill.ts`): con toda la lógica escrita pero diferidos a
+  propósito.** `claveunica.gob.cl` y `mercadopublico.cl` devuelven `ERR_CONNECTION_RESET` a
+  Chromium headless en un sandbox en la nube (confirmado repetidas veces; `curl` sí conecta con
+  el mismo User-Agent — bloqueo de fingerprint/WAF del portal, no un bug del código). Por
+  decisión del usuario, este paso no se reintenta desde acá: se completa en otra sesión con
+  **Claude Cowork en una máquina local**, usando los PDF de `output/` como insumo. Los
+  selectores están marcados `TODO(verificar en vivo)` donde no se pudieron confirmar contra el
+  DOM real — revisarlos con `page.pause()` en modo no-headless en esa sesión local.
+- **`output/` se versiona en el repo a propósito** (cotizaciones `.pptx`/`.pdf`, resúmenes,
+  notas, informes) — es el respaldo completo para la sesión local de Cowork y para cualquiera
+  que necesite revisar el trabajo sin correr nada.

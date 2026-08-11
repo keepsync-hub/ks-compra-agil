@@ -1,0 +1,25 @@
+{
+  "name": "ks-compra-agil",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Agente que monitorea Compras Ágiles en mercadopublico.cl que piden licencias Claude/Anthropic y prepara ofertas para revisión humana.",
+  "type": "module",
+  "scripts": {
+    "radar": "tsx .claude/skills/compra-agil-radar-claude/scripts/radar.ts",
+    "informe": "tsx .claude/skills/compra-agil-radar-claude/scripts/informe-nicho.ts",
+    "cotizar": "tsx .claude/skills/compra-agil-ofertar/scripts/cotizar.ts",
+    "login": "tsx .claude/skills/compra-agil-ofertar/scripts/login.ts",
+    "form-fill": "tsx .claude/skills/compra-agil-ofertar/scripts/form-fill.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "playwright": "^1.47.0",
+    "pptxgenjs": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4"
+  }
+}
