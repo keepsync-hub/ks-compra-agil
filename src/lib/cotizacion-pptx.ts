@@ -73,9 +73,23 @@ export async function generarCotizacionPptx(data: CotizacionPptxData, outputPath
   await pres.writeFile({ fileName: outputPath });
 }
 
+const COLOR_WARN = "FF4D4D";
+
+function agregarBadgeBorrador(slide: PptxGenJS.Slide): void {
+  slide.addShape("roundRect", {
+    x: SLIDE_W - 3.3, y: 0.35, w: 2.9, h: 0.5,
+    fill: { color: COLOR_WARN }, line: { type: "none" }, rectRadius: 0.06,
+  });
+  slide.addText("BORRADOR — identidad KeepSync sin confirmar", {
+    x: SLIDE_W - 3.3, y: 0.35, w: 2.9, h: 0.5,
+    align: "center", valign: "middle", fontFace: FONT, fontSize: 9, bold: true, color: COLOR.white,
+  });
+}
+
 function slidePortada(pres: PptxGenJS, data: CotizacionPptxData): void {
   const slide = pres.addSlide();
   slide.background = { color: COLOR.bg };
+  if (!data.company.identidad_confirmada) agregarBadgeBorrador(slide);
 
   slide.addImage({ path: LOGO_PATH, x: 0.7, y: 0.6, w: 1.0, h: 0.98 });
   slide.addText("KeepSync", {
@@ -206,6 +220,7 @@ function slideMarcoNormativo(pres: PptxGenJS, data: CotizacionPptxData): void {
 function slideCotizacion(pres: PptxGenJS, data: CotizacionPptxData): void {
   const slide = pres.addSlide();
   slide.background = { color: COLOR.bg };
+  if (!data.company.identidad_confirmada) agregarBadgeBorrador(slide);
 
   slide.addText("Cotización formal", { x: 0.7, y: 0.55, w: 10.3, h: 0.7, fontFace: FONT, fontSize: 30, bold: true, color: COLOR.white });
   slide.addText(
@@ -264,8 +279,11 @@ function slideCotizacion(pres: PptxGenJS, data: CotizacionPptxData): void {
     { x: 0.7, y: condicionesY + 0.4, w: 10.3, h: 1.3, fontFace: FONT, fontSize: 11, color: COLOR.gray, lineSpacingMultiple: 1.3 },
   );
 
-  slide.addText(
-    `KeepSync   —   ${data.company.contacto.email}   —   Válido por 30 días`,
-    { x: 0.7, y: 7.75, w: 10.3, h: 0.35, fontFace: FONT, fontSize: 10, color: COLOR.gray },
-  );
+  const footer = data.company.identidad_confirmada
+    ? `KeepSync   —   ${data.company.contacto.email}   —   Válido por 30 días`
+    : `KeepSync   —   ${data.company.contacto.email}   —   BORRADOR: RUT y razón social pendientes de confirmar antes de enviar`;
+  slide.addText(footer, {
+    x: 0.7, y: 7.75, w: 10.3, h: 0.35, fontFace: FONT, fontSize: 10,
+    color: data.company.identidad_confirmada ? COLOR.gray : COLOR_WARN, bold: !data.company.identidad_confirmada,
+  });
 }

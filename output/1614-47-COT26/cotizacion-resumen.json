@@ -1,0 +1,17 @@
+{
+  "codigo": "1614-47-COT26",
+  "fx": 916.3,
+  "plan": "Claude Pro",
+  "cantidad": 4,
+  "precio_lista_usd_mes": 17,
+  "meses": 12,
+  "costo_usd_total": 816,
+  "costo_clp_total": 747701,
+  "neto_clp_unitario": 196271,
+  "neto_clp_total": 785086,
+  "iva_clp_total": 149166,
+  "total_clp_unitario": 233563,
+  "total_clp_total": 934252,
+  "tope_clp": 1300000,
+  "archivo": "Q-20260811-SuperintendenciaDeElectricidadYCombustibles.pptx"
+}

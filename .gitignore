@@ -8,12 +8,14 @@ dist/
 config/company.json
 data/storageState.json
 
-# datos y salidas generadas (no versionar snapshots de la API, PDFs ni cotizaciones)
+# cache de la API (regenerable con `npm run radar`, no se versiona)
 data/*
 !data/.gitkeep
-output/*
-!output/.gitkeep
-!output/informe-nicho-claude.md
+
+# output/ SÍ se versiona a propósito: son las cotizaciones y reportes listos para revisión
+# humana, incluido como respaldo si el portal de Mercado Público no permite guardar un borrador
+# (ver docs/index.html). Quedan marcadas BORRADOR mientras config/company.json no tenga la
+# identidad real de la empresa confirmada.
 
 *.log
 .DS_Store

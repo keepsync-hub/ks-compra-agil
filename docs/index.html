@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agente de Compra Ágil — Claude | KeepSync</title>
+<meta name="description" content="Estado del agente que monitorea Compras Ágiles de licencias Claude en mercadopublico.cl: radar, informe del nicho, cotizaciones y bloqueadores conocidos.">
+<style>
+  :root {
+    --bg: #0E0E17;
+    --bg-alt: #09090B;
+    --card: #161527;
+    --card-alt: #1D1B33;
+    --border: #2A2844;
+    --accent: #786CF0;
+    --accent-light: #B4AAFA;
+    --white: #FFFFFF;
+    --gray: #9A9FB0;
+    --gray-dim: #6E7284;
+    --ok: #4ADE80;
+    --warn: #FBBF24;
+    --bad: #FB7185;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--white);
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 1.5rem; }
+  header.hero {
+    background: linear-gradient(180deg, var(--bg-alt) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 0 2rem;
+  }
+  .brand { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+  .brand img { width: 36px; height: 36px; }
+  .brand span { font-weight: 700; font-size: 1.1rem; letter-spacing: 0.02em; }
+  h1 { font-size: clamp(1.6rem, 4vw, 2.3rem); margin: 0 0 0.5rem; }
+  .subtitle { color: var(--gray); font-size: 1.02rem; max-width: 62ch; }
+  .meta { color: var(--gray-dim); font-size: 0.85rem; margin-top: 1rem; }
+  main { padding: 2.5rem 0 4rem; }
+  section { margin-bottom: 3rem; }
+  h2 { font-size: 1.4rem; margin: 0 0 0.3rem; }
+  .section-sub { color: var(--gray); font-size: 0.95rem; margin: 0 0 1.25rem; max-width: 68ch; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.9rem; }
+  .stat {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.1rem 1.2rem;
+  }
+  .stat .num { font-size: 1.9rem; font-weight: 700; color: var(--accent-light); line-height: 1.1; }
+  .stat .label { color: var(--gray); font-size: 0.85rem; margin-top: 0.35rem; }
+
+  .status-grid { display: grid; gap: 0.75rem; }
+  .status-row {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center;
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1.1rem;
+  }
+  .status-row .name { font-weight: 600; }
+  .status-row .desc { color: var(--gray); font-size: 0.88rem; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.7rem;
+    border-radius: 999px; font-size: 0.78rem; font-weight: 700; white-space: nowrap;
+  }
+  .badge.ok { background: rgba(74, 222, 128, 0.15); color: var(--ok); }
+  .badge.warn { background: rgba(251, 191, 36, 0.15); color: var(--warn); }
+  .badge.bad { background: rgba(251, 113, 133, 0.15); color: var(--bad); }
+  .badge::before { content: "●"; font-size: 0.6rem; }
+
+  .card-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .opp-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .opp-card .codigo { font-family: ui-monospace, Menlo, monospace; color: var(--accent-light); font-size: 0.85rem; }
+  .opp-card .org { font-weight: 700; font-size: 1.05rem; }
+  .opp-card .nombre { color: var(--gray); font-size: 0.88rem; }
+  .opp-card dl { display: grid; grid-template-columns: auto 1fr; gap: 0.25rem 0.6rem; font-size: 0.86rem; margin: 0.4rem 0; }
+  .opp-card dt { color: var(--gray-dim); }
+  .opp-card dd { margin: 0; }
+  .opp-card .cta { margin-top: 0.3rem; }
+  .btn {
+    display: inline-block; background: var(--accent); color: var(--white); text-decoration: none;
+    padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+  }
+  .btn:hover { background: var(--accent-light); color: var(--bg); }
+  .btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--gray); }
+  .btn.secondary:hover { border-color: var(--accent-light); color: var(--accent-light); }
+  .note {
+    background: var(--card-alt); border: 1px solid var(--border); border-left: 3px solid var(--warn);
+    border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.86rem; color: var(--gray);
+  }
+  .note.bad { border-left-color: var(--bad); }
+  .note.ok { border-left-color: var(--ok); }
+  .note code { color: var(--accent-light); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th, td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); }
+  th { color: var(--gray-dim); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  .table-wrap { overflow-x: auto; background: var(--card); border: 1px solid var(--border); border-radius: 10px; }
+  .table-wrap table { margin: 0; }
+  .table-wrap th, .table-wrap td { padding: 0.7rem 1rem; }
+
+  .recompra-list { display: grid; gap: 0.6rem; }
+  .recompra-item {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 0.7rem 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    font-size: 0.9rem;
+  }
+  .recompra-item .org { font-weight: 600; }
+  .recompra-item .count { color: var(--accent-light); font-weight: 700; white-space: nowrap; }
+
+  code, .mono { font-family: ui-monospace, Menlo, monospace; }
+  a { color: var(--accent-light); }
+  a:hover { color: var(--white); }
+
+  footer {
+    border-top: 1px solid var(--border); padding: 2rem 0; color: var(--gray-dim); font-size: 0.85rem;
+  }
+  footer a { color: var(--gray); }
+  .links-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+
+  @media (max-width: 600px) {
+    .status-row { grid-template-columns: 1fr; }
+    .status-row .badge { justify-self: start; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="brand"><img src="assets/logo-keepsync-blanco.png" alt=""><span>KeepSync</span></div>
+    <h1>Agente de Compra Ágil — licencias Claude</h1>
+    <p class="subtitle">
+      Monitorea Compras Ágiles en mercadopublico.cl que piden licencias Claude/Anthropic,
+      cotiza dentro del tope presupuestario y deja la oferta lista (formulario + adjunto) para
+      revisión y envío manual de un humano. Esta página resume qué está construido, probado
+      contra la API real, y qué sigue pendiente.
+    </p>
+    <p class="meta">Generado 2026-08-11 · repo <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a>, rama <code>claude/revisar-contexto-plan-ttaumn</code></p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <h2>Resumen</h2>
+    <div class="stat-grid">
+      <div class="stat"><div class="num">47</div><div class="label">casos históricos con mención real de "Claude"/"Anthropic"</div></div>
+      <div class="stat"><div class="num">79%</div><div class="label">termina desierto o cancelado</div></div>
+      <div class="stat"><div class="num">3</div><div class="label">oportunidades abiertas ahora mismo</div></div>
+      <div class="stat"><div class="num">2 / 3</div><div class="label">cotizables bajo el tope con precio público real</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Estado de cada componente</h2>
+    <p class="section-sub">Probado en esta sesión contra la API real de producción (<code>api2.mercadopublico.cl</code>) y el servicio público de adjuntos, no contra datos simulados.</p>
+    <div class="status-grid">
+      <div class="status-row">
+        <span class="badge ok">Funcionando</span>
+        <div><div class="name">Radar (<code>compra-agil-radar-claude</code>)</div><div class="desc">Encuentra las 3 oportunidades abiertas reales, extrae tope/plan/usuarios/documentos exigidos/excluyentes, detecta recompradores.</div></div>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/.claude/skills/compra-agil-radar-claude/scripts/radar.ts">Ver código</a>
+      </div>
+      <div class="status-row">
+        <span class="badge ok">Funcionando</span>
+        <div><div class="name">Informe del nicho</div><div class="desc">Barrido histórico completo: 47 casos, tasa de fracaso, motivos declarados y recompradores.</div></div>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/output/informe-nicho-claude.md">Ver informe</a>
+      </div>
+      <div class="status-row">
+        <span class="badge ok">Funcionando</span>
+        <div><div class="name">Cotizador (<code>compra-agil-ofertar</code> → cotizar.ts)</div><div class="desc">Precio público Anthropic (USD) → CLP con dólar observado en vivo → +5% margen → +19% IVA. Nunca cotiza sobre el tope — se detiene si no cabe.</div></div>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/.claude/skills/compra-agil-ofertar/scripts/cotizar.ts">Ver código</a>
+      </div>
+      <div class="status-row">
+        <span class="badge bad">Bloqueado</span>
+        <div><div class="name">Login (ClaveÚnica) + formulario del portal</div><div class="desc"><code>claveunica.gob.cl</code> y <code>mercadopublico.cl</code> resetean la conexión del navegador automatizado (<code>ERR_CONNECTION_RESET</code>) — confirmado dos veces en esta sesión. <code>curl</code> sí conecta, así que no es un bloqueo de red: parece un WAF/anti-bot del portal.</div></div>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/.claude/skills/compra-agil-ofertar/scripts/login.ts">Ver código</a>
+      </div>
+      <div class="status-row">
+        <span class="badge warn">Pendiente</span>
+        <div><div class="name">Identidad real de KeepSync</div><div class="desc">Falta RUT, razón social, dirección y representante legal reales en <code>config/company.json</code> (hoy solo existe el <code>.example</code> con el pricing ya resuelto). Las cotizaciones generadas quedan marcadas <strong>BORRADOR</strong> mientras esto no se confirme.</div></div>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/config/company.json.example">Ver plantilla</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Por qué esta página existe</h2>
+    <p class="section-sub">
+      El objetivo del agente es dejar una oferta completa en el formulario del portal para que
+      un humano la revise y confirme el envío. Como el login automatizado está bloqueado ahora
+      mismo (ver arriba), <strong>las cotizaciones para las 3 oportunidades abiertas se generaron
+      igual y quedaron versionadas en el repo</strong> como respaldo — listas para que un humano
+      las suba manualmente al portal si el flujo de formulario sigue sin poder completarse solo.
+    </p>
+  </section>
+
+  <section>
+    <h2>Oportunidades abiertas y su cotización</h2>
+    <p class="section-sub">Estado al momento de esta corrida — las ventanas de estas compras cierran en horas/días; volver a correr <code>npm run radar</code> para refrescar.</p>
+    <div class="card-grid">
+
+      <div class="opp-card">
+        <span class="codigo">1614-47-COT26</span>
+        <span class="org">Superintendencia de Electricidad y Combustibles</span>
+        <span class="nombre">SC-182 Suscripción de Claude Pro por 12 meses</span>
+        <dl>
+          <dt>Plan</dt><dd>Claude Pro, 4 usuarios</dd>
+          <dt>Tope</dt><dd>$1.300.000 CLP</dd>
+          <dt>Cotizado</dt><dd>$934.252 CLP (dentro del tope)</dd>
+          <dt>Cierre</dt><dd>2026-08-11 15:00</dd>
+          <dt>Competencia</dt><dd>5 ofertas recibidas</dd>
+        </dl>
+        <div class="cta">
+          <span class="badge ok">Cotización lista (borrador)</span>
+        </div>
+        <a class="btn" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/revisar-contexto-plan-ttaumn/output/1614-47-COT26/Q-20260811-SuperintendenciaDeElectricidadYCombustibles.pptx">Descargar cotización (.pptx)</a>
+      </div>
+
+      <div class="opp-card">
+        <span class="codigo">2759-474-COT26</span>
+        <span class="org">I. Municipalidad de Coronel</span>
+        <span class="nombre">Licencia SaaS de IA generativa, 12 meses, tipo Claude Pro</span>
+        <dl>
+          <dt>Plan</dt><dd>Claude Pro, 8 usuarios</dd>
+          <dt>Tope</dt><dd>$2.200.000 CLP</dd>
+          <dt>Cotizado</dt><dd>$1.868.504 CLP (dentro del tope)</dd>
+          <dt>Cierre</dt><dd>2026-08-12 15:00</dd>
+          <dt>Competencia</dt><dd>3 ofertas recibidas</dd>
+        </dl>
+        <div class="cta">
+          <span class="badge ok">Cotización lista (borrador)</span>
+        </div>
+        <a class="btn" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/revisar-contexto-plan-ttaumn/output/2759-474-COT26/Q-20260811-IMunicipalidadDeCoronel.pptx">Descargar cotización (.pptx)</a>
+      </div>
+
+      <div class="opp-card">
+        <span class="codigo">5769-102-COT26</span>
+        <span class="org">Universidad de Chile</span>
+        <span class="nombre">Suscripción anual a plataforma Claude Max 5x</span>
+        <dl>
+          <dt>Plan</dt><dd>Claude Max 5x, 1 usuario</dd>
+          <dt>Tope</dt><dd>$1.093.896 CLP</dd>
+          <dt>Costo real + margen + IVA</dt><dd>$1.373.900 CLP (sobre el tope)</dd>
+          <dt>Cierre</dt><dd>2026-08-12 10:00</dd>
+          <dt>Competencia</dt><dd>1 oferta recibida</dd>
+        </dl>
+        <div class="cta">
+          <span class="badge bad">Inadmisible — no se generó oferta</span>
+        </div>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/output/5769-102-COT26/nota.md">Ver por qué</a>
+      </div>
+
+    </div>
+    <p class="note" style="margin-top:1rem;">
+      Las cotizaciones descargables llevan una marca <strong>BORRADOR</strong> visible porque
+      <code>config/company.json</code> todavía no tiene el RUT ni la razón social reales de
+      KeepSync confirmados — el precio y el cálculo del tope ya son reales, pero el documento no
+      está listo para enviarse a un organismo comprador hasta completar esos datos.
+    </p>
+  </section>
+
+  <section>
+    <h2>El nicho: 47 casos, 79% de fracaso</h2>
+    <p class="section-sub">Barrido histórico completo contra la API (todas las Compras Ágiles que mencionan Claude/Anthropic desde el primer registro encontrado, sep. 2025). Detalle completo en el <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/output/informe-nicho-claude.md">informe del nicho</a>.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Desenlace</th><th>Casos</th><th>%</th></tr></thead>
+        <tbody>
+          <tr><td>Desierta</td><td>22</td><td>47%</td></tr>
+          <tr><td>Cancelada</td><td>15</td><td>32%</td></tr>
+          <tr><td>Cerrada (con éxito)</td><td>7</td><td>15%</td></tr>
+          <tr><td>Publicada (vigente)</td><td>3</td><td>6%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:1rem;">
+      Monto mediano de estos procesos: <strong>$2.000.000 CLP</strong> (rango $220.000 –
+      $7.150.600). La hipótesis de trabajo: el cuello de botella es de <em>fulfillment</em>
+      (poder entregar y facturar licencias legítimamente) y de topes presupuestarios que no
+      alcanzan para el costo real — no de falta de interés de oferentes (algunos procesos
+      recibieron hasta 11 cotizaciones y aun así se declararon desiertos). El caso
+      5769-102-COT26 de arriba es un ejemplo concreto de esto último medido en esta misma
+      corrida.
+    </p>
+  </section>
+
+  <section>
+    <h2>Organismos que reintentan (recompradores)</h2>
+    <p class="section-sub">Señal de alta probabilidad: estos organismos ya publicaron más de una Compra Ágil de Claude y avisan con antelación al republicar.</p>
+    <div class="recompra-list">
+      <div class="recompra-item"><span class="org">Universidad de Chile</span><span class="count">10 procesos</span></div>
+      <div class="recompra-item"><span class="org">Universidad de Valparaíso</span><span class="count">4 procesos</span></div>
+      <div class="recompra-item"><span class="org">Subsecretaría de las Culturas y las Artes</span><span class="count">3 procesos</span></div>
+      <div class="recompra-item"><span class="org">Subsecretaría de Economía y Empresas de Menor Tamaño</span><span class="count">3 procesos</span></div>
+      <div class="recompra-item"><span class="org">Servicio de Salud del Maule — Hospital de Curicó</span><span class="count">3 procesos</span></div>
+      <div class="recompra-item"><span class="org">I. Municipalidad de Coronel</span><span class="count">2 procesos</span></div>
+      <div class="recompra-item"><span class="org">Superintendencia de Electricidad y Combustibles</span><span class="count">2 procesos</span></div>
+      <div class="recompra-item"><span class="org">Universidad de La Frontera</span><span class="count">2 procesos</span></div>
+      <div class="recompra-item"><span class="org">Consejo para la Transparencia</span><span class="count">2 procesos</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Bloqueador conocido: el portal rechaza el navegador automatizado</h2>
+    <p class="section-sub">Diagnóstico corrido dos veces en esta sesión (<code>npx tsx .claude/skills/compra-agil-ofertar/scripts/login.ts --diagnostico</code>), mismo resultado ambas veces.</p>
+    <div class="note bad">
+      <strong>claveunica.gob.cl</strong> y <strong>mercadopublico.cl</strong> devuelven
+      <code>ERR_CONNECTION_RESET</code> a Chromium headless (Playwright), incluso con un
+      User-Agent de navegador real. <code>curl</code> con el mismo User-Agent sí conecta
+      (200/302) — no es un problema de red ni de credenciales, es el portal rechazando el
+      fingerprint del navegador automatizado antes de llegar a la pantalla de login.
+    </div>
+    <p class="section-sub" style="margin-top:1rem;">
+      <code>login.ts</code> y <code>form-fill.ts</code> tienen toda la lógica de negocio escrita
+      (2FA vía Gmail, guardado de sesión, llenado de formulario, captura de pantalla sin enviar),
+      pero sus selectores no se pudieron verificar contra el DOM real por este bloqueo. Siguiente
+      paso para destrabarlo: correr el mismo diagnóstico desde un entorno con navegador real
+      (no headless) o desde la red del usuario, en vez de este sandbox.
+    </p>
+  </section>
+
+  <section>
+    <h2>Qué falta para operar en serio</h2>
+    <ol>
+      <li><strong>Identidad real de KeepSync en <code>config/company.json</code></strong> — RUT, razón social, dirección, representante legal. Sin esto las cotizaciones quedan marcadas BORRADOR.</li>
+      <li><strong>Destrabar el login del portal</strong> (ver bloqueador arriba) — sin esto, el formulario debe completarse a mano usando las cotizaciones ya generadas como respaldo.</li>
+      <li><strong>Credenciales ClaveÚnica</strong> (<code>CLAVE_UNICA_RUN</code> / <code>CLAVE_UNICA_CLAVE</code>) en <code>.env</code>, una vez el login esté destrabado.</li>
+    </ol>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Página generada automáticamente a partir del estado del repo en la fecha indicada arriba — no se actualiza sola. Volver a correr <code>npm run radar</code> / <code>npm run informe</code> / <code>npm run cotizar</code> y regenerar esta página para refrescar los números.</p>
+    <div class="links-row">
+      <a href="https://github.com/keepsync-hub/ks-compra-agil">Repositorio</a>
+      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/PLAN.md">PLAN.md</a>
+      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/CLAUDE.md">CLAUDE.md</a>
+      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/revisar-contexto-plan-ttaumn/README.md">README.md</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

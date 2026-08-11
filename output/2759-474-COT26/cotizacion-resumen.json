@@ -1,0 +1,17 @@
+{
+  "codigo": "2759-474-COT26",
+  "fx": 916.3,
+  "plan": "Claude Pro",
+  "cantidad": 8,
+  "precio_lista_usd_mes": 17,
+  "meses": 12,
+  "costo_usd_total": 1632,
+  "costo_clp_total": 1495402,
+  "neto_clp_unitario": 196271,
+  "neto_clp_total": 1570172,
+  "iva_clp_total": 298333,
+  "total_clp_unitario": 233563,
+  "total_clp_total": 1868504,
+  "tope_clp": 2200000,
+  "archivo": "Q-20260811-IMunicipalidadDeCoronel.pptx"
+}

@@ -7,6 +7,11 @@ adjunto) para revisión y envío manual de un humano.
 Diseño completo y hallazgos verificados contra la API real: ver `PLAN.md`. Estado del insumo
 bloqueante (fulfillment) y guardrails: ver `CLAUDE.md`.
 
+**Página de estado (GitHub Pages)**: `docs/index.html` resume qué está funcionando, las
+oportunidades abiertas con sus cotizaciones, el bloqueador conocido del portal y los pendientes.
+Se publica automáticamente vía `.github/workflows/pages.yml` — activar una vez en el repo
+**Settings → Pages → Build and deployment → Source: GitHub Actions** si no está seteado ya.
+
 ## Setup
 
 ```bash
@@ -47,3 +52,8 @@ placeholders `"COMPLETAR"` sin llenar. La sección `pricing` ya viene con la fó
   con la mejor información disponible pero marcados `TODO(verificar en vivo)` donde no se
   pudieron confirmar. Correr el diagnóstico (`--diagnostico`) antes de depender de este flujo
   para una oferta real, y probar desde un entorno con navegador real si el bloqueo persiste.
+- **Respaldo por el bloqueo del portal**: como el login automatizado no funciona todavía,
+  `output/` (cotizaciones `.pptx`, resúmenes y notas) se versiona en el repo a propósito —
+  son las ofertas listas para que un humano las suba manualmente al portal si hace falta.
+  Las cotizaciones quedan marcadas **BORRADOR** mientras `config/company.json` no tenga la
+  identidad real de KeepSync.

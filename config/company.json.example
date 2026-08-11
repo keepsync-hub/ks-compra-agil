@@ -5,6 +5,7 @@
   "giro": "COMPLETAR: giro declarado ante SII",
   "direccion": "COMPLETAR: dirección comercial",
   "representante_legal": "COMPLETAR: nombre del representante legal",
+  "identidad_confirmada": false,
   "contacto": {
     "nombre": "COMPLETAR",
     "email": "COMPLETAR",

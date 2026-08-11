@@ -23,6 +23,12 @@ export interface CompanyConfig {
   giro?: string;
   direccion?: string;
   representante_legal?: string;
+  /**
+   * false mientras razon_social/rut/direccion/representante_legal no estén confirmados con
+   * KeepSync. cotizacion-pptx.ts marca el documento como BORRADOR mientras esto sea false —
+   * no es apto para enviar a un organismo comprador aunque el precio ya sea real.
+   */
+  identidad_confirmada: boolean;
   contacto: {
     nombre: string;
     email: string;
