@@ -1,0 +1,19 @@
+{
+  "codigo": "2427-851-COT26",
+  "fx": 916.3,
+  "plan": "Claude Pro",
+  "cantidad": 3,
+  "precio_lista_usd_mes": 17,
+  "meses": 12,
+  "costo_usd_total": 612,
+  "costo_clp_total": 560776,
+  "neto_clp_unitario": 196271,
+  "neto_clp_total": 588814,
+  "iva_clp_total": 111875,
+  "total_clp_unitario": 233563,
+  "total_clp_total": 700689,
+  "tope_clp": 1200000,
+  "archivo_pptx": "Q-20260811-IMunicipalidadDeValparaiso.pptx",
+  "archivo_pdf": "Q-20260811-IMunicipalidadDeValparaiso.pdf",
+  "archivo_publicable": "Q-20260811-IMunicipalidadDeValparaiso.pdf"
+}
