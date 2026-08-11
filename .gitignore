@@ -1,0 +1,19 @@
+node_modules/
+dist/
+
+# secretos
+.env
+.env.*
+!.env.example
+config/company.json
+data/storageState.json
+
+# datos y salidas generadas (no versionar snapshots de la API, PDFs ni cotizaciones)
+data/*
+!data/.gitkeep
+output/*
+!output/.gitkeep
+!output/informe-nicho-claude.md
+
+*.log
+.DS_Store
