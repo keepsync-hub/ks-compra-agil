@@ -187,9 +187,9 @@
         <a class="btn secondary" href="https://www.mercadopublico.cl/Proveedores/Ficha?rutProveedor=78441121-4">Ficha pública</a>
       </div>
       <div class="status-row">
-        <span class="badge warn">Necesita un ajuste manual</span>
-        <div><div class="name">Publicación de esta misma página en GitHub Pages</div><div class="desc">El workflow (<code>.github/workflows/pages.yml</code>) corrió pero GitHub lo rechazó: <em>"Branch 'claude/revisar-contexto-plan-ttaumn' is not allowed to deploy to github-pages due to environment protection rules."</em> Se arregla en <strong>Settings → Environments → github-pages → Deployment branches and tags</strong>, agregando esta rama (o permitiendo todas) — no hay forma de cambiar esa regla desde la API con los permisos de este agente.</div></div>
-        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/settings/environments">Ir a Settings</a>
+        <span class="badge ok">Publicada</span>
+        <div><div class="name">Publicación de esta misma página en GitHub Pages</div><div class="desc">El primer intento falló por una regla de protección del entorno <code>github-pages</code> restringida a la rama por defecto del repo. Se resolvió mergeando el PR a esa rama (<code>claude/mercadopublico-agente-compras-pgyedf</code>) — el deploy corrió automáticamente y quedó en verde.</div></div>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/actions/runs/31488949767">Ver el deploy</a>
       </div>
     </div>
   </section>
