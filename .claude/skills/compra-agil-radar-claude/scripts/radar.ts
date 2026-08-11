@@ -14,10 +14,21 @@ async function main() {
   console.log(`Radar compra-agil-claude — ${marcas.variantes.length} variantes de búsqueda, estado=publicada\n`);
 
   const encontrados = new Map<string, CompraAgilListItem>();
+  const variantesFallidas: { variante: string; error: string }[] = [];
   for (const variante of marcas.variantes) {
-    const items = await buscarCompraAgil({ q: variante, estado: "publicada" });
-    for (const item of items) {
-      if (!encontrados.has(item.codigo)) encontrados.set(item.codigo, item);
+    try {
+      const items = await buscarCompraAgil({ q: variante, estado: "publicada" });
+      for (const item of items) {
+        if (!encontrados.has(item.codigo)) encontrados.set(item.codigo, item);
+      }
+    } catch (err) {
+      // Una variante que sigue fallando (p.ej. 504 persistente del API para esa query) no debe
+      // abortar toda la corrida: las variantes multi-palabra son subconjuntos de las de una palabra
+      // (todo lo que menciona "Claude Pro" también menciona "Claude"), así que la cobertura se
+      // recupera vía dedup. Se registra el fallo para reportarlo con honestidad.
+      const mensaje = (err as Error).message;
+      console.warn(`  variante "${variante}": falló, se continúa sin ella — ${mensaje}`);
+      variantesFallidas.push({ variante, error: mensaje });
     }
   }
 
@@ -101,6 +112,13 @@ async function main() {
     `## Alertas de recompradores`,
     ``,
     alertasRecompra.length > 0 ? alertasRecompra.map((a) => `- ${a}`).join("\n") : "_Sin reintentos detectados en esta corrida._",
+    ``,
+    `## Cobertura`,
+    ``,
+    variantesFallidas.length > 0
+      ? `⚠️ ${variantesFallidas.length} de ${marcas.variantes.length} variantes fallaron y se omitieron (cobertura parcial):\n` +
+        variantesFallidas.map((v) => `- \`${v.variante}\`: ${v.error}`).join("\n")
+      : `Las ${marcas.variantes.length} variantes de búsqueda respondieron correctamente.`,
   ].join("\n");
 
   const outputDir = path.join(ROOT_DIR, "output");
