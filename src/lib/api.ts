@@ -83,26 +83,55 @@ interface ApiEnvelope<T> {
   errors: unknown;
 }
 
+// 502/503/504 son fallos transitorios del gateway del API (no cuota agotada): se reintentan.
+// 429 nunca se reintenta acá — es cuota diaria y hay que esperar al reset (ver guardrail).
+const TRANSIENT_STATUS = new Set([502, 503, 504]);
+const MAX_INTENTOS = 3;
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 async function apiGet<T>(pathAndQuery: string): Promise<T> {
   const ticket = getApiTicket();
   const url = `${BASE_URL}${pathAndQuery}`;
-  const res = await fetch(url, { headers: { ticket } });
 
-  if (res.status === 429) {
-    const retryAfter = res.headers.get("Retry-After");
-    throw new Error(
-      `Cuota diaria de la API agotada (429). Retry-After: ${retryAfter ?? "no informado"}. No reintentar a ciegas: esperar al reset diario.`,
-    );
+  let ultimoError: Error | undefined;
+  for (let intento = 1; intento <= MAX_INTENTOS; intento++) {
+    let res: Response;
+    try {
+      res = await fetch(url, { headers: { ticket } });
+    } catch (err) {
+      // Error de red (DNS, conexión, timeout de fetch): transitorio, reintentar.
+      ultimoError = err as Error;
+      if (intento < MAX_INTENTOS) {
+        await sleep(1000 * 2 ** (intento - 1)); // 1s, 2s
+        continue;
+      }
+      throw new Error(`API ${pathAndQuery} falló por red tras ${MAX_INTENTOS} intentos: ${ultimoError.message}`);
+    }
+
+    if (res.status === 429) {
+      const retryAfter = res.headers.get("Retry-After");
+      throw new Error(
+        `Cuota diaria de la API agotada (429). Retry-After: ${retryAfter ?? "no informado"}. No reintentar a ciegas: esperar al reset diario.`,
+      );
+    }
+    if (TRANSIENT_STATUS.has(res.status) && intento < MAX_INTENTOS) {
+      await res.body?.cancel().catch(() => {});
+      await sleep(1000 * 2 ** (intento - 1)); // 1s, 2s
+      continue;
+    }
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      throw new Error(`API ${pathAndQuery} respondió ${res.status}: ${body.slice(0, 500)}`);
+    }
+    const json = (await res.json()) as ApiEnvelope<T>;
+    if (json.success !== "OK") {
+      throw new Error(`API ${pathAndQuery} success=${json.success}: ${JSON.stringify(json.errors)}`);
+    }
+    return json.payload;
   }
-  if (!res.ok) {
-    const body = await res.text().catch(() => "");
-    throw new Error(`API ${pathAndQuery} respondió ${res.status}: ${body.slice(0, 500)}`);
-  }
-  const json = (await res.json()) as ApiEnvelope<T>;
-  if (json.success !== "OK") {
-    throw new Error(`API ${pathAndQuery} success=${json.success}: ${JSON.stringify(json.errors)}`);
-  }
-  return json.payload;
+  // Inalcanzable: el bucle retorna o lanza en cada rama, pero TS necesita el cierre.
+  throw ultimoError ?? new Error(`API ${pathAndQuery}: fallo desconocido`);
 }
 
 const PAGE_SIZE_MIN = 10; // no documentado: tamano_pagina < 10 es rechazado o ignorado por la API
