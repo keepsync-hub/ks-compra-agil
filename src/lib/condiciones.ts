@@ -23,6 +23,18 @@ const PATRONES_EXCLUYENTE = [
   /obligatorio[^.]*\./gi,
 ];
 
+/**
+ * Instrucciones enfáticas de adjuntar documentos (p.ej. "IMPORTANTE POR FAVOR ADJUNTAR PATENTE
+ * MUNICIPAL VIGENTE Y COTIZACIÓN FORMAL"). Se monitorean como restricción porque condicionan la
+ * admisibilidad de la oferta aunque no usen la palabra "inadmisible": el organismo puede exigir
+ * el documento en un plazo perentorio o descartar la oferta si no se acompaña.
+ */
+const PATRONES_REQUISITO_ADJUNTO = [
+  /\b(?:importante|por favor|favor de|se solicita|se requiere|deber[aá]n?|se debe(?:r[aá])?)\b[^.\n]*\badjunt\w*[^.\n]*/gi,
+  /\badjunt\w*[^.\n]*\bvigente\b[^.\n]*/gi,
+  /\bsi no (?:adjunta|acompa[nñ]a|presenta|incluye)\b[^.\n]*/gi,
+];
+
 /** Documentos habitualmente exigidos en estas compras; se busca la mención literal en el texto. */
 const DOCUMENTOS_CONOCIDOS: { patron: RegExp; etiqueta: string }[] = [
   { patron: /patente municipal/i, etiqueta: "Patente municipal al día" },
@@ -55,16 +67,37 @@ function detectarMesesVigencia(texto: string): number | null {
   return m ? Number(m[1]) : null;
 }
 
+/** Normaliza una frase capturada: colapsa espacios y quita marcas de markdown/adornos en los bordes. */
+function limpiarFrase(frase: string): string {
+  return frase
+    .replace(/\s+/g, " ")
+    .replace(/^[*\s"'¡¿(]+/, "")
+    .replace(/[*\s"']+$/, "")
+    .trim();
+}
+
+/** Descarta frases que son subcadena (case-insensitive) de otra frase más larga ya capturada,
+ * para no reportar el mismo requisito varias veces cuando varios patrones solapan. */
+function dedupPorContencion(frases: string[]): string[] {
+  const ordenadas = [...frases].sort((a, b) => b.length - a.length);
+  const resultado: string[] = [];
+  for (const frase of ordenadas) {
+    const lower = frase.toLowerCase();
+    if (!resultado.some((r) => r.toLowerCase().includes(lower))) resultado.push(frase);
+  }
+  return resultado;
+}
+
 function extraerCoincidencias(texto: string, patrones: RegExp[]): string[] {
   const encontrados = new Set<string>();
   for (const patron of patrones) {
     const matches = texto.matchAll(patron);
     for (const m of matches) {
-      const frase = m[0].trim();
+      const frase = limpiarFrase(m[0]);
       if (frase.length > 3) encontrados.add(frase);
     }
   }
-  return [...encontrados];
+  return dedupPorContencion([...encontrados]);
 }
 
 export function extraerCondiciones(detalle: CompraAgilDetalle): Condiciones {
@@ -93,7 +126,10 @@ export function extraerCondiciones(detalle: CompraAgilDetalle): Condiciones {
     plazo_entrega_dias: detalle.entrega?.plazo_entrega_dias ?? null,
     meses_vigencia: detectarMesesVigencia(textoCompleto),
     documentos_exigidos: documentosExigidos,
-    excluyentes: extraerCoincidencias(textoCompleto, PATRONES_EXCLUYENTE),
+    excluyentes: extraerCoincidencias(textoCompleto, [
+      ...PATRONES_EXCLUYENTE,
+      ...PATRONES_REQUISITO_ADJUNTO,
+    ]),
     competencia_ofertas: detalle.resumen.total_ofertas_recibidas,
   };
 }
