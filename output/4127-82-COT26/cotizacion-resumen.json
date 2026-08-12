@@ -1,0 +1,19 @@
+{
+  "codigo": "4127-82-COT26",
+  "fx": 914.41,
+  "plan": "Claude Pro",
+  "cantidad": 10,
+  "precio_lista_usd_mes": 17,
+  "meses": 12,
+  "costo_usd_total": 2040,
+  "costo_clp_total": 1865396,
+  "neto_clp_unitario": 195867,
+  "neto_clp_total": 1958666,
+  "iva_clp_total": 372147,
+  "total_clp_unitario": 233081,
+  "total_clp_total": 2330813,
+  "tope_clp": 3500000,
+  "archivo_pptx": "Q-20260812-SubsecretariaDeRedesAsistenciales.pptx",
+  "archivo_pdf": "Q-20260812-SubsecretariaDeRedesAsistenciales.pdf",
+  "archivo_publicable": "Q-20260812-SubsecretariaDeRedesAsistenciales.pdf"
+}
