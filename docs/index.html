@@ -152,8 +152,8 @@
     <div class="stat-grid">
       <div class="stat"><div class="num">47</div><div class="label">casos históricos con mención real de "Claude"/"Anthropic"</div></div>
       <div class="stat"><div class="num">79%</div><div class="label">termina desierto o cancelado</div></div>
-      <div class="stat"><div class="num">2</div><div class="label">oportunidades en la última corrida del radar</div></div>
-      <div class="stat"><div class="num">1 / 2</div><div class="label">con cotización lista bajo el tope, precio público real</div></div>
+      <div class="stat"><div class="num">1</div><div class="label">oportunidad abierta en la última corrida del radar</div></div>
+      <div class="stat"><div class="num">2</div><div class="label">estados monitoreados: Publicada + Proveedor Seleccionado</div></div>
     </div>
   </section>
 
@@ -163,7 +163,7 @@
     <div class="status-grid">
       <div class="status-row">
         <span class="badge ok">Funcionando</span>
-        <div><div class="name">Radar (<code>compra-agil-radar-claude</code>)</div><div class="desc">Encuentra las oportunidades abiertas de cada corrida, extrae tope/plan/usuarios/documentos exigidos/excluyentes, detecta recompradores. Reintenta fallos transitorios de la API (5xx) con backoff y tolera variantes que fallan sin abortar la corrida.</div></div>
+        <div><div class="name">Radar (<code>compra-agil-radar-claude</code>)</div><div class="desc">Monitorea dos estados —Publicada y Proveedor Seleccionado— extrae tope/plan/usuarios/documentos exigidos/excluyentes, detecta recompradores y adjudicaciones. Reintenta fallos transitorios de la API (5xx) con backoff y tolera variantes que fallan sin abortar la corrida.</div></div>
         <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/.claude/skills/compra-agil-radar-claude/scripts/radar.ts">Ver código</a>
       </div>
       <div class="status-row">
@@ -229,30 +229,74 @@
         <a class="btn secondary" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/4127-82-COT26/Q-20260812-SubsecretariaDeRedesAsistenciales.pptx">Fuente editable (.pptx)</a>
       </div>
 
-      <div class="opp-card" id="2013-1336-COT26">
-        <span class="codigo">2013-1336-COT26</span>
-        <span class="org">Universidad Arturo Prat</span>
-        <span class="nombre">Adquisición de 30 licencias de Claude Team</span>
-        <dl>
-          <dt>Plan</dt><dd>Claude Team, 30 usuarios</dd>
-          <dt>Tope</dt><dd>$6.600.000 CLP</dd>
-          <dt>Costo 30 asientos</dt><dd>$8.240.702 CLP (Team estándar, sobre el tope)</dd>
-          <dt>Cierre</dt><dd>2026-08-13 15:40</dd>
-          <dt>Competencia</dt><dd>4 ofertas recibidas</dd>
-        </dl>
-        <div class="cta">
-          <span class="badge bad">Inadmisible — tope bajo el costo</span>
-        </div>
-        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/output/2013-1336-COT26/nota.md">Ver por qué</a>
-      </div>
-
     </div>
+    <p class="section-sub" style="margin-top:0.9rem;">Otras compras de esta ventana ya cerraron (Arturo Prat, Valparaíso, Coronel, La Frontera, U. de Valparaíso). Su análisis está más abajo, en <a href="#analisis-competencia">Análisis de competencia y adjudicaciones</a>.</p>
     <p class="note ok" style="margin-top:1rem;">
       Las cotizaciones ya usan la identidad real de KeepSync (RUT 78.441.121-4, confirmado con
       la ficha del proveedor de Mercado Público) — no llevan marca BORRADOR. El PDF es el
       artefacto final a publicar; el <code>.pptx</code> queda como fuente editable en el mismo
       directorio. Completar el formulario del portal y confirmar el envío queda para la sesión
       con Claude Cowork en máquina local (ver más abajo) — este agente no lo intenta desde aquí.
+    </p>
+  </section>
+
+  <section id="analisis-competencia">
+    <h2>Análisis de competencia y adjudicaciones</h2>
+    <p class="section-sub">
+      El radar ahora monitorea dos estados: <strong>Publicada</strong> (oportunidades abiertas,
+      arriba) y <strong>Proveedor Seleccionado</strong> (adjudicadas). El objetivo es saber qué se
+      adjudicó, a quién, y por qué esa oferta gana frente a la nuestra.
+    </p>
+
+    <div class="note" style="border-left-color: var(--accent);">
+      <strong>Dato del ganador — límite de la fuente.</strong> La API pública de Compra Ágil
+      (<code>api2.mercadopublico.cl/v2</code>) <strong>no expone el proveedor seleccionado ni el
+      monto adjudicado</strong>: el filtro <code>estado=proveedor_seleccionado</code> devuelve 0
+      casos de Claude en esta corrida, y las compras cerradas traen <code>id_orden_compra</code>
+      nulo y <code>proveedores_cotizando</code> vacío. Ese dato (quién ganó y a cuánto) vive en la
+      <em>Orden de Compra</em> del portal, accesible con la API de Órdenes de Compra de Mercado
+      Público (otra credencial). Conectarla es el siguiente paso para nombrar al adjudicatario y su
+      precio exacto. Mientras tanto, el análisis de abajo se basa en los <strong>documentos
+      publicados</strong> de las compras Claude recién cerradas con más competencia.
+    </p>
+
+    <h3 style="margin:1.6rem 0 0.6rem; font-size:1.05rem;">Perfil de la oferta que gana (de las bases publicadas)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Requisito en las bases</th><th>Quién gana</th><th>Dónde queda KeepSync</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Procedencia legítima / distribuidor autorizado.</strong> La Frontera (5586-1980) exige licencias "suministradas por canales oficiales del fabricante o distribuidor autorizado; no se admiten cuentas gratuitas, de prueba, educacionales, compartidas, reutilizadas ni OEM", y acreditar esa calidad.</td>
+            <td>Un revendedor con canal oficial de Anthropic o procedencia acreditable.</td>
+            <td>Es exactamente el <em>gate de fulfillment</em> abierto: sin canal oficial confirmado, la oferta es descartable por admisibilidad.</td>
+          </tr>
+          <tr>
+            <td><strong>Precio más bajo que cumpla.</strong> Criterio textual de La Frontera: "prevalecerá la oferta más económica y conveniente que cumpla lo requerido". Arturo Prat (2013-1336): oferta económica 40% del puntaje.</td>
+            <td>Quien tenga menor costo — descuento de canal/educación, o que absorba margen.</td>
+            <td>Cotizamos a precio público de lista +5% +IVA; un competidor con descuento de canal ofrece más barato con el mismo cumplimiento.</td>
+          </tr>
+          <tr>
+            <td><strong>Tope por debajo de nuestro costo.</strong> U. de Valparaíso (5626-453): tope $182.882 &lt; costo de lista $186.539. Arturo Prat: 30 asientos Team = $8,24 M vs tope $6,6 M.</td>
+            <td>Quien consiga la licencia por debajo del precio de lista, o facture sin el IVA que nosotros sí aplicamos.</td>
+            <td>Con la fórmula actual no cabemos bajo el tope: inadmisibles por precio, sin importar cuánto ajustemos el margen.</td>
+          </tr>
+          <tr>
+            <td><strong>Facturación compatible con Anthropic.</strong> Valparaíso (2427-851): "el método de pago debe ser compatible con las políticas de facturación de Anthropic para evitar suspensiones".</td>
+            <td>Quien tenga un canal de pago/facturación que opere con Anthropic sin cortes durante los 12 meses.</td>
+            <td>Depende de resolver el mismo gate: poder proveer y facturar la licencia de forma sostenida.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="note bad" style="margin-top:1rem;">
+      <strong>Conclusión.</strong> El diferenciador no es encontrar oportunidades ni armar la
+      cotización — eso ya está resuelto y automatizado. Es el <em>fulfillment</em>: ser proveedor
+      con procedencia legítima y costo competitivo. En las compras que sí reciben varias ofertas y
+      se adjudican, gana quien tiene canal oficial y precio bajo el tope; en las demás, el tope
+      simplemente no cubre el costo real con impuestos y el proceso se declara desierto. Los dos
+      caminos apuntan a lo mismo que ya marca el informe del nicho: resolver cómo KeepSync provee y
+      factura licencias Claude legítimamente y a qué costo.
     </p>
   </section>
 
@@ -276,9 +320,9 @@
       (poder entregar y facturar licencias legítimamente) y de topes presupuestarios que no
       alcanzan para el costo real — no de falta de interés de oferentes (algunos procesos
       recibieron hasta 11 cotizaciones y aun así se declararon desiertos). El caso
-      2013-1336-COT26 de arriba es un ejemplo concreto de esto último medido en esta misma
-      corrida: el tope ($6.600.000 para 30 asientos Team) queda por debajo del costo real de las
-      licencias con impuestos.
+      2013-1336-COT26 (Arturo Prat), analizado en <a href="#analisis-competencia">Análisis de
+      competencia</a>, es un ejemplo concreto medido en esta misma ventana: el tope ($6.600.000
+      para 30 asientos Team) queda por debajo del costo real de las licencias con impuestos.
     </p>
   </section>
 

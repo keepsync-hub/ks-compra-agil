@@ -73,7 +73,46 @@ export interface CompraAgilDetalle {
   };
   productos_solicitados: ProductoSolicitado[];
   resumen: { multa_sancion: number; total_ofertas_recibidas: number; total_demandas: number };
-  motivos: { motivo_cancelacion: string | null; motivo_desierta: string | null };
+  motivos: { motivo_cancelacion: string | null; motivo_desierta: string | null; motivo_seleccion?: string | null };
+  // Campos de adjudicación. El endpoint v2 los declara pero hoy los entrega vacíos incluso para
+  // compras cerradas/adjudicadas (el proveedor ganador y su monto viven en la Orden de Compra del
+  // portal, fuera de esta API). Se tipan como opcionales para leerlos si algún día se pueblan.
+  id_orden_compra?: string | number | null;
+  proveedores_cotizando?: ProveedorCotizando[];
+}
+
+/** Forma flexible: la API entrega este arreglo vacío hoy; se deja laxo para leer lo que venga. */
+export interface ProveedorCotizando {
+  nombre?: string;
+  razon_social?: string;
+  rut?: string;
+  monto_clp?: number;
+  monto?: number;
+  seleccionado?: boolean;
+  [k: string]: unknown;
+}
+
+export interface Adjudicacion {
+  proveedor_seleccionado: string | null;
+  monto_adjudicado_clp: number | null;
+  orden_compra: string | null;
+  /** true si la API entregó algún dato de adjudicación; false si vino todo vacío. */
+  expuesta_por_api: boolean;
+}
+
+/** Extrae la adjudicación del detalle, tolerando que el endpoint v2 la entregue vacía. */
+export function extraerAdjudicacion(detalle: CompraAgilDetalle): Adjudicacion {
+  const proveedores = detalle.proveedores_cotizando ?? [];
+  const ganador = proveedores.find((p) => p.seleccionado) ?? proveedores[0];
+  const proveedor = ganador?.razon_social ?? ganador?.nombre ?? null;
+  const monto = ganador?.monto_clp ?? ganador?.monto ?? null;
+  const oc = detalle.id_orden_compra != null ? String(detalle.id_orden_compra) : null;
+  return {
+    proveedor_seleccionado: proveedor,
+    monto_adjudicado_clp: typeof monto === "number" ? monto : null,
+    orden_compra: oc,
+    expuesta_por_api: proveedor != null || oc != null,
+  };
 }
 
 interface ApiEnvelope<T> {
@@ -136,9 +175,16 @@ async function apiGet<T>(pathAndQuery: string): Promise<T> {
 
 const PAGE_SIZE_MIN = 10; // no documentado: tamano_pagina < 10 es rechazado o ignorado por la API
 
+export type EstadoCompraAgil =
+  | "publicada"
+  | "proveedor_seleccionado"
+  | "cerrada"
+  | "desierta"
+  | "cancelada";
+
 export interface BuscarCompraAgilParams {
   q: string;
-  estado?: "publicada" | "desierta" | "cancelada" | "cerrada";
+  estado?: EstadoCompraAgil;
   tamanoPagina?: number;
 }
 
