@@ -1,17 +1,8 @@
 # Radar Compra Ágil — Claude
 
-Corrida: 2026-08-13T18:56:41.672Z
+Corrida: 2026-08-13T19:46:01.502Z
 
-## Oportunidades abiertas (2)
-
-### 2013-1336-COT26 — UNIVERSIDAD ARTURO PRAT
--  ADQUISICIÓN LICENCIAS DE SOFTWARE CLAUDE TEAM
-- Cierre: 2026-08-13 15:40 (primer llamado — EMT puede ofertar)
-- Tope: $6.600.000 CLP (moneda original: CLP)
-- Plan detectado: Team, 30 usuarios
-- Competencia: 4 oferta(s) recibida(s)
-- Plazo de entrega: 5 día(s)
-- **NUEVO** desde la última corrida
+## Oportunidades abiertas (1)
 
 ### 4127-82-COT26 — SUBSECRETARIA DE REDES ASISTENCIALES
 - DIVPRE  10 LICENCIAS DE CLAUDE PRO 
@@ -20,6 +11,11 @@ Corrida: 2026-08-13T18:56:41.672Z
 - Plan detectado: Pro, 10 usuarios
 - Competencia: 4 oferta(s) recibida(s)
 - Plazo de entrega: 5 día(s)
+
+## Adjudicaciones (proveedor seleccionado) (0)
+
+_Ninguna Compra Ágil de Claude en estado "proveedor seleccionado" en esta corrida._
+
 
 ## Alertas de recompradores
 

@@ -7,6 +7,7 @@ import { obtenerTipoCambioUsdClp, cotizarLinea, mapearPlanAClavePricing } from "
 import { generarCotizacionPptx, type LineaCotizacionDisplay } from "../../../../src/lib/cotizacion-pptx.js";
 import { generarCotizacionPdf } from "../../../../src/lib/cotizacion-pdf.js";
 import { nombreArchivoCotizacion } from "../../../../src/lib/nombre-archivo.js";
+import { cierreYaPaso } from "../../../../src/lib/tiempo.js";
 
 async function cargarDetalle(codigo: string): Promise<CompraAgilDetalle> {
   const cachePath = path.join(ROOT_DIR, "data", codigo, "detalle.json");
@@ -34,9 +35,10 @@ async function main() {
     process.exitCode = 1;
     return;
   }
-  const cierre = new Date(detalle.fechas.fecha_cierre.replace(" ", "T"));
-  if (cierre.getTime() < Date.now()) {
-    console.error(`${codigo} ya cerró (${detalle.fechas.fecha_cierre}). No se cotiza.`);
+  // El cierre viene en hora de Chile sin zona horaria; se evalúa como America/Santiago (no como
+  // hora del proceso, que en la nube es UTC) para no descartar oportunidades aún abiertas.
+  if (cierreYaPaso(detalle.fechas.fecha_cierre)) {
+    console.error(`${codigo} ya cerró (${detalle.fechas.fecha_cierre}, hora de Chile). No se cotiza.`);
     process.exitCode = 1;
     return;
   }

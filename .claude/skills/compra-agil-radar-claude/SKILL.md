@@ -43,9 +43,14 @@ npm run radar
 5. Descarga adjuntos solo si `documentos[]` no viene vacío (la mayoría de estas compras no
    traen adjuntos), vía el servicio público sin login (`src/lib/adjuntos.ts`).
 6. Guarda todo en `data/<codigo>/{detalle.json, condiciones.json, attachments/}`.
-7. Actualiza `data/state.json`: marca qué códigos son nuevos y qué organismos ya tenían
+7. Repite el barrido con `estado=proveedor_seleccionado` (compras adjudicadas) y extrae la
+   adjudicación con `extraerAdjudicacion` (`src/lib/api.ts`). Nota verificada: la API v2 hoy no
+   puebla el proveedor ganador ni el monto (campos vacíos); ese dato vive en la Orden de Compra
+   del portal. Guarda `data/<codigo>/adjudicacion.json` y lo declara con honestidad en el reporte.
+8. Actualiza `data/state.json`: marca qué códigos son nuevos y qué organismos ya tenían
    procesos previos (recompradores) — señal de alta probabilidad, avisan con antelación.
-8. Escribe `output/radar-ultima-corrida.md` y lo imprime en consola.
+9. Escribe `output/radar-ultima-corrida.md` (con la sección de adjudicaciones) y lo imprime en
+   consola. Las fechas de cierre se evalúan en hora de Chile (`src/lib/tiempo.ts`).
 
 ## Notas
 

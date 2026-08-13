@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR, loadMarcasConfig } from "../../../../src/lib/config.js";
-import { buscarCompraAgil, obtenerDetalleCompraAgil, type CompraAgilListItem } from "../../../../src/lib/api.js";
+import { buscarCompraAgil, obtenerDetalleCompraAgil, extraerAdjudicacion, type CompraAgilListItem } from "../../../../src/lib/api.js";
 import { itemMencionaMarca, detalleMencionaMarca } from "../../../../src/lib/marca.js";
 import { extraerCondiciones } from "../../../../src/lib/condiciones.js";
 import { descargarAdjuntosSiExisten } from "../../../../src/lib/adjuntos.js";
@@ -97,6 +97,53 @@ async function main() {
     );
   }
 
+  // --- Adjudicaciones: compras con Proveedor Seleccionado ---
+  // Se monitorean junto con las publicadas para saber qué se adjudicó y a quién. Nota: el endpoint
+  // v2 hoy no puebla el proveedor ganador ni el monto adjudicado (viven en la Orden de Compra del
+  // portal); se extrae lo que haya y se declara con honestidad si la API no lo expone.
+  const adjudicadas = new Map<string, CompraAgilListItem>();
+  for (const variante of marcas.variantes) {
+    try {
+      const items = await buscarCompraAgil({ q: variante, estado: "proveedor_seleccionado" });
+      for (const item of items) if (!adjudicadas.has(item.codigo)) adjudicadas.set(item.codigo, item);
+    } catch (err) {
+      variantesFallidas.push({ variante: `${variante} (proveedor_seleccionado)`, error: (err as Error).message });
+    }
+  }
+  const adjudicadasReales = [...adjudicadas.values()].filter(itemMencionaMarca);
+  const filasAdjudicaciones: string[] = [];
+  let adjudicacionesSinProveedorExpuesto = 0;
+  for (const item of adjudicadasReales) {
+    const detalle = await obtenerDetalleCompraAgil(item.codigo);
+    if (!detalleMencionaMarca(detalle.descripcion, detalle.productos_solicitados)) continue;
+    const condiciones = extraerCondiciones(detalle);
+    const adj = extraerAdjudicacion(detalle);
+    if (!adj.expuesta_por_api) adjudicacionesSinProveedorExpuesto++;
+
+    const dirDatos = path.join(ROOT_DIR, "data", item.codigo);
+    mkdirSync(dirDatos, { recursive: true });
+    writeFileSync(path.join(dirDatos, "detalle.json"), JSON.stringify(detalle, null, 2), "utf-8");
+    writeFileSync(path.join(dirDatos, "adjudicacion.json"), JSON.stringify(adj, null, 2), "utf-8");
+
+    filasAdjudicaciones.push(
+      [
+        `### ${item.codigo} — ${item.institucion.organismo_comprador}`,
+        `- ${detalle.nombre}`,
+        `- Tope: $${condiciones.tope_clp.toLocaleString("es-CL")} CLP · ${condiciones.competencia_ofertas} oferta(s) recibida(s)`,
+        `- Proveedor seleccionado: ${adj.proveedor_seleccionado ?? "_no expuesto por la API v2 (ver Orden de Compra en el portal)_"}`,
+        adj.monto_adjudicado_clp != null ? `- Monto adjudicado: $${adj.monto_adjudicado_clp.toLocaleString("es-CL")} CLP` : null,
+        adj.orden_compra != null ? `- Orden de compra: ${adj.orden_compra}` : null,
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    );
+  }
+  console.log(
+    `\nAdjudicaciones (proveedor seleccionado) con Claude: ${adjudicadasReales.length}` +
+      (adjudicadasReales.length > 0 ? ` (${adjudicacionesSinProveedorExpuesto} sin proveedor expuesto por la API)` : "") +
+      ".",
+  );
+
   state.ultima_corrida = ahoraIso;
   guardarState(state);
 
@@ -108,6 +155,15 @@ async function main() {
     `## Oportunidades abiertas (${filasReporte.length})`,
     ``,
     filasReporte.length > 0 ? filasReporte.join("\n\n") : "_Ninguna oportunidad abierta en esta corrida._",
+    ``,
+    `## Adjudicaciones (proveedor seleccionado) (${filasAdjudicaciones.length})`,
+    ``,
+    filasAdjudicaciones.length > 0
+      ? filasAdjudicaciones.join("\n\n")
+      : "_Ninguna Compra Ágil de Claude en estado \"proveedor seleccionado\" en esta corrida._",
+    adjudicacionesSinProveedorExpuesto > 0
+      ? `\n> Nota: la API v2 no expone el proveedor ganador ni el monto adjudicado (campos vacíos); ese dato está en la Orden de Compra del portal.`
+      : ``,
     ``,
     `## Alertas de recompradores`,
     ``,
