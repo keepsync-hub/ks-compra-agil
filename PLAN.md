@@ -169,7 +169,7 @@ solución en vez de reventa de licencias:
    y **el precio cabe bajo el tope** (si no cabe, no se oferta: sería inadmisible).
 2. **Cotización de licencias**: una línea por `productos_solicitados[]` con cantidad, plan
    exacto solicitado, precio unitario y total, **verificando el tope**. Precios desde
-   `config/company.json` (costo de licencia + margen); el agente **no inventa precios**. Se
+   `config/company.json` (costo de licencia + markup); el agente **no inventa precios**. Se
    adjunta la lista de condiciones cumplidas y los documentos exigidos. PDF vía el skill `pdf`
    ya existente en el entorno de Claude Code (no escribir un renderer propio).
 3. **Login ClaveÚnica + 2FA**: `login.ts` llega a la pantalla del código, el agente lo lee en
@@ -196,7 +196,7 @@ ks-compra-agil/
     config.ts, browser.ts
   config/
     marcas.json           - variantes: Claude, Anthropic, Cloude, Claude Pro/Max/Code/Team
-    company.json.example  - RUT, razon social, es_emt=true, costos de licencia y margen
+    company.json.example  - RUT, razon social, es_emt=true, costos de licencia y markup
   data/  state.json, <codigo>/{detalle.json, condiciones.json, attachments/}
   output/ <codigo>/{cotizacion.pdf, formulario-listo.png}, informe-nicho-claude.md
 ```

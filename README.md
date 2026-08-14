@@ -22,7 +22,8 @@ cp .env.example .env   # completar COMPRA_AGIL_API_TICKET (y CLAVE_UNICA_* si va
 
 `config/company.json` (gitignored) ya tiene la identidad real de KeepSync (RUT 78.441.121-4,
 confirmada con la ficha del proveedor de Mercado Público) y el pricing real (precio público de
-Anthropic en USD → CLP con dólar observado en vivo → +5% margen → +19% IVA). Si se pierde o hay
+Anthropic en USD → CLP con dólar observado en vivo → +19% IVA de costo → +10% markup → +19% IVA
+de venta; incluye siempre taller de 3 h y comunidad de usuarios sin costo). Si se pierde o hay
 que recrearlo, copiar `config/company.json.example` y completar los campos — el agente rechaza
 el archivo (lanza error y no cotiza) mientras tenga placeholders `"COMPLETAR"` sin llenar. Si en
 cambio el archivo está completo pero `identidad_confirmada` queda en `false`, sí se usa para

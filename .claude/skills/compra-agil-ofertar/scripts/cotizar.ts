@@ -94,10 +94,27 @@ async function main() {
       valorUnitMensualClp: linea.neto_clp_unitario / linea.meses,
       subtotalNetoClp: linea.neto_clp_total,
     },
+    // Valor agregado incluido siempre, sin costo adicional (subtotal null → "Incluida").
+    {
+      descripcion: "Taller de buenas prácticas (3 horas) para aprovechar al máximo la plataforma",
+      cantidad: 1,
+      meses: null,
+      valorUnitMensualClp: null,
+      subtotalNetoClp: null,
+    },
+    {
+      descripcion: "Acceso a la comunidad de usuarios de Claude en Chile",
+      cantidad: 1,
+      meses: null,
+      valorUnitMensualClp: null,
+      subtotalNetoClp: null,
+    },
   ];
 
   const condicionesComerciales = [
     `Plazo de entrega / activación: ${condiciones.plazo_entrega_dias ?? "a confirmar"} día(s) hábil(es) desde la adjudicación.`,
+    "Incluye, sin costo adicional, un taller de buenas prácticas de 3 horas para aprovechar al máximo la plataforma.",
+    "Incluye, sin costo adicional, acceso a la comunidad de usuarios de Claude en Chile.",
     "Valor de despacho / entrega digital incluido en el monto total.",
     "Proveedor con habilidad vigente en el Sistema de Información (Mercado Público).",
     ...condiciones.documentos_exigidos.map((d) => `Documento exigido: ${d} — adjuntar junto con la oferta.`),
