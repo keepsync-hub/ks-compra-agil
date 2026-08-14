@@ -13,7 +13,8 @@
   },
   "pricing": {
     "moneda_lista": "USD",
-    "margen_pct": 5,
+    "markup_pct": 10,
+    "_formula_nota": "Precio final = lista (USD→CLP) + IVA (costo de compra) + markup_pct (sobre el costo) + IVA (venta). Es decir total = lista × (1+iva) × (1+markup) × (1+iva). El IVA se aplica dos veces a propósito: una en el costo de adquisición y otra en la venta facturada.",
     "iva_pct": 19,
     "fx_fuente": "mindicador.cl (dólar observado, Banco Central de Chile) — consultado en vivo por src/lib/pricing.ts en cada cotización",
     "fx_fallback_clp_por_usd": 916,

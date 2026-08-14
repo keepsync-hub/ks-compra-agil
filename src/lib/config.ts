@@ -36,7 +36,7 @@ export interface CompanyConfig {
   };
   pricing: {
     moneda_lista: "USD";
-    margen_pct: number;
+    markup_pct: number;
     iva_pct: number;
     fx_fuente: string;
     fx_fallback_clp_por_usd: number;

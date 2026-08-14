@@ -141,7 +141,7 @@
       revisión y envío manual de un humano. Esta página resume qué está construido, probado
       contra la API real, y qué sigue pendiente.
     </p>
-    <p class="meta">Generado 2026-08-13 · repo <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a>, rama <code>claude/mercadopublico-agente-compras-pgyedf</code> · <a href="flujo.html">ver el flujo completo, paso a paso →</a></p>
+    <p class="meta">Generado 2026-08-14 · repo <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a>, rama <code>claude/mercadopublico-agente-compras-pgyedf</code> · <a href="flujo.html">ver el flujo completo, paso a paso →</a></p>
   </div>
 </header>
 
@@ -173,7 +173,7 @@
       </div>
       <div class="status-row">
         <span class="badge ok">Funcionando</span>
-        <div><div class="name">Cotizador (<code>compra-agil-ofertar</code> → cotizar.ts)</div><div class="desc">Precio público Anthropic (USD) → CLP con dólar observado en vivo → +5% margen → +19% IVA. Nunca cotiza sobre el tope — se detiene si no cabe.</div></div>
+        <div><div class="name">Cotizador (<code>compra-agil-ofertar</code> → cotizar.ts)</div><div class="desc">Precio público Anthropic (USD) → CLP con dólar observado en vivo → +19% IVA (costo) → +10% markup → +19% IVA (venta). Incluye siempre, sin costo, un taller de 3 h y acceso a la comunidad de usuarios de Claude en Chile. Nunca cotiza sobre el tope — se detiene si no cabe.</div></div>
         <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/.claude/skills/compra-agil-ofertar/scripts/cotizar.ts">Ver código</a>
       </div>
       <div class="status-row">
@@ -218,15 +218,16 @@
         <dl>
           <dt>Plan</dt><dd>Claude Pro, 10 usuarios</dd>
           <dt>Tope</dt><dd>$3.500.000 CLP</dd>
-          <dt>Cotizado</dt><dd>$2.330.813 CLP (dentro del tope)</dd>
+          <dt>Cotizado</dt><dd>$2.901.902 CLP (dentro del tope)</dd>
           <dt>Cierre</dt><dd>2026-08-15 13:00</dd>
           <dt>Competencia</dt><dd>4 ofertas recibidas</dd>
+          <dt>Incluye</dt><dd>Taller de 3 h + comunidad de usuarios de Claude en Chile, sin costo</dd>
         </dl>
         <div class="cta">
           <span class="badge ok">Cotización lista</span>
         </div>
-        <a class="btn" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/4127-82-COT26/Q-20260812-SubsecretariaDeRedesAsistenciales.pdf">Descargar cotización (PDF)</a>
-        <a class="btn secondary" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/4127-82-COT26/Q-20260812-SubsecretariaDeRedesAsistenciales.pptx">Fuente editable (.pptx)</a>
+        <a class="btn" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/4127-82-COT26/Q-20260814-SubsecretariaDeRedesAsistenciales.pdf">Descargar cotización (PDF)</a>
+        <a class="btn secondary" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/4127-82-COT26/Q-20260814-SubsecretariaDeRedesAsistenciales.pptx">Fuente editable (.pptx)</a>
       </div>
 
     </div>
@@ -273,12 +274,12 @@
           <tr>
             <td><strong>Precio más bajo que cumpla.</strong> Criterio textual de La Frontera: "prevalecerá la oferta más económica y conveniente que cumpla lo requerido". Arturo Prat (2013-1336): oferta económica 40% del puntaje.</td>
             <td>Quien tenga menor costo — descuento de canal/educación, o que absorba margen.</td>
-            <td>Cotizamos a precio público de lista +5% +IVA; un competidor con descuento de canal ofrece más barato con el mismo cumplimiento.</td>
+            <td>Cotizamos sobre el precio público de lista (+IVA de costo, +10% markup, +IVA de venta); un competidor con descuento de canal ofrece más barato con el mismo cumplimiento.</td>
           </tr>
           <tr>
             <td><strong>Tope por debajo de nuestro costo.</strong> U. de Valparaíso (5626-453): tope $182.882 &lt; costo de lista $186.539. Arturo Prat: 30 asientos Team = $8,24 M vs tope $6,6 M.</td>
             <td>Quien consiga la licencia por debajo del precio de lista, o facture sin el IVA que nosotros sí aplicamos.</td>
-            <td>Con la fórmula actual no cabemos bajo el tope: inadmisibles por precio, sin importar cuánto ajustemos el margen.</td>
+            <td>Con la fórmula actual no cabemos bajo el tope: inadmisibles por precio, sin importar cuánto ajustemos el markup.</td>
           </tr>
           <tr>
             <td><strong>Facturación compatible con Anthropic.</strong> Valparaíso (2427-851): "el método de pago debe ser compatible con las políticas de facturación de Anthropic para evitar suspensiones".</td>

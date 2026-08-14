@@ -48,19 +48,26 @@ export interface LineaCotizada {
   cantidad: number;
   precio_lista_usd_mes: number;
   meses: number;
+  markup_pct: number;
   costo_usd_total: number;
-  costo_clp_total: number;
-  neto_clp_unitario: number;
+  lista_clp_total: number; // precio de lista en CLP (neto, antes de IVA)
+  costo_clp_total: number; // costo real = lista + IVA de compra (lo que paga KeepSync)
+  neto_clp_unitario: number; // base imponible de la venta = costo + markup
   neto_clp_total: number;
-  iva_clp_total: number;
+  iva_clp_total: number; // IVA de la venta (sobre el neto de venta)
   total_clp_unitario: number;
   total_clp_total: number;
 }
 
 /**
- * Precio de venta = costo publicado por Anthropic (USD, convertido a CLP con el dólar
- * observado) + margen_pct + iva_pct, aplicados en cascada (neto = costo*(1+margen),
- * total = neto*(1+iva)) — igual que se factura en Chile: neto + IVA = total.
+ * Fórmula de precio (definida por el usuario):
+ *   1. base = precio de lista publicado por Anthropic (USD × meses) → CLP con el dólar observado.
+ *   2. costo = base + IVA (el precio incluye IVA porque KeepSync paga IVA al adquirir la licencia).
+ *   3. neto de venta = costo + markup (markup_pct sobre el costo con IVA).
+ *   4. oferta final (total) = neto de venta + IVA (el IVA que se factura al organismo).
+ * Es decir, total = base × (1+iva) × (1+markup) × (1+iva). El IVA aparece dos veces a propósito:
+ * una como parte del costo de adquisición y otra como el IVA de la venta que se declara en la
+ * factura. En la cotización se muestra "Neto" (base imponible de la venta) + "IVA" = "Total".
  */
 export function cotizarLinea(
   planKey: string,
@@ -75,11 +82,14 @@ export function cotizarLinea(
       `Plan "${planKey}" no está en company.json (pricing.planes). Planes disponibles: ${Object.keys(company.pricing.planes).join(", ")}`,
     );
   }
+  const iva = company.pricing.iva_pct / 100;
+  const markup = company.pricing.markup_pct / 100;
+
   const costoUsdUnitario = plan.precio_lista_usd_mes * meses;
-  const costoUsdTotal = costoUsdUnitario * cantidad;
-  const costoClpUnitario = costoUsdUnitario * fxClpPorUsd;
-  const netoClpUnitario = costoClpUnitario * (1 + company.pricing.margen_pct / 100);
-  const totalClpUnitario = netoClpUnitario * (1 + company.pricing.iva_pct / 100);
+  const listaClpUnitario = costoUsdUnitario * fxClpPorUsd; // base: precio de lista en CLP (neto)
+  const costoClpUnitario = listaClpUnitario * (1 + iva); // costo = lista + IVA de compra
+  const netoClpUnitario = costoClpUnitario * (1 + markup); // neto de venta = costo + markup
+  const totalClpUnitario = netoClpUnitario * (1 + iva); // total = neto de venta + IVA de venta
 
   const netoClpTotal = netoClpUnitario * cantidad;
   const totalClpTotal = totalClpUnitario * cantidad;
@@ -89,7 +99,9 @@ export function cotizarLinea(
     cantidad,
     precio_lista_usd_mes: plan.precio_lista_usd_mes,
     meses,
-    costo_usd_total: round2(costoUsdTotal),
+    markup_pct: company.pricing.markup_pct,
+    costo_usd_total: round2(costoUsdUnitario * cantidad),
+    lista_clp_total: round0(listaClpUnitario * cantidad),
     costo_clp_total: round0(costoClpUnitario * cantidad),
     neto_clp_unitario: round0(netoClpUnitario),
     neto_clp_total: round0(netoClpTotal),
