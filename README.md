@@ -40,6 +40,27 @@ cotizar, pero cada PDF/PPTX generado queda marcado BORRADOR hasta que se confirm
 | `npm run form-fill -- <codigo>` | Completa el formulario de oferta en el portal y adjunta el PDF, sin enviar. Requiere login previo. |
 | `npm run typecheck` | `tsc --noEmit`. |
 
+## Agentes de GitHub Copilot (cloud agent)
+
+Además de los skills de Claude Code, el repo expone la misma lógica como **custom agents de
+GitHub Copilot** (`.github/agents/*.agent.md`) para poder correrla desde la nube sin una sesión
+manual:
+
+| Agente | Cubre | Qué NO hace |
+|---|---|---|
+| `compra-agil-radar` | El skill `compra-agil-radar-claude` completo (`npm run radar` + `npm run informe`). Solo lectura. | No cotiza ni toca `config/company.json`. |
+| `compra-agil-cotizar` | Solo el Paso 1 del skill `compra-agil-ofertar` (`npm run cotizar -- <codigo>`). | Nunca corre `login.ts`/`form-fill.ts` (diferido a Cowork local) ni envía nada. |
+
+Para usarlos: pestaña **Agents** del repo en GitHub → elegir el agente → indicar la rama y (para
+`compra-agil-cotizar`) el código de la Compra Ágil. Cada corrida entrega un PR, nunca hace push
+directo ni envía una oferta.
+
+Para que `compra-agil-radar` corra solo (ej. diario), configurar una **automation** desde la
+pestaña Agents (Settings → Copilot → Agents → Automations) apuntando a este agente con un
+trigger "on a schedule" — esa programación se guarda del lado de GitHub, no como archivo en el
+repo, así que hay que activarla manualmente una vez. Antes de activarla, cargar
+`COMPRA_AGIL_API_TICKET` como *repository secret* (no en `.env`, que es solo para uso local).
+
 ## Estado y pendientes
 
 - **Radar e informe del nicho: funcionando de punta a punta contra la API real** — encuentra las
