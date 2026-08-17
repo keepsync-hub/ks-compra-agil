@@ -61,6 +61,29 @@ trigger "on a schedule" — esa programación se guarda del lado de GitHub, no c
 repo, así que hay que activarla manualmente una vez. Antes de activarla, cargar
 `COMPRA_AGIL_API_TICKET` como *repository secret* (no en `.env`, que es solo para uso local).
 
+## Segundo nicho: Licitaciones de Gestión Documental / Digitalización de Procesos / Oficina de Partes
+
+Réplica del radar y el cotizador, pero para **Licitaciones públicas** (no Compra Ágil) que piden
+gestión documental, digitalización de procesos u oficina de partes. Vive en `licitaciones/`
+(librería, config y datos propios) + los skills `radar_licitaciones` y `cotizar_licitaciones` en
+`.claude/skills/`. Diseño completo, diferencias respecto a Compra Ágil e insumos bloqueantes:
+ver `licitaciones/PLAN.md`.
+
+**⚠️ Sin verificar contra producción todavía** (a diferencia de todo lo de Compra Ágil arriba):
+no se dispuso de un `LICITACIONES_API_TICKET` (distinto del de Compra Ágil, se pide en
+https://www.mercadopublico.cl/Home/Api) durante la sesión en que se escribió este código, y
+tampoco hay un catálogo de costos reales de KeepSync para gestión documental — a diferencia de
+licencias Claude, acá no existe un precio de lista público que copiar. Ambos son insumos
+bloqueantes documentados en `licitaciones/PLAN.md`.
+
+| Comando | Qué hace |
+|---|---|
+| `npm run radar-licitaciones` | Busca licitaciones activas de gestión documental/digitalización/oficina de partes, extrae condiciones, detecta recompradores. Solo lectura. |
+| `npm run informe-licitaciones` | Genera `licitaciones/output/informe-nicho-gestion-documental.md` con el barrido histórico. |
+| `npm run cotizar-licitaciones -- <codigo>` | Genera la cotización (`.pptx` + `.pdf`) para una licitación específica, validando el tope. No envía nada. |
+
+Página de estado equivalente: `docs/licitaciones.html` (+ `docs/informe-nicho-licitaciones.html`).
+
 ## Estado y pendientes
 
 - **Radar e informe del nicho: funcionando de punta a punta contra la API real** — encuentra las

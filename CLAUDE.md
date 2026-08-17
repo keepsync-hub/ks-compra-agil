@@ -53,3 +53,12 @@ humano y nunca el agente (ver guardrails abajo). El radar y el informe del nicho
 - **No inventar precios** — requieren `config/company.json` con costos reales del usuario.
 - Ante CAPTCHA o bloqueo del portal: detenerse y pedir intervención humana, no reintentar a
   ciegas.
+
+## Segundo nicho: Licitaciones de Gestión Documental (`licitaciones/`)
+
+Réplica de este mismo radar+cotizador para **Licitaciones públicas** (no Compra Ágil) de gestión
+documental, digitalización de procesos u oficina de partes — skills `radar_licitaciones` y
+`cotizar_licitaciones`. Es un dominio distinto con su propia API (`api.mercadopublico.cl`, ticket
+separado), su propio catálogo de costos (sin precio de lista público como el de Claude) y sus
+propios insumos bloqueantes sin resolver. **Leer `licitaciones/PLAN.md` antes de tocar ese
+código** — no asumir que los guardrails y hallazgos de arriba aplican tal cual a ese dominio.

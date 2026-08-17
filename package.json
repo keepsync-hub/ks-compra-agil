@@ -10,6 +10,9 @@
     "cotizar": "tsx .claude/skills/compra-agil-ofertar/scripts/cotizar.ts",
     "login": "tsx .claude/skills/compra-agil-ofertar/scripts/login.ts",
     "form-fill": "tsx .claude/skills/compra-agil-ofertar/scripts/form-fill.ts",
+    "radar-licitaciones": "tsx .claude/skills/radar_licitaciones/scripts/radar.ts",
+    "informe-licitaciones": "tsx .claude/skills/radar_licitaciones/scripts/informe-nicho.ts",
+    "cotizar-licitaciones": "tsx .claude/skills/cotizar_licitaciones/scripts/cotizar.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -17,5 +17,11 @@ data/*
 # (ver docs/index.html). Quedan marcadas BORRADOR mientras config/company.json no tenga la
 # identidad real de la empresa confirmada.
 
+# mismo criterio para el dominio de licitaciones (licitaciones/) — secretos y caché no se
+# versionan, licitaciones/output/ sí.
+licitaciones/config/company.json
+licitaciones/data/*
+!licitaciones/data/.gitkeep
+
 *.log
 .DS_Store

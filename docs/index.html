@@ -141,7 +141,7 @@
       revisión y envío manual de un humano. Esta página resume qué está construido, probado
       contra la API real, y qué sigue pendiente.
     </p>
-    <p class="meta">Generado 2026-08-17 · repo <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a>, rama <code>claude/mercadopublico-agente-compras-pgyedf</code> · <a href="flujo.html">ver el flujo completo, paso a paso →</a></p>
+    <p class="meta">Generado 2026-08-17 · repo <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a>, rama <code>claude/mercadopublico-agente-compras-pgyedf</code> · <a href="flujo.html">ver el flujo completo, paso a paso →</a> · <a href="licitaciones.html">ver el segundo nicho: Licitaciones de Gestión Documental →</a></p>
   </div>
 </header>
 
@@ -364,6 +364,23 @@
   </section>
 
   <section>
+    <h2>Segundo nicho: Licitaciones de Gestión Documental</h2>
+    <p class="section-sub">
+      Este mismo radar y cotizador, replicados para <strong>Licitaciones públicas</strong> (no
+      Compra Ágil) que piden gestión documental, digitalización de procesos u oficina de partes —
+      código escrito y listo (<code>radar_licitaciones</code>, <code>cotizar_licitaciones</code>),
+      pero sin correr todavía contra la API real ni con costos reales cargados.
+    </p>
+    <div class="status-grid">
+      <div class="status-row">
+        <span class="badge warn">Escrito, sin verificar</span>
+        <div><div class="name">Radar + cotizador de Licitaciones</div><div class="desc">Misma arquitectura, API y catálogo de costos distintos — faltan el ticket de esa API y el catálogo de costos reales de KeepSync para este segundo negocio.</div></div>
+        <a class="btn secondary" href="licitaciones.html">Ver estado completo</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <h2>Qué falta para operar en serio</h2>
     <ol>
       <li><strong>Sesión con Claude Cowork en máquina local</strong> — completar login ClaveÚnica + formulario de cada oportunidad abierta, adjuntando el PDF correspondiente de <code>output/</code>, y detenerse antes de enviar para revisión humana.</li>
@@ -378,6 +395,7 @@
     <p>Página generada automáticamente a partir del estado del repo en la fecha indicada arriba — no se actualiza sola. Volver a correr <code>npm run radar</code> / <code>npm run informe</code> / <code>npm run cotizar</code> y regenerar esta página para refrescar los números.</p>
     <div class="links-row">
       <a href="flujo.html">Flujo completo</a>
+      <a href="licitaciones.html">Segundo nicho: Licitaciones de Gestión Documental</a>
       <a href="https://github.com/keepsync-hub/ks-compra-agil">Repositorio</a>
       <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/PLAN.md">PLAN.md</a>
       <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/CLAUDE.md">CLAUDE.md</a>

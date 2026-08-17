@@ -1,0 +1,61 @@
+{
+  "razon_social": "COMPLETAR: razón social exacta de KeepSync",
+  "rut": "COMPLETAR: RUT de KeepSync, formato 12.345.678-9",
+  "es_emt": true,
+  "giro": "COMPLETAR: giro declarado ante SII",
+  "direccion": "COMPLETAR: dirección comercial",
+  "representante_legal": "COMPLETAR: nombre del representante legal",
+  "identidad_confirmada": false,
+  "contacto": {
+    "nombre": "COMPLETAR",
+    "email": "COMPLETAR",
+    "telefono": "COMPLETAR"
+  },
+  "pricing": {
+    "moneda": "CLP",
+    "markup_pct": 10,
+    "_formula_nota": "A diferencia de licencias Claude (precio de lista público de Anthropic en USD), acá NO existe un precio de lista externo que copiar: gestión documental/digitalización de procesos es un servicio que KeepSync arma con su propio costo real (plataforma que revende, horas propias o de terceros, etc.). Fórmula por defecto: total = costo_clp × (1+markup) × (1+iva). Confirmar con el usuario si esta fórmula (markup_pct, iva_pct) es la que realmente quiere usar para este negocio antes de cotizar en serio — es un valor por defecto, no una decisión ya tomada como sí lo fue la fórmula de licencias Claude.",
+    "iva_pct": 19,
+    "items": {
+      "licencia_sgd_usuario_mes": {
+        "nombre": "Licencia plataforma de Gestión Documental / Oficina de Partes (por usuario/mes)",
+        "costo_clp": 0,
+        "unidad": "usuario_mes",
+        "notas": "COMPLETAR: costo real que paga KeepSync por usuario/mes de la plataforma que efectivamente revende o implementa (nombre del producto, proveedor, condiciones de licenciamiento)."
+      },
+      "implementacion_proyecto": {
+        "nombre": "Implementación y configuración inicial",
+        "costo_clp": 0,
+        "unidad": "proyecto",
+        "notas": "COMPLETAR: costo real de poner en marcha la plataforma para un organismo (parametrización, flujos, roles)."
+      },
+      "migracion_documento": {
+        "nombre": "Migración / digitalización de documentos existentes",
+        "costo_clp": 0,
+        "unidad": "documento",
+        "notas": "COMPLETAR: costo real por documento digitalizado/migrado (escaneo, indexación, control de calidad). Si se cobra por GB o por lote, ajustar la unidad y recalcular antes de cotizar."
+      },
+      "capacitacion_hora": {
+        "nombre": "Capacitación a usuarios finales",
+        "costo_clp": 0,
+        "unidad": "hora",
+        "notas": "COMPLETAR: costo real por hora de capacitación (instructor, materiales)."
+      },
+      "soporte_mensual": {
+        "nombre": "Soporte y mantención mensual",
+        "costo_clp": 0,
+        "unidad": "mensual",
+        "notas": "COMPLETAR: costo real de soporte post-implementación por mes de contrato."
+      },
+      "integracion_hora": {
+        "nombre": "Integración con sistemas existentes",
+        "costo_clp": 0,
+        "unidad": "hora",
+        "notas": "COMPLETAR: costo real por hora de desarrollo de integración (ej. con sistemas municipales, SII, ChileAtiende)."
+      }
+    }
+  },
+  "documentos_estandar": [
+    "COMPLETAR: lista de documentos que KeepSync puede adjuntar sin pedir nada al usuario (ej. certificado de vigencia, patente municipal) — dejar vacío si no hay ninguno preparado de antemano"
+  ]
+}
