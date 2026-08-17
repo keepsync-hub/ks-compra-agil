@@ -2,8 +2,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR, loadCompanyConfig } from "../../../../src/lib/config.js";
 import { obtenerDetalleCompraAgil, type CompraAgilDetalle } from "../../../../src/lib/api.js";
-import { extraerCondiciones } from "../../../../src/lib/condiciones.js";
-import { obtenerTipoCambioUsdClp, cotizarLinea, mapearPlanAClavePricing } from "../../../../src/lib/pricing.js";
+import { extraerCondiciones, type Condiciones } from "../../../../src/lib/condiciones.js";
+import { obtenerTipoCambioUsdClp, cotizarLinea, mapearPlanAClavePricing, detectarPlanPricingDeTexto } from "../../../../src/lib/pricing.js";
 import { generarCotizacionPptx, type LineaCotizacionDisplay } from "../../../../src/lib/cotizacion-pptx.js";
 import { generarCotizacionPdf } from "../../../../src/lib/cotizacion-pdf.js";
 import { nombreArchivoCotizacion } from "../../../../src/lib/nombre-archivo.js";
@@ -17,6 +17,43 @@ async function cargarDetalle(codigo: string): Promise<CompraAgilDetalle> {
   }
   console.log(`Sin caché local, consultando la API...`);
   return obtenerDetalleCompraAgil(codigo);
+}
+
+interface LineaPlan {
+  clave: string;
+  cantidad: number;
+  meses: number;
+  requiereRevision: boolean;
+}
+
+/**
+ * Arma las líneas a cotizar. Si la compra itemiza varios tramos en `productos_solicitados`
+ * (p.ej. 1 Team Premium + 10 Team Standard, como pide Providencia), genera una línea por tramo
+ * detectando el plan de cada producto y agrupando por clave de pricing. Si es un solo producto,
+ * o algún producto no mapea a un plan conocido, cae a la detección única de `extraerCondiciones`
+ * (comportamiento previo). Devuelve null si no puede determinar plan y cantidad con confianza.
+ */
+function construirLineasACotizar(
+  detalle: CompraAgilDetalle,
+  condiciones: Condiciones,
+  meses: number,
+): LineaPlan[] | null {
+  const productos = detalle.productos_solicitados ?? [];
+  if (productos.length > 1) {
+    const porClave = new Map<string, LineaPlan>();
+    for (const p of productos) {
+      const det = detectarPlanPricingDeTexto(`${p.nombre} ${p.descripcion}`);
+      if (!det || !p.cantidad || p.cantidad < 1) return null; // no confiable → cae a tramo único
+      const e = porClave.get(det.clave) ?? { clave: det.clave, cantidad: 0, meses, requiereRevision: false };
+      e.cantidad += p.cantidad;
+      e.requiereRevision = e.requiereRevision || det.requiereRevision;
+      porClave.set(det.clave, e);
+    }
+    if (porClave.size > 0) return [...porClave.values()];
+  }
+  const planMapeado = mapearPlanAClavePricing(condiciones.plan_detectado);
+  if (!planMapeado || !condiciones.cantidad_usuarios) return null;
+  return [{ clave: planMapeado.clave, cantidad: condiciones.cantidad_usuarios, meses, requiereRevision: planMapeado.requiereRevision }];
 }
 
 async function main() {
@@ -45,40 +82,43 @@ async function main() {
 
   const condiciones = extraerCondiciones(detalle);
 
-  const planMapeado = mapearPlanAClavePricing(condiciones.plan_detectado);
-  if (!planMapeado) {
-    console.error(
-      `No se pudo determinar automáticamente el plan a cotizar (detectado: "${condiciones.plan_detectado}"). ` +
-        `Revisar manualmente la descripción de ${codigo} y, si corresponde, cotizar a mano — el agente no adivina el plan.`,
-    );
-    process.exitCode = 1;
-    return;
-  }
-  if (planMapeado.requiereRevision) {
-    console.warn(
-      `Aviso: plan "Team" detectado sin distinguir asiento estándar/premium en el texto — se está usando ` +
-        `"${company.pricing.planes[planMapeado.clave]?.nombre}" por defecto. Confirmar manualmente antes de enviar.`,
-    );
-  }
-
-  if (!condiciones.cantidad_usuarios) {
-    console.error(`No se pudo determinar la cantidad de usuarios/licencias solicitadas en ${codigo}. Revisar manualmente.`);
-    process.exitCode = 1;
-    return;
-  }
   const meses = condiciones.meses_vigencia ?? 12;
   if (!condiciones.meses_vigencia) {
     console.warn(`No se detectó la duración explícita en el texto — asumiendo 12 meses. Confirmar manualmente.`);
   }
 
+  const lineasPlan = construirLineasACotizar(detalle, condiciones, meses);
+  if (!lineasPlan) {
+    console.error(
+      `No se pudo determinar automáticamente el plan y la cantidad a cotizar en ${codigo} ` +
+        `(plan detectado: "${condiciones.plan_detectado}", cantidad: ${condiciones.cantidad_usuarios ?? "?"}). ` +
+        `Revisar manualmente — el agente no adivina.`,
+    );
+    process.exitCode = 1;
+    return;
+  }
+  if (lineasPlan.some((l) => l.requiereRevision)) {
+    console.warn(
+      `Aviso: uno o más tramos "Team" se detectaron sin distinguir estándar/premium en el texto — se usó ` +
+        `estándar por defecto. Confirmar manualmente antes de enviar.`,
+    );
+  }
+  if (lineasPlan.length > 1) {
+    console.log(`Cotización multi-tramo: ${lineasPlan.map((l) => `${l.cantidad}×${l.clave}`).join(", ")}.`);
+  }
+
   const fx = await obtenerTipoCambioUsdClp(company.pricing.fx_fallback_clp_por_usd);
   console.log(`Tipo de cambio usado: $${fx.valor} CLP/USD (${fx.fuente})`);
 
-  const linea = cotizarLinea(planMapeado.clave, company, condiciones.cantidad_usuarios, meses, fx.valor);
+  const lineasCotizadas = lineasPlan.map((l) => cotizarLinea(l.clave, company, l.cantidad, l.meses, fx.valor));
+  const netoClpTotal = lineasCotizadas.reduce((a, l) => a + l.neto_clp_total, 0);
+  const ivaClpTotal = lineasCotizadas.reduce((a, l) => a + l.iva_clp_total, 0);
+  const totalClpTotal = lineasCotizadas.reduce((a, l) => a + l.total_clp_total, 0);
+  const cantidadTotal = lineasCotizadas.reduce((a, l) => a + l.cantidad, 0);
 
-  if (linea.total_clp_total > condiciones.tope_clp) {
+  if (totalClpTotal > condiciones.tope_clp) {
     console.error(
-      `\nINADMISIBLE: la cotización (${linea.total_clp_total.toLocaleString("es-CL")} CLP) supera el tope ` +
+      `\nINADMISIBLE: la cotización (${totalClpTotal.toLocaleString("es-CL")} CLP) supera el tope ` +
         `presupuestario de ${codigo} (${condiciones.tope_clp.toLocaleString("es-CL")} CLP). ` +
         `No se genera oferta — cotizar por sobre el tope es causal de inadmisibilidad. No enviar.`,
     );
@@ -86,14 +126,24 @@ async function main() {
     return;
   }
 
+  // Etiqueta del plan para títulos: un solo nombre si hay un tramo; "Claude Team" si todos son
+  // Team; si no, los nombres distintos unidos.
+  const nombresDistintos = [...new Set(lineasCotizadas.map((l) => l.plan))];
+  const planPrincipal =
+    nombresDistintos.length === 1
+      ? nombresDistintos[0]!
+      : lineasPlan.every((l) => l.clave.startsWith("team"))
+        ? "Claude Team"
+        : nombresDistintos.join(" + ");
+
   const lineasDisplay: LineaCotizacionDisplay[] = [
-    {
-      descripcion: `Licencia cuenta ${linea.plan}`,
-      cantidad: linea.cantidad,
-      meses: linea.meses,
-      valorUnitMensualClp: linea.neto_clp_unitario / linea.meses,
-      subtotalNetoClp: linea.neto_clp_total,
-    },
+    ...lineasCotizadas.map((l) => ({
+      descripcion: `Licencia cuenta ${l.plan}`,
+      cantidad: l.cantidad,
+      meses: l.meses,
+      valorUnitMensualClp: l.neto_clp_unitario / l.meses,
+      subtotalNetoClp: l.neto_clp_total,
+    })),
     // Valor agregado incluido siempre, sin costo adicional (subtotal null → "Incluida").
     {
       descripcion: "Taller de buenas prácticas (3 horas) para aprovechar al máximo la plataforma",
@@ -137,13 +187,13 @@ async function main() {
     nombreCompra: detalle.nombre,
     organismoComprador: detalle.institucion.organismo_comprador,
     direccionEntrega: detalle.entrega?.direccion_entrega,
-    planPrincipal: linea.plan,
-    cantidadUsuarios: condiciones.cantidad_usuarios,
+    planPrincipal,
+    cantidadUsuarios: cantidadTotal,
     mesesVigencia: meses,
     lineas: lineasDisplay,
-    netoClp: linea.neto_clp_total,
-    ivaClp: linea.iva_clp_total,
-    totalClp: linea.total_clp_total,
+    netoClp: netoClpTotal,
+    ivaClp: ivaClpTotal,
+    totalClp: totalClpTotal,
     topeClp: condiciones.tope_clp,
     plazoEntregaDias: condiciones.plazo_entrega_dias,
     documentosExigidos: condiciones.documentos_exigidos,
@@ -165,7 +215,15 @@ async function main() {
       {
         codigo,
         fx: fx.valor,
-        ...linea,
+        plan: planPrincipal,
+        cantidad: cantidadTotal,
+        meses,
+        // Agregados top-level (los consume form-fill.ts): compatibles con el formato de un solo tramo.
+        neto_clp_total: netoClpTotal,
+        iva_clp_total: ivaClpTotal,
+        total_clp_total: totalClpTotal,
+        // Detalle por tramo (una entrada por plan cotizado).
+        lineas: lineasCotizadas,
         tope_clp: condiciones.tope_clp,
         archivo_pptx: nombreArchivoPptx,
         archivo_pdf: nombreArchivoPdf,
@@ -179,7 +237,7 @@ async function main() {
 
   console.log(`\nCotización generada: ${rutaPptx}`);
   console.log(`PDF (artefacto final a publicar): ${rutaPdf}`);
-  console.log(`Total: $${linea.total_clp_total.toLocaleString("es-CL")} CLP (tope: $${condiciones.tope_clp.toLocaleString("es-CL")} CLP) — dentro del tope.`);
+  console.log(`Total: $${totalClpTotal.toLocaleString("es-CL")} CLP (tope: $${condiciones.tope_clp.toLocaleString("es-CL")} CLP) — dentro del tope.`);
   console.log(`\nEsto NO envía nada. Revisar el archivo y luego usar el flujo de formulario (login + form-fill) para dejar la oferta lista; el envío final lo confirma un humano.`);
 }
 

@@ -1,10 +1,11 @@
-# 1056854-51-COT26 — I. Municipalidad de Providencia — cotización mixta (requiere generación manual)
+# 1056854-51-COT26 — I. Municipalidad de Providencia — cotización multi-tramo (generada)
 
 **Suscripción Claude AI Team Seat, 12 meses. Tope: $5.200.000 CLP.** Cierre: 2026-08-17 13:00.
 
-## Qué pide realmente (del detalle de productos)
+## Qué pide (del detalle de productos)
 
-El radar detectó "Team, 1 usuario", pero los ítems solicitados son una **combinación de tramos**:
+Combinación de tramos de Team, ahora cotizada automáticamente por el cotizador (soporte
+multi-tramo):
 
 | Ítem | Tramo | Cantidad |
 |---|---|---|
@@ -13,7 +14,7 @@ El radar detectó "Team, 1 usuario", pero los ítems solicitados son una **combi
 | Equipo 2 | Team **Standard** Seat | 4 |
 | **Total** | | **11 asientos** (1 premium + 10 estándar) |
 
-## Cotización (fórmula del proyecto, fx $913,2 CLP/USD)
+## Cotización generada (fx $913,2 CLP/USD)
 
 | Concepto | Total |
 |---|---|
@@ -23,25 +24,13 @@ El radar detectó "Team, 1 usuario", pero los ítems solicitados son una **combi
 | **IVA 19%** | **$817.639** |
 | **TOTAL** | **$5.121.003** |
 
-**Cabe bajo el tope de $5.200.000 — holgura de solo $78.997 (~1,5%).**
+**Cabe bajo el tope de $5.200.000 — holgura de solo $78.997 (~1,5%).** El PDF/PPTX está en esta
+carpeta (`Q-20260817-IMunicipalidadDeProvidencia.*`), con las dos líneas de licencias + el taller
+de 3 h y la comunidad de usuarios incluidos.
 
-## Por qué no la generó el cotizador automático
+## Antes de enviar
 
-- `cotizar.ts` maneja **un solo tramo por oferta**; aquí hay premium + estándar mezclados y no
-  puede armar la tabla de dos líneas automáticamente.
-- Además detectó mal la cantidad (1 en vez de 11), porque la tomó del texto "EQUIPO 1".
-- **Acción:** generar la cotización a mano con dos líneas (1 premium + 10 estándar), revisar el
-  `Solicitud Cotización.docx` adjunto (define el formato exigido) y confirmar el split de tramos
-  antes de ofertar.
-
-## Admisibilidad
-
+- **Confirmar el dólar del día**: sobre ~$927 CLP/USD la oferta se pasa del tope (margen ~1,5%).
 - **Adjuntar el formato de cotización es requisito de admisibilidad**: "no adjuntarlo, dicha
   oferta será declarada INADMISIBLE".
-- Incluir el taller de 3 h y el acceso a la comunidad de usuarios (valor agregado estándar de
-  KeepSync, sin costo).
-
-## Lectura
-
-Oportunidad viable pero de margen ajustado: cabe por ~$79k. Cualquier alza del dólar sobre
-~$927 CLP/USD la deja sobre el tope. Confirmar el tipo de cambio del día antes de enviar.
+- Verificar el split de tramos (1 premium + 10 estándar) contra el `Solicitud Cotización.docx`.
