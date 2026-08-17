@@ -1,0 +1,46 @@
+{
+  "codigo": "1056854-51-COT26",
+  "fx": 913.2,
+  "plan": "Claude Team",
+  "cantidad": 11,
+  "meses": 12,
+  "neto_clp_total": 4303364,
+  "iva_clp_total": 817639,
+  "total_clp_total": 5121003,
+  "lineas": [
+    {
+      "plan": "Claude Team (asiento premium)",
+      "cantidad": 1,
+      "precio_lista_usd_mes": 100,
+      "meses": 12,
+      "markup_pct": 10,
+      "costo_usd_total": 1200,
+      "lista_clp_total": 1095840,
+      "costo_clp_total": 1304050,
+      "neto_clp_unitario": 1434455,
+      "neto_clp_total": 1434455,
+      "iva_clp_total": 272546,
+      "total_clp_unitario": 1707001,
+      "total_clp_total": 1707001
+    },
+    {
+      "plan": "Claude Team (asiento estándar)",
+      "cantidad": 10,
+      "precio_lista_usd_mes": 20,
+      "meses": 12,
+      "markup_pct": 10,
+      "costo_usd_total": 2400,
+      "lista_clp_total": 2191680,
+      "costo_clp_total": 2608099,
+      "neto_clp_unitario": 286891,
+      "neto_clp_total": 2868909,
+      "iva_clp_total": 545093,
+      "total_clp_unitario": 341400,
+      "total_clp_total": 3414002
+    }
+  ],
+  "tope_clp": 5200000,
+  "archivo_pptx": "Q-20260817-IMunicipalidadDeProvidencia.pptx",
+  "archivo_pdf": "Q-20260817-IMunicipalidadDeProvidencia.pdf",
+  "archivo_publicable": "Q-20260817-IMunicipalidadDeProvidencia.pdf"
+}

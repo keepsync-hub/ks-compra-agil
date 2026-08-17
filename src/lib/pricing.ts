@@ -26,6 +26,25 @@ export function mapearPlanAClavePricing(plan: PlanClaude): { clave: string; requ
 }
 
 /**
+ * Detecta la clave de pricing directamente desde un texto libre (p.ej. la descripción de un
+ * `producto_solicitado`), distinguiendo el tramo de Team (premium vs estándar) que
+ * `mapearPlanAClavePricing` no resuelve. Devuelve null si no reconoce un plan con confianza.
+ * `requiereRevision` marca "Team" sin tramo explícito (se asume estándar).
+ */
+export function detectarPlanPricingDeTexto(texto: string): { clave: string; requiereRevision: boolean } | null {
+  const t = texto.toLowerCase();
+  if (/\bteam\b/.test(t)) {
+    if (/premium/.test(t)) return { clave: "team_premium", requiereRevision: false };
+    if (/standard|est[aá]ndar/.test(t)) return { clave: "team_standard", requiereRevision: false };
+    return { clave: "team_standard", requiereRevision: true };
+  }
+  if (/max\s*20\s*x/.test(t)) return { clave: "max20x", requiereRevision: false };
+  if (/max\s*5\s*x/.test(t) || /\bmax\b/.test(t)) return { clave: "max5x", requiereRevision: false };
+  if (/\bpro\b/.test(t)) return { clave: "pro", requiereRevision: false };
+  return null;
+}
+
+/**
  * Tipo de cambio USD/CLP: se consulta en vivo al "dólar observado" (Banco Central de Chile,
  * vía mindicador.cl, API pública sin auth) para no dejar un número fijo desactualizándose con
  * el tiempo. `fx_fallback_clp_por_usd` en company.json es el respaldo si el servicio falla.
