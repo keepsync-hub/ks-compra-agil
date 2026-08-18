@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Informe del nicho: Licitaciones de Gestión Documental | KeepSync</title>
+<meta name="description" content="Informe del nicho de Licitaciones públicas de gestión documental, digitalización de procesos y oficina de partes — pendiente de primera corrida real.">
+<style>
+  :root {
+    --bg: #0E0E17; --bg-alt: #09090B; --card: #161527; --card-alt: #1D1B33; --border: #2A2844;
+    --accent: #786CF0; --accent-light: #B4AAFA; --white: #FFFFFF; --gray: #9A9FB0; --gray-dim: #6E7284;
+    --ok: #4ADE80; --warn: #FBBF24; --bad: #FB7185;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--white); font-family: -apple-system, "Segoe UI", Arial, sans-serif; line-height: 1.6; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+  header.hero { background: linear-gradient(180deg, var(--bg-alt) 0%, var(--bg) 100%); border-bottom: 1px solid var(--border); padding: 2.5rem 0 2rem; }
+  .back { color: var(--gray); text-decoration: none; font-size: 0.85rem; }
+  .back:hover { color: var(--accent-light); }
+  h1 { font-size: clamp(1.5rem, 4vw, 2.1rem); margin: 0.75rem 0 0.5rem; }
+  .subtitle { color: var(--gray); font-size: 1rem; max-width: 68ch; }
+  .meta { color: var(--gray-dim); font-size: 0.85rem; margin-top: 1rem; }
+  main { padding: 2.5rem 0 4rem; }
+  section { margin-bottom: 3rem; }
+  h2 { font-size: 1.3rem; margin: 0 0 0.3rem; }
+  .section-sub { color: var(--gray); font-size: 0.92rem; margin: 0 0 1.1rem; max-width: 70ch; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th, td { text-align: left; padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border); }
+  th { color: var(--gray-dim); font-weight: 600; font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  .table-wrap { overflow-x: auto; background: var(--card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 1rem; }
+  .table-wrap table { margin: 0; }
+  ul.motivos { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+  ul.motivos li { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.9rem; font-size: 0.87rem; color: var(--gray); }
+  .note { background: var(--card-alt); border: 1px solid var(--border); border-left: 3px solid var(--bad); border-radius: 8px; padding: 0.9rem 1.1rem; font-size: 0.88rem; color: var(--gray); }
+  code, .mono { font-family: ui-monospace, Menlo, monospace; }
+  a { color: var(--accent-light); }
+  a:hover { color: var(--white); }
+  footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--gray-dim); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <a class="back" href="licitaciones.html">← Volver al resumen de Licitaciones</a>
+    <h1>Informe del nicho: Licitaciones de Gestión Documental</h1>
+    <p class="subtitle">Barrido histórico contra <code>api.mercadopublico.cl</code> (API clásica de Licitaciones) de procesos que mencionan gestión documental, digitalización de procesos u oficina de partes.</p>
+    <p class="meta">Generado 2026-08-17 · fuente: <code>licitaciones/output/informe-nicho-gestion-documental.md</code> (aún no generado) · regenerar con <code>npm run informe-licitaciones</code></p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <div class="note">
+      <strong>Este informe todavía no tiene cifras reales.</strong> A diferencia del
+      <a href="informe-nicho.html">informe del nicho de Compra Ágil</a> (47 casos medidos contra
+      la API de producción), este barrido no se ha corrido: falta un
+      <code>LICITACIONES_API_TICKET</code> válido — ver
+      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/licitaciones-radar-cotizar-yy3pan/licitaciones/PLAN.md">licitaciones/PLAN.md</a>,
+      sección "Insumos bloqueantes". El código de <code>npm run informe-licitaciones</code> está
+      escrito y listo para correr apenas exista el ticket; esta página se regenerará con las
+      cifras reales en ese momento.
+    </div>
+  </section>
+
+  <section>
+    <h2>Qué va a medir esta corrida (una vez que exista un ticket)</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Métrica</th><th>Cómo se mide</th></tr></thead>
+        <tbody>
+          <tr><td>Tamaño del nicho</td><td>Licitaciones en estados <code>cerrada</code>, <code>desierta</code>, <code>adjudicada</code> cuyo <code>Nombre</code>/<code>Descripcion</code> mencione gestión documental / digitalización de procesos / oficina de partes (filtro local, ver <code>config/keywords.json</code>).</td></tr>
+          <tr><td>Tasa de fracaso</td><td>Proporción de <code>desierta</code> sobre el total con desenlace conocido — el mismo indicador que reveló el 79% de fracaso en Compra Ágil de Claude.</td></tr>
+          <tr><td>Monto mediano y rango</td><td><code>MontoEstimado</code> de cada caso (campo sin verificar, ver PLAN.md).</td></tr>
+          <tr><td>Recompradores</td><td>Organismos con más de una licitación de este tipo en el histórico — misma señal de alta probabilidad que en Compra Ágil.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Metodología (planeada) y limitaciones ya conocidas</h2>
+    <ul class="motivos">
+      <li>Esta API no soporta búsqueda por texto libre (a diferencia de <code>q</code> en Compra Ágil): el filtrado por palabra clave es local sobre el listado completo de cada estado consultado, no una búsqueda del servidor.</li>
+      <li>Sin acotar por fecha, un estado con volumen país completo puede ser demasiado grande para barrer de forma confiable en una sola corrida — el script avisa en consola si detecta ese caso (ver <code>informe-nicho.ts</code>).</li>
+      <li>Los nombres de campo (<code>MontoEstimado</code>, <code>Garantia.*</code>, etc.) están tomados de documentación pública histórica, sin confirmar contra una respuesta real todavía.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><a href="licitaciones.html">← Volver al resumen de Licitaciones</a> · <a href="informe-nicho.html">Ver el informe de Compra Ágil (con datos reales)</a> · Repositorio: <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

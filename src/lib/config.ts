@@ -76,7 +76,15 @@ export interface MarcasConfig {
   variantes: string[];
 }
 
+/**
+ * Deriva de config/categorias.json (categoría "claude") en vez de config/marcas.json, que se
+ * eliminó — ver PLAN-VOLUMEN.md, Fase 1. Lee el JSON directo (sin pasar por src/lib/categorias.ts)
+ * a propósito, para no crear un import circular: categorias.ts ya depende de este módulo (ROOT_DIR).
+ */
 export function loadMarcasConfig(): MarcasConfig {
-  const p = path.join(ROOT_DIR, "config", "marcas.json");
-  return JSON.parse(readFileSync(p, "utf-8")) as MarcasConfig;
+  const p = path.join(ROOT_DIR, "config", "categorias.json");
+  const raw = JSON.parse(readFileSync(p, "utf-8")) as { categorias: { id: string; variantes_q: string[] }[] };
+  const claude = raw.categorias.find((c) => c.id === "claude");
+  if (!claude) throw new Error(`config/categorias.json no tiene una categoría con id "claude".`);
+  return { variantes: claude.variantes_q };
 }

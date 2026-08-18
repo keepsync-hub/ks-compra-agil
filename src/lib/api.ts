@@ -1,4 +1,5 @@
 import { getApiTicket } from "./config.js";
+import { contarRequest, registrar429 } from "./cuota.js";
 
 const BASE_URL = "https://api2.mercadopublico.cl";
 
@@ -135,6 +136,10 @@ async function apiGet<T>(pathAndQuery: string): Promise<T> {
 
   let ultimoError: Error | undefined;
   for (let intento = 1; intento <= MAX_INTENTOS; intento++) {
+    // Cuenta ANTES del fetch (no después): un intento retransmitido por fallo de red igual
+    // gastó una conexión, y el circuit breaker local (configurarCuota) debe cortar antes de
+    // arriesgar la cuota real, no después de confirmarla gastada.
+    contarRequest();
     let res: Response;
     try {
       res = await fetch(url, { headers: { ticket } });
@@ -150,6 +155,7 @@ async function apiGet<T>(pathAndQuery: string): Promise<T> {
 
     if (res.status === 429) {
       const retryAfter = res.headers.get("Retry-After");
+      registrar429(retryAfter);
       throw new Error(
         `Cuota diaria de la API agotada (429). Retry-After: ${retryAfter ?? "no informado"}. No reintentar a ciegas: esperar al reset diario.`,
       );
@@ -192,9 +198,16 @@ export interface BuscarCompraAgilParams {
   maxPaginas?: number;
 }
 
+const PAGE_SIZE_MAX = 50; // documentado en PLAN.md; hoy solo había piso, no techo — un caller podía pedir más de lo que la API sirve.
+
+interface Paginacion {
+  total_paginas?: number;
+  total_resultados?: number;
+}
+
 /** Trae todas las páginas para una consulta `q` dada, deduplicando no es responsabilidad de esta función. */
 export async function buscarCompraAgil(params: BuscarCompraAgilParams): Promise<CompraAgilListItem[]> {
-  const tamanoPagina = Math.max(params.tamanoPagina ?? 50, PAGE_SIZE_MIN);
+  const tamanoPagina = Math.min(Math.max(params.tamanoPagina ?? 50, PAGE_SIZE_MIN), PAGE_SIZE_MAX);
   const items: CompraAgilListItem[] = [];
   let pagina = 1;
   // Guardrail de seguridad: no dar más vueltas por consulta aunque la API pagine mal.
@@ -206,10 +219,18 @@ export async function buscarCompraAgil(params: BuscarCompraAgilParams): Promise<
       numero_pagina: String(pagina),
     });
     if (params.estado) qs.set("estado", params.estado);
-    const payload = await apiGet<{ items: CompraAgilListItem[] }>(`/v2/compra-agil?${qs.toString()}`);
+    const payload = await apiGet<{ items: CompraAgilListItem[]; paginacion?: Paginacion }>(`/v2/compra-agil?${qs.toString()}`);
     const pageItems = payload.items ?? [];
     items.push(...pageItems);
-    if (pageItems.length < tamanoPagina) break; // última página
+    // `payload.paginacion.total_paginas` (verificado contra producción el 18-08-2026, ver
+    // PLAN-VOLUMEN.md Fase 0) da el total exacto: evita el request extra que hacía falta cuando
+    // el conteo real era un múltiplo exacto de `tamanoPagina` (la página "última" venía llena,
+    // así que el chequeo de abajo no la detectaba como tal hasta pedir una página vacía de más).
+    if (payload.paginacion?.total_paginas != null) {
+      if (pagina >= payload.paginacion.total_paginas) break;
+      continue;
+    }
+    if (pageItems.length < tamanoPagina) break; // fallback si la API no informa paginacion
   }
   return items;
 }

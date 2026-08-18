@@ -3,6 +3,7 @@ import path from "node:path";
 import { ROOT_DIR, loadMarcasConfig } from "../../../../src/lib/config.js";
 import { buscarCompraAgil, obtenerDetalleCompraAgil, type CompraAgilListItem } from "../../../../src/lib/api.js";
 import { itemMencionaMarca } from "../../../../src/lib/marca.js";
+import { configurarCuota, radarYaCorrioHoy } from "../../../../src/lib/cuota.js";
 
 const ESTADOS = ["publicada", "desierta", "cancelada", "cerrada"] as const;
 
@@ -18,6 +19,19 @@ function clp(n: number): string {
 }
 
 async function main() {
+  // El radar tiene reserva prioritaria de cuota (ver PLAN-VOLUMEN.md, Fase 0/6): este barrido es
+  // ~4x más caro (32 vs. ~8-16 requests) y no debe arriesgar la corrida diaria del radar.
+  const forzar = process.argv.includes("--forzar");
+  if (!forzar && !radarYaCorrioHoy()) {
+    console.error(
+      "El radar (`npm run radar`) todavía no corrió hoy. Este informe es más costoso en cuota y tiene " +
+        "prioridad menor — correr el radar primero, o pasar --forzar si es intencional.",
+    );
+    process.exitCode = 1;
+    return;
+  }
+  configurarCuota({ script: "informe", maxRequests: 60 });
+
   const marcas = loadMarcasConfig();
   const encontrados = new Map<string, CompraAgilListItem>();
 
@@ -167,7 +181,7 @@ ${
 
 ## Metodología y limitaciones
 
-- Búsqueda por las variantes de \`config/marcas.json\` (${marcas.variantes.map((v) => `\`${v}\``).join(", ")})
+- Búsqueda por las variantes de la categoría \`claude\` en \`config/categorias.json\` (${marcas.variantes.map((v) => `\`${v}\``).join(", ")})
   contra los 4 estados de Compra Ágil (\`publicada\`, \`desierta\`, \`cancelada\`, \`cerrada\`),
   verificando localmente que \`nombre\` mencione la marca de verdad (descarta ruido de \`q\`).
 - \`total_ofertas_recibidas\` en el listado siempre reporta 0 para procesos abiertos (hallazgo

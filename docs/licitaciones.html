@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agente de Licitaciones — Gestión Documental | KeepSync</title>
+<meta name="description" content="Estado del agente que monitorea Licitaciones públicas de gestión documental, digitalización de procesos y oficina de partes en mercadopublico.cl: radar, cotizador y bloqueadores conocidos.">
+<style>
+  :root {
+    --bg: #0E0E17;
+    --bg-alt: #09090B;
+    --card: #161527;
+    --card-alt: #1D1B33;
+    --border: #2A2844;
+    --accent: #786CF0;
+    --accent-light: #B4AAFA;
+    --white: #FFFFFF;
+    --gray: #9A9FB0;
+    --gray-dim: #6E7284;
+    --ok: #4ADE80;
+    --warn: #FBBF24;
+    --bad: #FB7185;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--white);
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 1.5rem; }
+  header.hero {
+    background: linear-gradient(180deg, var(--bg-alt) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 0 2rem;
+  }
+  .back { color: var(--gray); text-decoration: none; font-size: 0.85rem; }
+  .back:hover { color: var(--accent-light); }
+  .brand { display: flex; align-items: center; gap: 0.75rem; margin: 1rem 0 1.5rem; }
+  .brand img { width: 36px; height: 36px; }
+  .brand span { font-weight: 700; font-size: 1.1rem; letter-spacing: 0.02em; }
+  h1 { font-size: clamp(1.6rem, 4vw, 2.3rem); margin: 0 0 0.5rem; }
+  .subtitle { color: var(--gray); font-size: 1.02rem; max-width: 66ch; }
+  .meta { color: var(--gray-dim); font-size: 0.85rem; margin-top: 1rem; }
+  main { padding: 2.5rem 0 4rem; }
+  section { margin-bottom: 3rem; }
+  h2 { font-size: 1.4rem; margin: 0 0 0.3rem; }
+  .section-sub { color: var(--gray); font-size: 0.95rem; margin: 0 0 1.25rem; max-width: 68ch; }
+
+  .status-grid { display: grid; gap: 0.75rem; }
+  .status-row {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center;
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1.1rem;
+  }
+  .status-row .name { font-weight: 600; }
+  .status-row .desc { color: var(--gray); font-size: 0.88rem; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.7rem;
+    border-radius: 999px; font-size: 0.78rem; font-weight: 700; white-space: nowrap;
+  }
+  .badge.ok { background: rgba(74, 222, 128, 0.15); color: var(--ok); }
+  .badge.warn { background: rgba(251, 191, 36, 0.15); color: var(--warn); }
+  .badge.bad { background: rgba(251, 113, 133, 0.15); color: var(--bad); }
+  .badge::before { content: "●"; font-size: 0.6rem; }
+
+  .btn {
+    display: inline-block; background: var(--accent); color: var(--white); text-decoration: none;
+    padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+  }
+  .btn:hover { background: var(--accent-light); color: var(--bg); }
+  .btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--gray); }
+  .btn.secondary:hover { border-color: var(--accent-light); color: var(--accent-light); }
+  .note {
+    background: var(--card-alt); border: 1px solid var(--border); border-left: 3px solid var(--warn);
+    border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.86rem; color: var(--gray);
+  }
+  .note.bad { border-left-color: var(--bad); }
+  .note.ok { border-left-color: var(--ok); }
+  .note code { color: var(--accent-light); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th, td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); }
+  th { color: var(--gray-dim); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  .table-wrap { overflow-x: auto; background: var(--card); border: 1px solid var(--border); border-radius: 10px; }
+  .table-wrap table { margin: 0; }
+  .table-wrap th, .table-wrap td { padding: 0.7rem 1rem; }
+
+  code, .mono { font-family: ui-monospace, Menlo, monospace; }
+  a { color: var(--accent-light); }
+  a:hover { color: var(--white); }
+
+  footer {
+    border-top: 1px solid var(--border); padding: 2rem 0; color: var(--gray-dim); font-size: 0.85rem;
+  }
+  footer a { color: var(--gray); }
+  .links-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+
+  @media (max-width: 600px) {
+    .status-row { grid-template-columns: 1fr; }
+    .status-row .badge { justify-self: start; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <a class="back" href="index.html">← Volver al resumen de Compra Ágil</a>
+    <div class="brand"><img src="assets/logo-keepsync-blanco.png" alt=""><span>KeepSync</span></div>
+    <h1>Agente de Licitaciones — Gestión Documental</h1>
+    <p class="subtitle">
+      Réplica del agente de Compra Ágil, para un segundo nicho: <strong>Licitaciones públicas</strong>
+      (no Compra Ágil) que piden gestión documental, digitalización de procesos u oficina de
+      partes. Mismo objetivo — monitorear oportunidades, cotizar dentro del tope y dejar todo
+      listo para revisión humana — con una API, un producto y un modelo de costos distintos.
+    </p>
+    <p class="meta">Generado 2026-08-17 · repo <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a> · código en <a href="https://github.com/keepsync-hub/ks-compra-agil/tree/claude/licitaciones-radar-cotizar-yy3pan/licitaciones">licitaciones/</a> · diseño completo en <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/licitaciones-radar-cotizar-yy3pan/licitaciones/PLAN.md">licitaciones/PLAN.md</a></p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <h2>Por qué esta página está separada de la de Compra Ágil</h2>
+    <p class="section-sub">
+      El agente de Compra Ágil (<a href="index.html">resumen</a>) está verificado end-to-end
+      contra la API real de producción. Este segundo nicho usa una API distinta
+      (<code>api.mercadopublico.cl</code>, la API clásica de Licitaciones) y todavía no se ha
+      corrido contra ella con un ticket válido — el código está escrito y revisado, pero sus
+      resultados son, por ahora, una hipótesis de diseño, no una medición. Esta página lo declara
+      con la misma honestidad que la de Compra Ágil declara sus propios pendientes.
+    </p>
+  </section>
+
+  <section>
+    <h2>Estado de cada componente</h2>
+    <p class="section-sub">A diferencia de la página de Compra Ágil, acá casi todo está en "escrito, sin verificar" — no "funcionando".</p>
+    <div class="status-grid">
+      <div class="status-row">
+        <span class="badge warn">Escrito, sin verificar</span>
+        <div><div class="name">Radar (<code>radar_licitaciones</code>)</div><div class="desc">Filtra localmente licitaciones activas por gestión documental / digitalización de procesos / oficina de partes — esta API no tiene búsqueda por texto como Compra Ágil, así que el filtrado local es el mecanismo primario, no un descarte de ruido. Sin correr contra producción: falta <code>LICITACIONES_API_TICKET</code>.</div></div>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/licitaciones-radar-cotizar-yy3pan/.claude/skills/radar_licitaciones/scripts/radar.ts">Ver código</a>
+      </div>
+      <div class="status-row">
+        <span class="badge warn">Escrito, sin verificar</span>
+        <div><div class="name">Informe del nicho</div><div class="desc">Barrido histórico por estado (cerrada/desierta/adjudicada), filtrado local por palabra clave. Mismo bloqueo: sin ticket real todavía.</div></div>
+        <a class="btn secondary" href="informe-nicho-licitaciones.html">Ver informe</a>
+      </div>
+      <div class="status-row">
+        <span class="badge warn">Escrito, sin verificar</span>
+        <div><div class="name">Cotizador (<code>cotizar_licitaciones</code>)</div><div class="desc">Cotiza por catálogo de costos propio de KeepSync (costo_clp × markup × IVA) — a diferencia de licencias Claude, acá no hay precio de lista público que copiar. Nunca cotiza sobre el tope. Bloqueado hasta que <code>licitaciones/config/company.json</code> tenga costos reales.</div></div>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/licitaciones-radar-cotizar-yy3pan/.claude/skills/cotizar_licitaciones/scripts/cotizar.ts">Ver código</a>
+      </div>
+      <div class="status-row">
+        <span class="badge bad">Fuera de alcance por ahora</span>
+        <div><div class="name">Login y formulario del portal de Licitaciones</div><div class="desc">No incluido en esta réplica (a diferencia de Compra Ágil, que sí tiene <code>login.ts</code>/<code>form-fill.ts</code> escritos aunque diferidos). El formulario real de una licitación involucra boletas de garantía y firma electrónica — un flujo más complejo, sin diseñar todavía.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Insumos bloqueantes</h2>
+    <p class="section-sub">Ninguno resuelto todavía — detalle completo en <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/licitaciones-radar-cotizar-yy3pan/licitaciones/PLAN.md">licitaciones/PLAN.md</a>.</p>
+    <div class="note bad">
+      <strong>1. <code>LICITACIONES_API_TICKET</code>.</strong> Distinto del ticket de Compra
+      Ágil — se solicita en <a href="https://www.mercadopublico.cl/Home/Api">mercadopublico.cl/Home/Api</a>.
+      Sin él, el radar y el cotizador no pueden correr contra datos reales ni verificar si los
+      nombres de campo asumidos en el código son correctos.
+    </div>
+    <div class="note bad" style="margin-top:0.8rem;">
+      <strong>2. Catálogo de costos reales de KeepSync para gestión documental.</strong> A
+      diferencia de licencias Claude (precio de lista público de Anthropic ya cargado), acá no
+      existe un precio externo que copiar: hay que definir qué plataforma se revende o implementa
+      y a qué costo real (por usuario, por hora, por documento digitalizado) antes de que el
+      cotizador pueda generar una oferta real.
+    </div>
+  </section>
+
+  <section>
+    <h2>Diferencias clave frente al agente de Compra Ágil</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>Compra Ágil (verificado)</th><th>Licitaciones (sin verificar)</th></tr></thead>
+        <tbody>
+          <tr><td>API</td><td><code>api2.mercadopublico.cl</code></td><td><code>api.mercadopublico.cl</code> (API clásica)</td></tr>
+          <tr><td>Búsqueda</td><td><code>q</code> por variantes de marca, en el servidor</td><td>sin búsqueda por texto — filtrado local sobre el listado por estado</td></tr>
+          <tr><td>Producto</td><td>licencias Claude, precio de lista público (Anthropic)</td><td>gestión documental/digitalización, catálogo de costos propio de KeepSync</td></tr>
+          <tr><td>Garantías</td><td>no aplica</td><td>seriedad de la oferta / fiel cumplimiento de contrato, habituales en licitaciones</td></tr>
+          <tr><td>Formulario del portal</td><td>escrito, diferido a sesión local (Cowork)</td><td>fuera de alcance de esta réplica — no diseñado</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Qué falta para operar en serio</h2>
+    <ol>
+      <li><strong><code>LICITACIONES_API_TICKET</code></strong> — solicitarlo y correr <code>npm run radar-licitaciones</code> contra la API real; corregir los nombres de campo de <code>licitaciones/src/lib/api.ts</code> según la respuesta real.</li>
+      <li><strong>Definir el catálogo de costos reales</strong> de KeepSync para gestión documental y completar <code>licitaciones/config/company.json</code>.</li>
+      <li><strong>Confirmar la fórmula de pricing</strong> (markup/IVA) para este negocio — el default en <code>company.json.example</code> es una plantilla razonable, no una decisión ya tomada.</li>
+      <li>Correr <code>npm run cotizar-licitaciones -- &lt;codigo&gt;</code> contra una licitación real y revisar manualmente el PDF/PPTX generado.</li>
+      <li>(Fuera de esta réplica) Diseñar un tercer skill para login + formulario del portal de Licitaciones, si se decide automatizar también ese paso.</li>
+    </ol>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Página generada a partir del estado del repo en la fecha indicada arriba — no se actualiza sola. A diferencia de <a href="index.html">la página de Compra Ágil</a>, no hay cifras reales que refrescar todavía: el primer paso es obtener el ticket.</p>
+    <div class="links-row">
+      <a href="index.html">Agente de Compra Ágil (Claude)</a>
+      <a href="https://github.com/keepsync-hub/ks-compra-agil">Repositorio</a>
+      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/licitaciones-radar-cotizar-yy3pan/licitaciones/PLAN.md">licitaciones/PLAN.md</a>
+      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/licitaciones-radar-cotizar-yy3pan/CLAUDE.md">CLAUDE.md</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

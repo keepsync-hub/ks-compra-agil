@@ -53,3 +53,22 @@ humano y nunca el agente (ver guardrails abajo). El radar y el informe del nicho
 - **No inventar precios** — requieren `config/company.json` con costos reales del usuario.
 - Ante CAPTCHA o bloqueo del portal: detenerse y pedir intervención humana, no reintentar a
   ciegas.
+
+## Plan de crecimiento (`PLAN-VOLUMEN.md`)
+
+Diseño para explotar al máximo la API **ya validada** y aumentar el volumen de venta: índice
+histórico versionado, radar multi-categoría, clasificador de motivos de fracaso, calificador de
+admisibilidad y digest priorizado. Contiene dos correcciones a lo que dice este archivo más
+arriba: (1) solo el 16% de los fracasos se declara por incumplimiento de la oferta — el 73% es
+atribuible al comprador, lo que matiza la hipótesis de fulfillment; y (2) hay un **bug vigente**:
+como `data/state.json` está gitignored, el radar corriendo en la nube nunca detecta recompradores.
+Leerlo antes de trabajar en cobertura, cuota o priorización.
+
+## Segundo nicho: Licitaciones de Gestión Documental (`licitaciones/`)
+
+Réplica de este mismo radar+cotizador para **Licitaciones públicas** (no Compra Ágil) de gestión
+documental, digitalización de procesos u oficina de partes — skills `radar_licitaciones` y
+`cotizar_licitaciones`. Es un dominio distinto con su propia API (`api.mercadopublico.cl`, ticket
+separado), su propio catálogo de costos (sin precio de lista público como el de Claude) y sus
+propios insumos bloqueantes sin resolver. **Leer `licitaciones/PLAN.md` antes de tocar ese
+código** — no asumir que los guardrails y hallazgos de arriba aplican tal cual a ese dominio.
