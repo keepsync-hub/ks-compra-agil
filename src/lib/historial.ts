@@ -2,6 +2,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR } from "./config.js";
 import type { CompraAgilListItem } from "./api.js";
+import type { Observacion } from "./indice.js";
 
 const STATE_PATH = path.join(ROOT_DIR, "data", "state.json");
 
@@ -78,4 +79,32 @@ export function registrarHallazgo(state: RadarState, item: CompraAgilListItem, a
   state.organismos[rut] = organismo;
 
   return { esNuevo, esReintentoDeOrganismo, procesosPreviosDelOrganismo };
+}
+
+/**
+ * Puebla `state` desde el índice histórico versionado (`historico/observaciones.jsonl`) antes de
+ * la corrida del día. `data/state.json` está gitignored y los agentes de GitHub Copilot corren
+ * sobre un checkout limpio — sin esto, cada corrida en la nube ve `estadoVacio()` y nunca detecta
+ * un recomprador (ver PLAN-VOLUMEN.md, Fase 2). Solo agrega lo que falte: nunca pisa un registro
+ * ya presente (la corrida del día, vía `registrarHallazgo`, sigue siendo la fuente de verdad para
+ * lo que se observa hoy). Mutación in-place; el caller decide cuándo persistir con `guardarState`.
+ */
+export function sembrarDesdeIndice(state: RadarState, observaciones: Iterable<Observacion>): void {
+  for (const obs of observaciones) {
+    if (!(obs.codigo in state.codigos_vistos)) {
+      state.codigos_vistos[obs.codigo] = { primera_vez: obs.observado_en, ultimo_estado: obs.estado };
+    }
+
+    const organismo = state.organismos[obs.rut] ?? { rut: obs.rut, nombre: obs.organismo, procesos: [] };
+    if (!organismo.procesos.some((p) => p.codigo === obs.codigo)) {
+      organismo.procesos.push({
+        codigo: obs.codigo,
+        nombre: obs.nombre,
+        fecha_publicacion: obs.fecha_publicacion,
+        estado: obs.estado,
+        monto_disponible_clp: obs.monto_disponible_clp,
+      });
+    }
+    state.organismos[obs.rut] = organismo;
+  }
 }

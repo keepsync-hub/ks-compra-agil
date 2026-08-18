@@ -141,7 +141,7 @@
       revisión y envío manual de un humano. Esta página resume qué está construido, probado
       contra la API real, y qué sigue pendiente.
     </p>
-    <p class="meta">Actualizado 2026-08-18 · repo <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a>, rama <code>claude/mercadopublico-agente-compras-pgyedf</code> · <a href="flujo.html">ver el flujo completo, paso a paso →</a> · <a href="licitaciones.html">ver el segundo nicho: Licitaciones de Gestión Documental →</a> · <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/PLAN-VOLUMEN.md">ver el plan de volumen (radar multi-categoría) →</a></p>
+    <p class="meta">Actualizado 2026-08-18 (Fase 2: índice histórico) · repo <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a>, rama <code>claude/mercadopublico-agente-compras-pgyedf</code> · <a href="flujo.html">ver el flujo completo, paso a paso →</a> · <a href="licitaciones.html">ver el segundo nicho: Licitaciones de Gestión Documental →</a> · <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/PLAN-VOLUMEN.md">ver el plan de volumen (radar multi-categoría) →</a></p>
   </div>
 </header>
 
@@ -170,6 +170,11 @@
         <span class="badge ok">Funcionando</span>
         <div><div class="name">Radar multi-categoría + cuota medida (Fase 0/1 del plan de volumen)</div><div class="desc">El radar ahora itera sobre "categorías de negocio" configurables (<code>config/categorias.json</code>) en vez de tener la marca Claude hardcodeada — 4 categorías definidas, ver <a href="#categorias">más abajo</a>. De paso, cada request a la API queda contado: la cuota diaria nunca se había medido, y ahora hay un ledger que la va acotando de forma pasiva. Validado contra producción con cero regresión: mismos códigos, mismo comportamiento.</div></div>
         <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/PLAN-VOLUMEN.md">Ver plan</a>
+      </div>
+      <div class="status-row">
+        <span class="badge ok">Funcionando — bug de recompradores corregido</span>
+        <div><div class="name">Índice histórico versionado (Fase 2 del plan de volumen)</div><div class="desc"><code>historico/observaciones.jsonl</code> arregla un bug vigente: <code>data/state.json</code> es efímero (gitignored), así que cada corrida del radar en la nube (checkout limpio) nunca detectaba organismos recompradores — la señal más valiosa del nicho (66% del mercado). El radar ahora se auto-indexa en cada corrida (0 requests extra) y siembra el estado desde el índice al arrancar. <strong>Probado de verdad</strong>: se borró <code>data/state.json</code> a propósito para simular la nube y se corrió el radar contra producción — el estado se repobló correctamente con las fechas reales de descubrimiento, no como "todo nuevo".</div></div>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/src/lib/indice.ts">Ver código</a>
       </div>
       <div class="status-row">
         <span class="badge ok">Funcionando</span>
@@ -438,7 +443,7 @@
     <p class="note" style="margin-top:1rem;">
       Las 3 categorías apagadas no son solo una decisión de negocio pendiente: activarlas suma su
       presupuesto de requests a cada corrida del radar, y la <strong>cuota diaria de la API nunca
-      se había medido</strong>. Hoy solo se sabe que aguantó ≥70 requests en un día sin devolver
+      se había medido</strong>. Hoy solo se sabe que aguantó ≥76 requests en un día sin devolver
       429 — no es un límite real, es la primera cota inferior de una medición que sigue en curso
       (<code>npm run cuota</code>). Activar una categoría nueva antes de tener ese número es
       arriesgar el radar de Claude, que sí funciona, por cobertura sin validar.

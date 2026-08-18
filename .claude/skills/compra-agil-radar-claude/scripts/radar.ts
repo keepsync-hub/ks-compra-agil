@@ -10,8 +10,9 @@ import {
 import { buscarCompraAgil, obtenerDetalleCompraAgil, extraerAdjudicacion, type CompraAgilListItem } from "../../../../src/lib/api.js";
 import { extraerCondiciones } from "../../../../src/lib/condiciones.js";
 import { descargarAdjuntosSiExisten } from "../../../../src/lib/adjuntos.js";
-import { cargarState, guardarState, registrarHallazgo } from "../../../../src/lib/historial.js";
+import { cargarState, guardarState, registrarHallazgo, sembrarDesdeIndice } from "../../../../src/lib/historial.js";
 import { configurarCuota } from "../../../../src/lib/cuota.js";
+import { anexar, proyectar, ultimaPorCodigo } from "../../../../src/lib/indice.js";
 
 interface VarianteFallida {
   variante: string;
@@ -70,6 +71,10 @@ async function barrerCategoria(
     mkdirSync(dirDatos, { recursive: true });
     writeFileSync(path.join(dirDatos, "detalle.json"), JSON.stringify(detalle, null, 2), "utf-8");
     writeFileSync(path.join(dirDatos, "condiciones.json"), JSON.stringify(condiciones, null, 2), "utf-8");
+    // Alimenta el índice histórico versionado (ver PLAN-VOLUMEN.md, Fase 2) — de paso, con cero
+    // requests extra: el detalle ya se pagó arriba. Es lo que le permite a una corrida en la nube
+    // (checkout limpio, sin data/state.json) sembrar recompradores desde corridas anteriores.
+    anexar(proyectar(detalle, categoria.id, ahoraIso));
 
     if (detalle.documentos.length > 0) {
       try {
@@ -123,6 +128,7 @@ async function barrerCategoria(
 async function barrerAdjudicacionesCategoria(
   categoria: CategoriaCompilada,
   variantesFallidas: VarianteFallida[],
+  ahoraIso: string,
 ): Promise<string[]> {
   const varianteAmplia = categoria.variantes_q[0] ?? categoria.nombre;
   const adjudicadas = new Map<string, CompraAgilListItem>();
@@ -146,6 +152,7 @@ async function barrerAdjudicacionesCategoria(
     mkdirSync(dirDatos, { recursive: true });
     writeFileSync(path.join(dirDatos, "detalle.json"), JSON.stringify(detalle, null, 2), "utf-8");
     writeFileSync(path.join(dirDatos, "adjudicacion.json"), JSON.stringify(adj, null, 2), "utf-8");
+    anexar(proyectar(detalle, categoria.id, ahoraIso));
 
     filas.push(
       [
@@ -177,6 +184,10 @@ async function main() {
   console.log(`Radar Compra Ágil — ${categorias.length} categoría(s) activa(s): ${categorias.map((c) => c.nombre).join(", ")}`);
 
   const state = cargarState();
+  // Puebla el estado desde el índice versionado ANTES de barrer — es lo que arregla el bug de
+  // la nube: sin esto, un checkout limpio (data/state.json gitignored) nunca ve recompradores
+  // de corridas anteriores, aunque estén registradas en historico/observaciones.jsonl.
+  sembrarDesdeIndice(state, ultimaPorCodigo().values());
   const variantesFallidas: VarianteFallida[] = [];
   const alertasRecompra: string[] = [];
   const seccionesOportunidades: { categoria: CategoriaCompilada; filas: string[] }[] = [];
@@ -192,7 +203,7 @@ async function main() {
   // portal); se extrae lo que haya y se declara con honestidad si la API no lo expone.
   const seccionesAdjudicaciones: { categoria: CategoriaCompilada; filas: string[] }[] = [];
   for (const categoria of categorias) {
-    const filas = await barrerAdjudicacionesCategoria(categoria, variantesFallidas);
+    const filas = await barrerAdjudicacionesCategoria(categoria, variantesFallidas, ahoraIso);
     seccionesAdjudicaciones.push({ categoria, filas });
   }
   const totalAdjudicaciones = seccionesAdjudicaciones.reduce((a, s) => a + s.filas.length, 0);
