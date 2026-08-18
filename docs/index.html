@@ -141,7 +141,7 @@
       revisión y envío manual de un humano. Esta página resume qué está construido, probado
       contra la API real, y qué sigue pendiente.
     </p>
-    <p class="meta">Generado 2026-08-17 · repo <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a>, rama <code>claude/mercadopublico-agente-compras-pgyedf</code> · <a href="flujo.html">ver el flujo completo, paso a paso →</a> · <a href="licitaciones.html">ver el segundo nicho: Licitaciones de Gestión Documental →</a></p>
+    <p class="meta">Actualizado 2026-08-18 · repo <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a>, rama <code>claude/mercadopublico-agente-compras-pgyedf</code> · <a href="flujo.html">ver el flujo completo, paso a paso →</a> · <a href="licitaciones.html">ver el segundo nicho: Licitaciones de Gestión Documental →</a> · <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/PLAN-VOLUMEN.md">ver el plan de volumen (radar multi-categoría) →</a></p>
   </div>
 </header>
 
@@ -152,8 +152,8 @@
     <div class="stat-grid">
       <div class="stat"><div class="num">47</div><div class="label">casos históricos con mención real de "Claude"/"Anthropic"</div></div>
       <div class="stat"><div class="num">79%</div><div class="label">termina desierto o cancelado</div></div>
-      <div class="stat"><div class="num">1</div><div class="label">oportunidad abierta en la última corrida del radar</div></div>
-      <div class="stat"><div class="num">2</div><div class="label">estados monitoreados: Publicada + Proveedor Seleccionado</div></div>
+      <div class="stat"><div class="num">3</div><div class="label">oportunidades abiertas en la última corrida del radar</div></div>
+      <div class="stat"><div class="num">4</div><div class="label">categorías de negocio definidas (1 activa) — <a href="#categorias">detalle</a></div></div>
     </div>
   </section>
 
@@ -165,6 +165,11 @@
         <span class="badge ok">Funcionando</span>
         <div><div class="name">Radar (<code>compra-agil-radar-claude</code>)</div><div class="desc">Monitorea dos estados —Publicada y Proveedor Seleccionado— extrae tope/plan/usuarios/documentos exigidos/excluyentes, detecta recompradores y adjudicaciones. Reintenta fallos transitorios de la API (5xx) con backoff y tolera variantes que fallan sin abortar la corrida.</div></div>
         <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/.claude/skills/compra-agil-radar-claude/scripts/radar.ts">Ver código</a>
+      </div>
+      <div class="status-row">
+        <span class="badge ok">Funcionando</span>
+        <div><div class="name">Radar multi-categoría + cuota medida (Fase 0/1 del plan de volumen)</div><div class="desc">El radar ahora itera sobre "categorías de negocio" configurables (<code>config/categorias.json</code>) en vez de tener la marca Claude hardcodeada — 4 categorías definidas, ver <a href="#categorias">más abajo</a>. De paso, cada request a la API queda contado: la cuota diaria nunca se había medido, y ahora hay un ledger que la va acotando de forma pasiva. Validado contra producción con cero regresión: mismos códigos, mismo comportamiento.</div></div>
+        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/PLAN-VOLUMEN.md">Ver plan</a>
       </div>
       <div class="status-row">
         <span class="badge ok">Funcionando</span>
@@ -208,37 +213,68 @@
 
   <section>
     <h2>Oportunidades abiertas y su cotización</h2>
-    <p class="section-sub">Estado de la corrida del 2026-08-17 — las ventanas de estas compras cierran en horas/días; volver a correr <code>npm run radar</code> para refrescar.</p>
+    <p class="section-sub">Estado de la corrida del 2026-08-18T19:35Z (categoría "Licencias Claude / Anthropic") — las ventanas de estas compras cierran en horas/días; volver a correr <code>npm run radar</code> para refrescar.</p>
+
+    <p class="note bad">
+      <strong>Ninguna de estas 3 tiene cotización lista todavía.</strong> <code>config/company.json</code>
+      (costos reales de KeepSync) no está disponible en el entorno donde corrió esta última
+      corrida del radar — el cotizador se niega a inventar precios (ver <code>CLAUDE.md</code>) y
+      no genera nada sin ese archivo. En cuanto exista, <code>npm run cotizar -- &lt;codigo&gt;</code>
+      genera el PDF/PPTX para cada una.
+    </p>
+
     <div class="card-grid">
 
-      <div class="opp-card" id="1056854-51-COT26">
-        <span class="codigo">1056854-51-COT26</span>
-        <span class="org">I. Municipalidad de Providencia</span>
-        <span class="nombre">Claude Team Seat, 12 meses — mezcla premium + estándar</span>
+      <div class="opp-card" id="1233595-38-COT26">
+        <span class="codigo">1233595-38-COT26</span>
+        <span class="org">Corp. Municipal de Desarrollo Económico, Cultura y Deportes de Renca</span>
+        <span class="nombre">Licencia Anthropic Claude Pro Mensual</span>
         <dl>
-          <dt>Plan</dt><dd>Team: 1 premium + 10 estándar (11 asientos)</dd>
-          <dt>Tope</dt><dd>$5.200.000 CLP</dd>
-          <dt>Cotizado</dt><dd>$5.121.003 CLP (holgura de solo $78.997)</dd>
-          <dt>Cierre</dt><dd>2026-08-17 13:00</dd>
-          <dt>Competencia</dt><dd>6 ofertas recibidas</dd>
-          <dt>Incluye</dt><dd>Taller de 3 h + comunidad de usuarios de Claude en Chile, sin costo</dd>
+          <dt>Plan</dt><dd>Pro, 10 usuarios</dd>
+          <dt>Tope</dt><dd>$1.700.000 CLP</dd>
+          <dt>Cierre</dt><dd>2026-08-19 15:30 — <strong>cierra mañana</strong></dd>
+          <dt>Competencia</dt><dd>1 oferta recibida</dd>
+          <dt>Plazo de entrega</dt><dd>1 día hábil</dd>
         </dl>
         <div class="cta">
-          <span class="badge ok">Cotización lista (multi-tramo)</span>
+          <span class="badge warn">Detectada — cotización pendiente</span>
         </div>
-        <a class="btn" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/1056854-51-COT26/Q-20260817-IMunicipalidadDeProvidencia.pdf">Descargar cotización (PDF)</a>
-        <a class="btn secondary" href="https://raw.githubusercontent.com/keepsync-hub/ks-compra-agil/claude/mercadopublico-agente-compras-pgyedf/output/1056854-51-COT26/Q-20260817-IMunicipalidadDeProvidencia.pptx">Fuente editable (.pptx)</a>
+      </div>
+
+      <div class="opp-card" id="607-180-COT26">
+        <span class="codigo">607-180-COT26</span>
+        <span class="org">Parque Metropolitano de Santiago</span>
+        <span class="nombre">Licencias de Inteligencia Artificial Claude</span>
+        <dl>
+          <dt>Plan</dt><dd>Max 5x, 4 usuarios</dd>
+          <dt>Tope</dt><dd>$2.500.000 CLP</dd>
+          <dt>Cierre</dt><dd>2026-08-21 09:30</dd>
+          <dt>Competencia</dt><dd>2 ofertas recibidas</dd>
+          <dt>Plazo de entrega</dt><dd>5 días</dd>
+        </dl>
+        <div class="cta">
+          <span class="badge warn">Detectada — cotización pendiente</span>
+        </div>
+      </div>
+
+      <div class="opp-card" id="2069-2272-COT26">
+        <span class="codigo">2069-2272-COT26</span>
+        <span class="org">Servicio de Salud Metropolitano Sur (Hospital)</span>
+        <span class="nombre">CNG-082026 — Licencias de Inteligencia Artificial Claude Team Anthropic</span>
+        <dl>
+          <dt>Plan</dt><dd>Team, 20 usuarios</dd>
+          <dt>Tope</dt><dd>$6.000.000 CLP</dd>
+          <dt>Cierre</dt><dd>2026-08-21 12:00</dd>
+          <dt>Competencia</dt><dd>4 ofertas recibidas</dd>
+          <dt>Plazo de entrega</dt><dd>1 día hábil</dd>
+        </dl>
+        <div class="cta">
+          <span class="badge warn">Detectada — cotización pendiente</span>
+        </div>
       </div>
 
     </div>
-    <p class="section-sub" style="margin-top:0.9rem;">Providencia es el primer caso resuelto con el nuevo soporte <strong>multi-tramo</strong> del cotizador (1 premium + 10 estándar en una sola oferta). Ojo: la holgura es de ~$79.000 (~1,5%); sobre ~$927 CLP/USD la oferta se pasa del tope, así que hay que confirmar el dólar del día antes de enviar. Las compras de ventanas anteriores ya cerraron (Redes Asistenciales, Vitacura, Arturo Prat, Valparaíso, Coronel, La Frontera, U. de Valparaíso); su análisis está más abajo, en <a href="#analisis-competencia">Análisis de competencia y adjudicaciones</a>.</p>
-    <p class="note ok" style="margin-top:1rem;">
-      Las cotizaciones ya usan la identidad real de KeepSync (RUT 78.441.121-4, confirmado con
-      la ficha del proveedor de Mercado Público) — no llevan marca BORRADOR. El PDF es el
-      artefacto final a publicar; el <code>.pptx</code> queda como fuente editable en el mismo
-      directorio. Completar el formulario del portal y confirmar el envío queda para la sesión
-      con Claude Cowork en máquina local (ver más abajo) — este agente no lo intenta desde aquí.
-    </p>
+    <p class="section-sub" style="margin-top:0.9rem;">Las tres son primer llamado (EMT puede ofertar) y ninguna estaba en la corrida anterior (2026-08-17): Providencia (1056854-51-COT26, cotizada esa vez con holgura de solo ~1,5%) ya cerró. Detalle completo, incluidas las adjudicaciones monitoreadas y la cobertura de la corrida, en <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/output/radar-ultima-corrida.md">radar-ultima-corrida.md</a>. Análisis de qué exige la oferta que gana, más abajo en <a href="#analisis-competencia">Análisis de competencia y adjudicaciones</a>.</p>
   </section>
 
   <section id="analisis-competencia">
@@ -363,6 +399,52 @@
     </p>
   </section>
 
+  <section id="categorias">
+    <h2>Nuevas categorías de negocio en el radar de Compra Ágil</h2>
+    <p class="section-sub">
+      El radar dejó de tener la marca "Claude" hardcodeada: ahora recorre una lista de
+      <strong>categorías de negocio</strong> configurables (<code>config/categorias.json</code>),
+      cada una con sus propias variantes de búsqueda y su propio presupuesto de cuota. Es la base
+      para vender más que licencias Claude sin reescribir el radar — ver
+      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/PLAN-VOLUMEN.md">PLAN-VOLUMEN.md</a>.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Categoría</th><th>Estado</th><th>Por qué</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Licencias Claude / Anthropic</strong></td>
+            <td><span class="badge ok">Activa</span></td>
+            <td>La única probada de punta a punta contra producción — es todo lo que ya describe esta página.</td>
+          </tr>
+          <tr>
+            <td><strong>Gestión documental / digitalización de procesos / oficina de partes</strong></td>
+            <td><span class="badge warn">Definida, apagada</span></td>
+            <td>Mismas variantes que el segundo nicho de Licitaciones (más abajo), ahora también buscable dentro de Compra Ágil. Sin catálogo de costos real todavía — el cotizador no se generalizó a esta categoría a propósito.</td>
+          </tr>
+          <tr>
+            <td><strong>Reventa de otras licencias de software</strong> (Canva, Cursor, Microsoft, Adobe)</td>
+            <td><span class="badge warn">Definida, apagada</span></td>
+            <td>Mismo gate de "distribuidor autorizado" que ya limita a Claude — sin resolver.</td>
+          </tr>
+          <tr>
+            <td><strong>Desarrollo a medida / integración / automatización</strong></td>
+            <td><span class="badge warn">Definida, apagada</span></td>
+            <td>Sin el gate de distribuidor, pero sin catálogo de costos ni ciclo de venta probado.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:1rem;">
+      Las 3 categorías apagadas no son solo una decisión de negocio pendiente: activarlas suma su
+      presupuesto de requests a cada corrida del radar, y la <strong>cuota diaria de la API nunca
+      se había medido</strong>. Hoy solo se sabe que aguantó ≥70 requests en un día sin devolver
+      429 — no es un límite real, es la primera cota inferior de una medición que sigue en curso
+      (<code>npm run cuota</code>). Activar una categoría nueva antes de tener ese número es
+      arriesgar el radar de Claude, que sí funciona, por cobertura sin validar.
+    </p>
+  </section>
+
   <section>
     <h2>Segundo nicho: Licitaciones de Gestión Documental</h2>
     <p class="section-sub">
@@ -383,8 +465,10 @@
   <section>
     <h2>Qué falta para operar en serio</h2>
     <ol>
+      <li><strong><code>config/company.json</code> con costos reales</strong> — sin él, las 3 oportunidades abiertas de arriba no se pueden cotizar (el agente no inventa precios).</li>
       <li><strong>Sesión con Claude Cowork en máquina local</strong> — completar login ClaveÚnica + formulario de cada oportunidad abierta, adjuntando el PDF correspondiente de <code>output/</code>, y detenerse antes de enviar para revisión humana.</li>
       <li><strong>Credenciales ClaveÚnica</strong> (<code>CLAVE_UNICA_RUN</code> / <code>CLAVE_UNICA_CLAVE</code>) en <code>.env</code>, disponibles para esa sesión local.</li>
+      <li><strong>Seguir midiendo la cuota diaria</strong> (<code>npm run cuota</code>) hasta tener una cota confiable, antes de activar alguna de las 3 categorías nuevas del radar.</li>
     </ol>
   </section>
 
@@ -398,6 +482,7 @@
       <a href="licitaciones.html">Segundo nicho: Licitaciones de Gestión Documental</a>
       <a href="https://github.com/keepsync-hub/ks-compra-agil">Repositorio</a>
       <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/PLAN.md">PLAN.md</a>
+      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/PLAN-VOLUMEN.md">PLAN-VOLUMEN.md</a>
       <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/CLAUDE.md">CLAUDE.md</a>
       <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/mercadopublico-agente-compras-pgyedf/README.md">README.md</a>
     </div>
