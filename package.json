@@ -7,6 +7,7 @@
   "scripts": {
     "diagnostico-api": "tsx src/scripts/diagnostico-api.ts",
     "cuota": "tsx src/scripts/cuota.ts",
+    "indexar": "tsx .claude/skills/compra-agil-indice/scripts/indexar.ts",
     "radar": "tsx .claude/skills/compra-agil-radar-claude/scripts/radar.ts",
     "array-radar": "tsx .claude/skills/array-compras-agiles-radar/scripts/radar.ts",
     "informe": "tsx .claude/skills/compra-agil-radar-claude/scripts/informe-nicho.ts",

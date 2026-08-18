@@ -1,6 +1,6 @@
 # Radar Compra Ágil
 
-Corrida: 2026-08-18T19:35:15.821Z
+Corrida: 2026-08-18T20:04:53.059Z
 Categorías activas: Licencias Claude / Anthropic
 
 ## Oportunidades abiertas (3)

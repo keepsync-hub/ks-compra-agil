@@ -46,15 +46,24 @@ npm run radar
    cantidad de usuarios, plazo de entrega, documentos exigidos y frases excluyentes.
 5. Descarga adjuntos solo si `documentos[]` no viene vacío (la mayoría de estas compras no
    traen adjuntos), vía el servicio público sin login (`src/lib/adjuntos.ts`).
-6. Guarda todo en `data/<codigo>/{detalle.json, condiciones.json, attachments/}`.
+6. Guarda todo en `data/<codigo>/{detalle.json, condiciones.json, attachments/}` y anexa una
+   observación al índice histórico versionado (`historico/observaciones.jsonl`,
+   `src/lib/indice.ts`) — con cero requests extra, el detalle ya se pagó. Es lo que le permite a
+   una corrida en la nube (checkout limpio, sin `data/state.json`) sembrar el historial real al
+   arrancar (`sembrarDesdeIndice`, paso 8) en vez de reportar todo como nuevo — ver
+   PLAN-VOLUMEN.md, Fase 2. El backfill de estados que este radar no cubre (`desierta`,
+   `cancelada`, `cerrada`) es el skill `compra-agil-indice` (`npm run indexar`).
 7. Repite el barrido con `estado=proveedor_seleccionado` (compras adjudicadas), pero con **una
    sola variante ancha** en vez de las 8 — medido en 0 casos en cada corrida hasta ahora, gastar
    8 requests para confirmar 8 veces el mismo cero no se justifica (ver PLAN-VOLUMEN.md, Fase 0).
    Extrae la adjudicación con `extraerAdjudicacion` (`src/lib/api.ts`). Nota verificada: la API v2
    hoy no puebla el proveedor ganador ni el monto (campos vacíos); ese dato vive en la Orden de
    Compra del portal. Guarda `data/<codigo>/adjudicacion.json` y lo declara con honestidad.
-8. Actualiza `data/state.json`: marca qué códigos son nuevos y qué organismos ya tenían
-   procesos previos (recompradores) — señal de alta probabilidad, avisan con antelación.
+8. Al arrancar, siembra `data/state.json` desde el índice histórico (`sembrarDesdeIndice`) antes
+   de barrer nada, y lo actualiza a medida que avanza: marca qué códigos son nuevos y qué
+   organismos ya tenían procesos previos (recompradores) — señal de alta probabilidad, avisan con
+   antelación. Confirmado en producción: con `data/state.json` borrado a propósito (simulando un
+   checkout limpio de la nube), el estado se repuebla correctamente desde el índice.
 9. Escribe `output/radar-ultima-corrida.md` (con la sección de adjudicaciones) y lo imprime en
    consola. Las fechas de cierre se evalúan en hora de Chile (`src/lib/tiempo.ts`).
 

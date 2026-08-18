@@ -86,6 +86,36 @@ confirmación por query) sí conviene aplicarla ahora, es una mejora sin riesgo 
   (a) una cota de cuota más confiable y (b) probar sus regex de verificación contra casos reales —
   ninguna se ha corrido todavía contra producción, a diferencia de `claude`.
 
+**Fase 2 — implementada y validada con la prueba que importa: un checkout limpio simulado**
+(18-08-2026, misma sesión):
+
+- `src/lib/indice.ts` (nuevo): `historico/observaciones.jsonl` versionado, append-only.
+  `proyectar()` reduce un `CompraAgilDetalle` a ~25 campos (no el payload crudo); `anexar()` solo
+  escribe si el hash cambió respecto de la última observación de ese código (idempotente); asserta
+  `byteLength < 4000` por línea antes de escribir (atomicidad real de `appendFileSync` bajo
+  `PIPE_BUF`, ver comentario en el archivo); `obtenerDetalleConCache()` usa inmutabilidad de
+  estados terminales + `fecha_ultimo_cambio` del listado (ya pagado) para no re-pedir detalles.
+- `sembrarDesdeIndice()` (aditivo en `historial.ts`): puebla `state` desde el índice antes de la
+  corrida, sin pisar nada de lo que ya esté ahí.
+- **`radar.ts` ahora se auto-indexa**: cada ítem que procesa (oportunidad o adjudicación) se anexa
+  al índice con `anexar(proyectar(...))`, **con cero requests extra** — el detalle ya se pagó. Esto
+  es lo que hace que el índice se mantenga fresco solo con el uso normal, sin depender de que
+  alguien recuerde correr `indexar.ts` aparte.
+- `.claude/skills/compra-agil-indice/scripts/indexar.ts` (nuevo, `npm run indexar`): backfill de
+  `desierta`/`cancelada`/`cerrada` (que `radar.ts` no cubre), con `--solo-cache` (reindexa desde
+  `data/*/detalle.json`, 0 requests) y `--forzar` (salta el chequeo de prioridad de cuota).
+- **Prueba real, no solo típecheck**: `npm run indexar -- --solo-cache` sobre los 3 códigos ya
+  cacheados → 3 observaciones nuevas, confirmado idempotente en una segunda corrida (0 nuevas, 3
+  sin cambios). Después, **se borró `data/state.json` a propósito** — simula exactamente el bug
+  descrito (checkout limpio en la nube) — y se corrió `npm run radar` contra producción de nuevo:
+  el `state.json` regenerado quedó con `primera_vez: "2026-08-18T20:04:04Z"` en los 3 códigos, que
+  es el timestamp del indexado anterior, **no** el de esta corrida (20:04:53Z). Es la prueba
+  directa de que `sembrarDesdeIndice` restaura el historial real en vez de tratar todo como NUEVO.
+  76 requests acumuladas en el día, 0 códigos 429.
+- Los `codigos_onu` capturados en el índice ya tienen datos reales para cuando llegue la Fase 3:
+  `43231512` (licencias Claude Pro/Team), `43232407`/`43232804` (Claude Max) — primera evidencia
+  real hacia resolver si es UNSPSC de 8 dígitos íntegro (pendiente `--diagnostico-onu`, Fase 3).
+
 ## Contexto
 
 El repo usa la API validada de Compra Ágil (`api2.mercadopublico.cl`) para un solo fin: buscar 8
