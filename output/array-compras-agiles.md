@@ -1,6 +1,6 @@
 # Radar Compra Ágil — servicios tipo Array
 
-Corrida: 2026-08-18T19:09:25.365Z
+Corrida: 2026-08-18T19:33:50.142Z
 
 ## Oportunidades abiertas (4)
 
@@ -40,8 +40,7 @@ Corrida: 2026-08-18T19:09:25.365Z
 
 Nota: a diferencia del radar de licencias Claude, estas variantes son términos genéricos ("proyectos", "partes", "trámites") que pueden traer miles de resultados; se limita la paginación a 3 páginas (150 códigos) por variante para no forzar 504 de la API. La relevancia real se confirma después contra el patrón de cada categoría, así que el tope acota volumen, no precisión — pero puede dejar fuera coincidencias que solo aparecen en páginas más profundas.
 
-⚠️ 4 de 17 variantes fallaron y se omitieron (cobertura parcial):
+⚠️ 3 de 17 variantes fallaron y se omitieron (cobertura parcial):
 - `ope: oficina partes electrónica`: API /v2/compra-agil?q=oficina+partes+electr%C3%B3nica&tamano_pagina=50&numero_pagina=1&estado=publicada respondió 504: {"message": "Endpoint request timed out"}
 - `ope: oficina partes`: API /v2/compra-agil?q=oficina+partes&tamano_pagina=50&numero_pagina=1&estado=publicada respondió 504: {"message": "Endpoint request timed out"}
 - `ged: documento electrónico`: API /v2/compra-agil?q=documento+electr%C3%B3nico&tamano_pagina=50&numero_pagina=1&estado=publicada respondió 504: {"message": "Endpoint request timed out"}
-- `pmo: gestión proyectos`: API /v2/compra-agil?q=gesti%C3%B3n+proyectos&tamano_pagina=50&numero_pagina=1&estado=publicada respondió 504: {"message": "Endpoint request timed out"}
