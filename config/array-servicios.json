@@ -1,0 +1,46 @@
+{
+  "categorias": [
+    {
+      "id": "ope",
+      "nombre": "Oficina de Partes Electrónica",
+      "descripcion_array": "Sistema de Oficina de Partes Electrónica (OPE): recepción y despacho de correspondencia por canales electrónicos y presenciales.",
+      "variantes": ["oficina partes electrónica", "oficina partes"],
+      "patron_mencion": "oficina\\s+de\\s+partes"
+    },
+    {
+      "id": "set",
+      "nombre": "Seguimiento de Trámites",
+      "descripcion_array": "Sistema de Seguimiento de Trámites (SET): visualización y alertas de cumplimiento de SLA para trámites ciudadanos e institucionales.",
+      "variantes": ["seguimiento trámites", "trámites"],
+      "patron_mencion": "seguimiento\\s+de\\s+tr[aá]mites"
+    },
+    {
+      "id": "ged",
+      "nombre": "Gestión Documental y Firma Electrónica",
+      "descripcion_array": "Sistema de Gestión Electrónica de Documentos (GED): elaboración, visación y firma electrónica de documentos oficiales.",
+      "variantes": ["gestión documental", "documento electrónico", "firma electrónica"],
+      "patron_mencion": "gesti[oó]n\\s+(electr[oó]nica\\s+)?document|firma\\s+electr[oó]nica"
+    },
+    {
+      "id": "rpa",
+      "nombre": "Automatización de Procesos (RPA / DBA)",
+      "descripcion_array": "Plataformas Digital Business Automation (DBA) y Robotic Process Automation (RPA): automatización de tareas repetitivas, flujos y captura de datos.",
+      "variantes": ["automatización robótica procesos", "RPA", "automatización procesos", "business process automation"],
+      "patron_mencion": "\\brpa\\b|automatizaci[oó]n\\s+(rob[oó]tica\\s+)?de\\s+procesos|business\\s+process\\s+automation"
+    },
+    {
+      "id": "bi",
+      "nombre": "Business Intelligence / Analítica",
+      "descripcion_array": "Plataforma de Analytics / BI: ingesta de datos desde múltiples fuentes, análisis predictivo, visualización geoespacial y búsqueda multimodal.",
+      "variantes": ["business intelligence", "inteligencia negocios", "analítica"],
+      "patron_mencion": "business\\s+intelligence|inteligencia\\s+de\\s+negocios|anal[ií]tica\\s+de\\s+datos"
+    },
+    {
+      "id": "pmo",
+      "nombre": "Gestión de Proyectos y Contratos (PMO)",
+      "descripcion_array": "Project Management Platform (ProactiveOffice): gestión de iniciativas, proyectos, contratos, recursos, riesgos e indicadores.",
+      "variantes": ["proactiveoffice", "gestión proyectos", "gestión contratos"],
+      "patron_mencion": "proactiveoffice|gesti[oó]n\\s+de\\s+proyectos"
+    }
+  ]
+}
