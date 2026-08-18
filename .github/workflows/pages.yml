@@ -5,6 +5,7 @@ on:
     branches:
       - claude/mercadopublico-agente-compras-pgyedf
       - claude/revisar-contexto-plan-ttaumn
+      - claude/array-agile-purchases-page-det2d4
       - main
       - master
     paths:

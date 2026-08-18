@@ -186,6 +186,10 @@ export interface BuscarCompraAgilParams {
   q: string;
   estado?: EstadoCompraAgil;
   tamanoPagina?: number;
+  /** Tope de páginas a recorrer (default 20). Bajarlo para queries deliberadamente genéricas
+   * que devuelven miles de resultados poco relevantes, donde paginar a fondo solo suma riesgo
+   * de 504 sin aportar hallazgos (la relevancia real se confirma después, localmente). */
+  maxPaginas?: number;
 }
 
 /** Trae todas las páginas para una consulta `q` dada, deduplicando no es responsabilidad de esta función. */
@@ -193,8 +197,9 @@ export async function buscarCompraAgil(params: BuscarCompraAgilParams): Promise<
   const tamanoPagina = Math.max(params.tamanoPagina ?? 50, PAGE_SIZE_MIN);
   const items: CompraAgilListItem[] = [];
   let pagina = 1;
-  // Guardrail de seguridad: no dar más de 20 vueltas por consulta aunque la API pagine mal.
-  for (; pagina <= 20; pagina++) {
+  // Guardrail de seguridad: no dar más vueltas por consulta aunque la API pagine mal.
+  const topePaginas = params.maxPaginas ?? 20;
+  for (; pagina <= topePaginas; pagina++) {
     const qs = new URLSearchParams({
       q: params.q,
       tamano_pagina: String(tamanoPagina),
