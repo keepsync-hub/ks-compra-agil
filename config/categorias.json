@@ -1,0 +1,61 @@
+{
+  "categorias": [
+    {
+      "id": "claude",
+      "nombre": "Licencias Claude / Anthropic",
+      "activa": true,
+      "variantes_q": ["Claude", "Anthropic", "Cloude", "Clude", "Claude Pro", "Claude Max", "Claude Code", "Claude Team"],
+      "verificacion_regex": "\\b(claude|anthropic|clo?ude|clude)\\b",
+      "verificacion_flags": "i",
+      "pricing": { "modo": "planes_usd" },
+      "presupuesto_requests_por_corrida": 40,
+      "acreditaciones_conocidas_faltantes": ["distribuidor_autorizado", "canal_oficial"]
+    },
+    {
+      "id": "gestion-documental",
+      "nombre": "Gestión documental / digitalización de procesos / oficina de partes",
+      "_nota": "activa=false hasta tener una cota inferior confiable de la cuota diaria (ver PLAN-VOLUMEN.md, Fase 0/6) — activarla suma otras 10 variantes al presupuesto de cada corrida del radar.",
+      "activa": false,
+      "variantes_q": [
+        "Gestión Documental",
+        "Gestor Documental",
+        "Digitalización de Procesos",
+        "Digitalización de Documentos",
+        "Digitalización de Archivos",
+        "Oficina de Partes",
+        "Expediente Electrónico",
+        "Tramitación Documental",
+        "Sistema de Gestión Documental",
+        "Archivo Digital"
+      ],
+      "_variantes_nota": "copiadas literalmente de licitaciones/config/keywords.json (no importadas: son APIs distintas — acá `q` es filtro de servidor + verificación local de ruido; en licitaciones/ la regex es el mecanismo de descubrimiento primario porque esa API no tiene `q`).",
+      "verificacion_regex": "\\b(gesti[oó]n\\s+documental|gestor\\s+documental|digitalizaci[oó]n\\s+de\\s+(?:procesos|documentos|archivos|expedientes)|oficina\\s+de\\s+partes|expediente\\s+electr[oó]nico|tramitaci[oó]n\\s+documental|sistema\\s+de\\s+gesti[oó]n\\s+documental|archivo\\s+digital|correspondencia\\s+digital)\\b",
+      "verificacion_flags": "i",
+      "pricing": { "modo": "manual" },
+      "presupuesto_requests_por_corrida": 40,
+      "acreditaciones_conocidas_faltantes": []
+    },
+    {
+      "id": "licencias-software",
+      "nombre": "Reventa de otras licencias de software (Canva, Cursor, Microsoft, Adobe, etc.)",
+      "activa": false,
+      "variantes_q": ["Canva", "Cursor", "Microsoft 365", "Office 365", "Adobe Creative Cloud", "Licencia de Software", "Suscripción de Software"],
+      "verificacion_regex": "\\b(canva|cursor|microsoft\\s*365|office\\s*365|adobe(?:\\s+creative\\s+cloud)?|licencia(?:s)?\\s+de\\s+software|suscripci[oó]n\\s+de\\s+software)\\b",
+      "verificacion_flags": "i",
+      "pricing": { "modo": "manual" },
+      "presupuesto_requests_por_corrida": 40,
+      "acreditaciones_conocidas_faltantes": ["distribuidor_autorizado", "canal_oficial"]
+    },
+    {
+      "id": "desarrollo-integracion",
+      "nombre": "Desarrollo a medida / integración / automatización",
+      "activa": false,
+      "variantes_q": ["Desarrollo de Software", "Desarrollo a Medida", "Integración de Sistemas", "Automatización de Procesos", "Consultoría TI"],
+      "verificacion_regex": "\\b(desarrollo\\s+(?:de\\s+software|a\\s+medida|de\\s+api)|integraci[oó]n\\s+de\\s+sistemas|automatizaci[oó]n\\s+de\\s+procesos|consultor[ií]a\\s+(?:ti|inform[aá]tica))\\b",
+      "verificacion_flags": "i",
+      "pricing": { "modo": "manual" },
+      "presupuesto_requests_por_corrida": 40,
+      "acreditaciones_conocidas_faltantes": []
+    }
+  ]
+}

@@ -57,6 +57,35 @@ que repetirlo en un día con la API más estable y medir la latencia, no solo la
 `q` todavía — la ganancia de eficiencia (`paginacion.total_resultados`, evita 1 request de
 confirmación por query) sí conviene aplicarla ahora, es una mejora sin riesgo nuevo.
 
+**Fase 1 — implementada y validada contra producción** (18-08-2026, misma sesión):
+
+- `config/categorias.json` (nuevo): 4 categorías definidas — `claude` (**activa**, las 8 variantes
+  de siempre), `gestion-documental` (variantes copiadas de `licitaciones/config/keywords.json`),
+  `licencias-software` (Canva/Cursor/Microsoft/Adobe) y `desarrollo-integracion` — las 3 últimas
+  con `activa: false` a propósito: activarlas suma su `presupuesto_requests_por_corrida` al costo
+  de cada corrida, y la cuota diaria todavía no tiene una cota inferior confiable (Fase 0 solo
+  llegó a "≥70 requests/día sin 429", no a un límite real).
+- `src/lib/categorias.ts` (nuevo): carga y compila las categorías, con dos guardas que no estaban
+  en el diseño original: rechaza flags de regex `g`/`y` (con `g`, `RegExp.test()` arrastra
+  `lastIndex` entre llamadas y produce falsos negativos intermitentes — un bug silencioso si se
+  hubiera colado) y valida que `id` cumpla `/^[a-z0-9-]+$/` (se usa como componente de ruta).
+- `src/lib/marca.ts`: reescrito como wrapper delgado sobre `categoriaPorId("claude")` — mismas 3
+  firmas exportadas, mismo comportamiento (confirmado con `mencionaCategoria` reproduciendo
+  exactamente la regex anterior). `informe-nicho.ts` sigue importándolo sin cambios.
+- `config/marcas.json` **eliminado** — absorbido por la categoría `claude` de `categorias.json`.
+  `loadMarcasConfig()` (`src/lib/config.ts`) ahora lee ese archivo directo (sin pasar por
+  `categorias.ts`, a propósito: evita un import circular config↔categorias).
+- `radar.ts` reescrito para iterar sobre `categoriasActivas()` en vez de tener "marca" hardcodeada:
+  reporte con una sección de oportunidades por categoría, presupuesto de cuota = suma de los
+  presupuestos de las categorías activas. **Smoke test contra producción con cero regresión**: con
+  solo `claude` activa, encontró los mismos 3 códigos que la corrida de Fase 0
+  (`1233595-38-COT26`, `607-180-COT26`, `2069-2272-COT26`), con las mismas condiciones extraídas
+  (la competencia varió porque son datos en vivo, esperado). 70 requests acumuladas en el día,
+  0 códigos 429 — la cota inferior de la cuota sigue creciendo sin haberse agotado.
+- Pendiente: activar `gestion-documental`/`licencias-software`/`desarrollo-integracion` requiere
+  (a) una cota de cuota más confiable y (b) probar sus regex de verificación contra casos reales —
+  ninguna se ha corrido todavía contra producción, a diferencia de `claude`.
+
 ## Contexto
 
 El repo usa la API validada de Compra Ágil (`api2.mercadopublico.cl`) para un solo fin: buscar 8

@@ -181,7 +181,7 @@ ${
 
 ## Metodología y limitaciones
 
-- Búsqueda por las variantes de \`config/marcas.json\` (${marcas.variantes.map((v) => `\`${v}\``).join(", ")})
+- Búsqueda por las variantes de la categoría \`claude\` en \`config/categorias.json\` (${marcas.variantes.map((v) => `\`${v}\``).join(", ")})
   contra los 4 estados de Compra Ágil (\`publicada\`, \`desierta\`, \`cancelada\`, \`cerrada\`),
   verificando localmente que \`nombre\` mencione la marca de verdad (descarta ruido de \`q\`).
 - \`total_ofertas_recibidas\` en el listado siempre reporta 0 para procesos abiertos (hallazgo

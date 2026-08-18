@@ -1,15 +1,14 @@
 import type { CompraAgilListItem, ProductoSolicitado } from "./api.js";
+import { categoriaPorId, mencionaCategoria, detalleMencionaCategoria } from "./categorias.js";
 
 /**
- * `q` en la API es un matching laxo (capturó "LICENCIAS CLOUDE" y "TIPO CLAUDE VERSION PRO"),
- * lo cual ayuda a encontrar variantes con errores de tipeo pero también trae ruido no
- * relacionado. Esta regex es la verificación local de que la mención de marca es real.
+ * Wrapper delgado sobre la categoría "claude" de config/categorias.json (ver PLAN-VOLUMEN.md,
+ * Fase 1). Mantiene las mismas tres firmas de antes para no tocar `radar.ts`/`informe-nicho.ts`
+ * durante la migración a multi-categoría — la regex y el comportamiento son idénticos a los que
+ * tenía este archivo antes de generalizarse (`\b(claude|anthropic|clo?ude|clude)\b`, flag "i").
  */
-const MENCION_MARCA_REGEX = /\b(claude|anthropic|clo?ude|clude)\b/i;
-
 export function tieneMencionRealDeMarca(texto: string | null | undefined): boolean {
-  if (!texto) return false;
-  return MENCION_MARCA_REGEX.test(texto);
+  return mencionaCategoria(categoriaPorId("claude"), texto);
 }
 
 export function itemMencionaMarca(item: CompraAgilListItem): boolean {
@@ -20,6 +19,5 @@ export function detalleMencionaMarca(
   descripcion: string | null | undefined,
   productos: ProductoSolicitado[] | undefined,
 ): boolean {
-  if (tieneMencionRealDeMarca(descripcion)) return true;
-  return (productos ?? []).some((p) => tieneMencionRealDeMarca(p.descripcion) || tieneMencionRealDeMarca(p.nombre));
+  return detalleMencionaCategoria(categoriaPorId("claude"), descripcion, productos);
 }

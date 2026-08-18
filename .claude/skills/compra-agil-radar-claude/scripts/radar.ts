@@ -1,23 +1,38 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { ROOT_DIR, loadMarcasConfig } from "../../../../src/lib/config.js";
+import { ROOT_DIR } from "../../../../src/lib/config.js";
+import {
+  categoriasActivas,
+  itemMencionaCategoria,
+  detalleCompraAgilMencionaCategoria,
+  type CategoriaCompilada,
+} from "../../../../src/lib/categorias.js";
 import { buscarCompraAgil, obtenerDetalleCompraAgil, extraerAdjudicacion, type CompraAgilListItem } from "../../../../src/lib/api.js";
-import { itemMencionaMarca, detalleMencionaMarca } from "../../../../src/lib/marca.js";
 import { extraerCondiciones } from "../../../../src/lib/condiciones.js";
 import { descargarAdjuntosSiExisten } from "../../../../src/lib/adjuntos.js";
 import { cargarState, guardarState, registrarHallazgo } from "../../../../src/lib/historial.js";
 import { configurarCuota } from "../../../../src/lib/cuota.js";
 
-async function main() {
-  configurarCuota({ script: "radar", maxRequests: 40 }); // reserva prioritaria — ver PLAN-VOLUMEN.md
-  const ahoraIso = new Date().toISOString();
-  const marcas = loadMarcasConfig();
+interface VarianteFallida {
+  variante: string;
+  error: string;
+}
 
-  console.log(`Radar compra-agil-claude — ${marcas.variantes.length} variantes de búsqueda, estado=publicada\n`);
+/** Barrido de una categoría contra `estado=publicada`: mismo procedimiento que antes tenía
+ * `radar.ts` hardcodeado a "marca" — generalizado a cualquier categoría de config/categorias.json
+ * (ver PLAN-VOLUMEN.md, Fase 1). Con una sola categoría activa, produce exactamente el mismo
+ * resultado que la versión anterior de este archivo. */
+async function barrerCategoria(
+  categoria: CategoriaCompilada,
+  state: ReturnType<typeof cargarState>,
+  ahoraIso: string,
+  variantesFallidas: VarianteFallida[],
+  alertasRecompra: string[],
+): Promise<string[]> {
+  console.log(`\n— ${categoria.nombre} (${categoria.variantes_q.length} variante(s), estado=publicada)`);
 
   const encontrados = new Map<string, CompraAgilListItem>();
-  const variantesFallidas: { variante: string; error: string }[] = [];
-  for (const variante of marcas.variantes) {
+  for (const variante of categoria.variantes_q) {
     try {
       const items = await buscarCompraAgil({ q: variante, estado: "publicada" });
       for (const item of items) {
@@ -30,22 +45,23 @@ async function main() {
       // recupera vía dedup. Se registra el fallo para reportarlo con honestidad.
       const mensaje = (err as Error).message;
       console.warn(`  variante "${variante}": falló, se continúa sin ella — ${mensaje}`);
-      variantesFallidas.push({ variante, error: mensaje });
+      variantesFallidas.push({ variante: `${variante} (${categoria.id})`, error: mensaje });
     }
   }
 
-  const conMencionReal = [...encontrados.values()].filter(itemMencionaMarca);
+  const conMencionReal = [...encontrados.values()].filter((item) => itemMencionaCategoria(categoria, item));
   const ruido = encontrados.size - conMencionReal.length;
-  console.log(`${encontrados.size} códigos únicos traídos por \`q\`, ${conMencionReal.length} con mención real de marca` + (ruido > 0 ? ` (${ruido} descartados como ruido de \`q\`)` : "") + ".\n");
+  console.log(
+    `  ${encontrados.size} códigos únicos traídos por \`q\`, ${conMencionReal.length} con mención real` +
+      (ruido > 0 ? ` (${ruido} descartados como ruido de \`q\`)` : "") +
+      ".",
+  );
 
-  const state = cargarState();
   const filasReporte: string[] = [];
-  const alertasRecompra: string[] = [];
-
   for (const item of conMencionReal) {
     const detalle = await obtenerDetalleCompraAgil(item.codigo);
-    if (!detalleMencionaMarca(detalle.descripcion, detalle.productos_solicitados)) {
-      console.log(`  ${item.codigo}: descartado, la descripción del detalle no confirma mención de marca (falso positivo de \`q\`).`);
+    if (!detalleCompraAgilMencionaCategoria(categoria, detalle)) {
+      console.log(`  ${item.codigo}: descartado, el detalle no confirma la mención (falso positivo de \`q\`).`);
       continue;
     }
     const condiciones = extraerCondiciones(detalle);
@@ -74,7 +90,7 @@ async function main() {
     const registro = registrarHallazgo(state, item, ahoraIso);
     if (registro.esReintentoDeOrganismo) {
       alertasRecompra.push(
-        `${item.institucion.organismo_comprador} republica (${item.codigo}) — ya tenía ${registro.procesosPreviosDelOrganismo.length} proceso(s) previo(s): ` +
+        `${item.institucion.organismo_comprador} republica (${item.codigo}, ${categoria.nombre}) — ya tenía ${registro.procesosPreviosDelOrganismo.length} proceso(s) previo(s): ` +
           registro.procesosPreviosDelOrganismo.map((p) => `${p.codigo} (${p.estado})`).join(", "),
       );
     }
@@ -98,42 +114,42 @@ async function main() {
         .join("\n"),
     );
   }
+  return filasReporte;
+}
 
-  // --- Adjudicaciones: compras con Proveedor Seleccionado ---
-  // Se monitorean junto con las publicadas para saber qué se adjudicó y a quién. Nota: el endpoint
-  // v2 hoy no puebla el proveedor ganador ni el monto adjudicado (viven en la Orden de Compra del
-  // portal); se extrae lo que haya y se declara con honestidad si la API no lo expone.
-  //
-  // Medido (ver PLAN-VOLUMEN.md): este estado devuelve 0 casos de Claude en cada corrida hecha
-  // hasta ahora. Barrer las 8 variantes de marca acá, como en el resto del radar, gastaría 8
-  // requests para confirmar 8 veces el mismo cero. Se usa 1 sola variante ancha ("Claude") —
-  // sigue detectando el día en que la API empiece a poblar el campo, a un octavo del costo.
-  const VARIANTE_ADJUDICACION = marcas.variantes[0] ?? "Claude";
+/** Barrido de `estado=proveedor_seleccionado` de una categoría, con el ahorro 8→1 ya aplicado
+ * (medido en 0 casos para "claude" en cada corrida hasta ahora — ver PLAN-VOLUMEN.md, Fase 0):
+ * una sola variante ancha en vez de todas las de la categoría. */
+async function barrerAdjudicacionesCategoria(
+  categoria: CategoriaCompilada,
+  variantesFallidas: VarianteFallida[],
+): Promise<string[]> {
+  const varianteAmplia = categoria.variantes_q[0] ?? categoria.nombre;
   const adjudicadas = new Map<string, CompraAgilListItem>();
   try {
-    const items = await buscarCompraAgil({ q: VARIANTE_ADJUDICACION, estado: "proveedor_seleccionado" });
+    const items = await buscarCompraAgil({ q: varianteAmplia, estado: "proveedor_seleccionado" });
     for (const item of items) if (!adjudicadas.has(item.codigo)) adjudicadas.set(item.codigo, item);
   } catch (err) {
-    variantesFallidas.push({ variante: `${VARIANTE_ADJUDICACION} (proveedor_seleccionado)`, error: (err as Error).message });
+    variantesFallidas.push({ variante: `${varianteAmplia} (${categoria.id}, proveedor_seleccionado)`, error: (err as Error).message });
+    return [];
   }
-  const adjudicadasReales = [...adjudicadas.values()].filter(itemMencionaMarca);
-  const filasAdjudicaciones: string[] = [];
-  let adjudicacionesSinProveedorExpuesto = 0;
+
+  const adjudicadasReales = [...adjudicadas.values()].filter((item) => itemMencionaCategoria(categoria, item));
+  const filas: string[] = [];
   for (const item of adjudicadasReales) {
     const detalle = await obtenerDetalleCompraAgil(item.codigo);
-    if (!detalleMencionaMarca(detalle.descripcion, detalle.productos_solicitados)) continue;
+    if (!detalleCompraAgilMencionaCategoria(categoria, detalle)) continue;
     const condiciones = extraerCondiciones(detalle);
     const adj = extraerAdjudicacion(detalle);
-    if (!adj.expuesta_por_api) adjudicacionesSinProveedorExpuesto++;
 
     const dirDatos = path.join(ROOT_DIR, "data", item.codigo);
     mkdirSync(dirDatos, { recursive: true });
     writeFileSync(path.join(dirDatos, "detalle.json"), JSON.stringify(detalle, null, 2), "utf-8");
     writeFileSync(path.join(dirDatos, "adjudicacion.json"), JSON.stringify(adj, null, 2), "utf-8");
 
-    filasAdjudicaciones.push(
+    filas.push(
       [
-        `### ${item.codigo} — ${item.institucion.organismo_comprador}`,
+        `### ${item.codigo} — ${item.institucion.organismo_comprador} (${categoria.nombre})`,
         `- ${detalle.nombre}`,
         `- Tope: $${condiciones.tope_clp.toLocaleString("es-CL")} CLP · ${condiciones.competencia_ofertas} oferta(s) recibida(s)`,
         `- Proveedor seleccionado: ${adj.proveedor_seleccionado ?? "_no expuesto por la API v2 (ver Orden de Compra en el portal)_"}`,
@@ -144,32 +160,75 @@ async function main() {
         .join("\n"),
     );
   }
-  console.log(
-    `\nAdjudicaciones (proveedor seleccionado) con Claude: ${adjudicadasReales.length}` +
-      (adjudicadasReales.length > 0 ? ` (${adjudicacionesSinProveedorExpuesto} sin proveedor expuesto por la API)` : "") +
-      ".",
-  );
+  return filas;
+}
+
+async function main() {
+  const categorias = categoriasActivas();
+  if (categorias.length === 0) {
+    console.error("Ninguna categoría activa en config/categorias.json — nada que buscar.");
+    process.exitCode = 1;
+    return;
+  }
+  const presupuestoTotal = categorias.reduce((a, c) => a + c.presupuesto_requests_por_corrida, 0);
+  configurarCuota({ script: "radar", maxRequests: presupuestoTotal }); // reserva prioritaria — ver PLAN-VOLUMEN.md
+
+  const ahoraIso = new Date().toISOString();
+  console.log(`Radar Compra Ágil — ${categorias.length} categoría(s) activa(s): ${categorias.map((c) => c.nombre).join(", ")}`);
+
+  const state = cargarState();
+  const variantesFallidas: VarianteFallida[] = [];
+  const alertasRecompra: string[] = [];
+  const seccionesOportunidades: { categoria: CategoriaCompilada; filas: string[] }[] = [];
+
+  for (const categoria of categorias) {
+    const filas = await barrerCategoria(categoria, state, ahoraIso, variantesFallidas, alertasRecompra);
+    seccionesOportunidades.push({ categoria, filas });
+  }
+
+  // --- Adjudicaciones: compras con Proveedor Seleccionado, por categoría ---
+  // Se monitorean junto con las publicadas para saber qué se adjudicó y a quién. Nota: el endpoint
+  // v2 hoy no puebla el proveedor ganador ni el monto adjudicado (viven en la Orden de Compra del
+  // portal); se extrae lo que haya y se declara con honestidad si la API no lo expone.
+  const seccionesAdjudicaciones: { categoria: CategoriaCompilada; filas: string[] }[] = [];
+  for (const categoria of categorias) {
+    const filas = await barrerAdjudicacionesCategoria(categoria, variantesFallidas);
+    seccionesAdjudicaciones.push({ categoria, filas });
+  }
+  const totalAdjudicaciones = seccionesAdjudicaciones.reduce((a, s) => a + s.filas.length, 0);
+  console.log(`\nAdjudicaciones (proveedor seleccionado) totales: ${totalAdjudicaciones}.`);
 
   state.ultima_corrida = ahoraIso;
   guardarState(state);
 
+  const totalOportunidades = seccionesOportunidades.reduce((a, s) => a + s.filas.length, 0);
+  const totalVariantes = categorias.reduce((a, c) => a + c.variantes_q.length, 0);
+
   const reporte = [
-    `# Radar Compra Ágil — Claude`,
+    `# Radar Compra Ágil`,
     ``,
     `Corrida: ${ahoraIso}`,
+    `Categorías activas: ${categorias.map((c) => c.nombre).join(", ")}`,
     ``,
-    `## Oportunidades abiertas (${filasReporte.length})`,
+    `## Oportunidades abiertas (${totalOportunidades})`,
     ``,
-    filasReporte.length > 0 ? filasReporte.join("\n\n") : "_Ninguna oportunidad abierta en esta corrida._",
+    ...seccionesOportunidades.map(({ categoria, filas }) =>
+      [
+        `### ${categoria.nombre} (${filas.length})`,
+        ``,
+        filas.length > 0 ? filas.join("\n\n") : "_Ninguna oportunidad abierta en esta corrida._",
+      ].join("\n"),
+    ),
     ``,
-    `## Adjudicaciones (proveedor seleccionado) (${filasAdjudicaciones.length})`,
+    `## Adjudicaciones (proveedor seleccionado) (${totalAdjudicaciones})`,
     ``,
-    filasAdjudicaciones.length > 0
-      ? filasAdjudicaciones.join("\n\n")
-      : "_Ninguna Compra Ágil de Claude en estado \"proveedor seleccionado\" en esta corrida._",
-    adjudicacionesSinProveedorExpuesto > 0
-      ? `\n> Nota: la API v2 no expone el proveedor ganador ni el monto adjudicado (campos vacíos); ese dato está en la Orden de Compra del portal.`
-      : ``,
+    totalAdjudicaciones > 0
+      ? seccionesAdjudicaciones
+          .filter((s) => s.filas.length > 0)
+          .map((s) => s.filas.join("\n\n"))
+          .join("\n\n")
+      : `_Ninguna Compra Ágil en estado "proveedor seleccionado" en esta corrida (todas las categorías)._`,
+    `\n> Nota: la API v2 no expone el proveedor ganador ni el monto adjudicado (campos vacíos); ese dato está en la Orden de Compra del portal.`,
     ``,
     `## Alertas de recompradores`,
     ``,
@@ -178,10 +237,10 @@ async function main() {
     `## Cobertura`,
     ``,
     variantesFallidas.length > 0
-      ? `⚠️ ${variantesFallidas.length} de ${marcas.variantes.length} variantes fallaron y se omitieron (cobertura parcial):\n` +
+      ? `⚠️ ${variantesFallidas.length} variante(s) fallaron y se omitieron (cobertura parcial):\n` +
         variantesFallidas.map((v) => `- \`${v.variante}\`: ${v.error}`).join("\n")
-      : `Las ${marcas.variantes.length} variantes de búsqueda respondieron correctamente.`,
-    `\nEl barrido de \`proveedor_seleccionado\` usa solo 1 variante (\`${VARIANTE_ADJUDICACION}\`), no las ${marcas.variantes.length} de \`publicada\` — medido en 0 casos en cada corrida hasta ahora, no se justifica gastar 8 requests para confirmar 8 veces el mismo cero (ver PLAN-VOLUMEN.md).`,
+      : `Las ${totalVariantes} variantes de búsqueda (todas las categorías activas) respondieron correctamente.`,
+    `\nEl barrido de \`proveedor_seleccionado\` usa 1 sola variante ancha por categoría (no todas sus variantes) — medido en 0 casos para "claude" en cada corrida hasta ahora, no se justifica gastar N requests para confirmar N veces el mismo cero (ver PLAN-VOLUMEN.md).`,
   ].join("\n");
 
   const outputDir = path.join(ROOT_DIR, "output");

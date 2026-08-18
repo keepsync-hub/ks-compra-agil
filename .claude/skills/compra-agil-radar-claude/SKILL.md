@@ -30,11 +30,15 @@ npm run radar
 
 ## Qué hace
 
-1. Consulta `/v2/compra-agil` con `estado=publicada` para cada variante en
-   `config/marcas.json` (`Claude`, `Anthropic`, `Cloude`, `Clude`, `Claude Pro`, `Claude Max`,
-   `Claude Code`, `Claude Team`), deduplicando por `codigo`.
-2. Descarta ruido de `q` verificando localmente que `nombre`/`descripcion` mencionen la marca de
-   verdad (`src/lib/marca.ts`).
+1. Corre una vez por cada **categoría activa** en `config/categorias.json` (ver
+   PLAN-VOLUMEN.md, Fase 1). Hoy solo `claude` está activa (`Claude`, `Anthropic`, `Cloude`,
+   `Clude`, `Claude Pro`, `Claude Max`, `Claude Code`, `Claude Team`); otras categorías
+   (gestión documental, reventa de otras licencias, desarrollo a medida) están definidas pero
+   apagadas hasta tener una cota confiable de la cuota diaria. Para cada variante consulta
+   `/v2/compra-agil` con `estado=publicada`, deduplicando por `codigo`.
+2. Descarta ruido de `q` verificando localmente que `nombre`/`descripcion` mencionen la
+   categoría de verdad (`src/lib/categorias.ts`; `src/lib/marca.ts` es un wrapper delgado sobre
+   la categoría `claude`, se mantiene por compatibilidad).
 3. Trae el detalle de cada código (`/v2/compra-agil/{codigo}`) para tener
    `total_ofertas_recibidas` real y `productos_solicitados`.
 4. Extrae condiciones con `src/lib/condiciones.ts`: tope presupuestario (siempre desde
@@ -59,9 +63,13 @@ npm run radar
 - La cuota de la API es diaria por ticket; si responde 429, el script se detiene y muestra el
   `Retry-After` — no reintentar a ciegas. Cada request se cuenta contra `data/cuota/<hoy>.json` y
   `historico/cuota.jsonl` (`src/lib/cuota.ts`, `npm run cuota` para verlo) — es la medición pasiva
-  del límite diario, que nunca se había medido. El radar tiene reserva prioritaria (40 requests
-  por corrida): `npm run informe` y los scripts futuros de índice/métricas rechazan correr si el
-  radar no corrió hoy, salvo `--forzar` (ver PLAN-VOLUMEN.md).
+  del límite diario, que nunca se había medido. El radar tiene reserva prioritaria: su presupuesto
+  por corrida es la suma de `presupuesto_requests_por_corrida` de las categorías activas (40 hoy,
+  con solo `claude` activa). `npm run informe` y los scripts futuros de índice/métricas rechazan
+  correr si el radar no corrió hoy, salvo `--forzar` (ver PLAN-VOLUMEN.md).
+- Activar una categoría nueva (`config/categorias.json` → `activa: true`) multiplica el costo por
+  corrida: sumar su `presupuesto_requests_por_corrida` al total antes de activarla, y revisar
+  `npm run cuota` para confirmar que hay margen bajo la cota inferior medida.
 - El servicio de adjuntos no es API documentada oficialmente; si empieza a fallar de forma
   consistente, revisar `src/lib/adjuntos.ts` (aislado a propósito) antes de asumir que el radar
   está roto.
