@@ -12,7 +12,10 @@ radar multi-categoría, calificador de admisibilidad) en ejecución: ver `PLAN-V
 está funcionando, las oportunidades abiertas con sus cotizaciones, y los pendientes. `docs/flujo.html`
 es el diagrama del flujo completo paso a paso — qué hace cada skill y en qué puntos exactos se
 detiene para que una persona actúe (incluida la sesión de Claude Cowork local para login +
-formulario). Se publica vía `.github/workflows/pages.yml` en cada push a la rama por defecto.
+formulario). `docs/array-compras-agiles.html` es una página aparte, de exploración de mercado
+para [Array](http://www.array.cl/) (no para el nicho Claude de KeepSync) — ver
+`npm run array-radar` más abajo. Se publica vía `.github/workflows/pages.yml` en cada push a la
+rama por defecto.
 
 ## Setup
 
@@ -41,6 +44,7 @@ cotizar, pero cada PDF/PPTX generado queda marcado BORRADOR hasta que se confirm
 | `npm run form-fill -- <codigo>` | Completa el formulario de oferta en el portal y adjunta el PDF, sin enviar. Requiere login previo. |
 | `npm run diagnostico-api` | Diagnóstico único de la API (¿`q` es opcional?, forma del payload, filtros de fecha, ticket clásico) — ver `PLAN-VOLUMEN.md`, Fase 0. Escribe `output/diagnostico-api.md`. |
 | `npm run cuota` | Muestra el consumo de cuota de hoy y la convergencia pasiva del límite diario medido (`historico/cuota.jsonl`). Cero requests. |
+| `npm run array-radar` | Busca Compras Ágiles publicadas relacionadas con los servicios de [Array](http://www.array.cl/) (oficina de partes, gestión documental/firma electrónica, RPA, BI, gestión de proyectos) y regenera `docs/array-compras-agiles.html`. Exploración de mercado independiente del nicho Claude — solo lectura. |
 | `npm run typecheck` | `tsc --noEmit`. |
 
 ## Agentes de GitHub Copilot (cloud agent)
