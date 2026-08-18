@@ -43,10 +43,12 @@ npm run radar
 5. Descarga adjuntos solo si `documentos[]` no viene vacío (la mayoría de estas compras no
    traen adjuntos), vía el servicio público sin login (`src/lib/adjuntos.ts`).
 6. Guarda todo en `data/<codigo>/{detalle.json, condiciones.json, attachments/}`.
-7. Repite el barrido con `estado=proveedor_seleccionado` (compras adjudicadas) y extrae la
-   adjudicación con `extraerAdjudicacion` (`src/lib/api.ts`). Nota verificada: la API v2 hoy no
-   puebla el proveedor ganador ni el monto (campos vacíos); ese dato vive en la Orden de Compra
-   del portal. Guarda `data/<codigo>/adjudicacion.json` y lo declara con honestidad en el reporte.
+7. Repite el barrido con `estado=proveedor_seleccionado` (compras adjudicadas), pero con **una
+   sola variante ancha** en vez de las 8 — medido en 0 casos en cada corrida hasta ahora, gastar
+   8 requests para confirmar 8 veces el mismo cero no se justifica (ver PLAN-VOLUMEN.md, Fase 0).
+   Extrae la adjudicación con `extraerAdjudicacion` (`src/lib/api.ts`). Nota verificada: la API v2
+   hoy no puebla el proveedor ganador ni el monto (campos vacíos); ese dato vive en la Orden de
+   Compra del portal. Guarda `data/<codigo>/adjudicacion.json` y lo declara con honestidad.
 8. Actualiza `data/state.json`: marca qué códigos son nuevos y qué organismos ya tenían
    procesos previos (recompradores) — señal de alta probabilidad, avisan con antelación.
 9. Escribe `output/radar-ultima-corrida.md` (con la sección de adjudicaciones) y lo imprime en
@@ -55,7 +57,11 @@ npm run radar
 ## Notas
 
 - La cuota de la API es diaria por ticket; si responde 429, el script se detiene y muestra el
-  `Retry-After` — no reintentar a ciegas.
+  `Retry-After` — no reintentar a ciegas. Cada request se cuenta contra `data/cuota/<hoy>.json` y
+  `historico/cuota.jsonl` (`src/lib/cuota.ts`, `npm run cuota` para verlo) — es la medición pasiva
+  del límite diario, que nunca se había medido. El radar tiene reserva prioritaria (40 requests
+  por corrida): `npm run informe` y los scripts futuros de índice/métricas rechazan correr si el
+  radar no corrió hoy, salvo `--forzar` (ver PLAN-VOLUMEN.md).
 - El servicio de adjuntos no es API documentada oficialmente; si empieza a fallar de forma
   consistente, revisar `src/lib/adjuntos.ts` (aislado a propósito) antes de asumir que el radar
   está roto.

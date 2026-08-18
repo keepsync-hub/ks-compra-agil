@@ -5,6 +5,8 @@
   "description": "Agente que monitorea Compras Ágiles en mercadopublico.cl que piden licencias Claude/Anthropic y prepara ofertas para revisión humana.",
   "type": "module",
   "scripts": {
+    "diagnostico-api": "tsx src/scripts/diagnostico-api.ts",
+    "cuota": "tsx src/scripts/cuota.ts",
     "radar": "tsx .claude/skills/compra-agil-radar-claude/scripts/radar.ts",
     "informe": "tsx .claude/skills/compra-agil-radar-claude/scripts/informe-nicho.ts",
     "cotizar": "tsx .claude/skills/compra-agil-ofertar/scripts/cotizar.ts",

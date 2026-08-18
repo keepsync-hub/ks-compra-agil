@@ -5,6 +5,58 @@
 > Este responde una pregunta distinta a la de ambos: **dado el acceso y la API que ya tenemos
 > validados, ¿qué más se puede hacer para aumentar el volumen de venta a Mercado Público?**
 
+## Progreso de ejecución
+
+**Fase 0 — implementada y validada contra producción** (18-08-2026, con `COMPRA_AGIL_API_TICKET`
+real disponible en el entorno):
+
+- `src/lib/lineas.ts`: `construirLineasACotizar` extraída de `cotizar.ts` + `estimarTotal` /
+  `calcularCotizacion` / `evaluarTope` nuevas, reusadas sin cambiar el resultado numérico
+  (`cotizar.ts` ahora importa desde ahí).
+- `src/lib/cuota.ts`: ledger diario (`data/cuota/<hoy>.json`) + rollup versionado
+  (`historico/cuota.jsonl`, se crea recién al primer 429) + circuit breaker local
+  (`configurarCuota`/`contarRequest`). Instrumentado en `apiGet` (`src/lib/api.ts`). **Corrida
+  real**: 58 requests acumuladas en el día entre radar/informe/diagnóstico, 0 códigos 429 — primer
+  dato real hacia la cota inferior del límite diario (ver `npm run cuota`; el rollup histórico
+  todavía no tiene ninguna fila porque no se llegó a un 429 en esta sesión).
+- Ahorro `proveedor_seleccionado`: 8→1 variante. **Confirmado en producción**: la corrida real
+  encontró 0 casos, igual que antes, a un octavo del costo (ver `output/radar-ultima-corrida.md`).
+- `informe-nicho.ts` ahora rechaza correr sin `--forzar` si el radar no corrió hoy (reserva
+  prioritaria de cuota) — confirmado que el guard lee el ledger correctamente.
+- `npm run diagnostico-api` (`src/scripts/diagnostico-api.ts`) y `npm run cuota`
+  (`src/scripts/cuota.ts`) creados. El diagnóstico corrió contra producción; resultados abajo.
+- **Radar corrido en limpio contra producción**: 3 oportunidades reales abiertas ahora mismo
+  (`1233595-38-COT26`, `607-180-COT26`, `2069-2272-COT26`) — ver `output/radar-ultima-corrida.md`
+  para el detalle (tope, plan, usuarios, competencia). La API mostró inestabilidad real durante la
+  corrida (un 504 "Endpoint request timed out" en la variante "Claude Pro" de `publicada`, y un
+  500 "Servicio no disponible" en `informe-nicho.ts` sobre `estado=desierta`) — no es un defecto
+  del código, es la API el día de esta corrida; el manejo de errores existente lo absorbió sin
+  romper el resto de la corrida.
+- Pendiente dentro de Fase 0: el chequeo de golden files de `cotizar.ts` contra los
+  `cotizacion-resumen.json` versionados no se pudo correr — sigue faltando `config/company.json`
+  real (costos de KeepSync) en este entorno, igual que antes. No bloquea el resto del plan.
+
+### Hallazgos reales de `npm run diagnostico-api` (ver `output/diagnostico-api.md` para el detalle)
+
+| Pregunta | Respuesta medida |
+|---|---|
+| ¿`q` es opcional en `/v2/compra-agil`? | **Sí** — HTTP 200 sin `q`. Un barrido completo sin keywords es técnicamente viable. |
+| ¿El payload trae total/paginación? | **Sí, y es mejor de lo esperado**: `payload.paginacion.{total_paginas, total_resultados}` da el total exacto en 1 sola llamada. **Ya aplicado** en `buscarCompraAgil` (`src/lib/api.ts`): corta apenas `numero_pagina >= total_paginas`, con fallback al heurístico anterior (página corta) si la API no informa `paginacion`. Elimina el request extra que hacía falta cuando el conteo real era un múltiplo exacto de `tamanoPagina`. |
+| ¿Algún filtro de fecha? | **No** — los 3 candidatos probados (`fecha_desde`, `fecha_publicacion_desde`, `fecha`) devolvieron HTTP 400. El barrido histórico sigue necesitando el cruce variante × estado, no puede volverse incremental por fecha. |
+| ¿Ticket clásico / Órdenes de Compra? | **Sin confirmar** — `LICITACIONES_API_TICKET` no estaba disponible en el entorno durante esta corrida. Repetir el diagnóstico cuando esté configurado; ese hallazgo condiciona toda la Fase 5. |
+
+**Hallazgo no anticipado por el plan**: la API mostró inestabilidad real y repetida durante toda
+la sesión — un 504 en la variante "Claude Pro" del radar, un 500 en `informe-nicho.ts`, y **dos
+timeouts de 20s consecutivos** en la propia medición del universo (`estado=publicada` sin `q`,
+la query más "pesada" al no tener filtro). Esto matiza el hallazgo de "`q` es opcional": es
+posible técnicamente, pero una query sin filtro puede ser más lenta/inestable en la práctica que
+una filtrada — antes de apostar la arquitectura de Fase 1 a un barrido completo sin keywords, hay
+que repetirlo en un día con la API más estable y medir la latencia, no solo la viabilidad.
+
+**Conclusión para Fase 1**: no cambiar la arquitectura de "8 variantes × estado" a un barrido sin
+`q` todavía — la ganancia de eficiencia (`paginacion.total_resultados`, evita 1 request de
+confirmación por query) sí conviene aplicarla ahora, es una mejora sin riesgo nuevo.
+
 ## Contexto
 
 El repo usa la API validada de Compra Ágil (`api2.mercadopublico.cl`) para un solo fin: buscar 8

@@ -23,5 +23,11 @@ licitaciones/config/company.json
 licitaciones/data/*
 !licitaciones/data/.gitkeep
 
+# historico/ SÍ se versiona a propósito (ver PLAN-VOLUMEN.md, Fase 2): es el índice append-only
+# de observaciones, el rollup de cuota y los fixtures de clasificación de motivos — sobrevive al
+# cambio de máquina entre la sesión local y los agentes de GitHub Copilot en la nube, que corren
+# sobre un checkout limpio. data/cuota/*.json (ledger del día en curso) sí es efímero y ya cae
+# bajo data/* arriba.
+
 *.log
 .DS_Store

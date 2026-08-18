@@ -2,12 +2,14 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR, loadCompanyConfig } from "../../../../src/lib/config.js";
 import { obtenerDetalleCompraAgil, type CompraAgilDetalle } from "../../../../src/lib/api.js";
-import { extraerCondiciones, type Condiciones } from "../../../../src/lib/condiciones.js";
-import { obtenerTipoCambioUsdClp, cotizarLinea, mapearPlanAClavePricing, detectarPlanPricingDeTexto } from "../../../../src/lib/pricing.js";
+import { extraerCondiciones } from "../../../../src/lib/condiciones.js";
+import { obtenerTipoCambioUsdClp } from "../../../../src/lib/pricing.js";
+import { construirLineasACotizar, calcularCotizacion } from "../../../../src/lib/lineas.js";
 import { generarCotizacionPptx, type LineaCotizacionDisplay } from "../../../../src/lib/cotizacion-pptx.js";
 import { generarCotizacionPdf } from "../../../../src/lib/cotizacion-pdf.js";
 import { nombreArchivoCotizacion } from "../../../../src/lib/nombre-archivo.js";
 import { cierreYaPaso } from "../../../../src/lib/tiempo.js";
+import { configurarCuota } from "../../../../src/lib/cuota.js";
 
 async function cargarDetalle(codigo: string): Promise<CompraAgilDetalle> {
   const cachePath = path.join(ROOT_DIR, "data", codigo, "detalle.json");
@@ -19,43 +21,6 @@ async function cargarDetalle(codigo: string): Promise<CompraAgilDetalle> {
   return obtenerDetalleCompraAgil(codigo);
 }
 
-interface LineaPlan {
-  clave: string;
-  cantidad: number;
-  meses: number;
-  requiereRevision: boolean;
-}
-
-/**
- * Arma las líneas a cotizar. Si la compra itemiza varios tramos en `productos_solicitados`
- * (p.ej. 1 Team Premium + 10 Team Standard, como pide Providencia), genera una línea por tramo
- * detectando el plan de cada producto y agrupando por clave de pricing. Si es un solo producto,
- * o algún producto no mapea a un plan conocido, cae a la detección única de `extraerCondiciones`
- * (comportamiento previo). Devuelve null si no puede determinar plan y cantidad con confianza.
- */
-function construirLineasACotizar(
-  detalle: CompraAgilDetalle,
-  condiciones: Condiciones,
-  meses: number,
-): LineaPlan[] | null {
-  const productos = detalle.productos_solicitados ?? [];
-  if (productos.length > 1) {
-    const porClave = new Map<string, LineaPlan>();
-    for (const p of productos) {
-      const det = detectarPlanPricingDeTexto(`${p.nombre} ${p.descripcion}`);
-      if (!det || !p.cantidad || p.cantidad < 1) return null; // no confiable → cae a tramo único
-      const e = porClave.get(det.clave) ?? { clave: det.clave, cantidad: 0, meses, requiereRevision: false };
-      e.cantidad += p.cantidad;
-      e.requiereRevision = e.requiereRevision || det.requiereRevision;
-      porClave.set(det.clave, e);
-    }
-    if (porClave.size > 0) return [...porClave.values()];
-  }
-  const planMapeado = mapearPlanAClavePricing(condiciones.plan_detectado);
-  if (!planMapeado || !condiciones.cantidad_usuarios) return null;
-  return [{ clave: planMapeado.clave, cantidad: condiciones.cantidad_usuarios, meses, requiereRevision: planMapeado.requiereRevision }];
-}
-
 async function main() {
   const codigo = process.argv[2];
   if (!codigo) {
@@ -63,6 +28,7 @@ async function main() {
     process.exitCode = 1;
     return;
   }
+  configurarCuota({ script: "cotizar", maxRequests: 5 }); // normalmente 0-1 (cache hit vs. miss)
 
   const company = loadCompanyConfig();
   const detalle = await cargarDetalle(codigo);
@@ -110,11 +76,11 @@ async function main() {
   const fx = await obtenerTipoCambioUsdClp(company.pricing.fx_fallback_clp_por_usd);
   console.log(`Tipo de cambio usado: $${fx.valor} CLP/USD (${fx.fuente})`);
 
-  const lineasCotizadas = lineasPlan.map((l) => cotizarLinea(l.clave, company, l.cantidad, l.meses, fx.valor));
-  const netoClpTotal = lineasCotizadas.reduce((a, l) => a + l.neto_clp_total, 0);
-  const ivaClpTotal = lineasCotizadas.reduce((a, l) => a + l.iva_clp_total, 0);
-  const totalClpTotal = lineasCotizadas.reduce((a, l) => a + l.total_clp_total, 0);
-  const cantidadTotal = lineasCotizadas.reduce((a, l) => a + l.cantidad, 0);
+  const { lineasCotizadas, netoClp: netoClpTotal, ivaClp: ivaClpTotal, totalClp: totalClpTotal, cantidadTotal } = calcularCotizacion(
+    lineasPlan,
+    company,
+    fx.valor,
+  );
 
   if (totalClpTotal > condiciones.tope_clp) {
     console.error(

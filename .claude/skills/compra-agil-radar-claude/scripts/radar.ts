@@ -6,8 +6,10 @@ import { itemMencionaMarca, detalleMencionaMarca } from "../../../../src/lib/mar
 import { extraerCondiciones } from "../../../../src/lib/condiciones.js";
 import { descargarAdjuntosSiExisten } from "../../../../src/lib/adjuntos.js";
 import { cargarState, guardarState, registrarHallazgo } from "../../../../src/lib/historial.js";
+import { configurarCuota } from "../../../../src/lib/cuota.js";
 
 async function main() {
+  configurarCuota({ script: "radar", maxRequests: 40 }); // reserva prioritaria — ver PLAN-VOLUMEN.md
   const ahoraIso = new Date().toISOString();
   const marcas = loadMarcasConfig();
 
@@ -101,14 +103,18 @@ async function main() {
   // Se monitorean junto con las publicadas para saber qué se adjudicó y a quién. Nota: el endpoint
   // v2 hoy no puebla el proveedor ganador ni el monto adjudicado (viven en la Orden de Compra del
   // portal); se extrae lo que haya y se declara con honestidad si la API no lo expone.
+  //
+  // Medido (ver PLAN-VOLUMEN.md): este estado devuelve 0 casos de Claude en cada corrida hecha
+  // hasta ahora. Barrer las 8 variantes de marca acá, como en el resto del radar, gastaría 8
+  // requests para confirmar 8 veces el mismo cero. Se usa 1 sola variante ancha ("Claude") —
+  // sigue detectando el día en que la API empiece a poblar el campo, a un octavo del costo.
+  const VARIANTE_ADJUDICACION = marcas.variantes[0] ?? "Claude";
   const adjudicadas = new Map<string, CompraAgilListItem>();
-  for (const variante of marcas.variantes) {
-    try {
-      const items = await buscarCompraAgil({ q: variante, estado: "proveedor_seleccionado" });
-      for (const item of items) if (!adjudicadas.has(item.codigo)) adjudicadas.set(item.codigo, item);
-    } catch (err) {
-      variantesFallidas.push({ variante: `${variante} (proveedor_seleccionado)`, error: (err as Error).message });
-    }
+  try {
+    const items = await buscarCompraAgil({ q: VARIANTE_ADJUDICACION, estado: "proveedor_seleccionado" });
+    for (const item of items) if (!adjudicadas.has(item.codigo)) adjudicadas.set(item.codigo, item);
+  } catch (err) {
+    variantesFallidas.push({ variante: `${VARIANTE_ADJUDICACION} (proveedor_seleccionado)`, error: (err as Error).message });
   }
   const adjudicadasReales = [...adjudicadas.values()].filter(itemMencionaMarca);
   const filasAdjudicaciones: string[] = [];
@@ -175,6 +181,7 @@ async function main() {
       ? `⚠️ ${variantesFallidas.length} de ${marcas.variantes.length} variantes fallaron y se omitieron (cobertura parcial):\n` +
         variantesFallidas.map((v) => `- \`${v.variante}\`: ${v.error}`).join("\n")
       : `Las ${marcas.variantes.length} variantes de búsqueda respondieron correctamente.`,
+    `\nEl barrido de \`proveedor_seleccionado\` usa solo 1 variante (\`${VARIANTE_ADJUDICACION}\`), no las ${marcas.variantes.length} de \`publicada\` — medido en 0 casos en cada corrida hasta ahora, no se justifica gastar 8 requests para confirmar 8 veces el mismo cero (ver PLAN-VOLUMEN.md).`,
   ].join("\n");
 
   const outputDir = path.join(ROOT_DIR, "output");

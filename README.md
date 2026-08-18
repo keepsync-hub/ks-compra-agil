@@ -5,7 +5,8 @@ prepara una cotización dentro del tope presupuestario, y deja lista una oferta 
 para revisión y envío manual de un humano.
 
 Diseño completo y hallazgos verificados contra la API real: ver `PLAN.md`. Estado del insumo
-bloqueante (fulfillment) y guardrails: ver `CLAUDE.md`.
+bloqueante (fulfillment) y guardrails: ver `CLAUDE.md`. Plan de crecimiento (índice histórico,
+radar multi-categoría, calificador de admisibilidad) en ejecución: ver `PLAN-VOLUMEN.md`.
 
 **Página de estado (GitHub Pages)**: `docs/index.html` (+ `docs/informe-nicho.html`) resume qué
 está funcionando, las oportunidades abiertas con sus cotizaciones, y los pendientes. `docs/flujo.html`
@@ -38,6 +39,8 @@ cotizar, pero cada PDF/PPTX generado queda marcado BORRADOR hasta que se confirm
 | `npm run cotizar -- <codigo>` | Genera la cotización (`.pptx` fuente + `.pdf` publicable) para una compra específica, validando el tope. No envía nada. |
 | `npx tsx .claude/skills/compra-agil-ofertar/scripts/login.ts --diagnostico` | Verifica si el portal es alcanzable desde el navegador antes de intentar login real. |
 | `npm run form-fill -- <codigo>` | Completa el formulario de oferta en el portal y adjunta el PDF, sin enviar. Requiere login previo. |
+| `npm run diagnostico-api` | Diagnóstico único de la API (¿`q` es opcional?, forma del payload, filtros de fecha, ticket clásico) — ver `PLAN-VOLUMEN.md`, Fase 0. Escribe `output/diagnostico-api.md`. |
+| `npm run cuota` | Muestra el consumo de cuota de hoy y la convergencia pasiva del límite diario medido (`historico/cuota.jsonl`). Cero requests. |
 | `npm run typecheck` | `tsc --noEmit`. |
 
 ## Agentes de GitHub Copilot (cloud agent)
