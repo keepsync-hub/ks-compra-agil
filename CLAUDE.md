@@ -54,6 +54,16 @@ humano y nunca el agente (ver guardrails abajo). El radar y el informe del nicho
 - Ante CAPTCHA o bloqueo del portal: detenerse y pedir intervención humana, no reintentar a
   ciegas.
 
+## Plan de crecimiento (`PLAN-VOLUMEN.md`)
+
+Diseño para explotar al máximo la API **ya validada** y aumentar el volumen de venta: índice
+histórico versionado, radar multi-categoría, clasificador de motivos de fracaso, calificador de
+admisibilidad y digest priorizado. Contiene dos correcciones a lo que dice este archivo más
+arriba: (1) solo el 16% de los fracasos se declara por incumplimiento de la oferta — el 73% es
+atribuible al comprador, lo que matiza la hipótesis de fulfillment; y (2) hay un **bug vigente**:
+como `data/state.json` está gitignored, el radar corriendo en la nube nunca detecta recompradores.
+Leerlo antes de trabajar en cobertura, cuota o priorización.
+
 ## Segundo nicho: Licitaciones de Gestión Documental (`licitaciones/`)
 
 Réplica de este mismo radar+cotizador para **Licitaciones públicas** (no Compra Ágil) de gestión
