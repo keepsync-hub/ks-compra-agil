@@ -98,5 +98,11 @@ hallazgos de arriba aplican tal cual a ese dominio. Dos diferencias que muerden:
   nicho — no asumir que existen ni pedirlas al radar. Ver "Decisión: solo licitaciones activas" en
   `licitaciones/PLAN.md` antes de reponer cualquier barrido.
 - Esa API **no expone adjuntos ni garantías** de la licitación — no existe acá el servicio de
-  adjuntos sin login que sí tiene Compra Ágil. Las bases se leen en el portal, y el cotizador sigue
-  bloqueado por falta de catálogo de costos reales.
+  adjuntos sin login que sí tiene Compra Ágil. Pero eso **ya no obliga a que una persona lea las
+  bases**: la ficha pública del portal (`DetailsAcquisition.aspx?idlicitacion=<codigo>`) sirve su
+  texto completo sin login ni CAPTCHA, y `npm run antecedentes-licitacion -- <codigo>` lo baja y
+  parsea (garantías, anexos exigidos, criterios de evaluación, foro de preguntas) sin gastar cuota
+  del ticket. Lo único que sigue necesitando a una persona son los ARCHIVOS adjuntos: el visor está
+  tras reCAPTCHA + un CAPTCHA de imagen, y el agente no los rodea (guardrail). Ver "Acceso a los
+  antecedentes" en `licitaciones/PLAN.md`. El cotizador sigue bloqueado por falta de catálogo de
+  costos reales.

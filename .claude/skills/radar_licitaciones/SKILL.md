@@ -19,7 +19,10 @@ Lo esencial para operarlo:
 - El ítem del **listado** es mucho más pobre que la ficha (no trae `Comprador`, `Tipo`,
   `MontoEstimado` ni `Estado`). Cualquier consumidor de esos datos debe usar el `detalle`.
 - La API **no expone adjuntos ni garantías** de la licitación: no existe el equivalente al servicio
-  de adjuntos sin login de Compra Ágil. Las bases se leen en el portal.
+  de adjuntos sin login de Compra Ágil. Pero eso ya no obliga a que una persona lea las bases: la
+  ficha pública del portal trae su texto completo y se baja con
+  `npm run antecedentes-licitacion -- <codigo>` (sin ticket ni cuota). Solo los ARCHIVOS adjuntos
+  siguen tras un CAPTCHA de imagen — ver "Acceso a los antecedentes" en `licitaciones/PLAN.md`.
 - **La cuota del ticket es escasa**: se agotó (429) en la segunda corrida del mismo día. Correr el
   radar contra la API una vez al día y usar `--desde-cache` para republicar sin gastar cuota.
 
@@ -62,8 +65,10 @@ agotada o cuando cambió el formato del reporte/página. No toca `state.json`.
    frases excluyentes.
 4. Extrae el plazo de contrato de `TiempoDuracionContrato` + `UnidadTiempoDuracionContrato` y lo
    reporta en la unidad que declaró el organismo ("16 meses"). **No hay adjuntos ni garantías que
-   listar**: esta API no los expone (verificado) — el reporte lo dice explícitamente para que quien
-   evalúe ofertar sepa que tiene que abrir las bases en el portal.
+   listar en la respuesta de la API**: no los expone (verificado). Para tener garantías, anexos
+   exigidos y criterios de evaluación de verdad, correr después
+   `npm run antecedentes-licitacion` (sin argumentos toma las licitaciones ya detectadas en caché):
+   los baja de la ficha pública del portal sin gastar cuota.
 5. Guarda todo en `licitaciones/data/<codigo>/{detalle.json, condiciones.json}`.
 6. Actualiza `licitaciones/data/state.json`: marca qué códigos son nuevos y qué organismos ya
    tenían procesos previos (recompradores). La agrupación es por el `Comprador` de la **ficha**;

@@ -98,8 +98,13 @@ grilla parcial); el detalle está en "Hallazgos de la corrida de verificación" 
   consulta por `estado=activas` y por ficha. A cambio, de este nicho no hay cifras históricas —
   cuántas se declaran desiertas, quién se las adjudica — como sí las hay del nicho Claude.
   Justificación completa en "Decisión: solo licitaciones activas" de `licitaciones/PLAN.md`.
-- **La API no expone adjuntos ni garantías** de la licitación (a diferencia de Compra Ágil): las
-  bases administrativas hay que leerlas en el portal antes de decidir si conviene ofertar.
+- **La API no expone adjuntos ni garantías**, pero la ficha PÚBLICA del portal sí trae el texto
+  completo de las bases — y eso ya se lee automáticamente con `npm run antecedentes-licitacion --
+  <codigo>` (sin ticket, sin cuota y sin login; verificado el 2026-08-19). Ahí están las garantías
+  exigidas, los anexos que hay que presentar y los criterios de evaluación. Lo único que sigue
+  necesitando a una persona son los ARCHIVOS adjuntos (PDF/DOCX): el portal los protege con un
+  CAPTCHA de imagen, y el agente no lo rodea — deja anotada la URL del visor. Ver "Acceso a los
+  antecedentes" en `licitaciones/PLAN.md`.
 - **No hay catálogo de costos reales** de KeepSync para gestión documental — a diferencia de
   licencias Claude, acá no existe un precio de lista público que copiar. `cotizar_licitaciones`
   sigue bloqueado por esto.
@@ -107,6 +112,7 @@ grilla parcial); el detalle está en "Hallazgos de la corrida de verificación" 
 | Comando | Qué hace |
 |---|---|
 | `npm run radar-licitaciones` | Busca licitaciones activas de gestión documental/digitalización/oficina de partes, extrae condiciones, detecta recompradores. Solo lectura. |
+| `npm run antecedentes-licitacion -- <codigo>` | Baja de la ficha **pública** del portal el contenido completo de las bases (garantías, anexos exigidos, criterios de evaluación) + el foro de preguntas, a `licitaciones/data/<codigo>/antecedentes.md`. Sin ticket, sin cuota y sin login. Sin argumentos, procesa todas las licitaciones ya detectadas en caché. |
 | `npm run cotizar-licitaciones -- <codigo>` | Genera la cotización (`.pptx` + `.pdf`) para una licitación específica, validando el tope. No envía nada. |
 
 Página de estado equivalente: `docs/licitaciones.html`, encabezada por las licitaciones abiertas

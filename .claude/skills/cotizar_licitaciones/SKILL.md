@@ -61,12 +61,19 @@ La API de Licitaciones **no expone los adjuntos ni las garantías** de la licita
 contra producción el 2026-08-19 — ver `licitaciones/PLAN.md`). En consecuencia:
 
 - Que la cotización generada no mencione una boleta de garantía **no significa que el organismo no
-  la exija**: la exigencia vive en las bases administrativas, que solo se leen en el portal.
-- Los "documentos exigidos" que aparecen salen de buscar frases en el texto de la ficha, no de un
-  campo estructurado. Son una pista, no la lista oficial.
+  la exija**: la exigencia vive en las bases administrativas.
+- Los "documentos exigidos" que aparecen salen de buscar frases en el texto de la ficha de la API,
+  no de un campo estructurado. Son una pista, no la lista oficial.
 
-Antes de que una de estas cotizaciones se use para ofertar de verdad, hay que abrir la licitación
-en el portal y leer las bases.
+**Corré `npm run antecedentes-licitacion -- <codigo>` antes de cotizar.** Baja de la ficha pública
+del portal —sin ticket, sin cuota y sin login— el contenido completo de las bases a
+`licitaciones/data/<codigo>/antecedentes.md`: garantías exigidas (sección 8), anexos que hay que
+presentar (sección 4) y criterios de evaluación (sección 6). Eso es lo que decide si conviene
+ofertar, y ya no requiere que una persona abra el portal.
+
+Lo que sí sigue requiriendo a una persona: los ARCHIVOS adjuntos (los PDF/DOCX de bases y los
+formatos de anexo en blanco). El portal los protege con un CAPTCHA de imagen y el agente no lo
+rodea — `antecedentes.md` deja anotada la URL del visor para abrirla en un navegador.
 
 ## Guardrails (no negociables, iguales en espíritu a `compra-agil-ofertar`)
 

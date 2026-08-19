@@ -53,8 +53,8 @@ y **desmintió varias suposiciones** que estaban escritas en el código:
 |---|---|
 | El ítem del listado trae los campos que el diccionario documenta bajo `Licitaciones/Listado/Licitacion/...` | **Falso.** El ítem del listado trae poco más que `CodigoExterno`, `Nombre` y `CodigoEstado`: **sin `Comprador`, sin `Estado`, sin `Tipo`, sin `FechaPublicacion`, sin `MontoEstimado`**. Todo eso solo llega pidiendo la ficha (`?codigo=`) |
 | `estado=activas` quizá pagina o hay que barrer por fecha | Devuelve **todas** las licitaciones vigentes del país en una sola llamada (4.381 en esa corrida). No hace falta paginar |
-| Los adjuntos vienen en `Adjuntos[].URL` de la ficha | **Falso.** No existe ningún campo `Adjuntos` en la ficha. Este dominio **no tiene** el equivalente al servicio de adjuntos sin login de Compra Ágil: las bases hay que leerlas en el portal |
-| Las garantías vienen en `Garantia.*` | **Falso.** Tampoco existen en la ficha. La exigencia de boleta de garantía solo aparece en las bases administrativas, fuera de la API |
+| Los adjuntos vienen en `Adjuntos[].URL` de la ficha | **Falso.** No existe ningún campo `Adjuntos` en la ficha. Este dominio **no tiene** el equivalente al servicio de adjuntos sin login de Compra Ágil (pero el texto de las bases sí se baja del portal sin persona: ver "Acceso a los antecedentes") |
+| Las garantías vienen en `Garantia.*` | **Falso.** Tampoco existen en la ficha de la API. La exigencia de boleta de garantía aparece en las bases — que hoy se leen automáticamente desde la ficha pública del portal (ver "Acceso a los antecedentes") |
 | El plazo de contrato está en `PlazosContrato.Plazo` | **Falso.** Está en `TiempoDuracionContrato` + `UnidadTiempoDuracionContrato` (tabla 3.6 del diccionario: 1 hora … 5 año) |
 | `CantidadReclamos` son los reclamos de esta licitación | **No.** Son los reclamos recibidos por el **organismo** comprador (campo 35 del diccionario; se veían valores de 387 en licitaciones chicas) |
 | `Comprador.RutUnidad` | Confirmado: existe y trae el RUT |
@@ -79,9 +79,9 @@ Dos bugs que esta corrida destapó, ya corregidos:
 | Auth | header `ticket` | query param `ticket` (verificado) |
 | Búsqueda por texto | `q` (matching laxo del servidor) | **no existe** — solo `fecha` (día de publicación), `codigo` (ficha) o `estado`. El filtrado por palabra clave (`config/keywords.json`) es LOCAL y es el mecanismo primario de descubrimiento, no un filtro de ruido secundario como en Compra Ágil |
 | Envelope de error | HTTP 429/5xx + `{success, payload, errors}` | HTTP 200 incluso en error, con `{Codigo, Mensaje}` en vez del listado esperado (verificado: así respondió con el ticket de prueba) |
-| Adjuntos | servicio público sin login, ya probado end-to-end | **la API no los expone** (verificado): no hay campo `Adjuntos` en la ficha. Solo se llega a las bases por el portal |
+| Adjuntos | servicio público sin login, ya probado end-to-end | **la API no los expone** (verificado): no hay campo `Adjuntos` en la ficha. El TEXTO de las bases sí se baja de la ficha pública del portal sin login (ver "Acceso a los antecedentes"); los ARCHIVOS quedan tras un CAPTCHA de imagen |
 | Tope | `presupuesto.monto_disponible_clp` (número exacto verificado) | `MontoEstimado` (verificado en runtime; solo en la ficha, no en el listado) |
-| Garantías | no aplica en Compra Ágil | Licitaciones sí suelen exigirlas (seriedad de la oferta, fiel cumplimiento), pero **la API no las expone** (verificado): hay que leer las bases en el portal antes de decidir si conviene ofertar |
+| Garantías | no aplica en Compra Ágil | Licitaciones sí suelen exigirlas (seriedad de la oferta, fiel cumplimiento) y **la API no las expone** (verificado) — pero la sección 8 de la ficha pública del portal sí las trae, y `npm run antecedentes-licitacion` las baja automáticamente |
 | Elegibilidad EMT | `convocatoria.estado_convocatoria` (1=primer llamado solo EMT) — filtro determinista verificado | No hay un campo equivalente confirmado; el tipo de licitación (`Tipo`: L1/LE/LP/LQ/LR/LS, según el monto en UTM) y la reserva MIPYME (Art. 20 Ley de Compras) son políticas a verificar, no un flag booleano simple como en Compra Ágil |
 
 Esa verificación campo por campo ya se hizo (2026-08-19): las fichas crudas quedan en
@@ -114,6 +114,69 @@ son las que condicionaron varias decisiones de diseño allá. Acá se opera sin 
 dice qué está abierto, no si vale la pena el mercado. Si esas cifras se necesitan, hay que
 presupuestar la cuota primero y recién entonces reponer el barrido.
 
+## Acceso a los antecedentes y a los documentos (2026-08-19)
+
+Pregunta que originó esta sección: **¿se puede llegar a los antecedentes/documentos de una
+licitación sin que intervenga una persona, dado que la API oficial no los expone?** Respuesta
+corta, verificada contra producción: **el CONTENIDO de las bases sí, los ARCHIVOS adjuntos no.**
+
+### Rutas evaluadas
+
+| Ruta | Resultado verificado |
+|---|---|
+| `api.mercadopublico.cl` (ficha con ticket) | Sin campo `Adjuntos` ni `Garantia`. Ya estaba documentado arriba. |
+| **Ficha pública del portal** — `DetailsAcquisition.aspx?idlicitacion=<codigo>` | ✅ **Funciona.** 302 → ficha con `qs` cifrado, que `fetch` sigue sin cookies ni sesión: HTTP 200 con ~240 KB de HTML que traen **las 9 secciones de las bases** (`<div id="Ficha1..9">`). Sin login, sin CAPTCHA, sin ticket, sin cuota. Es la ruta implementada. |
+| **Foro público de preguntas y respuestas** — `/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=` | ✅ Funciona igual de abierto. Sus aclaraciones modifican las bases, así que se baja junto con la ficha. |
+| API OCDS de ChileCompra — `api.mercadopublico.cl/APISOCDS/OCDS/...` | Existe, es pública y **no consume el ticket ni su cuota**, pero **no publica `tender.documents`**: no hay URLs de documentos. Además va con meses de rezago (agosto 2026 vacío al probar). Inservible para adjuntos; ver "Uso posible" abajo. |
+| Visor de adjuntos — `Attachment/ViewAttachment.aspx?enc=…` | ❌ **reCAPTCHA Enterprise por score, exigido del lado del servidor**: un cliente HTTP plano recibe 302 → `/Procurement/403.html`. El `enc` viene en el HTML de la ficha, así que el problema no es descubrir la URL. |
+| Página de descarga tras el visor — `ViewAttachmentLC.aspx` | ❌ Además del reCAPTCHA, la descarga misma exige un **CAPTCHA de imagen** (`/Procurement/Captcha/Captcha.aspx`) que hay que transcribir, y cada archivo se baja por postback de ASP.NET dentro de esa sesión. Es una verificación humana deliberada. |
+| Microservicio de adjuntos estilo Compra Ágil — `adjunto.mercadopublico.cl/adjunto-licitacion/…` | Responde `403 Authentication parameters missing` (el gateway enruta pero exige `user_key`). No se alcanzó a probar con la clave pública del buscador en esta sesión; queda como única hipótesis abierta, barata de descartar con un `curl` desde la máquina local. |
+
+### Lo que quedó implementado
+
+`licitaciones/src/lib/portal-ficha.ts` + `npm run antecedentes-licitacion -- <codigo>`
+(sin argumentos: todas las licitaciones ya detectadas en caché). Por cada una escribe en
+`licitaciones/data/<codigo>/`: `ficha-portal.html` (crudo), `antecedentes.md` (las 9 secciones en
+texto + foro) y `antecedentes.json`. Verificado sobre 4174-29-LE26, 5038-3-LE26 y 1191449-18-LE26.
+
+Esto **corrige dos afirmaciones de este mismo documento**: que las garantías "solo aparecen en las
+bases administrativas, fuera de la API" y que los documentos exigidos "hay que leerlos en el
+portal" — con una persona. Ambos datos son ahora automáticos: la sección 8 trae la garantía, su
+beneficiario y su vencimiento; la sección 4, los anexos administrativos/técnicos/económicos
+exigidos uno por uno; la 6, los criterios de evaluación con sus ponderaciones.
+
+### El límite, dicho con precisión
+
+Lo que sigue fuera de alcance automático son los **archivos** (el PDF de bases administrativas, las
+EE.TT., los formatos de anexo en blanco que hay que rellenar y firmar). No es un obstáculo técnico
+que falte resolver: es un CAPTCHA de imagen puesto a propósito para exigir a una persona. El
+proyecto no lo rodea — el guardrail de `CLAUDE.md` ("ante CAPTCHA o bloqueo del portal: detenerse y
+pedir intervención humana") aplica tal cual, y falsificar tokens o resolver CAPTCHAs con un servicio
+externo queda descartado. `antecedentes.md` deja anotada la URL del visor para que la abra un
+navegador real.
+
+Consecuencia práctica para el flujo de oferta: decidir **si conviene ofertar** (tope, garantías,
+plazos, criterios, anexos exigidos, excluyentes) ya no necesita a nadie. Bajar los formatos en
+blanco para **presentar** la oferta sí necesita un clic humano — el mismo punto del flujo donde ya
+se contempla intervención humana para el login y el envío.
+
+Una vía intermedia que queda sin verificar: un navegador real de Playwright ejecutando el propio
+reCAPTCHA del sitio podría alcanzar el listado (sin falsificar nada) y aun así se toparía con el
+CAPTCHA de imagen en la descarga. No se probó acá porque **Chromium no tiene salida de red en este
+sandbox** (`ERR_CONNECTION_RESET` incluso contra `example.com`, mientras `curl` con el mismo
+User-Agent llega sin problema) — el mismo bloqueo ya documentado para `login.ts`. Si se quiere
+intentar, es en la sesión de Claude Cowork local, y el resultado esperado sigue siendo "hasta el
+CAPTCHA de imagen y ahí para".
+
+### Uso posible de la API OCDS (hallazgo lateral)
+
+`https://api.mercadopublico.cl/APISOCDS/OCDS/listaOCDSAgnoMes/{año}/{mes}/{offset}/{limite}` y
+`.../tender/{codigo}` responden **sin ticket y sin consumir la cuota** que hoy limita todo este
+dominio, con datos históricos de licitaciones y sus adjudicaciones (`/award/{codigo}`). Eso es
+exactamente lo que "Decisión: solo licitaciones activas" dio por perdido — las cifras históricas del
+nicho — y podría reponerse **a costo cero de cuota**. No se implementó acá porque excede la pregunta
+de esta sesión; queda anotado como el camino a evaluar si esas cifras se vuelven a necesitar.
+
 ## Arquitectura
 
 Espejo de la de Compra Ágil (raíz), adaptada:
@@ -123,12 +186,15 @@ licitaciones/
   PLAN.md                    - este documento
   docs/                       - documentación oficial de referencia (diccionario de datos de la API)
   src/lib/
-    api.ts                   - cliente de api.mercadopublico.cl (SIN VERIFICAR, ver arriba)
+    api.ts                   - cliente de api.mercadopublico.cl (verificado 2026-08-19)
+    portal-ficha.ts           - antecedentes desde la ficha PÚBLICA del portal (sin ticket ni cuota)
     keywords.ts               - variantes de búsqueda + verificación local (acá es descubrimiento primario)
     condiciones.ts            - tope, garantías, plazo, documentos exigidos, excluyentes
     config.ts, historial.ts, tiempo.ts, nombre-archivo.ts
     pricing.ts                - cotiza por catálogo de costos propio (no hay precio de lista externo)
     cotizacion-pptx.ts / cotizacion-html.ts / cotizacion-pdf.ts - misma plantilla visual de KeepSync
+  src/scripts/
+    antecedentes.ts           - npm run antecedentes-licitacion -- <codigo>
   config/
     keywords.json             - variantes de búsqueda de gestión documental/digitalización/oficina de partes
     company.json.example      - plantilla de costos reales (placeholders COMPLETAR)
