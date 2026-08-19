@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { LIC_ROOT_DIR, loadKeywordsConfig } from "../../../../licitaciones/src/lib/config.js";
 import {
@@ -12,7 +12,9 @@ import { itemMencionaKeyword, detalleMencionaKeyword } from "../../../../licitac
 import { itemsDeLicitacion } from "../../../../licitaciones/src/lib/api.js";
 import { extraerCondicionesLicitacion } from "../../../../licitaciones/src/lib/condiciones.js";
 import { cargarState, guardarState, registrarHallazgo } from "../../../../licitaciones/src/lib/historial.js";
-import { cierreYaPaso } from "../../../../licitaciones/src/lib/tiempo.js";
+// La lectura/escritura de la caché vive en una lib porque `antecedentes-licitacion` también
+// republica la página desde ella (ver licitaciones/src/lib/cache.ts).
+import { fichaCacheada, guardarFicha, hallazgosDesdeCache } from "../../../../licitaciones/src/lib/cache.js";
 import {
   renderTarjetasLicitaciones,
   actualizarPaginaLicitaciones,
@@ -26,50 +28,6 @@ import {
 const MAX_DETALLES_POR_CORRIDA = 60;
 
 const DATA_DIR = path.join(LIC_ROOT_DIR, "data");
-
-/** Ficha guardada por una corrida anterior, si existe. La cuota de esta API es escasa: cuando una
- *  ficha no se puede refrescar, reusar la cacheada es mejor que perder la oportunidad del reporte. */
-function fichaCacheada(codigo: string): LicitacionDetalle | null {
-  const ruta = path.join(DATA_DIR, codigo, "detalle.json");
-  if (!existsSync(ruta)) return null;
-  try {
-    return JSON.parse(readFileSync(ruta, "utf-8")) as LicitacionDetalle;
-  } catch {
-    return null;
-  }
-}
-
-function guardarFicha(detalle: LicitacionDetalle, condiciones: unknown): void {
-  const dir = path.join(DATA_DIR, detalle.CodigoExterno);
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(path.join(dir, "detalle.json"), JSON.stringify(detalle, null, 2), "utf-8");
-  writeFileSync(path.join(dir, "condiciones.json"), JSON.stringify(condiciones, null, 2), "utf-8");
-}
-
-/** Vuelve a armar reporte y página desde las fichas ya guardadas, sin gastar una sola llamada a la
- *  API. Sirve cuando la cuota diaria está agotada o cuando cambió el formateo del reporte/página. */
-function hallazgosDesdeCache(): { hallazgos: HallazgoLicitacion[]; cerradas: number } {
-  if (!existsSync(DATA_DIR)) return { hallazgos: [], cerradas: 0 };
-  const hallazgos: HallazgoLicitacion[] = [];
-  let cerradas = 0;
-  for (const entrada of readdirSync(DATA_DIR, { withFileTypes: true })) {
-    if (!entrada.isDirectory()) continue;
-    const detalle = fichaCacheada(entrada.name);
-    if (!detalle) continue;
-    // La caché acumula fichas de corridas anteriores: una licitación que ya cerró no es una
-    // oportunidad y no debe volver a publicarse como si lo fuera.
-    const cierre = detalle.FechaCierre ?? detalle.Fechas?.FechaCierre;
-    if (cierre && cierreYaPaso(cierre)) {
-      cerradas++;
-      continue;
-    }
-    const condiciones = extraerCondicionesLicitacion(detalle);
-    guardarFicha(detalle, condiciones); // reescribe condiciones.json con el extractor vigente
-    hallazgos.push({ item: detalle, detalle, condiciones });
-  }
-  hallazgos.sort((a, b) => a.detalle.CodigoExterno.localeCompare(b.detalle.CodigoExterno));
-  return { hallazgos, cerradas };
-}
 
 function filaReporte(h: HallazgoLicitacion, marcas: string[]): string {
   const { detalle, condiciones } = h;

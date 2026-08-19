@@ -61,12 +61,24 @@ La API de Licitaciones **no expone los adjuntos ni las garantías** de la licita
 contra producción el 2026-08-19 — ver `licitaciones/PLAN.md`). En consecuencia:
 
 - Que la cotización generada no mencione una boleta de garantía **no significa que el organismo no
-  la exija**: la exigencia vive en las bases administrativas, que solo se leen en el portal.
-- Los "documentos exigidos" que aparecen salen de buscar frases en el texto de la ficha, no de un
-  campo estructurado. Son una pista, no la lista oficial.
+  la exija**: la exigencia vive en las bases administrativas.
+- Los "documentos exigidos" que aparecen salen de buscar frases en el texto de la ficha de la API,
+  no de un campo estructurado. Son una pista, no la lista oficial.
 
-Antes de que una de estas cotizaciones se use para ofertar de verdad, hay que abrir la licitación
-en el portal y leer las bases.
+**Corré `npm run antecedentes-licitacion -- <codigo>` antes de cotizar.** Baja de la ficha pública
+del portal —sin ticket, sin cuota y sin login— el contenido completo de las bases a
+`licitaciones/data/<codigo>/antecedentes.md`: garantías exigidas (sección 8), anexos que hay que
+presentar (sección 4) y criterios de evaluación (sección 6), más el archivo Excel oficial de
+preguntas y respuestas en `documentos/` (las respuestas del organismo modifican las bases). Eso es
+lo que decide si conviene ofertar, y ya no requiere que una persona abra el portal.
+
+Los ARCHIVOS adjuntos (PDF/DOCX de bases y formatos de anexo en blanco) son otra cosa: el portal
+los protege con reCAPTCHA por score y un CAPTCHA de imagen. No hace falta bajarlos para cotizar:
+`antecedentes.md` y `documentos.json` traen su **URL** —que es acceso suficiente— junto con la de la
+ficha, el foro y el Excel de preguntas, cada una marcada `directo` o `navegador`. Citar esas URLs
+como referencia en vez de prometer una copia local. Bajarlos (`npm run adjuntos-licitacion --
+<codigo> --con-login`) es opcional y solo funciona desde una máquina con IP residencial; no rodear
+nunca ese control.
 
 ## Guardrails (no negociables, iguales en espíritu a `compra-agil-ofertar`)
 

@@ -17,7 +17,10 @@
     "form-fill": "tsx .claude/skills/compra-agil-ofertar/scripts/form-fill.ts",
     "radar-licitaciones": "tsx .claude/skills/radar_licitaciones/scripts/radar.ts",
     "cotizar-licitaciones": "tsx .claude/skills/cotizar_licitaciones/scripts/cotizar.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "antecedentes-licitacion": "tsx licitaciones/src/scripts/antecedentes.ts",
+    "adjuntos-licitacion": "tsx licitaciones/src/scripts/adjuntos-navegador.ts",
+    "login-portal": "tsx licitaciones/src/scripts/login-portal.ts"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

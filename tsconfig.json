@@ -13,6 +13,6 @@
     "resolveJsonModule": true,
     "noUncheckedIndexedAccess": true
   },
-  "include": ["src", ".claude/skills"],
+  "include": ["src", "licitaciones/src", ".claude/skills"],
   "exclude": ["node_modules", "dist", "data", "output"]
 }

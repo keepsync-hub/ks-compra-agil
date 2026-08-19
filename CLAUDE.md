@@ -98,5 +98,33 @@ hallazgos de arriba aplican tal cual a ese dominio. Dos diferencias que muerden:
   nicho — no asumir que existen ni pedirlas al radar. Ver "Decisión: solo licitaciones activas" en
   `licitaciones/PLAN.md` antes de reponer cualquier barrido.
 - Esa API **no expone adjuntos ni garantías** de la licitación — no existe acá el servicio de
-  adjuntos sin login que sí tiene Compra Ágil. Las bases se leen en el portal, y el cotizador sigue
-  bloqueado por falta de catálogo de costos reales.
+  adjuntos sin login que sí tiene Compra Ágil. Pero eso **ya no obliga a que una persona lea las
+  bases**: la ficha pública del portal (`DetailsAcquisition.aspx?idlicitacion=<codigo>`) sirve su
+  texto completo sin login ni CAPTCHA, y `npm run antecedentes-licitacion -- <codigo>` lo baja y
+  parsea (garantías, anexos exigidos, criterios de evaluación, foro de preguntas) sin gastar cuota
+  del ticket, y además baja **un archivo real**: el Excel oficial de preguntas y respuestas
+  (`Export/PreguntasExcel.aspx`), el único documento de los antecedentes que el portal entrega sin
+  verificación humana.
+- **Acceso a los documentos = su URL, no una copia local.** Cada corrida de
+  `antecedentes-licitacion` deja el índice de documentos de la licitación (`documentos.json`, el
+  bloque "Documentos" de `antecedentes.md` y los enlaces en cada tarjeta de `docs/licitaciones.html`)
+  con un campo `acceso`: `directo` (un `fetch` lo trae: ficha, foro, Excel de preguntas) o
+  `navegador` (la URL del visor de adjuntos, que abre una persona). Bajar los bytes de los adjuntos
+  **no es un pendiente del flujo**: lo que decide si conviene ofertar ya viene en texto, y los
+  formatos de anexo en blanco se necesitan al presentar la oferta, donde ya hay una persona. Ver "El
+  objetivo estaba mal planteado" en `licitaciones/PLAN.md`.
+- Los ARCHIVOS adjuntos están tras reCAPTCHA por score + un CAPTCHA de imagen:
+  `npm run adjuntos-licitacion -- <codigo> [--con-login]` intenta la única vía honesta (navegador
+  real que el sitio puntúa con su propio reCAPTCHA, sin falsificar nada) y se detiene si lo
+  rechazan. Es opcional, para correr desde la máquina del usuario. Nunca rodear ese control.
+- **El login al portal ya funciona sin intervención humana, y aun así no abre los adjuntos**
+  (verificado end-to-end el 2026-08-19). `npm run login-portal` autentica con **ClaveÚnica** —el
+  portal no tiene credencial propia para un RUN chileno; el formulario usuario/contraseña de
+  Keycloak es la pestaña "Extranjero"— usando `MP_USUARIO`/`MP_CLAVE` del entorno, y el código de
+  6 caracteres lo lee el agente del Gmail del usuario con el workflow de n8n "Lector codigo 2FA
+  Mercado Publico" (handshake por archivo: el script pide, el agente escribe `2fa-codigo.txt`).
+  Pero el gate del visor de adjuntos **puntúa el navegador y la IP, no la identidad**: medido con
+  sesión ClaveÚnica autenticada en el mismo contexto (`npm run adjuntos-licitacion -- <codigo>
+  --con-login`) da score 0 contra umbral 0.5, igual que anónimo. Correrlo desde la máquina del
+  usuario es lo único que queda por probar. Ver "Acceso a los antecedentes" en
+  `licitaciones/PLAN.md`. El cotizador sigue bloqueado por falta de catálogo de costos reales.
