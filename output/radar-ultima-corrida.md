@@ -1,18 +1,34 @@
 # Radar Compra Ágil
 
-Corrida: 2026-08-18T20:04:53.059Z
+Corrida: 2026-08-19T18:37:04.529Z
 Categorías activas: Licencias Claude / Anthropic
 
-## Oportunidades abiertas (3)
+## Oportunidades abiertas (6)
 
-### Licencias Claude / Anthropic (3)
+### Licencias Claude / Anthropic (6)
+
+### 5455-104-COT26 — UNIVERSIDAD DE CHILE
+-  Licencias de software (Claude Max).
+- Cierre: 2026-08-19 16:50 (primer llamado — EMT puede ofertar)
+- Tope: $1.418.000 CLP (moneda original: CLP)
+- Plan detectado: Max 20x, 2 usuarios
+- Competencia: 5 oferta(s) recibida(s)
+- Plazo de entrega: 1 día(s)
+
+### 5537-238-COT26 — UNIVERSIDAD DE CHILE
+- Adquisición de Licencia Anual Claude Pro
+- Cierre: 2026-08-19 17:00 (primer llamado — EMT puede ofertar)
+- Tope: $500.000 CLP (moneda original: CLP)
+- Plan detectado: Pro, 2 usuarios
+- Competencia: 3 oferta(s) recibida(s)
+- Plazo de entrega: 1 día(s)
 
 ### 1233595-38-COT26 — CORPORACION MUNICIPAL DE DESARROLLO ECONOMICO CULTURA Y DEPORTES DE RE
 - Licencia Anthropic Claude Pro Mensual
 - Cierre: 2026-08-19 15:30 (primer llamado — EMT puede ofertar)
 - Tope: $1.700.000 CLP (moneda original: CLP)
 - Plan detectado: Pro, 10 usuarios
-- Competencia: 1 oferta(s) recibida(s)
+- Competencia: 6 oferta(s) recibida(s)
 - Plazo de entrega: 1 día(s)
 
 ### 607-180-COT26 — PARQUE METROPOLITANO DE SANTIAGO
@@ -20,7 +36,7 @@ Categorías activas: Licencias Claude / Anthropic
 - Cierre: 2026-08-21 09:30 (primer llamado — EMT puede ofertar)
 - Tope: $2.500.000 CLP (moneda original: CLP)
 - Plan detectado: Max 5x, 4 usuarios
-- Competencia: 2 oferta(s) recibida(s)
+- Competencia: 4 oferta(s) recibida(s)
 - Plazo de entrega: 5 día(s)
 
 ### 2069-2272-COT26 — SERVICIO DE SALUD METROPOLITANO SUR HOSP
@@ -28,8 +44,17 @@ Categorías activas: Licencias Claude / Anthropic
 - Cierre: 2026-08-21 12:00 (primer llamado — EMT puede ofertar)
 - Tope: $6.000.000 CLP (moneda original: CLP)
 - Plan detectado: Team, 20 usuarios
-- Competencia: 4 oferta(s) recibida(s)
+- Competencia: 7 oferta(s) recibida(s)
 - Plazo de entrega: 1 día(s)
+
+### 2013-1336-COT26 — UNIVERSIDAD ARTURO PRAT
+-  ADQUISICIÓN LICENCIAS DE SOFTWARE CLAUDE TEAM
+- Cierre: 2026-08-20 14:37 (segundo llamado)
+- Tope: $6.600.000 CLP (moneda original: CLP)
+- Plan detectado: Team, 30 usuarios
+- Competencia: 0 oferta(s) recibida(s)
+- Plazo de entrega: 5 día(s)
+- **NUEVO** desde la última corrida
 
 ## Adjudicaciones (proveedor seleccionado) (0)
 

@@ -9,6 +9,7 @@
     "cuota": "tsx src/scripts/cuota.ts",
     "indexar": "tsx .claude/skills/compra-agil-indice/scripts/indexar.ts",
     "radar": "tsx .claude/skills/compra-agil-radar-claude/scripts/radar.ts",
+    "keywords": "tsx src/scripts/keywords.ts",
     "array-radar": "tsx .claude/skills/array-compras-agiles-radar/scripts/radar.ts",
     "array-cotizar": "tsx .claude/skills/array-compras-agiles-cotizar/scripts/cotizar-array.ts",
     "informe": "tsx .claude/skills/compra-agil-radar-claude/scripts/informe-nicho.ts",

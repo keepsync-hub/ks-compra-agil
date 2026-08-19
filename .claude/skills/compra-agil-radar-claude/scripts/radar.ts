@@ -2,12 +2,29 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR } from "../../../../src/lib/config.js";
 import {
+  cargarCategorias,
   categoriasActivas,
   itemMencionaCategoria,
   detalleCompraAgilMencionaCategoria,
+  variantesDeBusqueda,
   type CategoriaCompilada,
 } from "../../../../src/lib/categorias.js";
-import { buscarCompraAgil, obtenerDetalleCompraAgil, extraerAdjudicacion, type CompraAgilListItem } from "../../../../src/lib/api.js";
+import {
+  renderTarjetasCompraAgil,
+  actualizarPaginaCompraAgil,
+  renderKeywordsCompraAgil,
+  actualizarBloqueKeywordsCompraAgil,
+  type HallazgoCompraAgil,
+} from "../../../../src/lib/pagina-compra-agil.js";
+import {
+  buscarCompraAgil,
+  obtenerDetalleCompraAgil,
+  extraerAdjudicacion,
+  detalleDesdeListado,
+  CuotaApiAgotadaError,
+  type CompraAgilDetalle,
+  type CompraAgilListItem,
+} from "../../../../src/lib/api.js";
 import { extraerCondiciones } from "../../../../src/lib/condiciones.js";
 import { descargarAdjuntosSiExisten } from "../../../../src/lib/adjuntos.js";
 import { cargarState, guardarState, registrarHallazgo, sembrarDesdeIndice } from "../../../../src/lib/historial.js";
@@ -19,6 +36,13 @@ interface VarianteFallida {
   error: string;
 }
 
+/**
+ * Cuota diaria agotada, compartida por toda la corrida: una vez que la API contesta 429, ninguna
+ * categoría vuelve a pedirle nada. La corrida sigue con fichas reducidas del listado en vez de
+ * abortar — antes, un 429 a mitad de camino tiraba abajo el radar y no se publicaba nada.
+ */
+let cuotaAgotada: CuotaApiAgotadaError | null = null;
+
 /** Barrido de una categoría contra `estado=publicada`: mismo procedimiento que antes tenía
  * `radar.ts` hardcodeado a "marca" — generalizado a cualquier categoría de config/categorias.json
  * (ver PLAN-VOLUMEN.md, Fase 1). Con una sola categoría activa, produce exactamente el mismo
@@ -29,11 +53,15 @@ async function barrerCategoria(
   ahoraIso: string,
   variantesFallidas: VarianteFallida[],
   alertasRecompra: string[],
+  hallazgos: HallazgoCompraAgil[],
 ): Promise<string[]> {
-  console.log(`\n— ${categoria.nombre} (${categoria.variantes_q.length} variante(s), estado=publicada)`);
+  // Incluye las palabras agregadas a mano (config/categorias-extra.json): agregar una amplía la
+  // búsqueda contra la API, no solo el filtro local.
+  const variantes = variantesDeBusqueda(categoria);
+  console.log(`\n— ${categoria.nombre} (${variantes.length} variante(s), estado=publicada)`);
 
   const encontrados = new Map<string, CompraAgilListItem>();
-  for (const variante of categoria.variantes_q) {
+  for (const variante of variantes) {
     try {
       const items = await buscarCompraAgil({ q: variante, estado: "publicada" });
       for (const item of items) {
@@ -60,8 +88,29 @@ async function barrerCategoria(
 
   const filasReporte: string[] = [];
   for (const item of conMencionReal) {
-    const detalle = await obtenerDetalleCompraAgil(item.codigo);
-    if (!detalleCompraAgilMencionaCategoria(categoria, detalle)) {
+    // Con la cuota agotada ya no se pide nada más: seguir iterando solo produce 429 en cadena. Se
+    // sigue con la ficha REDUCIDA del listado, que trae tope, cierre, comprador, competencia y si
+    // es primer llamado — suficiente para decidir si mirar la compra, y honesto sobre lo que falta.
+    let detalle: CompraAgilDetalle;
+    let fuente: "api" | "listado" = "api";
+    if (cuotaAgotada) {
+      detalle = detalleDesdeListado(item);
+      fuente = "listado";
+    } else {
+      try {
+        detalle = await obtenerDetalleCompraAgil(item.codigo);
+      } catch (err) {
+        if (!(err instanceof CuotaApiAgotadaError)) throw err;
+        cuotaAgotada = err;
+        console.warn(`  ⚠ ${err.message}\n    Se sigue con la ficha reducida del listado para el resto de la corrida.`);
+        detalle = detalleDesdeListado(item);
+        fuente = "listado";
+      }
+    }
+
+    // El descarte de falsos positivos exige el texto completo, que la ficha reducida no tiene: con
+    // ella solo se sabe que el NOMBRE menciona la categoría (`itemMencionaCategoria`, ya aplicado).
+    if (fuente === "api" && !detalleCompraAgilMencionaCategoria(categoria, detalle)) {
       console.log(`  ${item.codigo}: descartado, el detalle no confirma la mención (falso positivo de \`q\`).`);
       continue;
     }
@@ -74,12 +123,18 @@ async function barrerCategoria(
     // Alimenta el índice histórico versionado (ver PLAN-VOLUMEN.md, Fase 2) — de paso, con cero
     // requests extra: el detalle ya se pagó arriba. Es lo que le permite a una corrida en la nube
     // (checkout limpio, sin data/state.json) sembrar recompradores desde corridas anteriores.
-    anexar(proyectar(detalle, categoria.id, ahoraIso));
+    //
+    // Solo con la ficha completa: una reducida entraría al índice con ceros y nulls que parecen
+    // datos observados (0 multas, 0 productos, sin plazo) y contaminaría la analítica de mercado.
+    if (fuente === "api") anexar(proyectar(detalle, categoria.id, ahoraIso));
 
+    const adjuntosDescargados: string[] = [];
+    // El servicio de adjuntos es otro host y no gasta el ticket, así que se intenta igual.
     if (detalle.documentos.length > 0) {
       try {
         const adjuntos = await descargarAdjuntosSiExisten(item.codigo, true);
         if (adjuntos.length > 0) {
+          adjuntosDescargados.push(...adjuntos.map((a) => a.nombreArchivo));
           const dirAdjuntos = path.join(dirDatos, "attachments");
           mkdirSync(dirAdjuntos, { recursive: true });
           for (const a of adjuntos) {
@@ -99,6 +154,16 @@ async function barrerCategoria(
           registro.procesosPreviosDelOrganismo.map((p) => `${p.codigo} (${p.estado})`).join(", "),
       );
     }
+
+    hallazgos.push({
+      categoriaId: categoria.id,
+      categoriaNombre: categoria.nombre,
+      detalle,
+      condiciones,
+      adjuntosDescargados,
+      esNuevo: registro.esNuevo,
+      fuente,
+    });
 
     const elegible = item.convocatoria.estado_convocatoria === 1 ? "primer llamado — EMT puede ofertar" : "segundo llamado";
     filasReporte.push(
@@ -130,6 +195,7 @@ async function barrerAdjudicacionesCategoria(
   variantesFallidas: VarianteFallida[],
   ahoraIso: string,
 ): Promise<string[]> {
+  if (cuotaAgotada) return [];
   const varianteAmplia = categoria.variantes_q[0] ?? categoria.nombre;
   const adjudicadas = new Map<string, CompraAgilListItem>();
   try {
@@ -191,9 +257,10 @@ async function main() {
   const variantesFallidas: VarianteFallida[] = [];
   const alertasRecompra: string[] = [];
   const seccionesOportunidades: { categoria: CategoriaCompilada; filas: string[] }[] = [];
+  const hallazgos: HallazgoCompraAgil[] = [];
 
   for (const categoria of categorias) {
-    const filas = await barrerCategoria(categoria, state, ahoraIso, variantesFallidas, alertasRecompra);
+    const filas = await barrerCategoria(categoria, state, ahoraIso, variantesFallidas, alertasRecompra, hallazgos);
     seccionesOportunidades.push({ categoria, filas });
   }
 
@@ -213,7 +280,7 @@ async function main() {
   guardarState(state);
 
   const totalOportunidades = seccionesOportunidades.reduce((a, s) => a + s.filas.length, 0);
-  const totalVariantes = categorias.reduce((a, c) => a + c.variantes_q.length, 0);
+  const totalVariantes = categorias.reduce((a, c) => a + variantesDeBusqueda(c).length, 0);
 
   const reporte = [
     `# Radar Compra Ágil`,
@@ -221,6 +288,17 @@ async function main() {
     `Corrida: ${ahoraIso}`,
     `Categorías activas: ${categorias.map((c) => c.nombre).join(", ")}`,
     ``,
+    ...(cuotaAgotada
+      ? [
+          `> ⚠ **La cuota diaria de la API se agotó durante esta corrida** (429, Retry-After: ` +
+            `${cuotaAgotada.retryAfter ?? "no informado"}). Las compras que no alcanzaron a leerse en ` +
+            `detalle se reportan con la **ficha reducida del listado** (tope, cierre, comprador, ` +
+            `competencia y tipo de llamado); les falta la descripción, los productos solicitados y el ` +
+            `plazo de entrega, y su mención está confirmada solo por el nombre. No entran al índice ` +
+            `histórico: entrarían con ceros que parecen datos observados.`,
+          ``,
+        ]
+      : []),
     `## Oportunidades abiertas (${totalOportunidades})`,
     ``,
     ...seccionesOportunidades.map(({ categoria, filas }) =>
@@ -258,7 +336,48 @@ async function main() {
   mkdirSync(outputDir, { recursive: true });
   writeFileSync(path.join(outputDir, "radar-ultima-corrida.md"), reporte, "utf-8");
 
+  publicarPagina(hallazgos, variantesFallidas.length === 0);
+
   console.log("\n" + reporte);
+}
+
+/**
+ * Publica en `docs/index.html` la grilla de oportunidades y las palabras clave.
+ *
+ * La grilla **no se publica si la corrida quedó incompleta** (alguna variante falló): una compra
+ * que hoy no se pudo leer sigue abierta, y borrarla de la página la haría desaparecer sin que
+ * nadie lo note. El bloque de palabras clave sí se publica siempre: es la config, que está entera.
+ */
+function publicarPagina(hallazgos: HallazgoCompraAgil[], corridaCompleta: boolean): void {
+  const okKeywords = actualizarBloqueKeywordsCompraAgil(
+    renderKeywordsCompraAgil(
+      cargarCategorias().map((c) => ({
+        id: c.id,
+        nombre: c.nombre,
+        activa: c.activa,
+        variantes: variantesDeBusqueda(c),
+        extra: c.extra,
+        regex: String(c.regex),
+      })),
+    ),
+  );
+  if (!okKeywords) {
+    console.warn(`⚠ No se pudo publicar el bloque de palabras clave: faltan los marcadores KEYWORDS en docs/index.html.`);
+  }
+
+  if (!corridaCompleta) {
+    console.warn(
+      `\n⚠ La grilla de docs/index.html se dejó intacta: la corrida quedó incompleta (alguna variante ` +
+        `falló) y publicar una grilla parcial borraría oportunidades que siguen abiertas.`,
+    );
+    return;
+  }
+  const ok = actualizarPaginaCompraAgil(renderTarjetasCompraAgil(hallazgos));
+  console.log(
+    ok
+      ? `\nPágina actualizada: docs/index.html (${hallazgos.length} oportunidad(es) en la grilla).`
+      : `\n⚠ No se pudo actualizar docs/index.html: faltan los marcadores OPORTUNIDADES:INICIO/FIN.`,
+  );
 }
 
 main().catch((err) => {

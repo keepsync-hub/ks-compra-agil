@@ -84,3 +84,52 @@ npm run radar
   está roto.
 - Este skill es de solo lectura. Para preparar una oferta usar `compra-agil-ofertar`, que sí
   requiere `config/company.json` con costos reales.
+
+## Qué publica en `docs/index.html` (2026-08-19)
+
+Cada corrida refresca dos bloques entre marcadores (`OPORTUNIDADES:*` y `KEYWORDS:*`); el resto de
+la página es cabecera y pie.
+
+Esa página era un informe del estado del proyecto escrito a mano, con las oportunidades pegadas
+también a mano —y por lo tanto siempre desactualizadas—. A pedido del usuario quedó enfocada en una
+sola pregunta: **¿conviene participar en esta Compra Ágil?**. Lo que no aporta a esa decisión
+(estado de cada componente, pendientes del agente, comparaciones entre nichos) se eliminó: eso se
+lee en el repositorio.
+
+Cada tarjeta trae, todo desde la ficha oficial y sin inferir nada: tope, cierre con los días que
+faltan, **quién puede ofertar** (primer llamado = reservado a Empresas de Menor Tamaño, que
+KeepSync es), **cuánta competencia ya se presentó**, plan y usuarios detectados, vigencia, plazo y
+dirección de entrega, los productos pedidos con sus cantidades, los **documentos exigidos y las
+frases que dejan una oferta fuera** citadas tal como las escribió el organismo, los adjuntos
+publicados, la región, y **lo que este mismo comprador hizo antes** (compras previas, cuántas
+declaró desiertas, cuántas ofertas recibió en promedio) empatado por **RUT exacto** contra
+`historico/observaciones.jsonl` — nunca por nombre, que llega truncado y en varias grafías.
+
+El bloque de palabras clave publica las variantes `q` y la regex de verificación de cada categoría,
+con un formulario para agregar más. Como la página es estática y no puede escribir en el repo, lo
+agregado queda en el navegador marcado como **pendiente** y la página entrega el JSON listo para
+`config/categorias-extra.json` (ver "Palabras clave" abajo).
+
+## Palabras clave: dos archivos, dos públicos
+
+- `config/categorias.json` — las categorías y sus regex de verificación. Se validan al compilar
+  (id, flags, regex) y están afinadas contra casos reales: ampliarlas es trabajo de código.
+- `config/categorias-extra.json` — **frases literales** agregadas a mano, sin regex. Cada una se usa
+  como variante `q` contra la API (amplía el descubrimiento) y como verificación local del texto
+  (amplía el filtro), comparada sin distinguir mayúsculas, tildes ni espacios de más. Se edita con
+  `npm run keywords [-- agregar <categoria> "<frase>" | quitar "<frase>"]` o desde el formulario de
+  la página.
+
+**Ojo con la cuota**: cada frase agregada a una categoría activa suma un request `q` por corrida.
+
+## Cuota agotada: la corrida sigue, con ficha reducida
+
+Un 429 a mitad de corrida ya no tira abajo el radar (antes sí: no se publicaba nada, ni siquiera lo
+ya encontrado). `CuotaApiAgotadaError` corta las llamadas y la corrida continúa con la **ficha
+reducida del ítem del listado**, que en esta API es generoso: trae tope, cierre, comprador, región,
+competencia, tipo de llamado y los nombres de los adjuntos. Lo que no trae —descripción, productos
+solicitados, plazo de entrega, contadores de multas— queda vacío y la tarjeta lo declara.
+
+Dos cosas que una ficha reducida **no** hace, a propósito: no entra al índice histórico (entraría
+con ceros que parecen datos observados) y no puede descartar falsos positivos por el texto completo
+— su mención está confirmada solo por el nombre.

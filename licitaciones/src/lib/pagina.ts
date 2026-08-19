@@ -542,6 +542,7 @@ ${tarjetas}
     categorias.flatMap((c) => c.extra.map((t) => ({ categoria: c.id, termino: t }))),
   )};
   window.KW_EDIT_URL = ${JSON.stringify(REPO_KEYWORDS_EXTRA_URL)};
+  window.KW_ARCHIVO = "licitaciones/config/keywords-extra.json";
   </script>`;
 }
 

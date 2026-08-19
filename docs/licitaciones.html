@@ -151,7 +151,7 @@
 
 <header class="hero">
   <div class="wrap">
-    <a class="back" href="index.html">← Volver al resumen</a>
+    <a class="back" href="index.html">← Compras Ágiles abiertas (licencias Claude)</a>
     <div class="brand"><img src="assets/logo-keepsync-blanco.png" alt=""><span>KeepSync</span></div>
     <h1>Licitaciones abiertas — servicios de Array</h1>
     <p class="subtitle">
@@ -542,6 +542,7 @@
      incluirlos, porque reemplaza el contenido completo del archivo. */
   window.KW_GUARDADOS = [];
   window.KW_EDIT_URL = "https://github.com/keepsync-hub/ks-compra-agil/edit/claude/mercadopublico-agente-compras-pgyedf/licitaciones/config/keywords-extra.json";
+  window.KW_ARCHIVO = "licitaciones/config/keywords-extra.json";
   </script>
   <!-- KEYWORDS:FIN -->
 
@@ -570,6 +571,7 @@
   var LLAVE = "ks-lic-kw-pendientes";
   var guardados = window.KW_GUARDADOS || [];
   var editUrl = window.KW_EDIT_URL || "";
+  var archivo = window.KW_ARCHIVO || "licitaciones/config/keywords-extra.json";
   var $cat = document.getElementById("kw-categoria");
   var $termino = document.getElementById("kw-termino");
   var $agregar = document.getElementById("kw-agregar");
@@ -627,7 +629,7 @@
         '<h4>' + lista.length + ' palabra(s) pendiente(s) — el radar todavía no las usa</h4>' +
         '<div class="kw-chips">' + chips + '</div>' +
         '<p style="margin-top:0.8rem">Para que la próxima corrida las use, reemplaza el contenido de ' +
-          '<code>licitaciones/config/keywords-extra.json</code> por esto:</p>' +
+          '<code>' + esc(archivo) + '</code> por esto:</p>' +
         '<textarea class="kw-json" readonly>' + esc(jsonParaElRepo(lista)) + '</textarea>' +
         '<div class="kw-acciones">' +
           '<button class="btn" id="kw-copiar" type="button">Copiar JSON</button>' +
