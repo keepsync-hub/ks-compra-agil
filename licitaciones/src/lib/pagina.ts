@@ -453,8 +453,15 @@ export function actualizarPaginaLicitaciones(fragmento: string): boolean {
 const MARCA_KEYWORDS_INICIO = "<!-- KEYWORDS:INICIO (generado por `npm run radar-licitaciones` — no editar a mano) -->";
 const MARCA_KEYWORDS_FIN = "<!-- KEYWORDS:FIN -->";
 
+/**
+ * Enlace "editar en GitHub" del overlay de palabras clave. La rama va explícita y **no es `main`**:
+ * este repositorio no tiene `main` — su rama por defecto es `claude/mercadopublico-agente-compras-pgyedf`,
+ * que es también la que sirve GitHub Pages. Con `main` el enlace daba 404.
+ * Si alguna vez cambia la rama por defecto, hay que cambiarla acá.
+ */
+const REPO_RAMA_POR_DEFECTO = "claude/mercadopublico-agente-compras-pgyedf";
 const REPO_KEYWORDS_EXTRA_URL =
-  "https://github.com/keepsync-hub/ks-compra-agil/edit/main/licitaciones/config/keywords-extra.json";
+  `https://github.com/keepsync-hub/ks-compra-agil/edit/${REPO_RAMA_POR_DEFECTO}/licitaciones/config/keywords-extra.json`;
 
 function chipsConsultas(consultas: string[], extra: string[]): string {
   const propias = consultas.filter((c) => !extra.includes(c));
