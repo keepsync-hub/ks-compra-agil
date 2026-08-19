@@ -5,6 +5,11 @@ import { buscarLicitaciones, obtenerDetalleLicitacion, itemsDeLicitacion, type L
 import { itemMencionaKeyword, detalleMencionaKeyword } from "../../../../licitaciones/src/lib/keywords.js";
 import { extraerCondicionesLicitacion } from "../../../../licitaciones/src/lib/condiciones.js";
 import { cargarState, guardarState, registrarHallazgo } from "../../../../licitaciones/src/lib/historial.js";
+import {
+  renderTarjetasLicitaciones,
+  actualizarPaginaLicitaciones,
+  type HallazgoLicitacion,
+} from "../../../../licitaciones/src/lib/pagina.js";
 
 // Tope de items a revisar en detalle por corrida: "estado=activas" puede traer TODAS las
 // licitaciones vigentes del país (miles), y esta API no permite filtrar por texto en el servidor
@@ -47,6 +52,7 @@ async function main() {
   const state = cargarState();
   const filasReporte: string[] = [];
   const alertasRecompra: string[] = [];
+  const hallazgos: HallazgoLicitacion[] = [];
   let descartadosPorFalsoPositivo = 0;
 
   for (const item of aRevisar) {
@@ -74,6 +80,8 @@ async function main() {
     if (adjuntos.length > 0) {
       console.log(`  ${item.CodigoExterno}: ${adjuntos.length} adjunto(s) listado(s) en la ficha (no se descargan — URL sin verificar, ver PLAN.md).`);
     }
+
+    hallazgos.push({ item, detalle, condiciones });
 
     const registro = registrarHallazgo(state, item, ahoraIso);
     if (registro.esReintentoDeOrganismo) {
@@ -134,6 +142,16 @@ async function main() {
   const outputDir = path.join(LIC_ROOT_DIR, "output");
   mkdirSync(outputDir, { recursive: true });
   writeFileSync(path.join(outputDir, "radar-ultima-corrida.md"), reporte, "utf-8");
+
+  // Refresca solo el bloque de oportunidades de docs/licitaciones.html (el resto de esa página
+  // es análisis escrito a mano — ver licitaciones/src/lib/pagina.ts).
+  const actualizada = actualizarPaginaLicitaciones(renderTarjetasLicitaciones(hallazgos));
+  console.log(
+    actualizada
+      ? `\nPágina actualizada: docs/licitaciones.html (${hallazgos.length} oportunidad(es) en la grilla).`
+      : `\n⚠ No se pudo actualizar docs/licitaciones.html: faltan los marcadores OPORTUNIDADES:INICIO/FIN. ` +
+          `Se dejó la página intacta a propósito.`,
+  );
 
   console.log("\n" + reporte);
 }
