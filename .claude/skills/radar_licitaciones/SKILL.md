@@ -1,128 +1,172 @@
 ---
 name: radar_licitaciones
-description: Monitorea Licitaciones públicas en mercadopublico.cl sobre gestión documental, digitalización de procesos u oficina de partes. Usar cuando el usuario pida revisar licitaciones nuevas de este tipo, correr el radar de licitaciones, o preguntar qué licitaciones de gestión documental están abiertas ahora mismo.
+description: Monitorea Licitaciones públicas en mercadopublico.cl que piden servicios del catálogo de Array (array.cl) — oficina de partes electrónica, seguimiento de trámites, gestión documental y firma electrónica, RPA, business intelligence y plataformas de gestión de proyectos. Usar cuando el usuario pida revisar licitaciones nuevas de este tipo, correr el radar de licitaciones, o preguntar qué licitaciones de estos servicios están abiertas ahora mismo.
 ---
 
-# Radar de Licitaciones — Gestión Documental / Digitalización de Procesos / Oficina de Partes
+# Radar de Licitaciones — servicios de Array (array.cl)
 
 Réplica de `compra-agil-radar-claude` (raíz) para un segundo nicho: **Licitaciones públicas** (no
-Compra Ágil) contra la API clásica `api.mercadopublico.cl`, buscando gestión documental,
-digitalización de procesos y oficina de partes. No requiere credenciales del portal — solo el
-ticket de la API. No envía nada ni requiere aprobación humana: es de solo lectura.
+Compra Ágil) contra la API clásica `api.mercadopublico.cl`, buscando el **catálogo de servicios de
+[Array](http://www.array.cl/)** — el mismo nicho que `array-compras-agiles-radar` cubre en Compra
+Ágil: oficina de partes electrónica, seguimiento de trámites, gestión documental y firma
+electrónica, automatización de procesos (RPA), business intelligence y plataformas de gestión de
+proyectos. No requiere credenciales del portal — solo el ticket de la API. No envía nada ni
+requiere aprobación humana: es de solo lectura.
 
-## Estado: verificado contra producción (2026-08-19)
+Las categorías, con su `patron_mencion` y su `patron_excluyente`, viven en
+`licitaciones/config/keywords.json` (mismo contrato que `config/array-servicios.json`). Editar ese
+archivo cambia lo que el radar busca: los patrones se compilan desde ahí, no están en el código.
 
-Este skill ya corrió contra la API real con un ticket válido. Esa corrida corrigió varias
-suposiciones del código — ver "Hallazgos de la corrida de verificación" en `licitaciones/PLAN.md`.
-Lo esencial para operarlo:
+Y hay una segunda vía, sin regex, para ampliar el nicho: `licitaciones/config/keywords-extra.json`
+guarda frases literales que el radar usa **como consulta al buscador y como confirmación local**
+(comparación insensible a mayúsculas, tildes y espacios de más). Se agregan con
+`npm run keywords-licitaciones -- agregar <categoria> "<frase>"` o desde el formulario de
+`docs/licitaciones.html`, que publica las palabras vigentes junto a las oportunidades. Categorías
+válidas: los `id` de `keywords.json` más `otros`.
 
-- El ítem del **listado** es mucho más pobre que la ficha (no trae `Comprador`, `Tipo`,
-  `MontoEstimado` ni `Estado`). Cualquier consumidor de esos datos debe usar el `detalle`.
-- La API **no expone adjuntos ni garantías** de la licitación: no existe el equivalente al servicio
-  de adjuntos sin login de Compra Ágil. Pero eso ya no obliga a que una persona lea las bases: la
-  ficha pública del portal trae su texto completo y se baja con
-  `npm run antecedentes-licitacion` (sin ticket ni cuota), que además publica el **índice de
-  documentos** de cada licitación en su tarjeta de `docs/licitaciones.html`. Los ARCHIVOS adjuntos
-  siguen tras reCAPTCHA, pero eso ya no bloquea: se entrega su URL, que es acceso suficiente
-  (bajarlos con `npm run adjuntos-licitacion` es opcional y hay que correrlo desde la máquina del
-  usuario) — ver "El objetivo estaba mal planteado" en `licitaciones/PLAN.md`.
-- Después de correr el radar, **correr también `npm run antecedentes-licitacion`**: es gratis (no
-  gasta cuota), genera la **ficha de decisión** de cada oportunidad (`decision.md`: banderas, plazos,
-  garantías, criterios, anexos, cláusulas excluyentes) y deja la página con esos datos y los enlaces
-  a los documentos. Al reportar oportunidades, citar la ficha de decisión, no impresiones.
-- **La cuota del ticket es escasa**: se agotó (429) en la segunda corrida del mismo día. Correr el
-  radar contra la API una vez al día y usar `--desde-cache` para republicar sin gastar cuota.
+## Estado: verificado contra producción, y sin gastar cuota (2026-08-19)
+
+Este skill corrió contra fuentes reales y **ya no necesita la API con ticket para operar**. Se
+reordenó después de medir que la cuota se agotaba antes de la primera ficha:
+
+| Qué | De dónde sale hoy | Cuota |
+|---|---|---|
+| Descubrimiento (qué está abierto y menciona lo que buscamos) | buscador público del portal (`buscador-portal.ts`) | ninguna |
+| Nombre y **descripción completos** | el CSV de ese buscador | ninguna |
+| Organismo, tope, tipo, moneda, plazo de contrato, fechas | ficha pública de la licitación (`portal-ficha.ts` → `detalle-portal.ts`) | ninguna |
+| Bases, garantías, criterios de evaluación, anexos exigidos, cláusulas excluyentes | las 9 secciones de esa misma ficha (`decision.ts`) | ninguna |
+| Foro de preguntas + Excel oficial de preguntas y respuestas | portal | ninguna |
+| Tramo de monto cuando el organismo no publica la cifra, y **cómo paga el comprador** (reclamos por pago no oportuno / compras de 12 meses) | buscador, consultado por código | ninguna |
+| `CantidadReclamos` (total de reclamos al organismo, sin causa) | API con ticket, `--con-api` | 1 llamada por licitación |
+
+Es decir: **la única razón que queda para gastar cuota es un dato que el portal ya entrega mejor
+desglosado**. `--con-api` existe para contrastar, no para operar.
+
+Lo demás que hay que saber para operarlo:
+
+- El buscador del portal **sí filtra por texto en el servidor** (la API no puede) y devuelve la
+  descripción completa. Su matching es laxo —"gestion documental" trajo 743 de 4.511 publicadas—,
+  así que las consultas de `config/keywords.json` son el barrido grueso y la precisión la ponen
+  `patron_mencion` / `patron_excluyente` localmente, sobre el texto completo.
+- Los ARCHIVOS adjuntos siguen tras reCAPTCHA, y eso no bloquea: se entrega su URL, que es acceso
+  suficiente (bajarlos con `npm run adjuntos-licitacion` es opcional y hay que correrlo desde la
+  máquina del usuario) — ver "El objetivo estaba mal planteado" en `licitaciones/PLAN.md`.
+- Al reportar oportunidades, citar la ficha de decisión (`licitaciones/data/<codigo>/decision.md`),
+  no impresiones.
+- La cuota del ticket sigue siendo escasa (se agota en la segunda corrida del día). Por eso el
+  camino normal ya no la toca.
 
 ## Cuándo usar
 
 - El usuario pide "correr el radar de licitaciones", "qué hay abierto de gestión documental /
-  oficina de partes / digitalización de procesos".
-- Antes de armar una cotización con `cotizar_licitaciones`, para tener el detalle ya descargado en
-  `licitaciones/data/<codigo>/`.
+  oficina de partes / RPA / BI / gestión de proyectos", o "licitaciones para los servicios de Array".
+- Antes de armar una cotización con `cotizar_licitaciones`, para tener la ficha de decisión y las
+  bases ya descargadas en `licitaciones/data/<codigo>/`.
 
 ## Requisitos
 
-- `LICITACIONES_API_TICKET` en `.env` (ver `.env.example` en la raíz del repo) — **distinto** del
-  `COMPRA_AGIL_API_TICKET` que ya usa el otro radar. Se solicita en
+- **Ninguno para el camino normal**: no necesita ticket ni credenciales del portal.
+- `LICITACIONES_API_TICKET` en `.env` **solo** si se va a usar `--con-api` (ver la tabla de arriba
+  para saber qué agrega). Es un ticket distinto del `COMPRA_AGIL_API_TICKET`; se solicita en
   https://www.mercadopublico.cl/Home/Api.
 
 ## Cómo correrlo
 
 ```bash
-npm run radar-licitaciones                    # corrida real contra la API (gasta cuota)
-npm run radar-licitaciones -- --desde-cache   # re-render desde las fichas ya guardadas, sin API
+npm run keywords-licitaciones                 # qué palabras busca hoy (consultas + patrones)
+npm run keywords-licitaciones -- agregar ged "expediente digital"
+npm run keywords-licitaciones -- quitar "expediente digital"
+npm run radar-licitaciones                    # corrida completa, cero cuota de API
+npm run radar-licitaciones -- --max=20        # baja (o sube) el cap de licitaciones a procesar
+npm run radar-licitaciones -- --con-api       # agrega la ficha de la API (gasta 1 llamada c/u)
+npm run radar-licitaciones -- --desde-cache   # re-render de lo ya descargado, sin pedir nada
 ```
-
-`--desde-cache` no detecta nada nuevo: vuelve a publicar el reporte y la página a partir de
-`licitaciones/data/*/detalle.json`, y lo declara así en la salida. Sirve cuando la cuota está
-agotada o cuando cambió el formato del reporte/página. No toca `state.json`.
 
 ## Qué hace (`scripts/radar.ts`)
 
-1. Consulta `estado=activas` en la API clásica de Licitaciones. **Esta API no soporta búsqueda por
-   texto** (a diferencia de `q` en Compra Ágil): el filtrado por las variantes de
-   `licitaciones/config/keywords.json` (`Gestión Documental`, `Digitalización de Procesos`,
-   `Oficina de Partes`, etc.) es **local**, sobre `Nombre`/`Descripcion` del listado — es el
-   mecanismo de descubrimiento primario, no un filtro de ruido secundario.
-2. Trae el detalle (ficha) de cada candidato — con un cap de 60 por corrida para no agotar la
-   cuota diaria del ticket ante un listado `activas` potencialmente muy grande — y confirma
-   localmente que el detalle también menciona la palabra clave (descarta falsos positivos).
-3. Extrae condiciones con `licitaciones/src/lib/condiciones.ts`: tope (`MontoEstimado`), tipo de
-   licitación, plazo de contrato, garantías de seriedad/fiel cumplimiento, documentos exigidos y
-   frases excluyentes.
-4. Extrae el plazo de contrato de `TiempoDuracionContrato` + `UnidadTiempoDuracionContrato` y lo
-   reporta en la unidad que declaró el organismo ("16 meses"). **No hay adjuntos ni garantías que
-   listar en la respuesta de la API**: no los expone (verificado). Para tener garantías, anexos
-   exigidos y criterios de evaluación de verdad, correr después
-   `npm run antecedentes-licitacion` (sin argumentos toma las licitaciones ya detectadas en caché):
-   los baja de la ficha pública del portal sin gastar cuota.
-5. Guarda todo en `licitaciones/data/<codigo>/{detalle.json, condiciones.json}`.
-6. Actualiza `licitaciones/data/state.json`: marca qué códigos son nuevos y qué organismos ya
-   tenían procesos previos (recompradores). La agrupación es por el `Comprador` de la **ficha**;
-   si una ficha no trae identificador de comprador, no se afirma nada sobre recompra en vez de
-   agrupar a ciegas.
+1. **Descubre por el buscador público del portal.** Una consulta por cada término de
+   `consultas_portal` en `licitaciones/config/keywords.json` (14 en total). Cada consulta son dos
+   requests: `Home/GenerarArchivo` y `Home/Descargar`, el mismo flujo del botón "Descargar
+   resultados" del sitio, que entrega un CSV de hasta 1.000 filas con `IDLicitacion`,
+   `NombreLicitacion`, `Tipo`, `Estado`, `FechaPublicacion`, `Descripcion`, `Moneda`,
+   `TipoPresupuesto`, `TipoMonto`, `MontoLicitacion` y `Organismo`.
+
+   Por qué esto reemplazó a la API: su listado nacional traía el `Nombre` **truncado a ~50
+   caracteres** y **sin `Descripcion`**, y costaba cuota. El buscador entrega el texto completo,
+   filtra en el servidor y no cuesta nada. El barrido crudo queda en
+   `licitaciones/data/_busqueda-portal.json` para poder probar patrones nuevos sin volver a pedirlo.
+2. **Confirma localmente** cada resultado con `patron_mencion` / `patron_excluyente` sobre nombre +
+   descripción. Como el texto ya viene completo, **no hace falta pedir ninguna ficha para descartar
+   un falso positivo** (con el listado de la API sí hacía falta, y cada descarte costaba cuota).
+3. Por cada confirmada, **baja sus antecedentes del portal** (`antecedentes-pipeline.ts`, el mismo
+   que usa `npm run antecedentes-licitacion`): las 9 secciones de las bases, el foro, el Excel
+   oficial de preguntas y respuestas, el índice de documentos y la **ficha de decisión**
+   (`decision.md` / `decision.json`: banderas con su cita, plazos, garantías, criterios de
+   evaluación con su ponderación, anexos exigidos, cláusulas excluyentes).
+4. Consulta el buscador **por el código** de cada una para dos datos que solo están ahí: el tramo
+   de monto cuando el organismo no publica la cifra ("Entre 100 y 1000 UTM") y el comportamiento de
+   pago del comprador (reclamos por pago no oportuno sobre compras de los últimos 12 meses).
+   Queda en `licitaciones/data/<codigo>/buscador.json`.
+5. Arma la ficha equivalente a la de la API con `detalle-portal.ts` y extrae condiciones con
+   `condiciones.ts` (tope, tipo, plazo de contrato, documentos exigidos, frases excluyentes).
+   Con `--con-api`, además pide la ficha a la API; si la cuota está agotada **no falla**: sigue con
+   la del portal y lo declara en el reporte.
+6. Actualiza `licitaciones/data/state.json` (códigos nuevos, organismos recompradores). La
+   agrupación es por el `Comprador` de la ficha; si no hay identificador, no se afirma nada sobre
+   recompra en vez de agrupar a ciegas.
 7. Escribe `licitaciones/output/radar-ultima-corrida.md` y lo imprime en consola.
-8. Refresca la grilla de tarjetas de **oportunidades detectadas** en `docs/licitaciones.html`
-   (misma vista que la de Compra Ágil en `docs/index.html`: código, organismo, tope, cierre con
-   aviso de "cierra hoy/mañana", tipo L1/LE/LP/…, garantías y plazo de contrato).
+8. Refresca `docs/licitaciones.html`: la grilla de oportunidades y el bloque **"Qué palabras busca
+   el radar"**, con las consultas de cada categoría, su patrón de confirmación, su excluyente y las
+   frases agregadas a mano. Ese bloque incluye un formulario para agregar palabras: como la página
+   es estática y no puede escribir en el repo, lo agregado queda en el navegador marcado como
+   **pendiente** y la página entrega el JSON listo para `keywords-extra.json` (más el comando
+   equivalente). El bloque de palabras se publica incluso en una corrida incompleta — es config
+   entera, no hay nada que se pueda borrar por error, a diferencia de la grilla.
 
    Solo se reemplaza el bloque entre los marcadores
-   `<!-- OPORTUNIDADES:INICIO ... -->` y `<!-- OPORTUNIDADES:FIN -->`: el resto de esa página es
-   análisis escrito a mano (insumos bloqueantes, diferencias con Compra Ágil, qué falta para
-   operar) que una corrida del radar **no** debe pisar. Si los marcadores no están, el script
-   avisa y deja la página intacta en vez de reescribirla. El generador vive en
-   `licitaciones/src/lib/pagina.ts`.
+   `<!-- OPORTUNIDADES:INICIO ... -->` y `<!-- OPORTUNIDADES:FIN -->`; fuera de ellos quedan la
+   cabecera y el pie. Esa página **ya no lleva secciones de estado del proyecto** (insumos
+   bloqueantes, diferencias con Compra Ágil, qué falta para operar): se eliminaron a pedido del
+   usuario para que la página solo contenga lo que sirve para evaluar una licitación. Si los
+   marcadores no están, el script avisa y deja la página intacta en vez de reescribirla. El
+   generador vive en `licitaciones/src/lib/pagina.ts`.
+
+   Cada tarjeta trae: código, organismo y unidad, la **descripción completa** del objeto licitado
+   (el `Nombre` llega truncado en ambas fuentes), tope o tramo de monto, cierre con los días que
+   faltan, tipo L1/LE/LP/…, plazo de contrato, garantía exigida, cierre de la ventana de preguntas,
+   adjudicación estimada, cómo paga el organismo, región, **a qué servicio de Array corresponde**,
+   las banderas de la ficha de decisión con su cita, los **criterios de evaluación con su
+   ponderación** y los documentos publicados por el organismo. Se ordenan por cierre: primero lo
+   que vence antes.
 
    Cada tarjeta omite las filas que la ficha no informa, en vez de imprimir "—": las licitaciones
    chicas traen pocos campos y la tarjeta no debe sugerir que el organismo declaró algo que no
    declaró. Cuando no hay tope publicado lo dice explícitamente en vez de mostrar `$0`.
 
-   **Sin `LICITACIONES_API_TICKET` la grilla queda en su estado vacío**, que explica por qué está
-   vacía. No se inventan licitaciones para llenarla.
+   Una **corrida incompleta no publica**: si falla alguna consulta del buscador, alguna licitación
+   se queda sin ficha o se alcanza el cap, el reporte se escribe igual pero la página se deja
+   intacta. Publicar una grilla parcial borraría de la página oportunidades que siguen abiertas.
 
-   Una **corrida incompleta no publica**: si se agota la cuota, falla alguna ficha o se alcanza el
-   cap de 60, el reporte se escribe igual pero la página se deja intacta. Publicar una grilla
-   parcial borraría de la página oportunidades que siguen abiertas.
+## Solo licitaciones abiertas
 
-## Toda la cuota va a las licitaciones activas
-
-Este dominio consulta **un solo listado**: `estado=activas`. La API acepta otros estados
-(`cerrada`, `desierta`, `adjudicada`) y un parámetro `fecha`, pero acá no se usan: sin `q`, cada
-estado extra obliga a traerse un listado nacional completo, y la cuota de este ticket no da para
-eso. Hubo un `informe-nicho.ts` que hacía ese barrido histórico —el equivalente al informe del
-nicho de Compra Ágil— y **se eliminó a propósito**: consumía la cuota que necesita el radar sin
-haber llegado nunca a producir cifras.
+Este radar mira **solo lo que está publicado y recibiendo ofertas** (`idEstado=5` en el buscador).
+El buscador acepta además cerradas, desiertas, adjudicadas y revocadas, así que reponer un informe
+histórico del nicho **ya no depende de la cuota** —esa era la razón por la que se eliminó
+`informe-nicho.ts`—, sino de decidir que vale la pena procesar ese volumen. Hoy no se hace.
 
 Consecuencia a tener presente: de este nicho **no hay cifras históricas** (cuántas licitaciones de
-gestión documental se declaran desiertas, quién se las adjudica, a qué precio). Lo que el radar
+estos servicios se declaran desiertas, quién se las adjudica, a qué precio). Lo que el radar
 entrega es qué está abierto ahora, no una lectura del mercado. Si en algún momento esas cifras se
 necesitan, primero hay que presupuestar la cuota — ver `buscarLicitacionesActivas` en
 `licitaciones/src/lib/api.ts`.
 
 ## Notas
 
-- La cuota se agota rápido y la API **no informa `Retry-After`**. Ante un 429 el script deja de
-  consultar (no reintenta a ciegas), rescata desde caché las fichas que puede, marca la corrida como
-  incompleta y no toca la página. Cuánto rinde exactamente la cuota diaria sigue sin medirse.
+- Con `--con-api`, ante un 429 el script deja de consultar la API (no reintenta a ciegas) y sigue
+  con la ficha pública: la corrida no se pierde. La API **no informa `Retry-After`** y cuánto rinde
+  su cuota diaria sigue sin medirse — pero ya no condiciona el radar.
+- El buscador del portal se consulta como lo hace su propia página, con sus mismos parámetros: no
+  se falsifica nada ni se rodea ningún control. Los archivos adjuntos, que sí están tras un
+  CAPTCHA, se siguen sin tocar.
 - Este skill es de solo lectura. Para preparar una cotización usar `cotizar_licitaciones`, que sí
   requiere `licitaciones/config/company.json` con costos reales.

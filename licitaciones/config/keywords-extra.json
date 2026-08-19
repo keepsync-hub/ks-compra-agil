@@ -1,0 +1,6 @@
+{
+  "_que_es": "Palabras clave agregadas a mano, encima de las categorías de keywords.json. Existe para que ampliar el radar no exija editar regex: acá se escriben frases tal cual, y el radar las usa en la corrida siguiente — como consulta al buscador del portal (descubrimiento) y como confirmación local sobre el texto de cada licitación.",
+  "_como_se_agrega": "Desde docs/licitaciones.html (formulario 'Qué palabras busca el radar', que deja el JSON listo para pegar acá) o con `npm run keywords-licitaciones -- agregar <categoria> \"<frase>\"`. Categorías válidas: los `id` de keywords.json (ope, set, ged, rpa, bi, pmo) o `otros` para lo que no cae en ninguna.",
+  "_como_se_compara": "Comparación literal e insensible a mayúsculas, tildes y espacios de más — no es una regex. Una frase de dos palabras exige que aparezcan juntas y en ese orden.",
+  "terminos": []
+}

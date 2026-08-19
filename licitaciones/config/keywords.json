@@ -1,14 +1,79 @@
 {
-  "variantes": [
-    "Gestión Documental",
-    "Gestor Documental",
-    "Digitalización de Procesos",
-    "Digitalización de Documentos",
-    "Digitalización de Archivos",
-    "Oficina de Partes",
-    "Expediente Electrónico",
-    "Tramitación Documental",
-    "Sistema de Gestión Documental",
-    "Archivo Digital"
-  ]
+  "_fuente": "Catálogo de servicios de Array (http://www.array.cl/), el mismo que usa config/array-servicios.json para Compra Ágil. Acá los patrones están adaptados a cómo redactan las BASES DE LICITACIÓN (frases más largas y formales que un aviso de Compra Ágil).",
+  "_como_se_usa": "Esta API no tiene búsqueda por texto: `patron_mencion` es el mecanismo PRIMARIO de descubrimiento, evaluado localmente sobre Nombre/Descripcion del listado nacional de licitaciones activas. `patron_excluyente` se evalúa sobre el texto completo de la ficha y descarta la categoría cuando la palabra acierta pero el rubro no.",
+  "categorias": [
+    {
+      "id": "ope",
+      "nombre": "Oficina de Partes Electrónica",
+      "descripcion_array": "Sistema de Oficina de Partes Electrónica (OPE): recepción y despacho de correspondencia por canales electrónicos y presenciales.",
+      "patron_mencion": "oficina\\s+de\\s+partes|correspondencia\\s+(digital|electr[oó]nica)|ventanilla\\s+[uú]nica\\s+(digital|electr[oó]nica|de\\s+tr[aá]mites)",
+      "consultas_portal": [
+        "oficina de partes",
+        "correspondencia electronica"
+      ]
+    },
+    {
+      "id": "set",
+      "nombre": "Seguimiento de Trámites",
+      "descripcion_array": "Sistema de Seguimiento de Trámites (SET): visualización y alertas de cumplimiento de SLA para trámites ciudadanos e institucionales.",
+      "patron_mencion": "seguimiento\\s+de\\s+tr[aá]mites|tramitaci[oó]n\\s+(documental|electr[oó]nica|en\\s+l[ií]nea)|expediente\\s+electr[oó]nico",
+      "consultas_portal": [
+        "seguimiento de tramites",
+        "tramitacion en linea"
+      ]
+    },
+    {
+      "id": "ged",
+      "nombre": "Gestión Documental y Firma Electrónica",
+      "descripcion_array": "Sistema de Gestión Electrónica de Documentos (GED): elaboración, visación y firma electrónica de documentos oficiales.",
+      "patron_mencion": "gesti[oó]n\\s+(electr[oó]nica\\s+)?documental|gestor\\s+documental|plataforma\\s+documental|gesti[oó]n\\s+(de\\s+)?documentos?|firma\\s+electr[oó]nica|digitalizaci[oó]n\\s+(de\\s+)?(proceso|documen|archivo|expediente)|archivo\\s+digital|documento\\s+electr[oó]nico",
+      "_patron_excluyente_nota": "Cuatro rubros que la palabra pesca y no son Array, los cuatro vistos en corridas reales: (1) el certificado/token de firma electrónica, que es un insumo de $50.000 y no una plataforma; (2) la digitalización de imágenes médicas (2111-197-LR26 'DIGITALIZACION PARA IMAGENOLOGIA'), que es equipamiento clínico; (3) el retiro de residuos peligrosos que incluye 'la gestión documental y de trazabilidad de los residuos' (4291-43-LP26, Universidad de Antofagasta); y (4) la compra de hardware para correr un gestor documental ajeno (691232-7-LE26 'SERVIDORES … con procesador Intel Xeon, con el objeto de administrar sistema de gestión documental'). Los dos últimos aparecieron recién al descubrir por el buscador del portal, que entrega la descripción completa: más texto encuentra más licitaciones y también más maneras de equivocarse.",
+      "patron_excluyente": "certificad[oa]s?\\s+de\\s+firma|e-?token|token\\s+de\\s+firma|imagenolog[ií]a|radiolog[ií]a|mamograf|ecograf|rayos\\s+x|residuos\\s+(peligrosos|especiales|biol[oó]gico)|disposici[oó]n\\s+final\\s+de\\s+residuos|procesador(es)?\\s+intel|\\bxeon\\b",
+      "_patron_mencion_nota": "El listado de la API trae el Nombre TRUNCADO (~50 car.: '722-5-LE26 CONTRATACIÓN DE SERVICIO DE DIGITALIZACIÓN DOCUMEN'), y es el único texto disponible para descubrir — el ítem del listado no trae Descripcion. Por eso los patrones matchean prefijos ('documen', 'proceso') en vez de palabras completas: exigir 'digitalización de documentos' perdía licitaciones reales por el corte.",
+      "consultas_portal": [
+        "gestion documental",
+        "digitalizacion de documentos",
+        "firma electronica avanzada",
+        "expediente electronico"
+      ]
+    },
+    {
+      "id": "rpa",
+      "nombre": "Automatización de Procesos (RPA / DBA)",
+      "descripcion_array": "Plataformas Digital Business Automation (DBA) y Robotic Process Automation (RPA): automatización de tareas repetitivas, flujos y captura de datos.",
+      "patron_mencion": "\\brpa\\b|automatizaci[oó]n\\s+(rob[oó]tica\\s+)?de\\s+procesos|robotic\\s+process\\s+automation|business\\s+process\\s+automation|flujos?\\s+de\\s+trabajo\\s+(digital|automatizad)",
+      "_patron_excluyente_nota": "En Chile 'RPA' también significa Remotely Piloted Aircraft (dron): visto en la Compra Ágil 3703-332-COT26 'Implementos Dron RPA DOM', que el radar clasificaba como automatización robótica. También se descarta la automatización industrial/eléctrica, que es otro rubro entero.",
+      "patron_excluyente": "\\bdron(es)?\\b|\\bdrone\\b|aeronave|veh[ií]culo\\s+a[eé]reo|piloto\\s+remoto|\\buav\\b|automatizaci[oó]n\\s+(industrial|el[eé]ctrica)|\\bplc\\b|\\bscada\\b",
+      "consultas_portal": [
+        "automatizacion de procesos",
+        "robotic process automation"
+      ]
+    },
+    {
+      "id": "bi",
+      "nombre": "Business Intelligence / Analítica",
+      "descripcion_array": "Plataforma de Analytics / BI: ingesta de datos desde múltiples fuentes, análisis predictivo, visualización geoespacial y búsqueda multimodal.",
+      "patron_mencion": "business\\s+intelligence|inteligencia\\s+de\\s+negocios|anal[ií]tica\\s+de\\s+datos|cuadro\\s+de\\s+mando\\s+integral|tableros?\\s+de\\s+control\\s+(de\\s+)?(datos|gesti[oó]n)",
+      "_patron_excluyente_nota": "Una capacitación SOBRE analítica no es una plataforma de analítica (mismo caso que motivó el excluyente de PMO en Compra Ágil).",
+      "patron_excluyente": "\\bcursos?\\b|capacitaci[oó]n|diplomado|\\btalleres?\\b|seminario|\\bm[aá]g[ií]ster\\b|relator",
+      "consultas_portal": [
+        "business intelligence",
+        "analitica de datos"
+      ]
+    },
+    {
+      "id": "pmo",
+      "nombre": "Gestión de Proyectos y Contratos (PMO)",
+      "descripcion_array": "Project Management Platform (ProactiveOffice): gestión de iniciativas, proyectos, contratos, recursos, riesgos e indicadores.",
+      "_patron_mencion_nota": "Acá el patrón exige que se pida un SISTEMA/PLATAFORMA/SOFTWARE de gestión de proyectos o contratos. 'Gestión de proyectos' a secas, en licitaciones, casi siempre es asesoría o inspección técnica de obra — otro rubro, y el radar traería decenas de falsos positivos por corrida.",
+      "patron_mencion": "proactiveoffice|(sistema|plataforma|software|soluci[oó]n\\s+inform[aá]tica)\\s+(web\\s+)?(de\\s+|para\\s+(la\\s+)?)?gesti[oó]n\\s+de\\s+(proyectos|contratos|iniciativas)",
+      "_patron_excluyente_nota": "Una capacitación SOBRE gestión de proyectos no es una plataforma de gestión de proyectos: visto en la Compra Ágil 2020-153-COT26 'Curso Gestión de proyectos ágiles'.",
+      "patron_excluyente": "\\bcursos?\\b|capacitaci[oó]n|diplomado|\\btalleres?\\b|seminario|\\bm[aá]g[ií]ster\\b|relator",
+      "consultas_portal": [
+        "plataforma gestion de proyectos",
+        "software gestion de contratos"
+      ]
+    }
+  ],
+  "_consultas_portal_nota": "El buscador público del portal filtra por texto en el SERVIDOR (la API con ticket no puede) y devuelve nombre y descripción completos. Su matching es laxo —'gestion documental' trajo 743 de 4.511 publicadas—, así que estas consultas son solo el barrido grueso: la precisión la pone patron_mencion/patron_excluyente localmente, sobre el texto completo. Cada consulta cuesta 2 requests HTTP y cero cuota de API."
 }

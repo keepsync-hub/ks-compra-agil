@@ -76,28 +76,34 @@ trigger "on a schedule" — esa programación se guarda del lado de GitHub, no c
 repo, así que hay que activarla manualmente una vez. Antes de activarla, cargar
 `COMPRA_AGIL_API_TICKET` como *repository secret* (no en `.env`, que es solo para uso local).
 
-## Segundo nicho: Licitaciones de Gestión Documental / Digitalización de Procesos / Oficina de Partes
+## Segundo nicho: Licitaciones públicas para los servicios de Array
 
-Réplica del radar y el cotizador, pero para **Licitaciones públicas** (no Compra Ágil) que piden
-gestión documental, digitalización de procesos u oficina de partes. Vive en `licitaciones/`
-(librería, config y datos propios) + los skills `radar_licitaciones` y `cotizar_licitaciones` en
-`.claude/skills/`. Diseño completo, diferencias respecto a Compra Ágil e insumos bloqueantes:
-ver `licitaciones/PLAN.md`.
+Réplica del radar y el cotizador, pero para **Licitaciones públicas** (no Compra Ágil) que piden los
+servicios del catálogo de [Array](http://www.array.cl/) — oficina de partes electrónica, seguimiento
+de trámites, gestión documental y firma electrónica, RPA, business intelligence y plataformas de
+gestión de proyectos. Vive en `licitaciones/` (librería, config y datos propios) + los skills
+`radar_licitaciones` y `cotizar_licitaciones` en `.claude/skills/`. Diseño completo, diferencias
+respecto a Compra Ágil e insumos bloqueantes: ver `licitaciones/PLAN.md`.
 
-**Radar verificado contra producción el 2026-08-19**: corrió con un `LICITACIONES_API_TICKET`
-válido (distinto del de Compra Ágil, se pide en https://www.mercadopublico.cl/Home/Api) y detectó
-oportunidades reales — publicadas en `docs/licitaciones.html`. Esa corrida corrigió varias
-suposiciones del código y destapó dos bugs (alertas de recompradores falsas, publicación de una
-grilla parcial); el detalle está en "Hallazgos de la corrida de verificación" de
-`licitaciones/PLAN.md`. Tres cosas quedan pendientes:
+**El radar corre entero sin gastar cuota de API** (reordenado el 2026-08-19). Las oportunidades que
+publica en `docs/licitaciones.html` son reales y salen de fuentes públicas del portal:
 
-- **La cuota del ticket es muy escasa** — se agotó en la segunda corrida del mismo día. Correr el
-  radar contra la API una vez al día; `npm run radar-licitaciones -- --desde-cache` republica lo ya
-  detectado sin gastar cuota. Por esto **toda la cuota se gasta en licitaciones activas**: se
-  eliminaron el barrido histórico del nicho (`informe-licitaciones`) y su página, y la API solo se
-  consulta por `estado=activas` y por ficha. A cambio, de este nicho no hay cifras históricas —
-  cuántas se declaran desiertas, quién se las adjudica — como sí las hay del nicho Claude.
-  Justificación completa en "Decisión: solo licitaciones activas" de `licitaciones/PLAN.md`.
+- **Descubrimiento**: el buscador público de mercadopublico.cl, que **sí filtra por texto en el
+  servidor** —la API con ticket no puede— y devuelve el **nombre y la descripción completos**. El
+  listado de la API, además de costar cuota, traía el nombre truncado a ~50 caracteres y sin
+  descripción. Como el texto llega completo, descartar un falso positivo ya no cuesta una llamada.
+- **Ficha de cada licitación**: la ficha pública del portal, de donde salen organismo, tope, tipo,
+  plazos, garantías, criterios de evaluación con su ponderación, anexos exigidos y documentos.
+- **Datos que la API no tiene**: el tramo de monto cuando el organismo no publica la cifra ("Entre
+  100 y 1000 UTM") y **cómo paga el comprador** — reclamos por pago no oportuno sobre las compras de
+  los últimos 12 meses (medido: 0/484 en una municipalidad, 79/171 en otra).
+- **El `LICITACIONES_API_TICKET` quedó opcional** (`--con-api`): su cuota se agotaba antes de la
+  primera ficha, y lo único exclusivo que aporta (`CantidadReclamos`, total de reclamos al organismo
+  sin causa) el portal ya lo entrega mejor desglosado. Con la cuota agotada la corrida no se pierde:
+  sigue con la ficha pública y lo declara en el reporte.
+
+Lo que sigue pendiente:
+
 - **La API no expone adjuntos ni garantías**, pero la ficha PÚBLICA del portal sí trae el texto
   completo de las bases — y eso ya se lee automáticamente con `npm run antecedentes-licitacion --
   <codigo>` (sin ticket, sin cuota y sin login; verificado el 2026-08-19). Ahí están las garantías
@@ -119,7 +125,8 @@ grilla parcial); el detalle está en "Hallazgos de la corrida de verificación" 
 
 | Comando | Qué hace |
 |---|---|
-| `npm run radar-licitaciones` | Busca licitaciones activas de gestión documental/digitalización/oficina de partes, extrae condiciones, detecta recompradores. Solo lectura. |
+| `npm run keywords-licitaciones [-- agregar <categoria> "<frase>" \| quitar "<frase>"]` | Muestra o edita las palabras que busca el radar. Las frases agregadas van a `licitaciones/config/keywords-extra.json` y la corrida siguiente las usa como consulta al buscador y como confirmación local — sin tocar las regex de `keywords.json`. Es el equivalente por consola del formulario de `docs/licitaciones.html`. |
+| `npm run radar-licitaciones` | Busca licitaciones abiertas de los servicios de Array por el buscador público del portal, baja sus bases y ficha de decisión, y publica `docs/licitaciones.html`. **Cero llamadas a la API**; `--con-api` agrega la ficha del ticket, `--max=N` cambia el cap, `--desde-cache` republica sin pedir nada. Solo lectura. |
 | `npm run leer-adjuntos -- [<codigo>]` | Extrae el texto de los archivos que haya en `licitaciones/data/<codigo>/adjuntos/` (PDF con `pdfjs`, DOCX/XLSX con un lector de ZIP propio) y **rehace la ficha de decisión** incorporándolos, citando cada exigencia al archivo. Es el paso siguiente al clic humano en el visor del portal. |
 | `npm run antecedentes-licitacion -- [<codigo> ...]` | Baja de la ficha **pública** del portal el contenido completo de las bases (garantías, anexos exigidos, criterios de evaluación) + el foro de preguntas, a `licitaciones/data/<codigo>/antecedentes.md`, **y el archivo Excel oficial de preguntas y respuestas** a `documentos/`. Escribe el **índice de documentos** (`documentos.json`) y **republica `docs/licitaciones.html`** con esos enlaces en cada tarjeta. Sin ticket, sin cuota, sin login y sin CAPTCHA. Sin argumentos, procesa todas las licitaciones en caché. |
 | `npm run login-portal [-- --diagnostico] [--visible]` | Inicia sesión en el portal vía **ClaveÚnica** (`MP_USUARIO`/`MP_CLAVE` del entorno) y guarda `data/storageState.json`. El código de doble factor lo escribe el agente en `licitaciones/data/2fa-codigo.txt` tras leerlo del correo. `--diagnostico` verifica los selectores **sin usar credenciales**. Verificado contra producción el 2026-08-19. |

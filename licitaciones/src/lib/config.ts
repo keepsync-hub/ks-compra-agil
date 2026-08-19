@@ -83,11 +83,64 @@ export function loadCompanyConfig(): CompanyConfigLicitaciones {
   return JSON.parse(raw) as CompanyConfigLicitaciones;
 }
 
+/**
+ * Una categoría del catálogo de servicios de Array (http://www.array.cl/) tal como se busca en
+ * licitaciones. Mismo contrato que `config/array-servicios.json` (Compra Ágil), con los patrones
+ * adaptados a la redacción de bases de licitación.
+ */
+export interface CategoriaKeyword {
+  id: string;
+  nombre: string;
+  descripcion_array?: string;
+  /** Regex (string, case-insensitive al compilar) que descubre la licitación. */
+  patron_mencion: string;
+  /**
+   * Textos que se le piden al buscador público del portal (`buscador-portal.ts`), que sí filtra
+   * por texto en el servidor. Es el barrido grueso; la precisión la pone `patron_mencion`.
+   */
+  consultas_portal?: string[];
+  /** Contexto donde `patron_mencion` acierta la palabra pero se equivoca de rubro (ej. "RPA" = dron). */
+  patron_excluyente?: string;
+}
+
 export interface KeywordsConfig {
-  variantes: string[];
+  categorias: CategoriaKeyword[];
 }
 
 export function loadKeywordsConfig(): KeywordsConfig {
   const p = path.join(LIC_ROOT_DIR, "config", "keywords.json");
   return JSON.parse(readFileSync(p, "utf-8")) as KeywordsConfig;
+}
+
+/**
+ * Un término agregado a mano (desde la página publicada o desde `npm run keywords-licitaciones`).
+ * Es una frase literal, no una regex: quien la escribe no tiene por qué saber de expresiones
+ * regulares, y una regex mal formada rompería el radar entero.
+ */
+export interface TerminoExtra {
+  /** `id` de una categoría de keywords.json, o `"otros"`. */
+  categoria: string;
+  termino: string;
+  /** ISO corto de cuándo se agregó. Solo informativo. */
+  agregado?: string;
+}
+
+export interface KeywordsExtraConfig {
+  terminos: TerminoExtra[];
+}
+
+export const KEYWORDS_EXTRA_PATH = path.join(LIC_ROOT_DIR, "config", "keywords-extra.json");
+
+/** Overlay opcional: si el archivo no está o no parsea, el radar sigue con las categorías base. */
+export function loadKeywordsExtra(): KeywordsExtraConfig {
+  if (!existsSync(KEYWORDS_EXTRA_PATH)) return { terminos: [] };
+  try {
+    const datos = JSON.parse(readFileSync(KEYWORDS_EXTRA_PATH, "utf-8")) as Partial<KeywordsExtraConfig>;
+    const terminos = (datos.terminos ?? []).filter(
+      (t): t is TerminoExtra => typeof t?.categoria === "string" && typeof t?.termino === "string" && t.termino.trim() !== "",
+    );
+    return { terminos };
+  } catch {
+    return { terminos: [] };
+  }
 }

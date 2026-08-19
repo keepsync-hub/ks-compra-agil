@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Agente de Licitaciones — Gestión Documental | KeepSync</title>
-<meta name="description" content="Estado del agente que monitorea Licitaciones públicas de gestión documental, digitalización de procesos y oficina de partes en mercadopublico.cl: radar, cotizador y bloqueadores conocidos.">
+<title>Licitaciones abiertas — servicios de Array | KeepSync</title>
+<meta name="description" content="Licitaciones públicas abiertas en mercadopublico.cl que piden servicios de Array (oficina de partes, gestión documental, RPA, BI, gestión de proyectos), con tope, plazos, garantías, criterios de evaluación y documentos de cada una.">
 <style>
   :root {
     --bg: #0E0E17;
@@ -29,7 +29,7 @@
     font-family: -apple-system, "Segoe UI", Arial, sans-serif;
     line-height: 1.55;
   }
-  .wrap { max-width: 980px; margin: 0 auto; padding: 0 1.5rem; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
   header.hero {
     background: linear-gradient(180deg, var(--bg-alt) 0%, var(--bg) 100%);
     border-bottom: 1px solid var(--border);
@@ -42,19 +42,11 @@
   .brand span { font-weight: 700; font-size: 1.1rem; letter-spacing: 0.02em; }
   h1 { font-size: clamp(1.6rem, 4vw, 2.3rem); margin: 0 0 0.5rem; }
   .subtitle { color: var(--gray); font-size: 1.02rem; max-width: 66ch; }
-  .meta { color: var(--gray-dim); font-size: 0.85rem; margin-top: 1rem; }
   main { padding: 2.5rem 0 4rem; }
   section { margin-bottom: 3rem; }
   h2 { font-size: 1.4rem; margin: 0 0 0.3rem; }
-  .section-sub { color: var(--gray); font-size: 0.95rem; margin: 0 0 1.25rem; max-width: 68ch; }
+  .section-sub { color: var(--gray); font-size: 0.95rem; margin: 0 0 1.25rem; max-width: 78ch; }
 
-  .status-grid { display: grid; gap: 0.75rem; }
-  .status-row {
-    display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center;
-    background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1.1rem;
-  }
-  .status-row .name { font-weight: 600; }
-  .status-row .desc { color: var(--gray); font-size: 0.88rem; }
   .badge {
     display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.7rem;
     border-radius: 999px; font-size: 0.78rem; font-weight: 700; white-space: nowrap;
@@ -63,6 +55,7 @@
   .badge.warn { background: rgba(251, 191, 36, 0.15); color: var(--warn); }
   .badge.bad { background: rgba(251, 113, 133, 0.15); color: var(--bad); }
   .badge::before { content: "●"; font-size: 0.6rem; }
+
   /* 340px y no 280px como en las otras páginas: las licitaciones traen etiquetas más largas
      ("Garantía fiel cumpl.") y montos de 8 dígitos, que a menor ancho parten en dos líneas. */
   .card-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
@@ -71,6 +64,8 @@
   .opp-card .org { font-weight: 700; font-size: 1.05rem; line-height: 1.3; }
   .opp-card .nombre { color: var(--gray); font-size: 0.88rem; }
   .opp-card .unidad { color: var(--gray-dim); font-size: 0.8rem; }
+  /* Qué está pidiendo el organismo, en sus palabras: el Nombre llega truncado y esto no. */
+  .opp-card .descripcion { color: var(--gray); font-size: 0.84rem; margin: 0.5rem 0 0; }
   .opp-card dl { display: grid; grid-template-columns: auto 1fr; gap: 0.25rem 0.6rem; font-size: 0.86rem; margin: 0.6rem 0 0.4rem; }
   .opp-card dt { color: var(--gray-dim); }
   .opp-card dd { margin: 0; }
@@ -107,16 +102,40 @@
     background: var(--card-alt); border: 1px solid var(--border); border-left: 3px solid var(--warn);
     border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.86rem; color: var(--gray);
   }
-  .note.bad { border-left-color: var(--bad); }
-  .note.ok { border-left-color: var(--ok); }
   .note code { color: var(--accent-light); }
 
-  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-  th, td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); }
-  th { color: var(--gray-dim); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
-  .table-wrap { overflow-x: auto; background: var(--card); border: 1px solid var(--border); border-radius: 10px; }
-  .table-wrap table { margin: 0; }
-  .table-wrap th, .table-wrap td { padding: 0.7rem 1rem; }
+  /* --- Bloque "Qué palabras busca el radar" (generado + formulario) --------------------------
+     Las palabras se muestran junto a los resultados a propósito: quien mira las oportunidades es
+     quien nota que falta un término. El formulario no promete guardar en el repo —esta página es
+     estática— y por eso marca lo agregado como pendiente hasta que se persista. */
+  .kw-grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  .kw-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1.1rem; }
+  .kw-cat { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .kw-id { color: var(--gray-dim); font-family: ui-monospace, Menlo, monospace; font-size: 0.75rem; }
+  .kw-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .kw { background: rgba(120,108,240,0.14); border: 1px solid var(--border); border-radius: 999px; padding: 0.12rem 0.6rem; font-size: 0.8rem; color: var(--accent-light); }
+  .kw.agregada { background: rgba(74,222,128,0.14); color: var(--ok); }
+  .kw.pendiente { background: rgba(251,191,36,0.14); color: var(--warn); }
+  .kw-patron { margin-top: 0.6rem; font-size: 0.8rem; }
+  .kw-patron summary { cursor: pointer; color: var(--gray-dim); }
+  .kw-patron p { color: var(--gray); margin: 0.5rem 0 0.25rem; }
+  .kw-patron code { display: block; word-break: break-all; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 6px; padding: 0.45rem 0.6rem; color: var(--accent-light); font-size: 0.75rem; }
+  .kw-form { margin-top: 1.25rem; background: var(--card-alt); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; }
+  .kw-form h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+  .kw-form p { color: var(--gray); font-size: 0.87rem; margin: 0 0 0.8rem; max-width: 78ch; }
+  .kw-form-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .kw-form select, .kw-form input[type=text] {
+    background: var(--bg); color: var(--white); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.5rem 0.7rem; font-size: 0.88rem; font-family: inherit;
+  }
+  .kw-form input[type=text] { flex: 1 1 260px; }
+  .kw-form button { cursor: pointer; border: none; font-family: inherit; }
+  .kw-aviso { color: var(--warn); font-size: 0.85rem; margin: 0.7rem 0 0; }
+  .kw-pendientes-box { margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.9rem; }
+  .kw-pendientes-box h4 { margin: 0 0 0.5rem; font-size: 0.92rem; }
+  .kw-json { width: 100%; min-height: 150px; background: var(--bg); color: var(--gray); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem; font-family: ui-monospace, Menlo, monospace; font-size: 0.75rem; }
+  .kw-acciones { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; align-items: center; }
+  .kw-quitar { background: none; border: none; color: var(--gray-dim); cursor: pointer; font-size: 0.8rem; text-decoration: underline; padding: 0; }
 
   code, .mono { font-family: ui-monospace, Menlo, monospace; }
   a { color: var(--accent-light); }
@@ -126,29 +145,19 @@
     border-top: 1px solid var(--border); padding: 2rem 0; color: var(--gray-dim); font-size: 0.85rem;
   }
   footer a { color: var(--gray); }
-  .links-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
-
-  @media (max-width: 600px) {
-    .status-row { grid-template-columns: 1fr; }
-    .status-row .badge { justify-self: start; }
-  }
 </style>
 </head>
 <body>
 
 <header class="hero">
   <div class="wrap">
-    <a class="back" href="index.html">← Volver al resumen de Compra Ágil</a>
+    <a class="back" href="index.html">← Volver al resumen</a>
     <div class="brand"><img src="assets/logo-keepsync-blanco.png" alt=""><span>KeepSync</span></div>
-    <h1>Agente de Licitaciones — Gestión Documental</h1>
+    <h1>Licitaciones abiertas — servicios de Array</h1>
     <p class="subtitle">
-      Qué hay <strong>abierto ahora mismo</strong> en Licitaciones públicas (no Compra Ágil) de
-      gestión documental, digitalización de procesos u oficina de partes. Réplica del agente de
-      Compra Ágil — monitorear, cotizar dentro del tope y dejar listo para revisión humana — con
-      una API, un producto y un modelo de costos distintos. La cuota de esa API es escasa, así que
-      se gasta entera en las licitaciones activas de abajo.
+      Lo que está abierto hoy en <a href="https://www.mercadopublico.cl">mercadopublico.cl</a> para
+      los servicios de <a href="http://www.array.cl/">Array</a>, ordenado por lo que cierra antes.
     </p>
-    <p class="meta">Actualizado 2026-08-19 · repo <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a> · código en <a href="https://github.com/keepsync-hub/ks-compra-agil/tree/claude/radar-licitaciones-9ksb5a/licitaciones">licitaciones/</a> · diseño completo en <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/radar-licitaciones-9ksb5a/licitaciones/PLAN.md">licitaciones/PLAN.md</a></p>
   </div>
 </header>
 
@@ -156,72 +165,38 @@
 
 <!-- OPORTUNIDADES:INICIO (generado por `npm run radar-licitaciones` — no editar a mano) -->
   <section>
-    <h2>Licitaciones activas</h2>
+    <h2>Licitaciones abiertas</h2>
     <p class="section-sub">
-      Licitaciones públicas <strong>abiertas ahora</strong> que mencionan gestión documental,
-      digitalización de procesos u oficina de partes, según la última corrida de
-      <code>npm run radar-licitaciones</code>. Es lo único a lo que este agente dedica su cuota de
-      API: qué se puede ofertar hoy, no cómo le fue al nicho históricamente.
-      El estado de cada una es <strong>detectada</strong>: el radar solo observa — cotizar es un
-      paso aparte (<code>npm run cotizar-licitaciones -- &lt;codigo&gt;</code>) y el envío de una
-      oferta lo hace siempre una persona.
+      Licitaciones públicas de <strong>mercadopublico.cl abiertas ahora</strong> que piden alguno de
+      los servicios de <a href="http://www.array.cl/">Array</a>: oficina de partes electrónica,
+      seguimiento de trámites, gestión documental y firma electrónica, automatización de procesos
+      (RPA), business intelligence y plataformas de gestión de proyectos. Cada tarjeta trae lo que
+      decide si conviene presentarse — tope, plazos, garantías, criterios de evaluación, anexos
+      exigidos y los documentos publicados por el organismo — con su fuente citada; nada está
+      inferido.
     </p>
-    <p class="meta-corrida">3 licitación(es) activa(s) en la corrida del 2026-08-19.</p>
+    <p class="meta-corrida">5 licitación(es) abierta(s) · revisado el 2026-08-19 · Datos leídos de la ficha pública y las bases de cada licitación en el portal de Mercado Público.</p>
     <div class="card-grid">
-      <div class="opp-card" id="1191449-18-LE26">
-        <span class="codigo">1191449-18-LE26</span>
-        <span class="org">SERVICIO NACIONAL DEL PATRIMONIO CULTURAL</span>
-        <span class="nombre">SERVICIO DE DIGITALIZACIÓN DE DOCUMENTOS DEL GRUPO</span>
-        <span class="unidad">SUBDIRECCIÓN ARCHIVO NACIONAL DOS</span>
-        <dl>
-          <dt>Tope</dt><dd>$10.743.000 CLP</dd>
-          <dt>Cierre</dt><dd>2026-08-28 20:00 — cierra en 9 días</dd>
-          <dt>Tipo</dt><dd>LE — pública 100–1.000 UTM</dd>
-          <dt>Plazo de contrato</dt><dd>4 meses</dd>
-          <dt>Adjudicación</dt><dd>2026-09-07</dd>
-          <dt>Reclamos al organismo</dt><dd>387</dd>
-          <dt>Región</dt><dd>Región Metropolitana de Santiago</dd>
-        </dl>
-        <div class="decision">
-          <div class="chips"><span>precio 40%</span><span>sin garantía</span><span>3 anexos</span><span>preguntas abiertas</span><span>sin adjuntos leídos</span></div>
-          <details>
-            <summary>2 punto(s) a revisar antes de cotizar</summary>
-            <ul>
-            <li title="Son reclamos recibidos por el comprador en el sistema, no de esta licitación: señal de trato con proveedores. (API (CantidadReclamos))">El organismo acumula 387 reclamos</li>
-            <li title="Esta ficha se armó solo con la ficha pública. Las bases administrativas y las EE.TT. en PDF pueden traer exigencias que no aparecen ahí. Bajarlos a licitaciones/data/&lt;codigo&gt;/adjuntos/ (un clic en el visor del portal, o `npm run adjuntos-licitacion -- &lt;codigo&gt; --con-login` desde una máquina con IP residencial) y correr `npm run leer-adjuntos` para incorporarlos. (estado local)">Falta el detalle fino: no hay adjuntos leídos</li>
-            </ul>
-          </details>
-        </div>
-        <details class="docs">
-          <summary>Documentos publicados por el organismo</summary>
-          <ul>
-            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=ht9pDcP5uLvVO%2bljbUNrzsUdph%2fX5HQKWFPeng167N3dXcKQGaN9QYBrrymkPDew9HCt1Vif863j%2brJZ5iRYgUx5DpWxRFDBu21tKwwMWZZfmk%2fRFKHzm9aXxdirj6nNU%2bQ2ceS9205BJRtc%2fAz6ho7PlbUbgvSlMV7hrxS8J3f5zUwe1PagoyshA8ZFIfBut9isAUEQkKPlOvVD6CZZEfLYlzmS7iOWDCpza3WERG3LWmFSQ6RsjsSyNi050hdJbnLoWErFat%2fwd1ac9sRZlHUarYrQAoZcQeP2E0s72x70areOCteAvMXb5WxlSQwH" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
-            <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=lKvtFRpL4uKTdjKPd1yxSKU2+FAWc2Ju5ByDjBQsxFzpZzt8jPmROwYPPMDTY16x">Foro de preguntas y respuestas</a></li>
-            <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=lKvtFRpL4uKTdjKPd1yxSKU2+FAWc2Ju5ByDjBQsxFzpZzt8jPmROwYPPMDTY16x">Excel oficial de preguntas y respuestas</a></li>
-          </ul>
-        </details>
-        <div class="cta">
-          <span class="badge warn">Detectada — cotización pendiente</span>
-          <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=1191449-18-LE26">Ver en el portal</a>
-        </div>
-      </div>
-
       <div class="opp-card" id="4174-29-LE26">
         <span class="codigo">4174-29-LE26</span>
-        <span class="org">Ilustre Municipalidad de Quirihue</span>
+        <span class="org">I MUNICIPALIDAD DE QUIRIHUE</span>
         <span class="nombre">SISTEMA DE GESTIÓN DOCUMENTAL Y COMPLEMENTOS</span>
         <span class="unidad">Secplan</span>
+        <p class="descripcion">La presente licitación tiene por objeto la contratación de una persona natural o jurídica que provea el servicio que permita dar una solución integral de Gestión Documental Electrónica para la Ilustre Municipalidad de Quirihue, incluyendo el suministro de licencias, implementación, configuración, parametrización, puesta en marcha, capacitación de usuarios, soporte técnico y acompañamiento inicial, de conformidad con las condiciones establecidas en las presentes Bases Administrativas, Especificaciones Técnicas y demás antecedentes que integran el proceso licitatorio.</p>
         <dl>
           <dt>Tope</dt><dd>$10.000.000 CLP</dd>
           <dt>Cierre</dt><dd>2026-08-21 15:00 — cierra en 2 días</dd>
           <dt>Tipo</dt><dd>LE — pública 100–1.000 UTM</dd>
           <dt>Plazo de contrato</dt><dd>16 meses</dd>
+          <dt>Garantía exigida</dt><dd>Garantía fiel de Cumplimiento de Contrato por 5% <span class="sin-dato">(vence 2027-03-11)</span></dd>
+          <dt>Preguntas hasta</dt><dd>2026-08-10 15:00 <span class="sin-dato">(cerradas)</span></dd>
           <dt>Adjudicación</dt><dd>2026-09-01</dd>
-          <dt>Reclamos al organismo</dt><dd>45</dd>
+          <dt>Pago del organismo</dt><dd>2 reclamo(s) por pago no oportuno en 769 compras (12 meses) — <strong>0%</strong></dd>
           <dt>Región</dt><dd>Región del Ñuble</dd>
+          <dt>Servicio Array</dt><dd>Gestión Documental y Firma Electrónica</dd>
         </dl>
         <div class="decision">
-          <div class="chips"><span>precio 40%</span><span>garantía 5%</span><span>8 anexos</span><span>preguntas cerradas</span><span>sin adjuntos leídos</span></div>
+          <div class="chips"><span>precio 40%</span><span>garantía 5%</span><span>8 anexos</span><span>preguntas cerradas</span><span>bases en PDF sin leer</span></div>
           <details>
             <summary>6 punto(s) a revisar antes de cotizar</summary>
             <ul>
@@ -229,172 +204,477 @@
             <li title="La ventana de consultas cerró el 2026-08-10T15:00:00: las dudas de las bases no se podrán aclarar. (sección 3 (Etapas y plazos))">Ya no se pueden hacer preguntas</li>
             <li title="Garantía fiel de Cumplimiento de Contrato por 5%, vigente hasta 2027-03-11T00:00:00. Hay que poder emitirla (costo financiero y plazo). (sección 8 (Garantías requeridas))">Exige garantía</li>
             <li title="Todo el servicio debe prestarlo el propio oferente. (sección 7 (Montos y duración del contrato))">Prohíbe subcontratación</li>
-            <li title="Esta ficha se armó solo con la ficha pública. Las bases administrativas y las EE.TT. en PDF pueden traer exigencias que no aparecen ahí. Bajarlos a licitaciones/data/&lt;codigo&gt;/adjuntos/ (un clic en el visor del portal, o `npm run adjuntos-licitacion -- &lt;codigo&gt; --con-login` desde una máquina con IP residencial) y correr `npm run leer-adjuntos` para incorporarlos. (estado local)">Falta el detalle fino: no hay adjuntos leídos</li>
+            <li title="Esta evaluación se armó con la ficha pública de la licitación. Las bases administrativas y las especificaciones técnicas en PDF, que se abren desde el portal, pueden agregar exigencias que no aparecen en la ficha. (alcance de esta ficha)">Las bases en PDF no están leídas</li>
             <li title="Documentos Administrativos: 5 · Documentos Técnicos: 2 · Documentos Económicos: 1 (sección 4 (Antecedentes para incluir en la oferta))">8 documento(s) exigidos en la oferta</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Criterios de evaluación</summary>
+            <ul>
+            <li title="X= Precio mínimo ofertado * 100 /Precio Oferta X">Precio — <strong>40%</strong></li>
+            <li title="(Según Bases Administrativas y EE.TT)">ESPECIFICACIONES TÉCNICAS — <strong>20%</strong></li>
+            <li title="(Según Bases Administrativas y EE.TT)">PORTABILIDAD Y MIGRACIÓN DE DATOS — <strong>10%</strong></li>
+            <li title="(Según Bases Administrativas y EE.TT)">EXPERIENCIA DE LA EMPRESA — <strong>20%</strong></li>
+            <li title="(Según Bases Administrativas y EE.TT)">CUMPLIMIENTO PROGRAMA DE INTEGRIDAD — <strong>5%</strong></li>
+            <li title="(Según Bases Administrativas y EE.TT)">CORRECTO CUMPLIMIENTO CONTRACTUAL — <strong>5%</strong></li>
             </ul>
           </details>
         </div>
         <details class="docs">
           <summary>Documentos publicados por el organismo</summary>
           <ul>
-            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=JW7YyZoEpcYD8Kr6wkwCGYgomQ7M8cBGCs2TAtnWDi12hYG19%2b0snrkqd5e83ZpqiQHoMt4dONn31ca%2fE1YCnuaGwDd9YP6OsHd1dVcbSnH6TbnCcs0uVQuB42IQjCxX1JzwPkr3WAUxDMKHJtKqHC0UVdTuGIvKYA3AfUeDFk57hzOrXnaKLOazuxDlj0wTDSXTJIEzCBvUSw4ZrcFVucAqPy2GS90cN2qC4Vf2gvSRPunMQ0%2fFVFCLZavs%2bT4o1DKj6lJz3HVk%2fc2GN3xOcoufiproJL3vYeZFr8teaSNaKJOgRahpWPrO4Eha0Uom" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=Jnl7EcZAzfZ%2f2NYM7%2bxOfFfQKlunYotwnDW5WJWoowulTmtGY9zzxePXvDToZTAeN3RPh%2few4YIxEQQn9cLly3LaWKBZ3jxrT4kbvqDzAZcQcjhM69CZCG1dKoeHO8S3hGpmNnIMQZf9gb55ruHRUyBSQtBfKurpsgQrX0ky4aUSN%2bo%2bUr7zDtP96DOmqyFCbkJFCARpw%2fFB1CarJZbIsI%2bxj81tu9JdyhqbpWr7hU%2fIXH0vLAaYhDtbLK2fqyIV6a7vZ1dmW3L73TC3GCalUaegDu8lK1uV1TtVwZ3M84dHuZBsTsOEe6Ll96T%2bwJ88" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=uGfnGMmKV6ls5F2Xx5UnW2sTm5rxNqi4IQyEH86Dvvi5Ey9jvDhdTT2hNQc3xcbG">Foro de preguntas y respuestas</a></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=uGfnGMmKV6ls5F2Xx5UnW2sTm5rxNqi4IQyEH86Dvvi5Ey9jvDhdTT2hNQc3xcbG">Excel oficial de preguntas y respuestas</a></li>
           </ul>
         </details>
         <div class="cta">
-          <span class="badge warn">Detectada — cotización pendiente</span>
-          <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=4174-29-LE26">Ver en el portal</a>
+          <span class="badge warn">Quedan 2 días para ofertar</span>
+          <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=4174-29-LE26">Ver en el portal y ofertar</a>
+        </div>
+      </div>
+
+      <div class="opp-card" id="722-5-LE26">
+        <span class="codigo">722-5-LE26</span>
+        <span class="org">GOBIERNO REGIONAL DE LA ARAUCANIA</span>
+        <span class="nombre">CONTRATACIÓN DE SERVICIO DE DIGITALIZACIÓN DOCUMEN</span>
+        <span class="unidad">Gobierno Regional de La Araucanía</span>
+        <p class="descripcion">Digitalización documental a realizarse en las oficinas del Gobierno Regional de La Araucanía, ubicadas en calle Manuel Bulnes N°570 Temuco, procesamiento de archivadores y carpetas, generación de archivos en PDF con OCR, entrega estructurada en nube y disco SSD, índice digital con metadatos, trazabilidad, control de calidad y resguardo permanente de la cadena de custodia documental.</p>
+        <dl>
+          <dt>Tope</dt><dd>Entre 100 y 1000 UTM <span class="sin-dato">(tramo; el organismo no publicó el monto)</span></dd>
+          <dt>Cierre</dt><dd>2026-08-21 15:00 — cierra en 2 días</dd>
+          <dt>Tipo</dt><dd>LE — pública 100–1.000 UTM</dd>
+          <dt>Preguntas hasta</dt><dd>2026-08-17 12:00 <span class="sin-dato">(cerradas)</span></dd>
+          <dt>Adjudicación</dt><dd>2026-08-28</dd>
+          <dt>Pago del organismo</dt><dd>8 reclamo(s) por pago no oportuno en 116 compras (12 meses) — <strong>7%</strong></dd>
+          <dt>Región</dt><dd>Región de la Araucanía</dd>
+          <dt>Servicio Array</dt><dd>Gestión Documental y Firma Electrónica</dd>
+        </dl>
+        <div class="decision">
+          <div class="chips"><span>sin garantía</span><span>3 anexos</span><span>preguntas cerradas</span><span>bases en PDF sin leer</span></div>
+          <details>
+            <summary>4 punto(s) a revisar antes de cotizar</summary>
+            <ul>
+            <li title="Quedan ~2 día(s) para presentar la oferta (cierre 2026-08-21T15:00:00). (sección 3 (Etapas y plazos))">Cierra en menos de 48 horas</li>
+            <li title="La ventana de consultas cerró el 2026-08-17T12:00:00: las dudas de las bases no se podrán aclarar. (sección 3 (Etapas y plazos))">Ya no se pueden hacer preguntas</li>
+            <li title="Todo el servicio debe prestarlo el propio oferente. (sección 7 (Montos y duración del contrato))">Prohíbe subcontratación</li>
+            <li title="Esta evaluación se armó con la ficha pública de la licitación. Las bases administrativas y las especificaciones técnicas en PDF, que se abren desde el portal, pueden agregar exigencias que no aparecen en la ficha. (alcance de esta ficha)">Las bases en PDF no están leídas</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Criterios de evaluación</summary>
+            <ul>
+            <li title="Según Artículo 13 de la Res. Ex. 917 del 11.08.2026">b) Propuesta Económica — <strong>30%</strong></li>
+            <li title="Según Artículo 13 de la Res. Ex. 917 del 11.08.2026">c) Plazo de entrega en días corridos — <strong>25%</strong></li>
+            <li title="Según Artículo 13 de la Res. Ex. 917 del 11.08.2026">d) Requisitos formales — <strong>5%</strong></li>
+            <li title="Según Artículo 13 de la Res. Ex. 917 del 11.08.2026">E) Propuesta técnica — <strong>35%</strong></li>
+            <li title="Según Artículo 13 de la Res. Ex. 917 del 11.08.2026">a) Experiencia del Oferente — <strong>5%</strong></li>
+            </ul>
+          </details>
+        </div>
+        <details class="docs">
+          <summary>Documentos publicados por el organismo</summary>
+          <ul>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=6BdVKhMI8IU%2b7GlKKXL7LXKeVLbKcUOsZudTF8f7zmLBSrUSmzEsQe%2bfXqQlBnDoGcwPR%2bd96uAKv5Vq7i3jDpWeA74qb8myPdOpSNEckU2FwpL22i9Bj6M9NTSQi8DAknBlolX%2b5qo4Lr%2fNFDB5yl3%2fg0PBWkNe138d6vX2Mpvjyiwf%2bblK%2fe1CBZu86VJAAAoY0k8AuWDAfAN0Patw0Vp7IoHq0iMIIA5Ik11HuH2VtxOFMctw4h6A6OWIg6v9%2faCijONBI1RnK3FX8DqBBeJNmOmH7vY3G0pxZaDpnNGgkvu5nKDZMl7Zyt2JWhwy" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=POn3WQG/DoRKA2APf7n2GZTavwHiFPkPr+VXxZNfm6c/colNVxQ/FMnWzbAw1K5s">Foro de preguntas y respuestas</a></li>
+            <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=POn3WQG/DoRKA2APf7n2GZTavwHiFPkPr+VXxZNfm6c/colNVxQ/FMnWzbAw1K5s">Excel oficial de preguntas y respuestas</a></li>
+          </ul>
+        </details>
+        <div class="cta">
+          <span class="badge warn">Quedan 2 días para ofertar</span>
+          <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=722-5-LE26">Ver en el portal y ofertar</a>
         </div>
       </div>
 
       <div class="opp-card" id="5038-3-LE26">
         <span class="codigo">5038-3-LE26</span>
         <span class="org">I MUNICIPALIDAD RIO IBANEZ</span>
-        <span class="nombre">CONTRATACIÓN DE SERVICIO DE SISTEMA DE GESTIÓN DOCUMENTAL ATENCIÓN CIUDADANA FIRMA ELECTRÓNICA </span>
+        <span class="nombre">CONTRATACIÓN DE SERVICIO DE SISTEMA DE GESTIÓN DOCUMENTAL ATENCIÓN CIUDADANA FIRMA ELECTRÓNICA</span>
         <span class="unidad">Administración Municipal</span>
+        <p class="descripcion">Esta adquisición tiene como propósito dar cumplimiento a la Ley N° 21.180 sobre Transformación Digital del Estado, optimizando los tiempos de respuesta, eliminando el uso del papel, garantizando la trazabilidad de los expedientes y mejorando significativamente la interacción del municipio con sus habitantes y el ecosistema regulatorio nacional.</p>
         <dl>
           <dt>Tope</dt><dd>$20.000.000 CLP</dd>
           <dt>Cierre</dt><dd>2026-08-26 11:00 — cierra en 7 días</dd>
           <dt>Tipo</dt><dd>LE — pública 100–1.000 UTM</dd>
           <dt>Plazo de contrato</dt><dd>12 meses</dd>
+          <dt>Garantía exigida</dt><dd>Garantía fiel de Cumplimiento de Contrato por 5% <span class="sin-dato">(vence 2027-11-30)</span></dd>
+          <dt>Preguntas hasta</dt><dd>2026-08-19 17:30 <span class="sin-dato">(cerradas)</span></dd>
           <dt>Adjudicación</dt><dd>2026-09-07</dd>
-          <dt>Reclamos al organismo</dt><dd>46</dd>
+          <dt>Pago del organismo</dt><dd>0 reclamo(s) por pago no oportuno en 484 compras (12 meses) — <strong>0%</strong></dd>
           <dt>Región</dt><dd>Región Aysén del General Carlos Ibáñez del Campo</dd>
+          <dt>Servicio Array</dt><dd>Gestión Documental y Firma Electrónica</dd>
         </dl>
         <div class="decision">
-          <div class="chips"><span>precio 30%</span><span>garantía 5%</span><span>3 anexos</span><span>preguntas abiertas</span><span>sin adjuntos leídos</span></div>
+          <div class="chips"><span>precio 30%</span><span>garantía 5%</span><span>3 anexos</span><span>preguntas cerradas</span><span>bases en PDF sin leer</span></div>
           <details>
-            <summary>3 punto(s) a revisar antes de cotizar</summary>
+            <summary>4 punto(s) a revisar antes de cotizar</summary>
             <ul>
+            <li title="La ventana de consultas cerró el 2026-08-19T17:30:00: las dudas de las bases no se podrán aclarar. (sección 3 (Etapas y plazos))">Ya no se pueden hacer preguntas</li>
             <li title="Garantía fiel de Cumplimiento de Contrato por 5%, vigente hasta 2027-11-30T00:00:00. Hay que poder emitirla (costo financiero y plazo). (sección 8 (Garantías requeridas))">Exige garantía</li>
             <li title="70% de la evaluación depende de criterios técnicos y administrativos, no del precio. (sección 6 (Criterios de evaluación))">El precio pesa 30%</li>
-            <li title="Esta ficha se armó solo con la ficha pública. Las bases administrativas y las EE.TT. en PDF pueden traer exigencias que no aparecen ahí. Bajarlos a licitaciones/data/&lt;codigo&gt;/adjuntos/ (un clic en el visor del portal, o `npm run adjuntos-licitacion -- &lt;codigo&gt; --con-login` desde una máquina con IP residencial) y correr `npm run leer-adjuntos` para incorporarlos. (estado local)">Falta el detalle fino: no hay adjuntos leídos</li>
+            <li title="Esta evaluación se armó con la ficha pública de la licitación. Las bases administrativas y las especificaciones técnicas en PDF, que se abren desde el portal, pueden agregar exigencias que no aparecen en la ficha. (alcance de esta ficha)">Las bases en PDF no están leídas</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Criterios de evaluación</summary>
+            <ul>
+            <li title="Según punto Nº 11.1 de las Bases Administrativas">Oferta Económica — <strong>30%</strong></li>
+            <li title="Según punto Nº 11.2 de las Bases Administrativas">Cumplimiento requisitos técnicos — <strong>40%</strong></li>
+            <li title="Según punto Nº 11.3 de las Bases Administrativas">Experiencia en servicios similares — <strong>15%</strong></li>
+            <li title="Según punto Nº 11.4 de las Bases Administrativas">Cumplimiento Requisitos Formales — <strong>10%</strong></li>
+            <li title="Según punto Nº 11.5 de las Bases Administrativas">Programa de integridad y ética empresarial — <strong>5%</strong></li>
             </ul>
           </details>
         </div>
         <details class="docs">
           <summary>Documentos publicados por el organismo</summary>
           <ul>
-            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=jgH6r85ebGXtnY41rozvkMbRVjrJh4TOZaQaOhSBC4sE0ACkiU%2fzvM%2bmmt6F7zkyinX2V%2fRpmjrinfCvacgpGuMw%2bA%2fZcrnJ%2fLgyzv5aRe%2fXP5LNirhAhwji4RqzA%2fvCM4tosEOpZmuJEuA8a8mx50aOclVGO%2fV6FxsF23wsEgepoVaVlzDnbTeGZQiL9izXoKQhtuL9dNUmucWahE9p4%2bTQFuuG%2bO0B2v5EEhQ%2bW0v%2fsENIDuO%2bGuYW9t7HjujyZtHcM4M%2fg4MeBhYuywpLZPDULSGFB1gqhFP8bmJprcrdU%2bq9JBDcc1OUbDx7ekHV" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=vD5E4XEVz9C2wJ7ijExkBENbXv0TJw%2fJgkIfJC2o1iFi8h5p%2fvm9MoYaa67ELC7sb94zgNds%2bHSqDRR7nAUpcXgmEl6yuuCJdXEAXWuBLczFgj0IPKdVasw0uKJY0vhiZtVefy1lfUSDTCwFbIMyGSjHjx49H8egolamS8IjWqVRjZID7IiRpZyjZJsc%2fou4OaRy5sXSgkx1ieXy8%2bBOdkch1u757DwbBCcX11%2b5v40QTM12PTlKPJfGekQJYc6lrUGtBXZru23vcBUtWtRbvIR4O6kQrcf5rSd6WcUOb4qMM1Kpb5Fd2lZveYw2RnF2" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=zzCqw+eHfR6SOua4qKgZd/QFbEo/pc9m9yGHwQ0Rtk1qMZ0HUgvH1vCKwvM6XtOF">Foro de preguntas y respuestas</a></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=zzCqw+eHfR6SOua4qKgZd/QFbEo/pc9m9yGHwQ0Rtk1qMZ0HUgvH1vCKwvM6XtOF">Excel oficial de preguntas y respuestas</a></li>
           </ul>
         </details>
         <div class="cta">
-          <span class="badge warn">Detectada — cotización pendiente</span>
-          <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=5038-3-LE26">Ver en el portal</a>
+          <span class="badge ok">Quedan 7 días para ofertar</span>
+          <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=5038-3-LE26">Ver en el portal y ofertar</a>
+        </div>
+      </div>
+
+      <div class="opp-card" id="1191449-18-LE26">
+        <span class="codigo">1191449-18-LE26</span>
+        <span class="org">ARCHIVO NACIONAL</span>
+        <span class="nombre">SERVICIO DE DIGITALIZACIÓN DE DOCUMENTOS DEL GRUPO</span>
+        <span class="unidad">SUBDIRECCIÓN ARCHIVO NACIONAL DOS</span>
+        <p class="descripcion">SERVICIO DE DIGITALIZACIÓN DE DOCUMENTOS DEL GRUPO DE FONDOS DEL ARCHIVO DE MUJERES Y GÉNEROS DEL ARCHIVO NACIONAL</p>
+        <dl>
+          <dt>Tope</dt><dd>$10.743.000 CLP</dd>
+          <dt>Cierre</dt><dd>2026-08-28 20:00 — cierra en 9 días</dd>
+          <dt>Tipo</dt><dd>LE — pública 100–1.000 UTM</dd>
+          <dt>Plazo de contrato</dt><dd>4 meses</dd>
+          <dt>Preguntas hasta</dt><dd>2026-08-21 16:00</dd>
+          <dt>Adjudicación</dt><dd>2026-09-07</dd>
+          <dt>Pago del organismo</dt><dd>45 reclamo(s) por pago no oportuno en 1.121 compras (12 meses) — <strong>4%</strong></dd>
+          <dt>Región</dt><dd>Región Metropolitana de Santiago</dd>
+          <dt>Servicio Array</dt><dd>Gestión Documental y Firma Electrónica</dd>
+        </dl>
+        <div class="decision">
+          <div class="chips"><span>precio 40%</span><span>sin garantía</span><span>3 anexos</span><span>preguntas abiertas</span><span>bases en PDF sin leer</span></div>
+          <details>
+            <summary>1 punto(s) a revisar antes de cotizar</summary>
+            <ul>
+            <li title="Esta evaluación se armó con la ficha pública de la licitación. Las bases administrativas y las especificaciones técnicas en PDF, que se abren desde el portal, pueden agregar exigencias que no aparecen en la ficha. (alcance de esta ficha)">Las bases en PDF no están leídas</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Criterios de evaluación</summary>
+            <ul>
+            <li title="Ver punto 6.4 de las bases de licitación">Precio — <strong>40%</strong></li>
+            <li title="Ver punto 6.5.1 de las bases de licitación">Experiencia técnica especializada del equipo human — <strong>26%</strong></li>
+            <li title="Ver punto 6.5.2 numero 2) de las bases de licitación">Propuesta flujo de trabajo para la edición para we — <strong>8%</strong></li>
+            <li title="Ver punto 6.5.2 numero 2) de las bases de licitación">Enfoque de género — <strong>4%</strong></li>
+            <li title="Ver punto 6.6 de las bases de licitación">Pacto de Integridad — <strong>2%</strong></li>
+            <li title="Ver punto 6.7 de las bases de licitación">Evaluación del cumplimiento de requisitos formales — <strong>4%</strong></li>
+            <li title="Ver punto 6.5.2 numero 1) de las bases de licitación">Propuesta flujo de trabajo para la digitalización — <strong>10%</strong></li>
+            <li title="Ver punto 6.5.2 numero 3) de las bases de licitación">Propuesta de Carta Gantt — <strong>6%</strong></li>
+            </ul>
+          </details>
+        </div>
+        <details class="docs">
+          <summary>Documentos publicados por el organismo</summary>
+          <ul>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=FaqL5Ja4TeChFflutp8%2bweY5QJErQS5luYte%2fQ9vf0SCRW16211lKRjF4GL8sAc%2f35mJgQNkH%2fD9YLCo4A38MvYq21PnwWF%2bRawvCz%2bMle5%2fZL8WC3wwCavf396GaH3zwCy1SsHnOMUyudCGEr%2b640jLZbqxpi3ASyoVBckazLABIXSU0cVPia%2ftKI%2b12RfbZdp5NtR4VXn%2fUMpvYj69NjIWXetxtParxaYxERxO34wkP84wj0gJGx49kwJdDdSjGqY6TEoKWaldxuQDZ2xlqaClzwqmrhoCVb%2b3JB8pjxigKs6eRATNw83amUz8uKym" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=lKvtFRpL4uKTdjKPd1yxSKU2+FAWc2Ju5ByDjBQsxFzpZzt8jPmROwYPPMDTY16x">Foro de preguntas y respuestas</a></li>
+            <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=lKvtFRpL4uKTdjKPd1yxSKU2+FAWc2Ju5ByDjBQsxFzpZzt8jPmROwYPPMDTY16x">Excel oficial de preguntas y respuestas</a></li>
+          </ul>
+        </details>
+        <div class="cta">
+          <span class="badge ok">Quedan 9 días para ofertar</span>
+          <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=1191449-18-LE26">Ver en el portal y ofertar</a>
+        </div>
+      </div>
+
+      <div class="opp-card" id="2713-159-LE26">
+        <span class="codigo">2713-159-LE26</span>
+        <span class="org">I MUNICIPALIDAD DE AYSEN</span>
+        <span class="nombre">DAF-informatica sevicio plataforma documental</span>
+        <span class="unidad">I.MUNICIPALIDAD AYSEN-ADQUISICIONES</span>
+        <p class="descripcion">Que, el Director de Administración y Finanzas a través de la unidad de informática y mediante solicitud N°961, de fecha 10 de agosto de 2026, solicita licitar un servicio integral en modalidad SaaS para la continuidad, ampliación, migración y soporte técnico de la Plataforma Documental y de Correspondencia de la Ilustre Municipalidad de Aysén.</p>
+        <dl>
+          <dt>Tope</dt><dd>Entre 100 y 1000 UTM <span class="sin-dato">(tramo; el organismo no publicó el monto)</span></dd>
+          <dt>Cierre</dt><dd>2026-09-01 14:30 — cierra en 13 días</dd>
+          <dt>Tipo</dt><dd>LE — pública 100–1.000 UTM</dd>
+          <dt>Plazo de contrato</dt><dd>48 meses</dd>
+          <dt>Garantía exigida</dt><dd>Garantía fiel de Cumplimiento de Contrato por 5% <span class="sin-dato">(vence 2031-01-23)</span></dd>
+          <dt>Preguntas hasta</dt><dd>2026-08-22 16:02</dd>
+          <dt>Adjudicación</dt><dd>2026-10-07</dd>
+          <dt>Pago del organismo</dt><dd>79 reclamo(s) por pago no oportuno en 171 compras (12 meses) — <strong>46%</strong></dd>
+          <dt>Región</dt><dd>Región Aysén del General Carlos Ibáñez del Campo</dd>
+          <dt>Servicio Array</dt><dd>Gestión Documental y Firma Electrónica</dd>
+        </dl>
+        <div class="decision">
+          <div class="chips"><span>precio 50%</span><span>garantía 5%</span><span>4 anexos</span><span>preguntas abiertas</span><span>bases en PDF sin leer</span></div>
+          <details>
+            <summary>2 punto(s) a revisar antes de cotizar</summary>
+            <ul>
+            <li title="Garantía fiel de Cumplimiento de Contrato por 5%, vigente hasta 2031-01-23T00:00:00. Hay que poder emitirla (costo financiero y plazo). (sección 8 (Garantías requeridas))">Exige garantía</li>
+            <li title="Esta evaluación se armó con la ficha pública de la licitación. Las bases administrativas y las especificaciones técnicas en PDF, que se abren desde el portal, pueden agregar exigencias que no aparecen en la ficha. (alcance de esta ficha)">Las bases en PDF no están leídas</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Criterios de evaluación</summary>
+            <ul>
+            <li title="VER BASES ADMINISTRATIVAS">OFERTA ECONOMICA — <strong>50%</strong></li>
+            <li title="VER BASES ADMINISTRATIVAS">OFERTA TECNICA — <strong>40%</strong></li>
+            <li title="VER BASES ADMINISTRATIVOS">OFERTA ADMINISTRATIVA — <strong>10%</strong></li>
+            </ul>
+          </details>
+        </div>
+        <details class="docs">
+          <summary>Documentos publicados por el organismo</summary>
+          <ul>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=JzSkKOOAJM60Mi6beu4v3cVwJCp44V1uv9XXEdm%2f3dePQLqN4r7X7kz0DbA0hEcdusZ5ctOWPxa3gTaSvTysHjQSc6GfZ%2bzUUOH4Po2kHPkB2siB6MCBVwv%2foJJtGUIEHvDFVcnOhc926Q5yatP5qC2O%2b76mRFQu4QgqY%2fw3M8r5SjFWDs4mwoGIFTDjJVP4AeFuC%2f7QdFn997s99RmaMB0F6Tx7KvHt%2bes206yjsQTnKuHqXP9xnsIYjw%2fTfQQ7%2bf9C8bYL4bMAAmSCpv%2bmNX6czHfDveOsI%2fvSLFmDP9g4XHDkeDsvPadedKOUEZum" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=2bKsV+suvLjMViY9gIJzCvdA50wJHyvsdLIrd2XEk5d/pSGzOq/PWit5KQmg2QiS">Foro de preguntas y respuestas</a></li>
+            <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=2bKsV+suvLjMViY9gIJzCvdA50wJHyvsdLIrd2XEk5d/pSGzOq/PWit5KQmg2QiS">Excel oficial de preguntas y respuestas</a></li>
+          </ul>
+        </details>
+        <div class="cta">
+          <span class="badge ok">Quedan 13 días para ofertar</span>
+          <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=2713-159-LE26">Ver en el portal y ofertar</a>
         </div>
       </div>
     </div>
   </section>
   <!-- OPORTUNIDADES:FIN -->
 
-  <section>
-    <h2>Por qué esta página está separada de la de Compra Ágil</h2>
+<!-- KEYWORDS:INICIO (generado por `npm run radar-licitaciones` — no editar a mano) -->
+  <section id="palabras-clave">
+    <h2>Qué palabras busca el radar</h2>
     <p class="section-sub">
-      El agente de Compra Ágil (<a href="index.html">resumen</a>) está verificado end-to-end
-      contra la API real de producción. Este segundo nicho usa una API distinta
-      (<code>api.mercadopublico.cl</code>, la API clásica de Licitaciones), con su propio ticket y
-      su propia cuota. Desde el <strong>19 de agosto de 2026</strong> el radar sí corrió contra esa
-      API con un ticket válido: las oportunidades de arriba son datos reales, no una maqueta. Lo que
-      sigue sin resolverse es el otro extremo — poder cotizar y entregar —, y esta página lo declara
-      con la misma honestidad que la de Compra Ágil declara sus propios pendientes.
+      Con estas palabras se le pregunta al buscador de mercadopublico.cl qué hay abierto; lo que
+      vuelve se confirma sobre el nombre y la descripción completos de cada licitación. Si ves un
+      término que debería estar y no está, agrégalo acá abajo.
     </p>
-  </section>
+    <div class="kw-grid">
+      <div class="kw-card">
+        <div class="kw-cat">Oficina de Partes Electrónica <span class="kw-id">ope</span></div>
+        <div class="kw-chips"><span class="kw">oficina de partes</span><span class="kw">correspondencia electronica</span></div>
+        <details class="kw-patron">
+          <summary>Cómo confirma que la licitación es de este tipo</summary>
+          <p>Se busca por las palabras de arriba y después se confirma sobre el texto completo con:</p>
+          <code>oficina\s+de\s+partes|correspondencia\s+(digital|electr[oó]nica)|ventanilla\s+[uú]nica\s+(digital|electr[oó]nica|de\s+tr[aá]mites)</code>
+        </details>
+      </div>
+      <div class="kw-card">
+        <div class="kw-cat">Seguimiento de Trámites <span class="kw-id">set</span></div>
+        <div class="kw-chips"><span class="kw">seguimiento de tramites</span><span class="kw">tramitacion en linea</span></div>
+        <details class="kw-patron">
+          <summary>Cómo confirma que la licitación es de este tipo</summary>
+          <p>Se busca por las palabras de arriba y después se confirma sobre el texto completo con:</p>
+          <code>seguimiento\s+de\s+tr[aá]mites|tramitaci[oó]n\s+(documental|electr[oó]nica|en\s+l[ií]nea)|expediente\s+electr[oó]nico</code>
+        </details>
+      </div>
+      <div class="kw-card">
+        <div class="kw-cat">Gestión Documental y Firma Electrónica <span class="kw-id">ged</span></div>
+        <div class="kw-chips"><span class="kw">gestion documental</span><span class="kw">digitalizacion de documentos</span><span class="kw">firma electronica avanzada</span><span class="kw">expediente electronico</span></div>
+        <details class="kw-patron">
+          <summary>Cómo confirma que la licitación es de este tipo</summary>
+          <p>Se busca por las palabras de arriba y después se confirma sobre el texto completo con:</p>
+          <code>gesti[oó]n\s+(electr[oó]nica\s+)?documental|gestor\s+documental|plataforma\s+documental|gesti[oó]n\s+(de\s+)?documentos?|firma\s+electr[oó]nica|digitalizaci[oó]n\s+(de\s+)?(proceso|documen|archivo|expediente)|archivo\s+digital|documento\s+electr[oó]nico</code>
+          <p>Y se descarta si además aparece:</p>
+          <code>certificad[oa]s?\s+de\s+firma|e-?token|token\s+de\s+firma|imagenolog[ií]a|radiolog[ií]a|mamograf|ecograf|rayos\s+x|residuos\s+(peligrosos|especiales|biol[oó]gico)|disposici[oó]n\s+final\s+de\s+residuos|procesador(es)?\s+intel|\bxeon\b</code>
+        </details>
+      </div>
+      <div class="kw-card">
+        <div class="kw-cat">Automatización de Procesos (RPA / DBA) <span class="kw-id">rpa</span></div>
+        <div class="kw-chips"><span class="kw">automatizacion de procesos</span><span class="kw">robotic process automation</span></div>
+        <details class="kw-patron">
+          <summary>Cómo confirma que la licitación es de este tipo</summary>
+          <p>Se busca por las palabras de arriba y después se confirma sobre el texto completo con:</p>
+          <code>\brpa\b|automatizaci[oó]n\s+(rob[oó]tica\s+)?de\s+procesos|robotic\s+process\s+automation|business\s+process\s+automation|flujos?\s+de\s+trabajo\s+(digital|automatizad)</code>
+          <p>Y se descarta si además aparece:</p>
+          <code>\bdron(es)?\b|\bdrone\b|aeronave|veh[ií]culo\s+a[eé]reo|piloto\s+remoto|\buav\b|automatizaci[oó]n\s+(industrial|el[eé]ctrica)|\bplc\b|\bscada\b</code>
+        </details>
+      </div>
+      <div class="kw-card">
+        <div class="kw-cat">Business Intelligence / Analítica <span class="kw-id">bi</span></div>
+        <div class="kw-chips"><span class="kw">business intelligence</span><span class="kw">analitica de datos</span></div>
+        <details class="kw-patron">
+          <summary>Cómo confirma que la licitación es de este tipo</summary>
+          <p>Se busca por las palabras de arriba y después se confirma sobre el texto completo con:</p>
+          <code>business\s+intelligence|inteligencia\s+de\s+negocios|anal[ií]tica\s+de\s+datos|cuadro\s+de\s+mando\s+integral|tableros?\s+de\s+control\s+(de\s+)?(datos|gesti[oó]n)</code>
+          <p>Y se descarta si además aparece:</p>
+          <code>\bcursos?\b|capacitaci[oó]n|diplomado|\btalleres?\b|seminario|\bm[aá]g[ií]ster\b|relator</code>
+        </details>
+      </div>
+      <div class="kw-card">
+        <div class="kw-cat">Gestión de Proyectos y Contratos (PMO) <span class="kw-id">pmo</span></div>
+        <div class="kw-chips"><span class="kw">plataforma gestion de proyectos</span><span class="kw">software gestion de contratos</span></div>
+        <details class="kw-patron">
+          <summary>Cómo confirma que la licitación es de este tipo</summary>
+          <p>Se busca por las palabras de arriba y después se confirma sobre el texto completo con:</p>
+          <code>proactiveoffice|(sistema|plataforma|software|soluci[oó]n\s+inform[aá]tica)\s+(web\s+)?(de\s+|para\s+(la\s+)?)?gesti[oó]n\s+de\s+(proyectos|contratos|iniciativas)</code>
+          <p>Y se descarta si además aparece:</p>
+          <code>\bcursos?\b|capacitaci[oó]n|diplomado|\btalleres?\b|seminario|\bm[aá]g[ií]ster\b|relator</code>
+        </details>
+      </div>
+    </div>
 
-  <section>
-    <h2>Estado de cada componente</h2>
-    <p class="section-sub">El radar ya está verificado contra producción y es lo único que consume cuota; el cotizador sigue bloqueado por falta de un catálogo de costos reales.</p>
-    <div class="status-grid">
-      <div class="status-row">
-        <span class="badge ok">Verificado contra producción</span>
-        <div><div class="name">Radar (<code>radar_licitaciones</code>)</div><div class="desc">Filtra localmente licitaciones activas por gestión documental / digitalización de procesos / oficina de partes — esta API no tiene búsqueda por texto como Compra Ágil, así que el filtrado local es el mecanismo primario, no un descarte de ruido. Corrida del 19-08-2026: 4.381 licitaciones activas en una sola llamada, 3 con mención de estas palabras clave. La cuota del ticket es muy escasa (se agotó en la segunda corrida del día), por lo que el radar reusa las fichas ya guardadas y nunca publica una grilla parcial.</div></div>
-        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/radar-licitaciones-9ksb5a/.claude/skills/radar_licitaciones/scripts/radar.ts">Ver código</a>
+    <div class="kw-form">
+      <h3>Agregar una palabra clave</h3>
+      <p>
+        Esta página es estática: no puede guardar por sí sola en el repositorio. Lo que agregues
+        queda en <strong>este navegador</strong> y marcado como pendiente hasta que lo guardes en
+        <code>licitaciones/config/keywords-extra.json</code>, que es de donde el radar las lee en su
+        próxima corrida.
+      </p>
+      <div class="kw-form-row">
+        <select id="kw-categoria" aria-label="Categoría"><option value="ope">Oficina de Partes Electrónica</option><option value="set">Seguimiento de Trámites</option><option value="ged">Gestión Documental y Firma Electrónica</option><option value="rpa">Automatización de Procesos (RPA / DBA)</option><option value="bi">Business Intelligence / Analítica</option><option value="pmo">Gestión de Proyectos y Contratos (PMO)</option></select>
+        <input id="kw-termino" type="text" placeholder="ej: ventanilla única digital" aria-label="Palabra o frase">
+        <button class="btn" id="kw-agregar" type="button">Agregar</button>
       </div>
-      <div class="status-row">
-        <span class="badge bad">Eliminado a propósito</span>
-        <div><div class="name">Informe histórico del nicho</div><div class="desc">Existía un barrido por estado (cerrada/desierta/adjudicada) equivalente al del nicho Claude. Se eliminó: sin búsqueda por texto, cada estado obliga a traerse el listado nacional completo, y la cuota de este ticket no da para eso sin sacrificar el radar. <strong>Consecuencia:</strong> de este nicho no hay cifras históricas — cuántas se declaran desiertas, quién se las adjudica, a qué precio. El radar dice qué está abierto, no si el mercado vale la pena.</div></div>
-      </div>
-      <div class="status-row">
-        <span class="badge warn">Escrito, bloqueado</span>
-        <div><div class="name">Cotizador (<code>cotizar_licitaciones</code>)</div><div class="desc">Cotiza por catálogo de costos propio de KeepSync (costo_clp × markup × IVA) — a diferencia de licencias Claude, acá no hay precio de lista público que copiar. Nunca cotiza sobre el tope. Bloqueado hasta que <code>licitaciones/config/company.json</code> tenga costos reales.</div></div>
-        <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/radar-licitaciones-9ksb5a/.claude/skills/cotizar_licitaciones/scripts/cotizar.ts">Ver código</a>
-      </div>
-      <div class="status-row">
-        <span class="badge bad">Fuera de alcance por ahora</span>
-        <div><div class="name">Login y formulario del portal de Licitaciones</div><div class="desc">No incluido en esta réplica (a diferencia de Compra Ágil, que sí tiene <code>login.ts</code>/<code>form-fill.ts</code> escritos aunque diferidos). El formulario real de una licitación involucra boletas de garantía y firma electrónica — un flujo más complejo, sin diseñar todavía.</div></div>
-      </div>
+      <p class="kw-aviso" id="kw-aviso" hidden></p>
+      <div id="kw-pendientes"></div>
     </div>
   </section>
 
-  <section>
-    <h2>Insumos bloqueantes</h2>
-    <p class="section-sub">El primero quedó resuelto; el que decide si esto se convierte en venta, no — detalle completo en <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/radar-licitaciones-9ksb5a/licitaciones/PLAN.md">licitaciones/PLAN.md</a>.</p>
-    <div class="note ok">
-      <strong>1. <code>LICITACIONES_API_TICKET</code> — resuelto.</strong> El ticket existe y el
-      radar corrió contra producción el 19-08-2026. Esa corrida corrigió varias suposiciones del
-      código: el ítem del listado no trae comprador ni monto (solo la ficha los trae), el plazo de
-      contrato vive en <code>TiempoDuracionContrato</code>, y esta API <strong>no expone los
-      adjuntos ni las garantías</strong> de la licitación. Eso se resolvió por otra vía: la ficha
-      pública del portal sí trae el texto completo de las bases (garantías, anexos exigidos,
-      criterios de evaluación) y el índice de documentos de cada licitación, que es lo que enlaza
-      cada tarjeta de arriba — tener la URL de un documento es tener acceso a él.
-      Queda pendiente cuidar la cuota: es de pocas llamadas al día, y por eso se decidió gastarla
-      entera en las licitaciones activas.
-    </div>
-    <div class="note bad" style="margin-top:0.8rem;">
-      <strong>2. Catálogo de costos reales de KeepSync para gestión documental.</strong> A
-      diferencia de licencias Claude (precio de lista público de Anthropic ya cargado), acá no
-      existe un precio externo que copiar: hay que definir qué plataforma se revende o implementa
-      y a qué costo real (por usuario, por hora, por documento digitalizado) antes de que el
-      cotizador pueda generar una oferta real.
-    </div>
-  </section>
-
-  <section>
-    <h2>Diferencias clave frente al agente de Compra Ágil</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th></th><th>Compra Ágil</th><th>Licitaciones</th></tr></thead>
-        <tbody>
-          <tr><td>API</td><td><code>api2.mercadopublico.cl</code></td><td><code>api.mercadopublico.cl</code> (API clásica)</td></tr>
-          <tr><td>Búsqueda</td><td><code>q</code> por variantes de marca, en el servidor</td><td>sin búsqueda por texto — filtrado local sobre el listado por estado</td></tr>
-          <tr><td>Producto</td><td>licencias Claude, precio de lista público (Anthropic)</td><td>gestión documental/digitalización, catálogo de costos propio de KeepSync</td></tr>
-          <tr><td>Garantías</td><td>no aplica</td><td>seriedad de la oferta / fiel cumplimiento de contrato, habituales en licitaciones — <strong>la API no las expone</strong>: hay que leer las bases en el portal</td></tr>
-          <tr><td>Adjuntos</td><td>descargables sin login por un servicio no documentado</td><td>no expuestos por la API; su URL se obtiene de la ficha pública y se publica como enlace (el visor exige reCAPTCHA, o sea un clic humano)</td></tr>
-          <tr><td>Cuota del ticket</td><td>holgada para el uso diario del radar</td><td>muy escasa: se agotó en la segunda corrida del mismo día</td></tr>
-          <tr><td>Formulario del portal</td><td>escrito, diferido a sesión local (Cowork)</td><td>fuera de alcance de esta réplica — no diseñado</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <section>
-    <h2>Qué falta para operar en serio</h2>
-    <ol>
-      <li><s><strong><code>LICITACIONES_API_TICKET</code></strong> — solicitarlo y correr el radar contra la API real</s> — hecho el 19-08-2026; los nombres de campo de <code>licitaciones/src/lib/api.ts</code> ya están corregidos según la respuesta real.</li>
-      <li><strong>Medir la cuota diaria del ticket</strong> — se agotó en la segunda corrida del día. Mientras no se sepa cuánto rinde: una corrida real contra la API por día, y <code>--desde-cache</code> para republicar sin gastarla.</li>
-      <li><strong>Definir el catálogo de costos reales</strong> de KeepSync para gestión documental y completar <code>licitaciones/config/company.json</code>.</li>
-      <li><strong>Confirmar la fórmula de pricing</strong> (markup/IVA) para este negocio — el default en <code>company.json.example</code> es una plantilla razonable, no una decisión ya tomada.</li>
-      <li>Correr <code>npm run cotizar-licitaciones -- &lt;codigo&gt;</code> contra una licitación real y revisar manualmente el PDF/PPTX generado.</li>
-      <li>(Fuera de esta réplica) Diseñar un tercer skill para login + formulario del portal de Licitaciones, si se decide automatizar también ese paso.</li>
-    </ol>
-  </section>
+  <script>
+  /* Términos ya guardados en el repo, embebidos por el radar: el JSON que se copia tiene que
+     incluirlos, porque reemplaza el contenido completo del archivo. */
+  window.KW_GUARDADOS = [];
+  window.KW_EDIT_URL = "https://github.com/keepsync-hub/ks-compra-agil/edit/claude/mercadopublico-agente-compras-pgyedf/licitaciones/config/keywords-extra.json";
+  </script>
+  <!-- KEYWORDS:FIN -->
 
 </main>
 
 <footer>
   <div class="wrap">
-    <p>La grilla de licitaciones activas la refresca <code>npm run radar-licitaciones</code>; el resto de la página está escrito a mano y no se actualiza solo. No hay cifras históricas de este nicho y no se van a generar mientras la cuota siga siendo la que es — la decisión y su costo están en <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/radar-licitaciones-9ksb5a/licitaciones/PLAN.md">licitaciones/PLAN.md</a>.</p>
-    <div class="links-row">
-      <a href="index.html">Agente de Compra Ágil (Claude)</a>
-      <a href="https://github.com/keepsync-hub/ks-compra-agil">Repositorio</a>
-      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/radar-licitaciones-9ksb5a/licitaciones/PLAN.md">licitaciones/PLAN.md</a>
-      <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/radar-licitaciones-9ksb5a/CLAUDE.md">CLAUDE.md</a>
-    </div>
+    <p>
+      Los datos de cada tarjeta salen de la ficha oficial y de las bases publicadas por el propio
+      organismo comprador; los puntos a revisar traen su motivo y la sección de donde se leyeron.
+      La oferta se presenta en la ficha de la licitación en
+      <a href="https://www.mercadopublico.cl">mercadopublico.cl</a>, siempre por una persona.
+    </p>
   </div>
 </footer>
+
+
+<script>
+/*
+ * Formulario de palabras clave. Todo lo que hace es local y explícito: guarda en este navegador,
+ * arma el JSON que corresponde pegar en `licitaciones/config/keywords-extra.json` y muestra el
+ * comando equivalente. No hay backend: esta página se sirve estática desde GitHub Pages, así que
+ * fingir que "guarda" sería mentirle a quien la usa.
+ */
+(function () {
+  var LLAVE = "ks-lic-kw-pendientes";
+  var guardados = window.KW_GUARDADOS || [];
+  var editUrl = window.KW_EDIT_URL || "";
+  var $cat = document.getElementById("kw-categoria");
+  var $termino = document.getElementById("kw-termino");
+  var $agregar = document.getElementById("kw-agregar");
+  var $aviso = document.getElementById("kw-aviso");
+  var $pendientes = document.getElementById("kw-pendientes");
+  if (!$cat || !$termino || !$agregar || !$pendientes) return;
+
+  function normalizar(t) {
+    return (t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+  }
+  function leer() {
+    try { return JSON.parse(localStorage.getItem(LLAVE) || "[]"); } catch (e) { return []; }
+  }
+  function escribir(lista) {
+    try { localStorage.setItem(LLAVE, JSON.stringify(lista)); } catch (e) { /* modo privado */ }
+  }
+  function avisar(mensaje) {
+    if (!$aviso) return;
+    $aviso.textContent = mensaje || "";
+    $aviso.hidden = !mensaje;
+  }
+  function esc(t) {
+    return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  /* Una pendiente que ya aparece entre las guardadas dejó de estar pendiente: el radar ya la usa. */
+  function depurar(lista) {
+    return lista.filter(function (p) {
+      return !guardados.some(function (g) { return normalizar(g.termino) === normalizar(p.termino); });
+    });
+  }
+
+  function jsonParaElRepo(pendientes) {
+    var todos = guardados.concat(pendientes).map(function (t) {
+      return { categoria: t.categoria, termino: t.termino, agregado: t.agregado || new Date().toISOString().slice(0, 10) };
+    });
+    return JSON.stringify({ terminos: todos }, null, 2);
+  }
+
+  function render() {
+    var lista = depurar(leer());
+    escribir(lista);
+    if (lista.length === 0) { $pendientes.innerHTML = ""; return; }
+
+    var chips = lista.map(function (p, i) {
+      return '<span class="kw pendiente">' + esc(p.termino) + ' <em>· ' + esc(p.categoria) + '</em></span>' +
+             ' <button class="kw-quitar" data-i="' + i + '" type="button">quitar</button>';
+    }).join(" ");
+    var comandos = lista.map(function (p) {
+      return 'npm run keywords-licitaciones -- agregar ' + p.categoria + ' "' + p.termino + '"';
+    }).join("\n");
+
+    $pendientes.innerHTML =
+      '<div class="kw-pendientes-box">' +
+        '<h4>' + lista.length + ' palabra(s) pendiente(s) — el radar todavía no las usa</h4>' +
+        '<div class="kw-chips">' + chips + '</div>' +
+        '<p style="margin-top:0.8rem">Para que la próxima corrida las use, reemplaza el contenido de ' +
+          '<code>licitaciones/config/keywords-extra.json</code> por esto:</p>' +
+        '<textarea class="kw-json" readonly>' + esc(jsonParaElRepo(lista)) + '</textarea>' +
+        '<div class="kw-acciones">' +
+          '<button class="btn" id="kw-copiar" type="button">Copiar JSON</button>' +
+          (editUrl ? '<a class="btn secondary" href="' + esc(editUrl) + '" target="_blank" rel="noopener">Abrir el archivo en GitHub</a>' : "") +
+        '</div>' +
+        '<p style="margin-top:0.9rem">O, sin pasar por el navegador:</p>' +
+        '<textarea class="kw-json" style="min-height:60px" readonly>' + esc(comandos) + '</textarea>' +
+      '</div>';
+
+    Array.prototype.forEach.call($pendientes.querySelectorAll(".kw-quitar"), function (boton) {
+      boton.addEventListener("click", function () {
+        var actual = depurar(leer());
+        actual.splice(Number(boton.getAttribute("data-i")), 1);
+        escribir(actual);
+        render();
+      });
+    });
+    var $copiar = document.getElementById("kw-copiar");
+    if ($copiar) {
+      $copiar.addEventListener("click", function () {
+        var texto = $pendientes.querySelector(".kw-json").value;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(texto).then(function () { $copiar.textContent = "Copiado"; });
+        } else {
+          $pendientes.querySelector(".kw-json").select();
+        }
+      });
+    }
+  }
+
+  $agregar.addEventListener("click", function () {
+    var termino = ($termino.value || "").trim();
+    if (termino.length < 3) { avisar("Escribe al menos 3 caracteres: una palabra más corta pesca cualquier cosa."); return; }
+    var lista = depurar(leer());
+    var repetida = lista.concat(guardados).some(function (t) { return normalizar(t.termino) === normalizar(termino); });
+    if (repetida) { avisar('"' + termino + '" ya está en la lista.'); return; }
+    lista.push({ categoria: $cat.value, termino: termino });
+    escribir(lista);
+    $termino.value = "";
+    avisar("");
+    render();
+  });
+  $termino.addEventListener("keydown", function (e) { if (e.key === "Enter") $agregar.click(); });
+
+  render();
+})();
+</script>
 
 </body>
 </html>

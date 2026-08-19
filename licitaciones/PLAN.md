@@ -1,4 +1,4 @@
-# Agente de Licitaciones — Gestión Documental, digitalización de procesos, Oficina de Partes
+# Agente de Licitaciones — servicios de Array (array.cl)
 
 > Réplica del diseño de `PLAN.md` (raíz, Compra Ágil de licencias Claude) para un segundo nicho:
 > **Licitaciones públicas** (no Compra Ágil) que piden soluciones de gestión documental,
@@ -11,21 +11,52 @@
 
 ## Alcance
 
-Licitaciones públicas de mercadopublico.cl (no Compra Ágil) cuyo objeto sea gestión documental,
-digitalización de procesos u oficina de partes — el mismo tipo de necesidad de transformación
-digital que Compra Ágil de Claude, pero en el instrumento de compra "Licitación" (montos más
-altos, procesos más formales: garantías, bases administrativas y técnicas, evaluación por
-comisión) y con un producto/servicio completamente distinto (no hay un precio de lista público
-como el de Anthropic).
+Licitaciones públicas de mercadopublico.cl (no Compra Ágil) cuyo objeto sea alguno de los
+**servicios del catálogo de [Array](http://www.array.cl/)**: oficina de partes electrónica,
+seguimiento de trámites, gestión documental y firma electrónica, automatización de procesos
+(RPA/DBA), business intelligence y plataformas de gestión de proyectos. Es el mismo tipo de
+necesidad de transformación digital que Compra Ágil de Claude, pero en el instrumento de compra
+"Licitación" (montos más altos, procesos más formales: garantías, bases administrativas y
+técnicas, evaluación por comisión) y con un producto/servicio completamente distinto (no hay un
+precio de lista público como el de Anthropic).
+
+### Cambio de nicho: de "gestión documental" a los servicios de Array (2026-08-19)
+
+Este dominio nació buscando tres frases —gestión documental, digitalización de procesos, oficina de
+partes— con una regex **hardcodeada** en `keywords.ts`, mientras `config/keywords.json` se cargaba
+sin que nadie leyera su contenido: editar la config no cambiaba nada.
+
+A pedido del usuario el nicho pasó a ser el catálogo completo de Array, el mismo que ya usa
+`array-compras-agiles-radar` en Compra Ágil. Ahora `licitaciones/config/keywords.json` tiene la
+misma forma que `config/array-servicios.json` (categorías con `patron_mencion` y
+`patron_excluyente`) y **es la config la que manda**: `keywords.ts` compila los patrones desde ahí.
+Cada hallazgo declara a qué servicio de Array corresponde, en el reporte y en la tarjeta publicada.
+
+Dos cosas que descubrió la primera corrida con el nicho ampliado, y que hay que tener presentes
+antes de tocar los patrones:
+
+- **El ítem del listado no trae `Descripcion`** (solo `CodigoExterno`, `Nombre`, `CodigoEstado` y
+  `FechaCierre`), y el `Nombre` viene **truncado a ~50 caracteres**: `722-5-LE26` aparece como
+  "CONTRATACIÓN DE SERVICIO DE DIGITALIZACIÓN DOCUMEN". Todo el descubrimiento ocurre sobre ese
+  texto corto, así que los patrones matchean **prefijos** ("documen", "proceso"): exigir la palabra
+  completa perdía licitaciones reales. Lo que quede fuera del corte es invisible para el radar —
+  una licitación de oficina de partes cuyo nombre empiece con el organismo no se detecta, y no hay
+  forma de saberlo sin pedir 4.500 fichas.
+- **Ampliar el nicho no amplió los resultados**: de 4.508 licitaciones activas, las 5 detectadas
+  son todas de gestión documental/digitalización. Cero de RPA, BI, seguimiento de trámites,
+  oficina de partes o gestión de proyectos. No es que los patrones fallen — esas palabras
+  simplemente no aparecen en ningún nombre del listado nacional de ese día (verificado grepeando
+  `licitaciones/data/_listado-activas.json`, que ahora queda guardado justo para poder probar
+  patrones sin gastar cuota).
 
 ## Insumos bloqueantes
 
-1. ~~**`LICITACIONES_API_TICKET`**~~ — **resuelto el 2026-08-19**. El ticket existe y el radar corrió
-   contra `api.mercadopublico.cl` en producción. Ver "Hallazgos de la corrida de verificación".
-   Queda una restricción operativa derivada: **la cuota diaria es muy escasa** — se agotó (429) en la
-   segunda corrida del mismo día, a mitad de las llamadas de ficha. Eso condiciona la frecuencia del
-   radar. Por eso se decidió gastar **toda** la cuota en licitaciones activas: ver "Decisión: solo
-   licitaciones activas" abajo.
+1. ~~**`LICITACIONES_API_TICKET`**~~ — **resuelto el 2026-08-19, y después vuelto irrelevante para
+   el radar**. El ticket existe y sirvió para verificar la API en producción (ver "Hallazgos de la
+   corrida de verificación"), pero su cuota es tan escasa que se agotaba antes de la primera ficha.
+   Ese mismo día se reordenó el radar para que **todo el camino normal salga de fuentes públicas del
+   portal**, sin ticket ni cuota: ver "El descubrimiento también es gratis" y "La cuota alcanzó solo
+   para el listado". El ticket quedó como opción (`--con-api`), no como requisito.
 2. **Catálogo de costos reales de KeepSync para gestión documental/digitalización**: a diferencia
    de licencias Claude (precio de lista público de Anthropic, ya cargado en `config/company.json`
    de la raíz), acá no existe un precio externo que copiar. `licitaciones/config/company.json` debe
@@ -77,7 +108,7 @@ Dos bugs que esta corrida destapó, ya corregidos:
 |---|---|---|
 | Host | `api2.mercadopublico.cl` | `api.mercadopublico.cl` (API "clásica", distinta y más antigua) |
 | Auth | header `ticket` | query param `ticket` (verificado) |
-| Búsqueda por texto | `q` (matching laxo del servidor) | **no existe** — solo `fecha` (día de publicación), `codigo` (ficha) o `estado`. El filtrado por palabra clave (`config/keywords.json`) es LOCAL y es el mecanismo primario de descubrimiento, no un filtro de ruido secundario como en Compra Ágil |
+| Búsqueda por texto | `q` (matching laxo del servidor) | **no existe en la API** — solo `fecha`, `codigo` o `estado`. Por eso el descubrimiento se hace por el **buscador público del portal**, que sí filtra por texto y no gasta cuota (ver "El descubrimiento también es gratis"). El filtrado fino por `config/keywords.json` es LOCAL en ambos casos |
 | Envelope de error | HTTP 429/5xx + `{success, payload, errors}` | HTTP 200 incluso en error, con `{Codigo, Mensaje}` en vez del listado esperado (verificado: así respondió con el ticket de prueba) |
 | Adjuntos | servicio público sin login, ya probado end-to-end | **la API no los expone** (verificado): no hay campo `Adjuntos` en la ficha. El TEXTO de las bases sí se baja de la ficha pública del portal sin login (ver "Acceso a los antecedentes"); los ARCHIVOS quedan tras un CAPTCHA de imagen |
 | Tope | `presupuesto.monto_disponible_clp` (número exacto verificado) | `MontoEstimado` (verificado en runtime; solo en la ficha, no en el listado) |
@@ -107,12 +138,170 @@ junto con la página `docs/informe-nicho-licitaciones.html`. `buscarLicitaciones
 por `buscarLicitacionesActivas()`, sin parámetros: ningún camino de código puede gastar cuota en otra
 cosa que el listado de activas y las fichas de los candidatos.
 
-**Lo que se pierde, dicho explícitamente**: de este nicho no hay ni habrá cifras históricas —
-cuántas licitaciones de gestión documental se declaran desiertas, quién se las adjudica y a qué
-precio. El nicho Claude sí las tiene (`output/informe-nicho-claude.md`, 47 casos, 79% de fracaso) y
-son las que condicionaron varias decisiones de diseño allá. Acá se opera sin ese contexto: el radar
-dice qué está abierto, no si vale la pena el mercado. Si esas cifras se necesitan, hay que
-presupuestar la cuota primero y recién entonces reponer el barrido.
+**Lo que se pierde, dicho explícitamente**: de este nicho no hay cifras históricas — cuántas
+licitaciones de estos servicios se declaran desiertas, quién se las adjudica y a qué precio. El
+nicho Claude sí las tiene (`output/informe-nicho-claude.md`, 47 casos, 79% de fracaso) y son las que
+condicionaron varias decisiones de diseño allá. Acá se opera sin ese contexto: el radar dice qué
+está abierto, no si vale la pena el mercado.
+
+**Corrección del 2026-08-19 (tarde), por si esto se reabre**: el argumento de arriba era de cuota, y
+la cuota dejó de ser el límite. El buscador público del portal acepta los mismos estados —cerradas,
+desiertas, adjudicadas, revocadas— y **no cuesta cuota**, así que reponer el barrido histórico ya no
+choca con el ticket sino con el volumen a procesar y con decidir que vale la pena. Sigue sin
+hacerse, pero ya no por imposibilidad. Lo que no cambia es `api.ts`: expone solo
+`buscarLicitacionesActivas()` y la ficha por código, para que ningún camino de código pueda gastar
+cuota en otra cosa.
+
+## El descubrimiento también es gratis: el buscador público del portal (2026-08-19)
+
+Pregunta que originó esta sección, planteada por el usuario: **¿qué parte de esto necesita de
+verdad la cuota de la API, y qué se puede sacar de fuentes que no la consuman?** Respuesta medida:
+**hoy no queda ninguna parte que la necesite.**
+
+Después de resolver la ficha por el portal (sección anterior), la única llamada obligatoria a la
+API era el listado nacional de activas. Y era, además, la peor fuente posible para descubrir: sin
+búsqueda por texto, con el `Nombre` truncado a ~50 caracteres y sin `Descripcion`.
+
+El portal tiene su propio buscador público —`mercadopublico.cl/BuscarLicitacion`— y su botón
+"Descargar resultados" expone exactamente lo que falta:
+
+| | API con ticket (`estado=activas`) | Buscador público del portal |
+|---|---|---|
+| Búsqueda por texto | **no existe** | **sí, en el servidor** |
+| Nombre | truncado a ~50 caracteres | completo |
+| Descripción | **no viene** | completa |
+| Volumen por llamada | 4.508 (todo el país) | hasta 1.000 por consulta |
+| Costo | cuota del ticket | ninguno |
+
+El flujo es el mismo que ejecuta el sitio: `POST /BuscarLicitacion/Home/GenerarArchivo` con los
+filtros devuelve `{FileGuid, nombreArchivo}`, y `GET /BuscarLicitacion//Home/Descargar?fileGuid=…`
+entrega un CSV con 11 columnas (`IDLicitacion; NombreLicitacion; Tipo; Estado; FechaPublicacion;
+Descripcion; Moneda; TipoPresupuesto; TipoMonto; MontoLicitacion; Organismo`). Dos detalles que
+costaron encontrar y conviene no volver a descubrir:
+
+- Los parámetros hay que mandarlos **tal como los arma su propio JS** (`codigoRegion: "-1"`,
+  `montoEstimadoTipo: [0]`, `fechaInicio: null`). Variantes razonables —`codigoRegion: ""`— hacen
+  que el servidor conteste "sin coincidencias" en vez de fallar.
+- El archivo queda atado a la **sesión** que lo generó: sin la cookie del paso previo, la descarga
+  responde 200 con cuerpo vacío.
+
+Su matching es laxo: "gestion documental" devolvió 743 de las 4.511 publicadas. Da lo mismo — el
+filtro fino es local y ahora corre sobre el texto completo. En la corrida del 2026-08-19, 14
+consultas trajeron 2.372 licitaciones distintas y los patrones confirmaron 5.
+
+**Lo que ganó el radar, además de no gastar cuota**: como la descripción viene completa, ya no hace
+falta pedir una ficha para descartar un falso positivo (antes cada descarte costaba una llamada), y
+aparecen licitaciones que el nombre truncado escondía. También aparecen falsos positivos nuevos que
+antes no llegaban a verse —el retiro de residuos peligrosos "con gestión documental de los
+residuos", la compra de servidores "para administrar sistema de gestión documental"—, ya cubiertos
+por `patron_excluyente`: más texto encuentra más licitaciones y también más maneras de equivocarse.
+
+### Y encima trae datos que la API no tiene
+
+Consultado por el **código exacto** de una licitación, el buscador devuelve esa sola y muestra en su
+tarjeta dos cosas que no están en ninguna otra fuente:
+
+- El **tramo de monto** cuando el organismo no publica la cifra ("Entre 100 y 1000 UTM"). Antes esa
+  licitación aparecía como "tope no publicado" y punto.
+- **Cómo paga el comprador**: reclamos por pago no oportuno sobre compras efectuadas en los últimos
+  12 meses. Medido en las 5 licitaciones publicadas: 0/484 en Río Ibáñez, 2/769 en Quirihue,
+  45/1.121 en el Archivo Nacional, **79/171 (46%) en Aysén**. Para un proveedor eso decide tanto
+  como el tope.
+
+Ese par vuelve prescindible el último dato exclusivo de la API, `CantidadReclamos` — el total de
+reclamos recibidos por el organismo, sin decir por qué ni sobre cuántas compras.
+
+### Estado final del gasto de cuota
+
+`npm run radar-licitaciones` hace **cero llamadas a la API** y publica la página completa. La
+bandera `--con-api` sigue existiendo para agregar `CantidadReclamos` o contrastar campo por campo,
+y si la cuota está agotada no rompe la corrida: se sigue con la ficha del portal y el reporte lo
+declara. El ticket dejó de ser un requisito de este skill.
+
+## La cuota alcanzó solo para el listado, y aun así se publicó (2026-08-19)
+
+Segunda medición de la cuota del ticket, con el nicho ya ampliado a los servicios de Array. La
+corrida trajo el listado nacional completo (4.508 licitaciones activas) y **la primera llamada de
+ficha ya respondió 429**: la cuota diaria se había gastado en corridas anteriores del mismo día.
+Cero fichas de la API.
+
+Antes eso significaba no poder publicar: sin `detalle.json` no había organismo, ni tope, ni tipo,
+ni plazo — la tarjeta no se podía armar y la página se dejaba intacta (que es lo correcto: publicar
+una grilla parcial borra oportunidades abiertas). Pero **esos datos también están en la ficha
+pública del portal**, que ya se descarga gratis para los antecedentes:
+
+| Dato de la tarjeta | Sección de la ficha pública |
+|---|---|
+| Nombre, estado, descripción, tipo (LE/LP/…), moneda | 1. Características de la licitación |
+| Organismo, unidad, RUT, dirección, comuna, región | 2. Organismo demandante |
+| Publicación, preguntas, cierre, apertura, adjudicación | 3. Etapas y plazos |
+| Monto total estimado (el tope), duración del contrato | 7. Montos y duración del contrato |
+
+`licitaciones/src/lib/detalle-portal.ts` arma con eso un `LicitacionDetalle` equivalente, y
+`hallazgosDesdeCache()` lo usa cuando falta el de la API (la de la API manda si existe). Lo único
+que no se puede reconstruir es `CantidadReclamos` —reclamos recibidos por el organismo, que solo
+expone la API— y se omite en vez de inventarse; la página declara de qué fuente salieron los datos.
+
+Consecuencia práctica: **la única llamada indispensable a la API es la del listado**. Con una sola
+llamada al día el radar descubre, y todo lo demás (fichas, bases, garantías, criterios, anexos,
+documentos) sale del portal sin cuota. Las 5 licitaciones publicadas el 2026-08-19 se armaron
+enteras por esta vía.
+
+El listado nacional crudo queda ahora en `licitaciones/data/_listado-activas.json`: es lo que
+permite probar patrones nuevos de `config/keywords.json` contra la última corrida real sin gastar
+otra llamada.
+
+## Las palabras clave, a la vista y editables desde la página (2026-08-19)
+
+Pedido del usuario: que `docs/licitaciones.html` muestre **qué palabras busca el radar** y permita
+agregar más, y que lo agregado quede guardado para la corrida siguiente.
+
+Las palabras se publican en el bloque "Qué palabras busca el radar" (marcadores
+`KEYWORDS:INICIO/FIN`, que el radar refresca en cada corrida): por categoría, las consultas que se
+le mandan al buscador del portal, el patrón de confirmación local y el excluyente. Van junto a las
+oportunidades a propósito — quien mira los resultados es quien nota que falta un término.
+
+**El límite que no se disimula**: esa página es estática (GitHub Pages). No tiene backend ni puede
+escribir en el repositorio, así que el formulario no finge guardar. Lo agregado queda en el
+`localStorage` del navegador, se muestra marcado como **pendiente — el radar todavía no las usa**, y
+la página entrega las dos vías reales de persistirlo: el JSON ya armado para pegar en
+`licitaciones/config/keywords-extra.json` (con un enlace directo a editar ese archivo en GitHub) y
+el comando equivalente. Cuando una pendiente aparece entre las guardadas, la página la saca sola de
+la lista: es la señal de que el radar ya la está usando.
+
+`keywords-extra.json` es un overlay de **frases literales**, no de regex: quien agrega una palabra
+no tiene por qué escribir expresiones regulares, y una regex mal formada rompería el radar entero.
+La comparación normaliza mayúsculas, tildes y espacios de más ("expediente electronico" encuentra
+"Expediente Electrónico"). Cada frase se usa en los dos lados del embudo: **como consulta al
+buscador** (amplía el descubrimiento) y **como confirmación local** (amplía el filtro). Los
+excluyentes de la categoría se siguen aplicando: da lo mismo por cuál de las dos vías se encontró
+la licitación, si el contexto desmiente la categoría se descarta igual.
+
+Verificado end-to-end el 2026-08-19: agregada "ventanilla unica digital" a `ope` con
+`npm run keywords-licitaciones`, la corrida siguiente pasó de 14 a 15 consultas al buscador e
+incluyó la nueva (131 resultados, ninguno confirmado — no hay licitaciones de ese tipo abiertas).
+
+Lo que este mecanismo **no** toca es `keywords.json`: esos patrones son regex afinadas contra casos
+reales (ver los `_patron_excluyente_nota`), y ampliarlas sigue siendo trabajo de código.
+
+## La página publicada: solo lo que sirve para evaluar una licitación (2026-08-19)
+
+`docs/licitaciones.html` tenía, además de la grilla, cinco secciones sobre el estado del proyecto
+(por qué está separada de Compra Ágil, estado de cada componente, insumos bloqueantes, diferencias
+con Compra Ágil, qué falta para operar). **Se eliminaron a pedido del usuario**: esa página es para
+decidir sobre licitaciones, y el estado del agente se lee en el repo (este documento, `CLAUDE.md`,
+`README.md`). Quedan la cabecera, la grilla y un pie de una línea.
+
+La grilla, a cambio, quedó más completa — cada tarjeta trae la descripción completa del objeto
+licitado (el `Nombre` llega truncado en ambas fuentes), el servicio de Array al que corresponde, la
+garantía exigida, el cierre de la ventana de preguntas y los criterios de evaluación con su
+ponderación; se ordenan por cierre, primero lo que vence antes. Nada de eso se infiere: sale de la
+ficha de decisión, con su cita.
+
+Una nota de tono que conviene mantener: `decision.json` lo consumen dos públicos distintos. La
+bandera "no hay adjuntos leídos" trae rutas y comandos porque `decision.md` lo lee quien opera el
+agente; en la página esa misma bandera se enuncia como el hecho que importa para evaluar ("las
+bases en PDF no están leídas y pueden agregar exigencias"). La traducción vive en `pagina.ts`.
 
 ## Acceso a los antecedentes y a los documentos (2026-08-19)
 
@@ -381,19 +570,27 @@ licitaciones/
   PLAN.md                    - este documento
   docs/                       - documentación oficial de referencia (diccionario de datos de la API)
   src/lib/
-    api.ts                   - cliente de api.mercadopublico.cl (verificado 2026-08-19)
+    api.ts                   - cliente de api.mercadopublico.cl (verificado 2026-08-19; opcional
+                                desde que el radar no gasta cuota: solo lo usa --con-api)
+    buscador-portal.ts        - descubrimiento por el buscador público del portal (sin cuota) y
+                                datos que la API no tiene (tramo de monto, pago del comprador)
+    antecedentes-pipeline.ts  - ficha pública + documentos + ficha de decisión, en una función
     portal-ficha.ts           - antecedentes desde la ficha PÚBLICA del portal (sin ticket ni cuota)
-    keywords.ts               - variantes de búsqueda + verificación local (acá es descubrimiento primario)
+    keywords.ts               - compila los patrones de config/keywords.json (descubrimiento primario)
+    detalle-portal.ts         - reconstruye la ficha (organismo, tope, tipo, plazos) desde la ficha
+                                pública del portal, cuando la cuota no alcanzó para pedirla a la API
     condiciones.ts            - tope, garantías, plazo, documentos exigidos, excluyentes
     config.ts, historial.ts, tiempo.ts, nombre-archivo.ts
     pricing.ts                - cotiza por catálogo de costos propio (no hay precio de lista externo)
     cotizacion-pptx.ts / cotizacion-html.ts / cotizacion-pdf.ts - misma plantilla visual de KeepSync
   src/scripts/
     antecedentes.ts           - npm run antecedentes-licitacion -- <codigo>
+    keywords.ts               - npm run keywords-licitaciones [-- agregar|quitar]
     adjuntos-navegador.ts     - npm run adjuntos-licitacion -- <codigo> (navegador real; el portal
                                 puntúa la sesión con reCAPTCHA y puede rechazarla)
   config/
-    keywords.json             - variantes de búsqueda de gestión documental/digitalización/oficina de partes
+    keywords.json             - categorías del catálogo de Array (patron_mencion + patron_excluyente)
+    keywords-extra.json       - frases agregadas a mano desde la página o el CLI (overlay literal)
     company.json.example      - plantilla de costos reales (placeholders COMPLETAR)
   data/, output/               - igual que la raíz (gitignored salvo output/, ver .gitignore)
 
