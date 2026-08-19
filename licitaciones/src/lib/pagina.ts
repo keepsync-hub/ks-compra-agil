@@ -436,3 +436,116 @@ export function actualizarPaginaLicitaciones(fragmento: string): boolean {
   writeFileSync(PAGINA_PATH, nuevo, "utf-8");
   return true;
 }
+
+/* ------------------------------------------------------------------------------------------- *
+ * Bloque "Qué palabras busca el radar": qué se busca, y cómo agregar más.
+ *
+ * Por qué está en la página y no solo en la config: quien mira las oportunidades es quien nota que
+ * falta un término ("acá dicen 'ventanilla única' y no lo estamos pescando"). Mostrar las palabras
+ * al lado de los resultados convierte esa observación en una acción de un minuto.
+ *
+ * Y por qué el formulario no guarda solo: esta página es estática (GitHub Pages), no tiene backend
+ * ni puede escribir en el repositorio. Entonces no finge que guarda: deja el término en el propio
+ * navegador, lo marca como PENDIENTE mientras el radar no lo use, y ofrece las dos vías reales de
+ * persistirlo — pegar el JSON en `keywords-extra.json` desde GitHub, o el comando equivalente.
+ * ------------------------------------------------------------------------------------------- */
+
+const MARCA_KEYWORDS_INICIO = "<!-- KEYWORDS:INICIO (generado por `npm run radar-licitaciones` — no editar a mano) -->";
+const MARCA_KEYWORDS_FIN = "<!-- KEYWORDS:FIN -->";
+
+const REPO_KEYWORDS_EXTRA_URL =
+  "https://github.com/keepsync-hub/ks-compra-agil/edit/main/licitaciones/config/keywords-extra.json";
+
+function chipsConsultas(consultas: string[], extra: string[]): string {
+  const propias = consultas.filter((c) => !extra.includes(c));
+  return [
+    ...propias.map((c) => `<span class="kw">${escapeHtml(c)}</span>`),
+    ...extra.map((c) => `<span class="kw agregada" title="Agregada a mano en keywords-extra.json">${escapeHtml(c)}</span>`),
+  ].join("");
+}
+
+export interface CategoriaPublicada {
+  id: string;
+  nombre: string;
+  consultas: string[];
+  extra: string[];
+  patronMencion: string;
+  patronExcluyente?: string;
+}
+
+/** Fragmento HTML del bloque de palabras clave, sin los marcadores. */
+export function renderKeywords(categorias: CategoriaPublicada[]): string {
+  const tarjetas = categorias
+    .map(
+      (c) => `      <div class="kw-card">
+        <div class="kw-cat">${escapeHtml(c.nombre)} <span class="kw-id">${escapeHtml(c.id)}</span></div>
+        <div class="kw-chips">${chipsConsultas(c.consultas, c.extra)}</div>
+        <details class="kw-patron">
+          <summary>Cómo confirma que la licitación es de este tipo</summary>
+          <p>Se busca por las palabras de arriba y después se confirma sobre el texto completo con:</p>
+          <code>${escapeHtml(c.patronMencion)}</code>${
+            c.patronExcluyente
+              ? `
+          <p>Y se descarta si además aparece:</p>
+          <code>${escapeHtml(c.patronExcluyente)}</code>`
+              : ""
+          }
+        </details>
+      </div>`,
+    )
+    .join("\n");
+
+  const opciones = categorias
+    .map((c) => `<option value="${escapeHtml(c.id)}">${escapeHtml(c.nombre)}</option>`)
+    .join("");
+
+  return `  <section id="palabras-clave">
+    <h2>Qué palabras busca el radar</h2>
+    <p class="section-sub">
+      Con estas palabras se le pregunta al buscador de mercadopublico.cl qué hay abierto; lo que
+      vuelve se confirma sobre el nombre y la descripción completos de cada licitación. Si ves un
+      término que debería estar y no está, agrégalo acá abajo.
+    </p>
+    <div class="kw-grid">
+${tarjetas}
+    </div>
+
+    <div class="kw-form">
+      <h3>Agregar una palabra clave</h3>
+      <p>
+        Esta página es estática: no puede guardar por sí sola en el repositorio. Lo que agregues
+        queda en <strong>este navegador</strong> y marcado como pendiente hasta que lo guardes en
+        <code>licitaciones/config/keywords-extra.json</code>, que es de donde el radar las lee en su
+        próxima corrida.
+      </p>
+      <div class="kw-form-row">
+        <select id="kw-categoria" aria-label="Categoría">${opciones}</select>
+        <input id="kw-termino" type="text" placeholder="ej: ventanilla única digital" aria-label="Palabra o frase">
+        <button class="btn" id="kw-agregar" type="button">Agregar</button>
+      </div>
+      <p class="kw-aviso" id="kw-aviso" hidden></p>
+      <div id="kw-pendientes"></div>
+    </div>
+  </section>
+
+  <script>
+  /* Términos ya guardados en el repo, embebidos por el radar: el JSON que se copia tiene que
+     incluirlos, porque reemplaza el contenido completo del archivo. */
+  window.KW_GUARDADOS = ${JSON.stringify(
+    categorias.flatMap((c) => c.extra.map((t) => ({ categoria: c.id, termino: t }))),
+  )};
+  window.KW_EDIT_URL = ${JSON.stringify(REPO_KEYWORDS_EXTRA_URL)};
+  </script>`;
+}
+
+/** Reemplaza el bloque de palabras clave. Devuelve false si la página no tiene los marcadores. */
+export function actualizarBloqueKeywords(fragmento: string): boolean {
+  if (!existsSync(PAGINA_PATH)) return false;
+  const html = readFileSync(PAGINA_PATH, "utf-8");
+  const inicio = html.indexOf(MARCA_KEYWORDS_INICIO);
+  const fin = html.indexOf(MARCA_KEYWORDS_FIN);
+  if (inicio === -1 || fin === -1 || fin < inicio) return false;
+  const nuevo = html.slice(0, inicio + MARCA_KEYWORDS_INICIO.length) + "\n" + fragmento + "\n  " + html.slice(fin);
+  writeFileSync(PAGINA_PATH, nuevo, "utf-8");
+  return true;
+}

@@ -17,6 +17,13 @@ Las categorías, con su `patron_mencion` y su `patron_excluyente`, viven en
 `licitaciones/config/keywords.json` (mismo contrato que `config/array-servicios.json`). Editar ese
 archivo cambia lo que el radar busca: los patrones se compilan desde ahí, no están en el código.
 
+Y hay una segunda vía, sin regex, para ampliar el nicho: `licitaciones/config/keywords-extra.json`
+guarda frases literales que el radar usa **como consulta al buscador y como confirmación local**
+(comparación insensible a mayúsculas, tildes y espacios de más). Se agregan con
+`npm run keywords-licitaciones -- agregar <categoria> "<frase>"` o desde el formulario de
+`docs/licitaciones.html`, que publica las palabras vigentes junto a las oportunidades. Categorías
+válidas: los `id` de `keywords.json` más `otros`.
+
 ## Estado: verificado contra producción, y sin gastar cuota (2026-08-19)
 
 Este skill corrió contra fuentes reales y **ya no necesita la API con ticket para operar**. Se
@@ -66,6 +73,9 @@ Lo demás que hay que saber para operarlo:
 ## Cómo correrlo
 
 ```bash
+npm run keywords-licitaciones                 # qué palabras busca hoy (consultas + patrones)
+npm run keywords-licitaciones -- agregar ged "expediente digital"
+npm run keywords-licitaciones -- quitar "expediente digital"
 npm run radar-licitaciones                    # corrida completa, cero cuota de API
 npm run radar-licitaciones -- --max=20        # baja (o sube) el cap de licitaciones a procesar
 npm run radar-licitaciones -- --con-api       # agrega la ficha de la API (gasta 1 llamada c/u)
@@ -105,7 +115,13 @@ npm run radar-licitaciones -- --desde-cache   # re-render de lo ya descargado, s
    agrupación es por el `Comprador` de la ficha; si no hay identificador, no se afirma nada sobre
    recompra en vez de agrupar a ciegas.
 7. Escribe `licitaciones/output/radar-ultima-corrida.md` y lo imprime en consola.
-8. Refresca la grilla de `docs/licitaciones.html`.
+8. Refresca `docs/licitaciones.html`: la grilla de oportunidades y el bloque **"Qué palabras busca
+   el radar"**, con las consultas de cada categoría, su patrón de confirmación, su excluyente y las
+   frases agregadas a mano. Ese bloque incluye un formulario para agregar palabras: como la página
+   es estática y no puede escribir en el repo, lo agregado queda en el navegador marcado como
+   **pendiente** y la página entrega el JSON listo para `keywords-extra.json` (más el comando
+   equivalente). El bloque de palabras se publica incluso en una corrida incompleta — es config
+   entera, no hay nada que se pueda borrar por error, a diferencia de la grilla.
 
    Solo se reemplaza el bloque entre los marcadores
    `<!-- OPORTUNIDADES:INICIO ... -->` y `<!-- OPORTUNIDADES:FIN -->`; fuera de ellos quedan la

@@ -104,6 +104,39 @@
   }
   .note code { color: var(--accent-light); }
 
+  /* --- Bloque "Qué palabras busca el radar" (generado + formulario) --------------------------
+     Las palabras se muestran junto a los resultados a propósito: quien mira las oportunidades es
+     quien nota que falta un término. El formulario no promete guardar en el repo —esta página es
+     estática— y por eso marca lo agregado como pendiente hasta que se persista. */
+  .kw-grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  .kw-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1.1rem; }
+  .kw-cat { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .kw-id { color: var(--gray-dim); font-family: ui-monospace, Menlo, monospace; font-size: 0.75rem; }
+  .kw-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .kw { background: rgba(120,108,240,0.14); border: 1px solid var(--border); border-radius: 999px; padding: 0.12rem 0.6rem; font-size: 0.8rem; color: var(--accent-light); }
+  .kw.agregada { background: rgba(74,222,128,0.14); color: var(--ok); }
+  .kw.pendiente { background: rgba(251,191,36,0.14); color: var(--warn); }
+  .kw-patron { margin-top: 0.6rem; font-size: 0.8rem; }
+  .kw-patron summary { cursor: pointer; color: var(--gray-dim); }
+  .kw-patron p { color: var(--gray); margin: 0.5rem 0 0.25rem; }
+  .kw-patron code { display: block; word-break: break-all; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 6px; padding: 0.45rem 0.6rem; color: var(--accent-light); font-size: 0.75rem; }
+  .kw-form { margin-top: 1.25rem; background: var(--card-alt); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; }
+  .kw-form h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+  .kw-form p { color: var(--gray); font-size: 0.87rem; margin: 0 0 0.8rem; max-width: 78ch; }
+  .kw-form-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .kw-form select, .kw-form input[type=text] {
+    background: var(--bg); color: var(--white); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.5rem 0.7rem; font-size: 0.88rem; font-family: inherit;
+  }
+  .kw-form input[type=text] { flex: 1 1 260px; }
+  .kw-form button { cursor: pointer; border: none; font-family: inherit; }
+  .kw-aviso { color: var(--warn); font-size: 0.85rem; margin: 0.7rem 0 0; }
+  .kw-pendientes-box { margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.9rem; }
+  .kw-pendientes-box h4 { margin: 0 0 0.5rem; font-size: 0.92rem; }
+  .kw-json { width: 100%; min-height: 150px; background: var(--bg); color: var(--gray); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem; font-family: ui-monospace, Menlo, monospace; font-size: 0.75rem; }
+  .kw-acciones { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; align-items: center; }
+  .kw-quitar { background: none; border: none; color: var(--gray-dim); cursor: pointer; font-size: 0.8rem; text-decoration: underline; padding: 0; }
+
   code, .mono { font-family: ui-monospace, Menlo, monospace; }
   a { color: var(--accent-light); }
   a:hover { color: var(--white); }
@@ -190,7 +223,7 @@
         <details class="docs">
           <summary>Documentos publicados por el organismo</summary>
           <ul>
-            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=tkqdzUO%2bMfRwzqQbjqZaYAHXppw123DGaN6IBJur3AtKlAoh2zol2FWFtCubZleZF%2f8UTJ6mzz3nmwV%2fhMaT14crKQRvtGaGtyKp6taY1LRVRB4RIKx2hTuhYLfcMJZl8Y3lQi9WTQvCxnenVXuhP950wAoPBrAdfAyAzKcIMPK9N2FvabpoeBiPMBMeYU0o8Acx6xBszBuq9pdHOQVoHWGa1QQMQWu%2fl7ErqL251IOoT5xBnWbi26F4fVwU39vq071AbtNoqTgsKfoJ%2bpR1hMOftj6ZsLPki3dHc%2ff8nB%2fl8n%2fQvyi7eMRhZYmIuOxo" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=Jnl7EcZAzfZ%2f2NYM7%2bxOfFfQKlunYotwnDW5WJWoowulTmtGY9zzxePXvDToZTAeN3RPh%2few4YIxEQQn9cLly3LaWKBZ3jxrT4kbvqDzAZcQcjhM69CZCG1dKoeHO8S3hGpmNnIMQZf9gb55ruHRUyBSQtBfKurpsgQrX0ky4aUSN%2bo%2bUr7zDtP96DOmqyFCbkJFCARpw%2fFB1CarJZbIsI%2bxj81tu9JdyhqbpWr7hU%2fIXH0vLAaYhDtbLK2fqyIV6a7vZ1dmW3L73TC3GCalUaegDu8lK1uV1TtVwZ3M84dHuZBsTsOEe6Ll96T%2bwJ88" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=uGfnGMmKV6ls5F2Xx5UnW2sTm5rxNqi4IQyEH86Dvvi5Ey9jvDhdTT2hNQc3xcbG">Foro de preguntas y respuestas</a></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=uGfnGMmKV6ls5F2Xx5UnW2sTm5rxNqi4IQyEH86Dvvi5Ey9jvDhdTT2hNQc3xcbG">Excel oficial de preguntas y respuestas</a></li>
           </ul>
@@ -242,7 +275,7 @@
         <details class="docs">
           <summary>Documentos publicados por el organismo</summary>
           <ul>
-            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=TFDCNjgnZ5ktZ%2b97aHzm%2f3cTRKyBR3FEFAsXt%2b5cPJqxjRg7toGE3%2fCXjqiclXIP1nZFyIzYF3WSqzHpskdfj%2fVUDnGSmR3kghcDNXmO2u09gZNRgkf%2bzyKJBKN91tEUFDcc%2b4pKjJfLSFcfEUB6sRAvkgEKpZwuVleP8pyQnAHLXlz%2fXfAWPwUb4K43SKKAflpOWAWF%2bQ%2fvTeZ26YB09jd8IW85RD4BBV768zvJq%2bPfOtHJ4L2OOJ2qgcQCuVjDxHiJgKc21xFQ%2b3JybD5dhqNFTW7ds4d3lQpHfFhsu%2bFXQjkjudLUs7mW9MrTQrhz" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=6BdVKhMI8IU%2b7GlKKXL7LXKeVLbKcUOsZudTF8f7zmLBSrUSmzEsQe%2bfXqQlBnDoGcwPR%2bd96uAKv5Vq7i3jDpWeA74qb8myPdOpSNEckU2FwpL22i9Bj6M9NTSQi8DAknBlolX%2b5qo4Lr%2fNFDB5yl3%2fg0PBWkNe138d6vX2Mpvjyiwf%2bblK%2fe1CBZu86VJAAAoY0k8AuWDAfAN0Patw0Vp7IoHq0iMIIA5Ik11HuH2VtxOFMctw4h6A6OWIg6v9%2faCijONBI1RnK3FX8DqBBeJNmOmH7vY3G0pxZaDpnNGgkvu5nKDZMl7Zyt2JWhwy" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=POn3WQG/DoRKA2APf7n2GZTavwHiFPkPr+VXxZNfm6c/colNVxQ/FMnWzbAw1K5s">Foro de preguntas y respuestas</a></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=POn3WQG/DoRKA2APf7n2GZTavwHiFPkPr+VXxZNfm6c/colNVxQ/FMnWzbAw1K5s">Excel oficial de preguntas y respuestas</a></li>
           </ul>
@@ -296,7 +329,7 @@
         <details class="docs">
           <summary>Documentos publicados por el organismo</summary>
           <ul>
-            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=%2fl%2fW1RmZH5rnwGS6JZI0Hga6iaD%2bJqRmrv1MzkeoPfZEvBhkd%2bAnLAO26NzNjH%2bvqEKIJp1KRzWPdk9EbYtd1d2USjs3ZhTQ4L%2f1JmYO3ZcECSH6YBPExk4Fi1GdxsA8d21OAPlnq5YQcOUPsBdBSv5emmc9zoNTr0HVsuMnL3YoyCJpuNUB1GIOfPqnm7oB9945xLUbjbRj1y5%2bxIOuAHefCCgBeW59tfJ41iBN%2b2%2f73OzJJc62HUIygUxwNMIuXWpWhv%2bsAtGK086yskIwCwdVGFXmGR2TrU%2bnRcBnNE1VSBm0NyWTdTo8%2fc9I8Y4W" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=vD5E4XEVz9C2wJ7ijExkBENbXv0TJw%2fJgkIfJC2o1iFi8h5p%2fvm9MoYaa67ELC7sb94zgNds%2bHSqDRR7nAUpcXgmEl6yuuCJdXEAXWuBLczFgj0IPKdVasw0uKJY0vhiZtVefy1lfUSDTCwFbIMyGSjHjx49H8egolamS8IjWqVRjZID7IiRpZyjZJsc%2fou4OaRy5sXSgkx1ieXy8%2bBOdkch1u757DwbBCcX11%2b5v40QTM12PTlKPJfGekQJYc6lrUGtBXZru23vcBUtWtRbvIR4O6kQrcf5rSd6WcUOb4qMM1Kpb5Fd2lZveYw2RnF2" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=zzCqw+eHfR6SOua4qKgZd/QFbEo/pc9m9yGHwQ0Rtk1qMZ0HUgvH1vCKwvM6XtOF">Foro de preguntas y respuestas</a></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=zzCqw+eHfR6SOua4qKgZd/QFbEo/pc9m9yGHwQ0Rtk1qMZ0HUgvH1vCKwvM6XtOF">Excel oficial de preguntas y respuestas</a></li>
           </ul>
@@ -349,7 +382,7 @@
         <details class="docs">
           <summary>Documentos publicados por el organismo</summary>
           <ul>
-            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=hf5Z6G7gJAR4CsHMleVeyupcDWkGg2Hb0R%2fgsxAtp4z0V%2f4k8%2buMvWPzBr8UT28CojDEDnZhKvCIYdzmXuH7G0UCtIwz6uuIl3dKUS49qpKpF7CSiZfkppPt5jsyJAuFFqiYZf4eZU%2bCbu%2fPSTyhcMURs04ne8nTcWGVX04KwxPGzfao8l6uaFjHAH1ncxS2ZgbjxzUrzba0Fhqf8VLKIcSl8v1z6WQg43j7sc7Ku6Uadgxj%2b4EwC9IQsDXOON0T%2ffueLqVUl72YYK0%2fH6sAqBU7wV3nC2vDtlwDrB15G7sHOPBF9gEU%2b5n%2bs%2be85lt1" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=FaqL5Ja4TeChFflutp8%2bweY5QJErQS5luYte%2fQ9vf0SCRW16211lKRjF4GL8sAc%2f35mJgQNkH%2fD9YLCo4A38MvYq21PnwWF%2bRawvCz%2bMle5%2fZL8WC3wwCavf396GaH3zwCy1SsHnOMUyudCGEr%2b640jLZbqxpi3ASyoVBckazLABIXSU0cVPia%2ftKI%2b12RfbZdp5NtR4VXn%2fUMpvYj69NjIWXetxtParxaYxERxO34wkP84wj0gJGx49kwJdDdSjGqY6TEoKWaldxuQDZ2xlqaClzwqmrhoCVb%2b3JB8pjxigKs6eRATNw83amUz8uKym" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=lKvtFRpL4uKTdjKPd1yxSKU2+FAWc2Ju5ByDjBQsxFzpZzt8jPmROwYPPMDTY16x">Foro de preguntas y respuestas</a></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=lKvtFRpL4uKTdjKPd1yxSKU2+FAWc2Ju5ByDjBQsxFzpZzt8jPmROwYPPMDTY16x">Excel oficial de preguntas y respuestas</a></li>
           </ul>
@@ -399,7 +432,7 @@
         <details class="docs">
           <summary>Documentos publicados por el organismo</summary>
           <ul>
-            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=AFPOC6EbDgzRTtfhVjDbOdlE03cOQwSO8hNVUDFx0ijG36xgaNHzLLnMrmu4vriGNmGBRNG1LdUet0fKsDLYznVx80Gdnm8HOCUljLP2WyOCO259JlCFU3jIjMhol%2fOdfTApsZEJuXWkpr8bUWzvvpQd23gfge61w8Cjkn%2bCs5Wf1e1Vdu4ZJYwjGJXRqlgMkps3%2fpvdFMkoXJL7TSaoWGHkJtjEbXe%2bAX1Er5EdlndokYQLbEGLDF1gEjthOY2ltqiPh5rVtNSQ1XWAXI4O24XTjI%2bIuI69z%2bFC8AeKJci486fQjrWQ5hveBFOcSrcw" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=JzSkKOOAJM60Mi6beu4v3cVwJCp44V1uv9XXEdm%2f3dePQLqN4r7X7kz0DbA0hEcdusZ5ctOWPxa3gTaSvTysHjQSc6GfZ%2bzUUOH4Po2kHPkB2siB6MCBVwv%2foJJtGUIEHvDFVcnOhc926Q5yatP5qC2O%2b76mRFQu4QgqY%2fw3M8r5SjFWDs4mwoGIFTDjJVP4AeFuC%2f7QdFn997s99RmaMB0F6Tx7KvHt%2bes206yjsQTnKuHqXP9xnsIYjw%2fTfQQ7%2bf9C8bYL4bMAAmSCpv%2bmNX6czHfDveOsI%2fvSLFmDP9g4XHDkeDsvPadedKOUEZum" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=2bKsV+suvLjMViY9gIJzCvdA50wJHyvsdLIrd2XEk5d/pSGzOq/PWit5KQmg2QiS">Foro de preguntas y respuestas</a></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=2bKsV+suvLjMViY9gIJzCvdA50wJHyvsdLIrd2XEk5d/pSGzOq/PWit5KQmg2QiS">Excel oficial de preguntas y respuestas</a></li>
           </ul>
@@ -413,6 +446,105 @@
   </section>
   <!-- OPORTUNIDADES:FIN -->
 
+<!-- KEYWORDS:INICIO (generado por `npm run radar-licitaciones` — no editar a mano) -->
+  <section id="palabras-clave">
+    <h2>Qué palabras busca el radar</h2>
+    <p class="section-sub">
+      Con estas palabras se le pregunta al buscador de mercadopublico.cl qué hay abierto; lo que
+      vuelve se confirma sobre el nombre y la descripción completos de cada licitación. Si ves un
+      término que debería estar y no está, agrégalo acá abajo.
+    </p>
+    <div class="kw-grid">
+      <div class="kw-card">
+        <div class="kw-cat">Oficina de Partes Electrónica <span class="kw-id">ope</span></div>
+        <div class="kw-chips"><span class="kw">oficina de partes</span><span class="kw">correspondencia electronica</span></div>
+        <details class="kw-patron">
+          <summary>Cómo confirma que la licitación es de este tipo</summary>
+          <p>Se busca por las palabras de arriba y después se confirma sobre el texto completo con:</p>
+          <code>oficina\s+de\s+partes|correspondencia\s+(digital|electr[oó]nica)|ventanilla\s+[uú]nica\s+(digital|electr[oó]nica|de\s+tr[aá]mites)</code>
+        </details>
+      </div>
+      <div class="kw-card">
+        <div class="kw-cat">Seguimiento de Trámites <span class="kw-id">set</span></div>
+        <div class="kw-chips"><span class="kw">seguimiento de tramites</span><span class="kw">tramitacion en linea</span></div>
+        <details class="kw-patron">
+          <summary>Cómo confirma que la licitación es de este tipo</summary>
+          <p>Se busca por las palabras de arriba y después se confirma sobre el texto completo con:</p>
+          <code>seguimiento\s+de\s+tr[aá]mites|tramitaci[oó]n\s+(documental|electr[oó]nica|en\s+l[ií]nea)|expediente\s+electr[oó]nico</code>
+        </details>
+      </div>
+      <div class="kw-card">
+        <div class="kw-cat">Gestión Documental y Firma Electrónica <span class="kw-id">ged</span></div>
+        <div class="kw-chips"><span class="kw">gestion documental</span><span class="kw">digitalizacion de documentos</span><span class="kw">firma electronica avanzada</span><span class="kw">expediente electronico</span></div>
+        <details class="kw-patron">
+          <summary>Cómo confirma que la licitación es de este tipo</summary>
+          <p>Se busca por las palabras de arriba y después se confirma sobre el texto completo con:</p>
+          <code>gesti[oó]n\s+(electr[oó]nica\s+)?documental|gestor\s+documental|plataforma\s+documental|gesti[oó]n\s+(de\s+)?documentos?|firma\s+electr[oó]nica|digitalizaci[oó]n\s+(de\s+)?(proceso|documen|archivo|expediente)|archivo\s+digital|documento\s+electr[oó]nico</code>
+          <p>Y se descarta si además aparece:</p>
+          <code>certificad[oa]s?\s+de\s+firma|e-?token|token\s+de\s+firma|imagenolog[ií]a|radiolog[ií]a|mamograf|ecograf|rayos\s+x|residuos\s+(peligrosos|especiales|biol[oó]gico)|disposici[oó]n\s+final\s+de\s+residuos|procesador(es)?\s+intel|\bxeon\b</code>
+        </details>
+      </div>
+      <div class="kw-card">
+        <div class="kw-cat">Automatización de Procesos (RPA / DBA) <span class="kw-id">rpa</span></div>
+        <div class="kw-chips"><span class="kw">automatizacion de procesos</span><span class="kw">robotic process automation</span></div>
+        <details class="kw-patron">
+          <summary>Cómo confirma que la licitación es de este tipo</summary>
+          <p>Se busca por las palabras de arriba y después se confirma sobre el texto completo con:</p>
+          <code>\brpa\b|automatizaci[oó]n\s+(rob[oó]tica\s+)?de\s+procesos|robotic\s+process\s+automation|business\s+process\s+automation|flujos?\s+de\s+trabajo\s+(digital|automatizad)</code>
+          <p>Y se descarta si además aparece:</p>
+          <code>\bdron(es)?\b|\bdrone\b|aeronave|veh[ií]culo\s+a[eé]reo|piloto\s+remoto|\buav\b|automatizaci[oó]n\s+(industrial|el[eé]ctrica)|\bplc\b|\bscada\b</code>
+        </details>
+      </div>
+      <div class="kw-card">
+        <div class="kw-cat">Business Intelligence / Analítica <span class="kw-id">bi</span></div>
+        <div class="kw-chips"><span class="kw">business intelligence</span><span class="kw">analitica de datos</span></div>
+        <details class="kw-patron">
+          <summary>Cómo confirma que la licitación es de este tipo</summary>
+          <p>Se busca por las palabras de arriba y después se confirma sobre el texto completo con:</p>
+          <code>business\s+intelligence|inteligencia\s+de\s+negocios|anal[ií]tica\s+de\s+datos|cuadro\s+de\s+mando\s+integral|tableros?\s+de\s+control\s+(de\s+)?(datos|gesti[oó]n)</code>
+          <p>Y se descarta si además aparece:</p>
+          <code>\bcursos?\b|capacitaci[oó]n|diplomado|\btalleres?\b|seminario|\bm[aá]g[ií]ster\b|relator</code>
+        </details>
+      </div>
+      <div class="kw-card">
+        <div class="kw-cat">Gestión de Proyectos y Contratos (PMO) <span class="kw-id">pmo</span></div>
+        <div class="kw-chips"><span class="kw">plataforma gestion de proyectos</span><span class="kw">software gestion de contratos</span></div>
+        <details class="kw-patron">
+          <summary>Cómo confirma que la licitación es de este tipo</summary>
+          <p>Se busca por las palabras de arriba y después se confirma sobre el texto completo con:</p>
+          <code>proactiveoffice|(sistema|plataforma|software|soluci[oó]n\s+inform[aá]tica)\s+(web\s+)?(de\s+|para\s+(la\s+)?)?gesti[oó]n\s+de\s+(proyectos|contratos|iniciativas)</code>
+          <p>Y se descarta si además aparece:</p>
+          <code>\bcursos?\b|capacitaci[oó]n|diplomado|\btalleres?\b|seminario|\bm[aá]g[ií]ster\b|relator</code>
+        </details>
+      </div>
+    </div>
+
+    <div class="kw-form">
+      <h3>Agregar una palabra clave</h3>
+      <p>
+        Esta página es estática: no puede guardar por sí sola en el repositorio. Lo que agregues
+        queda en <strong>este navegador</strong> y marcado como pendiente hasta que lo guardes en
+        <code>licitaciones/config/keywords-extra.json</code>, que es de donde el radar las lee en su
+        próxima corrida.
+      </p>
+      <div class="kw-form-row">
+        <select id="kw-categoria" aria-label="Categoría"><option value="ope">Oficina de Partes Electrónica</option><option value="set">Seguimiento de Trámites</option><option value="ged">Gestión Documental y Firma Electrónica</option><option value="rpa">Automatización de Procesos (RPA / DBA)</option><option value="bi">Business Intelligence / Analítica</option><option value="pmo">Gestión de Proyectos y Contratos (PMO)</option></select>
+        <input id="kw-termino" type="text" placeholder="ej: ventanilla única digital" aria-label="Palabra o frase">
+        <button class="btn" id="kw-agregar" type="button">Agregar</button>
+      </div>
+      <p class="kw-aviso" id="kw-aviso" hidden></p>
+      <div id="kw-pendientes"></div>
+    </div>
+  </section>
+
+  <script>
+  /* Términos ya guardados en el repo, embebidos por el radar: el JSON que se copia tiene que
+     incluirlos, porque reemplaza el contenido completo del archivo. */
+  window.KW_GUARDADOS = [];
+  window.KW_EDIT_URL = "https://github.com/keepsync-hub/ks-compra-agil/edit/main/licitaciones/config/keywords-extra.json";
+  </script>
+  <!-- KEYWORDS:FIN -->
+
 </main>
 
 <footer>
@@ -425,6 +557,124 @@
     </p>
   </div>
 </footer>
+
+
+<script>
+/*
+ * Formulario de palabras clave. Todo lo que hace es local y explícito: guarda en este navegador,
+ * arma el JSON que corresponde pegar en `licitaciones/config/keywords-extra.json` y muestra el
+ * comando equivalente. No hay backend: esta página se sirve estática desde GitHub Pages, así que
+ * fingir que "guarda" sería mentirle a quien la usa.
+ */
+(function () {
+  var LLAVE = "ks-lic-kw-pendientes";
+  var guardados = window.KW_GUARDADOS || [];
+  var editUrl = window.KW_EDIT_URL || "";
+  var $cat = document.getElementById("kw-categoria");
+  var $termino = document.getElementById("kw-termino");
+  var $agregar = document.getElementById("kw-agregar");
+  var $aviso = document.getElementById("kw-aviso");
+  var $pendientes = document.getElementById("kw-pendientes");
+  if (!$cat || !$termino || !$agregar || !$pendientes) return;
+
+  function normalizar(t) {
+    return (t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+  }
+  function leer() {
+    try { return JSON.parse(localStorage.getItem(LLAVE) || "[]"); } catch (e) { return []; }
+  }
+  function escribir(lista) {
+    try { localStorage.setItem(LLAVE, JSON.stringify(lista)); } catch (e) { /* modo privado */ }
+  }
+  function avisar(mensaje) {
+    if (!$aviso) return;
+    $aviso.textContent = mensaje || "";
+    $aviso.hidden = !mensaje;
+  }
+  function esc(t) {
+    return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  /* Una pendiente que ya aparece entre las guardadas dejó de estar pendiente: el radar ya la usa. */
+  function depurar(lista) {
+    return lista.filter(function (p) {
+      return !guardados.some(function (g) { return normalizar(g.termino) === normalizar(p.termino); });
+    });
+  }
+
+  function jsonParaElRepo(pendientes) {
+    var todos = guardados.concat(pendientes).map(function (t) {
+      return { categoria: t.categoria, termino: t.termino, agregado: t.agregado || new Date().toISOString().slice(0, 10) };
+    });
+    return JSON.stringify({ terminos: todos }, null, 2);
+  }
+
+  function render() {
+    var lista = depurar(leer());
+    escribir(lista);
+    if (lista.length === 0) { $pendientes.innerHTML = ""; return; }
+
+    var chips = lista.map(function (p, i) {
+      return '<span class="kw pendiente">' + esc(p.termino) + ' <em>· ' + esc(p.categoria) + '</em></span>' +
+             ' <button class="kw-quitar" data-i="' + i + '" type="button">quitar</button>';
+    }).join(" ");
+    var comandos = lista.map(function (p) {
+      return 'npm run keywords-licitaciones -- agregar ' + p.categoria + ' "' + p.termino + '"';
+    }).join("\n");
+
+    $pendientes.innerHTML =
+      '<div class="kw-pendientes-box">' +
+        '<h4>' + lista.length + ' palabra(s) pendiente(s) — el radar todavía no las usa</h4>' +
+        '<div class="kw-chips">' + chips + '</div>' +
+        '<p style="margin-top:0.8rem">Para que la próxima corrida las use, reemplaza el contenido de ' +
+          '<code>licitaciones/config/keywords-extra.json</code> por esto:</p>' +
+        '<textarea class="kw-json" readonly>' + esc(jsonParaElRepo(lista)) + '</textarea>' +
+        '<div class="kw-acciones">' +
+          '<button class="btn" id="kw-copiar" type="button">Copiar JSON</button>' +
+          (editUrl ? '<a class="btn secondary" href="' + esc(editUrl) + '" target="_blank" rel="noopener">Abrir el archivo en GitHub</a>' : "") +
+        '</div>' +
+        '<p style="margin-top:0.9rem">O, sin pasar por el navegador:</p>' +
+        '<textarea class="kw-json" style="min-height:60px" readonly>' + esc(comandos) + '</textarea>' +
+      '</div>';
+
+    Array.prototype.forEach.call($pendientes.querySelectorAll(".kw-quitar"), function (boton) {
+      boton.addEventListener("click", function () {
+        var actual = depurar(leer());
+        actual.splice(Number(boton.getAttribute("data-i")), 1);
+        escribir(actual);
+        render();
+      });
+    });
+    var $copiar = document.getElementById("kw-copiar");
+    if ($copiar) {
+      $copiar.addEventListener("click", function () {
+        var texto = $pendientes.querySelector(".kw-json").value;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(texto).then(function () { $copiar.textContent = "Copiado"; });
+        } else {
+          $pendientes.querySelector(".kw-json").select();
+        }
+      });
+    }
+  }
+
+  $agregar.addEventListener("click", function () {
+    var termino = ($termino.value || "").trim();
+    if (termino.length < 3) { avisar("Escribe al menos 3 caracteres: una palabra más corta pesca cualquier cosa."); return; }
+    var lista = depurar(leer());
+    var repetida = lista.concat(guardados).some(function (t) { return normalizar(t.termino) === normalizar(termino); });
+    if (repetida) { avisar('"' + termino + '" ya está en la lista.'); return; }
+    lista.push({ categoria: $cat.value, termino: termino });
+    escribir(lista);
+    $termino.value = "";
+    avisar("");
+    render();
+  });
+  $termino.addEventListener("keydown", function (e) { if (e.key === "Enter") $agregar.click(); });
+
+  render();
+})();
+</script>
 
 </body>
 </html>

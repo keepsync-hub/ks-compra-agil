@@ -101,6 +101,11 @@ de arriba aplican tal cual a ese dominio. Lo que hay que saber para operarlo:
   `config/array-servicios.json`) y la config manda de verdad: editar ese archivo cambia qué busca el
   radar. Ojo con los excluyentes — más texto encuentra más licitaciones y también más falsos
   positivos (residuos "con gestión documental", servidores "para administrar un gestor documental").
+- Para ampliar el nicho **sin escribir regex** está `licitaciones/config/keywords-extra.json`:
+  frases literales que el radar usa como consulta al buscador y como confirmación local. Se agregan
+  con `npm run keywords-licitaciones -- agregar <categoria> "<frase>"` o desde el formulario de
+  `docs/licitaciones.html`, que además publica las palabras vigentes. La página es estática: lo que
+  se agrega ahí queda pendiente hasta pegarlo en ese archivo — el radar solo lee el repo.
 - El radar publica `docs/licitaciones.html`, que **solo contiene lo que sirve para evaluar una
   licitación** (tope o tramo de monto, plazos, garantías, criterios con su ponderación, anexos,
   banderas con su cita, cómo paga el organismo, documentos). Las secciones de estado del proyecto se

@@ -16,6 +16,7 @@
     "login": "tsx .claude/skills/compra-agil-ofertar/scripts/login.ts",
     "form-fill": "tsx .claude/skills/compra-agil-ofertar/scripts/form-fill.ts",
     "radar-licitaciones": "tsx .claude/skills/radar_licitaciones/scripts/radar.ts",
+    "keywords-licitaciones": "tsx licitaciones/src/scripts/keywords.ts",
     "cotizar-licitaciones": "tsx .claude/skills/cotizar_licitaciones/scripts/cotizar.ts",
     "typecheck": "tsc --noEmit",
     "antecedentes-licitacion": "tsx licitaciones/src/scripts/antecedentes.ts",

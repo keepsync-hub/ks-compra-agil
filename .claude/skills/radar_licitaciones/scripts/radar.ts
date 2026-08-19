@@ -29,7 +29,12 @@ import {
   fichaEnBuscador,
   type ResultadoBusquedaPortal,
 } from "../../../../licitaciones/src/lib/buscador-portal.js";
-import { categoriasDeTexto, categoriasDeDetalle, categoriasKeyword } from "../../../../licitaciones/src/lib/keywords.js";
+import {
+  categoriasDeTexto,
+  categoriasDeDetalle,
+  categoriasKeyword,
+  consultasDeDescubrimiento,
+} from "../../../../licitaciones/src/lib/keywords.js";
 import { extraerCondicionesLicitacion } from "../../../../licitaciones/src/lib/condiciones.js";
 import { cargarState, guardarState, registrarHallazgo } from "../../../../licitaciones/src/lib/historial.js";
 // La lectura/escritura de la caché vive en una lib porque `antecedentes-licitacion` también
@@ -39,6 +44,8 @@ import { procesarAntecedentes } from "../../../../licitaciones/src/lib/anteceden
 import {
   renderTarjetasLicitaciones,
   actualizarPaginaLicitaciones,
+  renderKeywords,
+  actualizarBloqueKeywords,
   type HallazgoLicitacion,
 } from "../../../../licitaciones/src/lib/pagina.js";
 
@@ -94,9 +101,37 @@ const NOTA_ALCANCE = [
     `evaluación, anexos exigidos y documentos.`,
 ];
 
+/**
+ * Publica en la página qué palabras se están buscando. Se hace en toda corrida, incluso en una
+ * incompleta: a diferencia de la grilla, acá no hay nada que se pueda borrar por error — es la
+ * config, que siempre está entera.
+ */
+function publicarKeywords(): void {
+  const ok = actualizarBloqueKeywords(
+    renderKeywords(
+      categoriasKeyword().map((c) => ({
+        id: c.id,
+        nombre: c.nombre,
+        consultas: consultasDeDescubrimiento(c).filter((q) => !c.extra.includes(q)),
+        extra: c.extra,
+        patronMencion: c.patron_mencion,
+        patronExcluyente: c.patron_excluyente,
+      })),
+    ),
+  );
+  if (!ok) {
+    console.warn(
+      `⚠ No se pudo publicar el bloque de palabras clave: faltan los marcadores KEYWORDS:INICIO/FIN ` +
+        `en docs/licitaciones.html.`,
+    );
+  }
+}
+
 function escribirSalidas(reporte: string, hallazgos: HallazgoLicitacion[], actualizarPagina: boolean): void {
   mkdirSync(path.join(LIC_ROOT_DIR, "output"), { recursive: true });
   writeFileSync(path.join(LIC_ROOT_DIR, "output", "radar-ultima-corrida.md"), reporte, "utf-8");
+
+  publicarKeywords();
 
   if (!actualizarPagina) {
     console.warn(
@@ -173,7 +208,9 @@ async function descubrirEnPortal(): Promise<Descubrimiento> {
   let filasBrutas = 0;
 
   for (const categoria of categoriasKeyword()) {
-    for (const consulta of categoria.consultas_portal ?? []) {
+    // Incluye las palabras agregadas a mano (keywords-extra.json): agregar una amplía el
+    // descubrimiento, no solo el filtro local.
+    for (const consulta of consultasDeDescubrimiento(categoria)) {
       consultasCorridas++;
       try {
         const filas = await buscarEnPortal(consulta);

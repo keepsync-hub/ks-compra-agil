@@ -251,6 +251,39 @@ El listado nacional crudo queda ahora en `licitaciones/data/_listado-activas.jso
 permite probar patrones nuevos de `config/keywords.json` contra la última corrida real sin gastar
 otra llamada.
 
+## Las palabras clave, a la vista y editables desde la página (2026-08-19)
+
+Pedido del usuario: que `docs/licitaciones.html` muestre **qué palabras busca el radar** y permita
+agregar más, y que lo agregado quede guardado para la corrida siguiente.
+
+Las palabras se publican en el bloque "Qué palabras busca el radar" (marcadores
+`KEYWORDS:INICIO/FIN`, que el radar refresca en cada corrida): por categoría, las consultas que se
+le mandan al buscador del portal, el patrón de confirmación local y el excluyente. Van junto a las
+oportunidades a propósito — quien mira los resultados es quien nota que falta un término.
+
+**El límite que no se disimula**: esa página es estática (GitHub Pages). No tiene backend ni puede
+escribir en el repositorio, así que el formulario no finge guardar. Lo agregado queda en el
+`localStorage` del navegador, se muestra marcado como **pendiente — el radar todavía no las usa**, y
+la página entrega las dos vías reales de persistirlo: el JSON ya armado para pegar en
+`licitaciones/config/keywords-extra.json` (con un enlace directo a editar ese archivo en GitHub) y
+el comando equivalente. Cuando una pendiente aparece entre las guardadas, la página la saca sola de
+la lista: es la señal de que el radar ya la está usando.
+
+`keywords-extra.json` es un overlay de **frases literales**, no de regex: quien agrega una palabra
+no tiene por qué escribir expresiones regulares, y una regex mal formada rompería el radar entero.
+La comparación normaliza mayúsculas, tildes y espacios de más ("expediente electronico" encuentra
+"Expediente Electrónico"). Cada frase se usa en los dos lados del embudo: **como consulta al
+buscador** (amplía el descubrimiento) y **como confirmación local** (amplía el filtro). Los
+excluyentes de la categoría se siguen aplicando: da lo mismo por cuál de las dos vías se encontró
+la licitación, si el contexto desmiente la categoría se descarta igual.
+
+Verificado end-to-end el 2026-08-19: agregada "ventanilla unica digital" a `ope` con
+`npm run keywords-licitaciones`, la corrida siguiente pasó de 14 a 15 consultas al buscador e
+incluyó la nueva (131 resultados, ninguno confirmado — no hay licitaciones de ese tipo abiertas).
+
+Lo que este mecanismo **no** toca es `keywords.json`: esos patrones son regex afinadas contra casos
+reales (ver los `_patron_excluyente_nota`), y ampliarlas sigue siendo trabajo de código.
+
 ## La página publicada: solo lo que sirve para evaluar una licitación (2026-08-19)
 
 `docs/licitaciones.html` tenía, además de la grilla, cinco secciones sobre el estado del proyecto
@@ -552,10 +585,12 @@ licitaciones/
     cotizacion-pptx.ts / cotizacion-html.ts / cotizacion-pdf.ts - misma plantilla visual de KeepSync
   src/scripts/
     antecedentes.ts           - npm run antecedentes-licitacion -- <codigo>
+    keywords.ts               - npm run keywords-licitaciones [-- agregar|quitar]
     adjuntos-navegador.ts     - npm run adjuntos-licitacion -- <codigo> (navegador real; el portal
                                 puntúa la sesión con reCAPTCHA y puede rechazarla)
   config/
     keywords.json             - categorías del catálogo de Array (patron_mencion + patron_excluyente)
+    keywords-extra.json       - frases agregadas a mano desde la página o el CLI (overlay literal)
     company.json.example      - plantilla de costos reales (placeholders COMPLETAR)
   data/, output/               - igual que la raíz (gitignored salvo output/, ver .gitignore)
 

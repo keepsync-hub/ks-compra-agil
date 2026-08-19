@@ -111,3 +111,36 @@ export function loadKeywordsConfig(): KeywordsConfig {
   const p = path.join(LIC_ROOT_DIR, "config", "keywords.json");
   return JSON.parse(readFileSync(p, "utf-8")) as KeywordsConfig;
 }
+
+/**
+ * Un término agregado a mano (desde la página publicada o desde `npm run keywords-licitaciones`).
+ * Es una frase literal, no una regex: quien la escribe no tiene por qué saber de expresiones
+ * regulares, y una regex mal formada rompería el radar entero.
+ */
+export interface TerminoExtra {
+  /** `id` de una categoría de keywords.json, o `"otros"`. */
+  categoria: string;
+  termino: string;
+  /** ISO corto de cuándo se agregó. Solo informativo. */
+  agregado?: string;
+}
+
+export interface KeywordsExtraConfig {
+  terminos: TerminoExtra[];
+}
+
+export const KEYWORDS_EXTRA_PATH = path.join(LIC_ROOT_DIR, "config", "keywords-extra.json");
+
+/** Overlay opcional: si el archivo no está o no parsea, el radar sigue con las categorías base. */
+export function loadKeywordsExtra(): KeywordsExtraConfig {
+  if (!existsSync(KEYWORDS_EXTRA_PATH)) return { terminos: [] };
+  try {
+    const datos = JSON.parse(readFileSync(KEYWORDS_EXTRA_PATH, "utf-8")) as Partial<KeywordsExtraConfig>;
+    const terminos = (datos.terminos ?? []).filter(
+      (t): t is TerminoExtra => typeof t?.categoria === "string" && typeof t?.termino === "string" && t.termino.trim() !== "",
+    );
+    return { terminos };
+  } catch {
+    return { terminos: [] };
+  }
+}
