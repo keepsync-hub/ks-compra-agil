@@ -62,6 +62,8 @@ export interface CondicionesComerciales {
   renovacion?: string;
   plazoPago?: string;
   subcontratacion?: string;
+  /** `montoEstimado` / meses de `duracionContrato` (sección 7, ambos). `undefined` si falta cualquiera de los dos. */
+  montoMensualEstimado?: number;
 }
 
 export interface AnexosExigidos {
@@ -135,6 +137,31 @@ function fechaChilena(valor: string | undefined): string | undefined {
   if (!m) return undefined;
   const [, d, mes, anio, hh = "00", mm = "00"] = m;
   return `${anio}-${mes}-${d}T${hh}:${mm}:00`;
+}
+
+/** Bajo esto, el monto mensual del contrato (monto total / meses) se marca como bajo el mínimo de interés. */
+const UMBRAL_MONTO_MENSUAL_CLP = 1_500_000;
+
+/**
+ * Meses de duración del contrato a partir del texto libre de "Tiempo del Contrato" (sección 7),
+ * p.ej. "12 Meses", "2 Años", "1 Año y 6 Meses". Suma años (×12) y meses si ambos aparecen.
+ * `undefined` si no se pudo leer ningún número — nunca asume una duración por defecto.
+ */
+function parsearMesesDuracion(texto: string | undefined): number | undefined {
+  if (!texto) return undefined;
+  let meses = 0;
+  let encontrado = false;
+  const anios = texto.match(/(\d+(?:[.,]\d+)?)\s*a[nñ]os?/i);
+  if (anios?.[1]) {
+    meses += Number(anios[1].replace(",", ".")) * 12;
+    encontrado = true;
+  }
+  const soloMeses = texto.match(/(\d+(?:[.,]\d+)?)\s*mes(?:es)?/i);
+  if (soloMeses?.[1]) {
+    meses += Number(soloMeses[1].replace(",", "."));
+    encontrado = true;
+  }
+  return encontrado && meses > 0 ? meses : undefined;
 }
 
 function extraerFechas(a: AntecedentesLicitacion, ahora: Date): FechasClave {
@@ -373,6 +400,25 @@ function construirBanderas(f: FichaDecision): Bandera[] {
     });
   }
 
+  if (f.comerciales.montoMensualEstimado !== undefined) {
+    const mensual = f.comerciales.montoMensualEstimado;
+    banderas.push(
+      mensual >= UMBRAL_MONTO_MENSUAL_CLP
+        ? {
+            nivel: "favorable",
+            titulo: `Monto mensual ≈ $${Math.round(mensual).toLocaleString("es-CL")}`,
+            motivo: `Monto total estimado / duración del contrato (${f.comerciales.duracionContrato}) ≥ el mínimo de $${UMBRAL_MONTO_MENSUAL_CLP.toLocaleString("es-CL")}/mes.`,
+            fuente: sec(7, "Montos y duración del contrato"),
+          }
+        : {
+            nivel: "atencion",
+            titulo: `Monto mensual bajo el mínimo (≈ $${Math.round(mensual).toLocaleString("es-CL")})`,
+            motivo: `Monto total estimado / duración del contrato (${f.comerciales.duracionContrato}) da menos de $${UMBRAL_MONTO_MENSUAL_CLP.toLocaleString("es-CL")}/mes.`,
+            fuente: sec(7, "Montos y duración del contrato"),
+          },
+    );
+  }
+
   if (f.sumaPonderaciones !== undefined && Math.abs(f.sumaPonderaciones - 100) > 0.5) {
     banderas.push({
       nivel: "atencion",
@@ -457,6 +503,11 @@ export function construirFichaDecision(
   const criterios = parsearCriterios(seccion(a, 6)?.texto);
   const precio = criterios.find((c) => /precio|oferta econ[oó]mica/i.test(c.nombre));
   const montoTexto = campo(s7, /^Monto Total Estimado/i);
+  const montoEstimado = montoTexto ? Number(montoTexto.replace(/[^\d]/g, "")) || undefined : detalle?.MontoEstimado;
+  const duracionContrato = campo(s7, /^Tiempo del Contrato/i);
+  const mesesContrato = parsearMesesDuracion(duracionContrato);
+  const montoMensualEstimado =
+    montoEstimado !== undefined && mesesContrato !== undefined ? montoEstimado / mesesContrato : undefined;
 
   const ficha: FichaDecision = {
     codigo: a.codigo,
@@ -468,13 +519,14 @@ export function construirFichaDecision(
     tipo: campo(s1, /^Tipo de licitaci[oó]n/i) ?? detalle?.Tipo,
     fechas,
     comerciales: {
-      montoEstimado: montoTexto ? Number(montoTexto.replace(/[^\d]/g, "")) || undefined : detalle?.MontoEstimado,
+      montoEstimado,
       moneda: campo(s1, /^Moneda/i) ?? detalle?.Moneda,
       fuenteFinanciamiento: campo(s7, /^Fuente de financiamiento/i),
-      duracionContrato: campo(s7, /^Tiempo del Contrato/i),
+      duracionContrato,
       renovacion: campo(s7, /^Contrato con Renovaci[oó]n/i),
       plazoPago: campo(s7, /^Plazos de pago/i),
       subcontratacion: campo(s7, /^Prohibici[oó]n de subcontrataci[oó]n/i),
+      montoMensualEstimado,
     },
     garantia: extraerGarantia(a),
     criterios,
@@ -524,6 +576,7 @@ export function fichaDecisionAMarkdown(f: FichaDecision): string {
     `| Estado | ${f.estado ?? "—"} |`,
     `| Tipo | ${f.tipo ?? "—"} |`,
     `| Tope (monto estimado) | ${clp(f.comerciales.montoEstimado)} ${f.comerciales.moneda ?? ""} |`,
+    `| Monto mensual estimado | ${f.comerciales.montoMensualEstimado !== undefined ? `${clp(Math.round(f.comerciales.montoMensualEstimado))}/mes` : "no calculable (falta monto o duración)"} |`,
     `| Cierre de ofertas | ${f.fechas.cierre ?? "—"} (${f.fechas.diasHastaCierre ?? "?"} días) |`,
     `| Preguntas | ${f.preguntas.ventana ?? "—"}${f.preguntas.ingresadas !== undefined ? ` · ${f.preguntas.ingresadas} ingresada(s)` : ""} |`,
     `| Adjudicación estimada | ${f.fechas.adjudicacion ?? "—"} |`,

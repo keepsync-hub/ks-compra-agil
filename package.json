@@ -13,6 +13,7 @@
     "array-radar": "tsx .claude/skills/array-compras-agiles-radar/scripts/radar.ts",
     "array-cotizar": "tsx .claude/skills/array-compras-agiles-cotizar/scripts/cotizar-array.ts",
     "informe": "tsx .claude/skills/compra-agil-radar-claude/scripts/informe-nicho.ts",
+    "digest": "tsx src/scripts/digest.ts",
     "cotizar": "tsx .claude/skills/compra-agil-ofertar/scripts/cotizar.ts",
     "login": "tsx .claude/skills/compra-agil-ofertar/scripts/login.ts",
     "form-fill": "tsx .claude/skills/compra-agil-ofertar/scripts/form-fill.ts",
