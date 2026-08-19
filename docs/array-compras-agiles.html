@@ -41,6 +41,11 @@
   .btn.secondary:hover { border-color: var(--accent-light); color: var(--accent-light); }
   .note { background: var(--card-alt); border: 1px solid var(--border); border-left: 3px solid var(--warn); border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.86rem; color: var(--gray); }
   .note.ok { border-left-color: var(--ok); }
+  .note .gen { color: var(--gray-dim); }
+  .adjuntos { font-size: 0.82rem; color: var(--gray); }
+  .adjuntos summary { cursor: pointer; color: var(--accent-light); }
+  .adjuntos ul { margin: 0.5rem 0; padding-left: 1.1rem; word-break: break-word; }
+  .adjuntos p { color: var(--gray-dim); margin: 0.4rem 0 0; }
   code, .mono { font-family: ui-monospace, Menlo, monospace; }
   a { color: var(--accent-light); }
   a:hover { color: var(--white); }
@@ -70,7 +75,7 @@
   <section>
     <h2>Resumen</h2>
     <div class="stat-grid">
-      <div class="stat"><div class="num">7</div><div class="label">oportunidad(es) abierta(s) en esta corrida</div></div>
+      <div class="stat"><div class="num">5</div><div class="label">oportunidad(es) abierta(s) en esta corrida</div></div>
       <div class="stat"><div class="num">6</div><div class="label">categorías de servicio monitoreadas</div></div>
       <div class="stat"><div class="num">17</div><div class="label">variantes de búsqueda</div></div>
     </div>
@@ -189,23 +194,6 @@
           
         </div>
       </div>
-
-      <div class="opp-card">
-        <span class="codigo">3703-332-COT26</span>
-        <span class="org">I MUNICIPALIDAD DE HUASCO</span>
-        <span class="nombre">Implementos Dron RPA DOM</span>
-        <dl>
-          <dt>Tope</dt><dd>$800.000 CLP</dd>
-          <dt>Cierre</dt><dd>2026-08-20 15:00 (primer llamado — EMT puede ofertar)</dd>
-          <dt>Competencia</dt><dd>2 oferta(s) recibida(s)</dd>
-          <dt>Región</dt><dd>Región de Atacama </dd>
-        </dl>
-        
-        <div class="cta">
-          <a class="btn secondary" href="https://www.mercadopublico.cl/Portal/CompraAgil/DetalleCompra?codigo=3703-332-COT26">Ver en el portal</a>
-          
-        </div>
-      </div>
     </div>
   </section>
 
@@ -221,23 +209,7 @@
     <h2>Gestión de Proyectos y Contratos (PMO)</h2>
     <p class="section-sub">Project Management Platform (ProactiveOffice): gestión de iniciativas, proyectos, contratos, recursos, riesgos e indicadores.</p>
     <div class="card-grid">
-
-      <div class="opp-card">
-        <span class="codigo">2020-153-COT26</span>
-        <span class="org">Biblioteca del Congreso Nacional</span>
-        <span class="nombre">Curso Gestión de proyectos ágiles </span>
-        <dl>
-          <dt>Tope</dt><dd>$140.000 CLP</dd>
-          <dt>Cierre</dt><dd>2026-08-31 10:00 (primer llamado — EMT puede ofertar)</dd>
-          <dt>Competencia</dt><dd>0 oferta(s) recibida(s)</dd>
-          <dt>Región</dt><dd>Región Metropolitana de Santiago</dd>
-        </dl>
-        
-        <div class="cta">
-          <a class="btn secondary" href="https://www.mercadopublico.cl/Portal/CompraAgil/DetalleCompra?codigo=2020-153-COT26">Ver en el portal</a>
-          
-        </div>
-      </div>
+<p class="note">Sin oportunidades abiertas en esta corrida para "Gestión de Proyectos y Contratos (PMO)".</p>
     </div>
   </section>
 
@@ -263,6 +235,11 @@
       variantes de búsqueda evitan esa palabra por eso.
     </p>
     
+    <p class="note">Descartadas por contexto: la ficha usa la palabra de la categoría en otro rubro
+      (p.ej. "RPA" como <em>Remotely Piloted Aircraft</em>, o un <em>curso sobre</em> gestión de proyectos en vez de
+      una plataforma). Se listan acá para que el filtro no oculte nada en silencio — si alguna corresponde de
+      verdad, ajustar <code>patron_excluyente</code> en <code>config/array-servicios.json</code>:</p>
+    <ul class="note" style="list-style:disc;padding-left:2rem;"><li><code>2020-153-COT26</code> — Curso Gestión de proyectos ágiles  <em>(Gestión de Proyectos y Contratos (PMO))</em></li><li><code>3703-332-COT26</code> — Implementos Dron RPA DOM <em>(Automatización de Procesos (RPA / DBA))</em></li></ul>
     <p class="note">Volver a correr <code>npm run array-radar</code> para refrescar esta página con datos actuales.</p>
   </section>
 

@@ -1,16 +1,8 @@
 # Radar Compra Ágil — servicios tipo Array
 
-Corrida: 2026-08-19T04:09:17.782Z
+Corrida: 2026-08-19T04:59:11.931Z
 
-## Oportunidades abiertas (7)
-
-### 2020-153-COT26 — Biblioteca del Congreso Nacional
-- Curso Gestión de proyectos ágiles 
-- Categoría(s) Array: Gestión de Proyectos y Contratos (PMO)
-- Cierre: 2026-08-31 10:00 (primer llamado)
-- Tope: $140.000 CLP
-- Competencia: 0 oferta(s) recibida(s)
-- Región: Región Metropolitana de Santiago
+## Oportunidades abiertas (5)
 
 ### 2583-631-COT26 — I MUNICIPALIDAD DE MAIPU
 - SOPE 348/ADQUISICION CONTRATACIÓN DE SOLUCIÓN TIPO  RPA/DIRECCIÓN DE TECNOLOGÍA Y COMUNICACIONES/CFM.
@@ -51,14 +43,6 @@ Corrida: 2026-08-19T04:09:17.782Z
 - Tope: $50.000 CLP
 - Competencia: 1 oferta(s) recibida(s)
 - Región: Región del Biobío 
-
-### 3703-332-COT26 — I MUNICIPALIDAD DE HUASCO
-- Implementos Dron RPA DOM
-- Categoría(s) Array: Automatización de Procesos (RPA / DBA)
-- Cierre: 2026-08-20 15:00 (primer llamado)
-- Tope: $800.000 CLP
-- Competencia: 2 oferta(s) recibida(s)
-- Región: Región de Atacama 
 
 ## Cobertura
 
