@@ -178,7 +178,7 @@ export function generarCotizacionArrayHtml(data: CotizacionArrayData): string {
     </div>
     <div class="totales" style="width:3.3in;">
       <div class="fila"><span class="gray">Neto</span><span>${formatoClp(data.netoClp)}</span></div>
-      <div class="fila"><span class="gray">IVA 19%</span><span>${formatoClp(data.ivaClp)}</span></div>
+      <div class="fila"><span class="gray">IVA ${data.company.pricing.iva_pct}%</span><span>${formatoClp(data.ivaClp)}</span></div>
       <div class="fila total"><span>TOTAL</span><span>${formatoClp(data.totalClp)}</span></div>
     </div>
   </div>

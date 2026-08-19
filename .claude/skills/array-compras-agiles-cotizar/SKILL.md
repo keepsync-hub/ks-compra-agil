@@ -78,6 +78,25 @@ Los códigos que ya cerraron quedan como entradas huérfanas en el índice y com
 en `docs/array-cotizaciones/`: no se renderizan (la página solo dibuja códigos de la corrida
 actual), pero tampoco se limpian solos. Purgarlos a mano de vez en cuando.
 
+## Falsos positivos: por qué el cotizador filtra más que el radar
+
+El radar de solo lectura podía tolerar ruido — era una lista para que un humano descartara a ojo.
+El cotizador no: convierte cada hallazgo en una **propuesta comercial firmada como KeepSync**
+dirigida a un organismo real. Dos casos reales de la primera corrida lo dejaron claro:
+
+- `3703-332-COT26` "Implementos **Dron RPA** DOM" (Municipalidad de Huasco): acá `RPA` es
+  *Remotely Piloted Aircraft*, no Robotic Process Automation. Se habría ofertado automatización
+  robótica de procesos por $640.000 a alguien que pedía repuestos de dron.
+- `2020-153-COT26` "**Curso** Gestión de proyectos ágiles" (BCN): una capacitación, no una
+  plataforma PMO.
+
+Por eso cada categoría de `config/array-servicios.json` puede declarar `patron_excluyente`: un
+contexto en el que la palabra acierta pero el rubro no. Se evalúa sobre el texto completo de la
+ficha y descarta la categoría. Los descartes **se reportan** (consola y una sección de la página):
+un patrón demasiado amplio se vería si no como oportunidades que desaparecen sin explicación. Si
+alguna descartada sí correspondía, ajustar el patrón — el `_patron_excluyente_nota` de cada
+categoría documenta qué caso lo motivó.
+
 ## Guardrails (no negociables — igual criterio que el resto del repo)
 
 1. **Nunca se envía nada automáticamente** — el PDF queda en `output/`/`docs/` para revisión
@@ -96,6 +115,11 @@ actual), pero tampoco se limpian solos. Purgarlos a mano de vez en cuando.
    corrida. Sus nombres de archivo se sanitizan (`path.basename`) antes de tocar el disco.
 6. **Cuota**: como todos los scripts que pegan a la API, declara su presupuesto con
    `configurarCuota()` (`presupuestoRequestsArray()` en `src/lib/array-servicios.ts`:
-   variantes × páginas + margen de detalles). Es el script más caro del repo — sin ese circuit
-   breaker podría comerse la cuota diaria que comparte con el radar de licencias Claude, que
-   tiene reserva prioritaria (ver `PLAN-VOLUMEN.md`).
+   variantes × páginas + margen de detalles ≈ 111). Es el script más caro del repo — sin ese
+   circuit breaker podría comerse la cuota diaria que comparte con el radar de licencias Claude.
+   Además **se niega a correr si `npm run radar` no corrió hoy** (`radarYaCorrioHoy()`, igual que
+   `informe` e `indexar`): ese radar tiene reserva prioritaria con presupuesto 40, y este barrido
+   es exploración de otro nicho. `--forzar` lo salta si es intencional.
+7. **Nunca sobre el tope**: además del "por construcción" (80% siempre cabe), hay un chequeo
+   explícito `totalClp > tope_clp` antes de escribir el PDF — un argumento no es una verificación,
+   y si alguien cambia la fórmula el guardrail tiene que seguir cortando.

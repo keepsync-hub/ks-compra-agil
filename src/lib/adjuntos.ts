@@ -21,6 +21,38 @@ function headers() {
   return { user_key: USER_KEY, "User-Agent": USER_AGENT };
 }
 
+// Mismo criterio que src/lib/api.ts: 502/503/504 son fallos transitorios del gateway, no "el
+// archivo no existe". Este servicio los devuelve seguido (una corrida completa de `array-cotizar`
+// perdió los 5 adjuntos por 504 y quedó sin documentación que leer), así que sin reintento la
+// descarga es poco confiable en la práctica.
+const TRANSIENT_STATUS = new Set([502, 503, 504]);
+const MAX_INTENTOS = 3;
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+async function fetchConReintento(url: string, descripcion: string): Promise<Response> {
+  let ultimoError: Error | undefined;
+  for (let intento = 1; intento <= MAX_INTENTOS; intento++) {
+    let res: Response;
+    try {
+      res = await fetch(url, { headers: headers() });
+    } catch (err) {
+      ultimoError = err as Error;
+      if (intento < MAX_INTENTOS) {
+        await sleep(1000 * 2 ** (intento - 1)); // 1s, 2s
+        continue;
+      }
+      throw new Error(`${descripcion} falló por red tras ${MAX_INTENTOS} intentos: ${ultimoError.message}`);
+    }
+    if (TRANSIENT_STATUS.has(res.status) && intento < MAX_INTENTOS) {
+      await res.body?.cancel().catch(() => {});
+      await sleep(1000 * 2 ** (intento - 1));
+      continue;
+    }
+    return res;
+  }
+  throw ultimoError ?? new Error(`${descripcion}: fallo desconocido`);
+}
+
 interface ListarAdjuntosEnvelope {
   success: string;
   payload: { files: AdjuntoListado[] };
@@ -28,9 +60,10 @@ interface ListarAdjuntosEnvelope {
 }
 
 export async function listarAdjuntos(codigo: string): Promise<AdjuntoListado[]> {
-  const res = await fetch(`${BASE_URL}/v1/adjuntos-compra-agil/listar/${encodeURIComponent(codigo)}`, {
-    headers: headers(),
-  });
+  const res = await fetchConReintento(
+    `${BASE_URL}/v1/adjuntos-compra-agil/listar/${encodeURIComponent(codigo)}`,
+    `Listado de adjuntos de ${codigo}`,
+  );
   if (!res.ok) {
     throw new Error(
       `No se pudo listar adjuntos de ${codigo} (HTTP ${res.status}). El servicio no es API oficial: ` +
@@ -43,9 +76,10 @@ export async function listarAdjuntos(codigo: string): Promise<AdjuntoListado[]> 
 }
 
 export async function descargarAdjunto(id: string): Promise<Buffer> {
-  const res = await fetch(`${BASE_URL}/v1/adjuntos-compra-agil/descargar/${encodeURIComponent(id)}`, {
-    headers: headers(),
-  });
+  const res = await fetchConReintento(
+    `${BASE_URL}/v1/adjuntos-compra-agil/descargar/${encodeURIComponent(id)}`,
+    `Descarga del adjunto ${id}`,
+  );
   if (!res.ok) {
     throw new Error(`No se pudo descargar el adjunto ${id} (HTTP ${res.status}).`);
   }
@@ -61,9 +95,21 @@ export async function descargarAdjuntosSiExisten(
   if (!tieneDocumentosDeclarados) return [];
   const listado = await listarAdjuntos(codigo);
   const resultados: { nombreArchivo: string; contenido: Buffer }[] = [];
+  const fallidos: string[] = [];
   for (const adjunto of listado) {
-    const contenido = await descargarAdjunto(adjunto.id);
-    resultados.push({ nombreArchivo: adjunto.nombreArchivo, contenido });
+    try {
+      const contenido = await descargarAdjunto(adjunto.id);
+      resultados.push({ nombreArchivo: adjunto.nombreArchivo, contenido });
+    } catch (err) {
+      // Un archivo que falla no debe costar los demás de la misma ficha: 9 de 10 bases
+      // descargadas es mucho más útil para preparar una oferta que ninguna.
+      fallidos.push(`${adjunto.nombreArchivo} (${(err as Error).message})`);
+    }
+  }
+  if (fallidos.length > 0) {
+    console.warn(
+      `  ${codigo}: ${fallidos.length} de ${listado.length} adjunto(s) no se pudieron descargar — ${fallidos.join("; ")}`,
+    );
   }
   return resultados;
 }

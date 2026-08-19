@@ -26,7 +26,9 @@
       "nombre": "Automatización de Procesos (RPA / DBA)",
       "descripcion_array": "Plataformas Digital Business Automation (DBA) y Robotic Process Automation (RPA): automatización de tareas repetitivas, flujos y captura de datos.",
       "variantes": ["automatización robótica procesos", "RPA", "automatización procesos", "business process automation"],
-      "patron_mencion": "\\brpa\\b|automatizaci[oó]n\\s+(rob[oó]tica\\s+)?de\\s+procesos|business\\s+process\\s+automation"
+      "patron_mencion": "\\brpa\\b|automatizaci[oó]n\\s+(rob[oó]tica\\s+)?de\\s+procesos|business\\s+process\\s+automation",
+      "_patron_excluyente_nota": "En Chile 'RPA' también significa Remotely Piloted Aircraft (dron): visto en 3703-332-COT26 'Implementos Dron RPA DOM', que el radar clasificaba como automatización robótica.",
+      "patron_excluyente": "\\bdron(es)?\\b|\\bdrone\\b|aeronave|veh[ií]culo\\s+a[eé]reo|piloto\\s+remoto|\\buav\\b"
     },
     {
       "id": "bi",
@@ -40,7 +42,9 @@
       "nombre": "Gestión de Proyectos y Contratos (PMO)",
       "descripcion_array": "Project Management Platform (ProactiveOffice): gestión de iniciativas, proyectos, contratos, recursos, riesgos e indicadores.",
       "variantes": ["proactiveoffice", "gestión proyectos", "gestión contratos"],
-      "patron_mencion": "proactiveoffice|gesti[oó]n\\s+de\\s+proyectos"
+      "patron_mencion": "proactiveoffice|gesti[oó]n\\s+de\\s+proyectos",
+      "_patron_excluyente_nota": "Una capacitación SOBRE gestión de proyectos no es una plataforma de gestión de proyectos: visto en 2020-153-COT26 'Curso Gestión de proyectos ágiles'.",
+      "patron_excluyente": "\\bcursos?\\b|capacitaci[oó]n|diplomado|\\btalleres?\\b|seminario|\\bm[aá]g[ií]ster\\b|relator"
     }
   ]
 }

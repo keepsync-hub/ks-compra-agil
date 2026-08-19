@@ -3,7 +3,7 @@ import path from "node:path";
 import { ROOT_DIR } from "../../../../src/lib/config.js";
 import { loadArrayServiciosConfig, buscarHallazgosArray, presupuestoRequestsArray } from "../../../../src/lib/array-servicios.js";
 import { generarPaginaArrayHtml, leerIndiceCotizaciones } from "../../../../src/lib/array-pagina.js";
-import { configurarCuota } from "../../../../src/lib/cuota.js";
+import { configurarCuota, radarYaCorrioHoy } from "../../../../src/lib/cuota.js";
 
 function fmtClp(n: number): string {
   return `$${n.toLocaleString("es-CL")} CLP`;
@@ -13,13 +13,24 @@ async function main() {
   const ahoraIso = new Date().toISOString();
   const config = loadArrayServiciosConfig();
   const totalVariantes = config.categorias.reduce((acc, c) => acc + c.variantes.length, 0);
+  // Reserva prioritaria del radar de licencias Claude (PLAN-VOLUMEN.md, Fase 0/6): este barrido
+  // usa términos genéricos y cuesta ~111 requests contra los 40 de aquel, así que no se le adelanta.
+  const forzar = process.argv.includes("--forzar");
+  if (!forzar && !radarYaCorrioHoy()) {
+    console.error(
+      "El radar de licencias Claude (`npm run radar`) todavía no corrió hoy. Este barrido es mucho más " +
+        "caro en cuota y tiene prioridad menor — correr el radar primero, o pasar --forzar si es intencional.",
+    );
+    process.exitCode = 1;
+    return;
+  }
   configurarCuota({ script: "array-radar", maxRequests: presupuestoRequestsArray(config) });
 
   console.log(
     `Radar compra-agil-array — ${config.categorias.length} categorías de servicio, ${totalVariantes} variantes de búsqueda, estado=publicada\n`,
   );
 
-  const { hallazgos, variantesFallidas, codigosUnicosTraidos, candidatosConMencionEnNombre } =
+  const { hallazgos, variantesFallidas, codigosUnicosTraidos, candidatosConMencionEnNombre, descartadosPorContexto } =
     await buscarHallazgosArray(config);
 
   const ruido = codigosUnicosTraidos - candidatosConMencionEnNombre;
@@ -30,6 +41,9 @@ async function main() {
   );
   for (const h of hallazgos) {
     console.log(`  ${h.item.codigo}: ${h.item.institucion.organismo_comprador} — ${h.categorias.map((c) => c.nombre).join(", ")}`);
+  }
+  for (const d of descartadosPorContexto) {
+    console.log(`  ${d.codigo}: descartado por contexto (${d.categorias.join(", ")}) — ${d.nombre}`);
   }
   for (const v of variantesFallidas) {
     console.warn(`  variante "${v.variante}": falló, se continuó sin ella — ${v.error}`);
@@ -109,6 +123,7 @@ async function main() {
   const cotizaciones = leerIndiceCotizaciones();
   const html = generarPaginaArrayHtml(hallazgos, config, {
     variantesFallidas,
+    descartadosPorContexto,
     cotizaciones: cotizaciones.size > 0 ? cotizaciones : undefined,
   });
   const docsDir = path.join(ROOT_DIR, "docs");

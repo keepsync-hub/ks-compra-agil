@@ -16,7 +16,7 @@ import {
 } from "../../../../src/lib/array-pagina.js";
 import { nombreArchivoCotizacion } from "../../../../src/lib/nombre-archivo.js";
 import { cierreYaPaso } from "../../../../src/lib/tiempo.js";
-import { configurarCuota } from "../../../../src/lib/cuota.js";
+import { configurarCuota, radarYaCorrioHoy } from "../../../../src/lib/cuota.js";
 
 /** Precio de exploración de mercado: 80% del presupuesto disponible, pedido explícitamente por el usuario. */
 const DESCUENTO_SOBRE_PRESUPUESTO = 0.2;
@@ -83,6 +83,17 @@ async function cotizarHallazgo(
   const totalClp = Math.round(h.condiciones.tope_clp * (1 - DESCUENTO_SOBRE_PRESUPUESTO));
   const netoClp = Math.round(totalClp / (1 + company.pricing.iva_pct / 100));
   const ivaClp = totalClp - netoClp;
+
+  // Guardrail no negociable del proyecto (ver CLAUDE.md): nunca cotizar sobre el tope. Acá se
+  // cumple "por construcción", pero eso es un argumento, no una verificación — y el cotizador de
+  // licencias Claude sí tiene el chequeo explícito. Si alguien cambia la fórmula, esto corta.
+  if (totalClp > h.condiciones.tope_clp) {
+    console.error(
+      `  ${codigo}: INADMISIBLE — la cotización ($${totalClp.toLocaleString("es-CL")}) supera el tope ` +
+        `($${h.condiciones.tope_clp.toLocaleString("es-CL")}). No se genera PDF.`,
+    );
+    return null;
+  }
 
   const categoriaNombre = h.categorias.map((c) => c.nombre).join(" + ");
   const categoriaDescripcion = h.categorias.map((c) => c.descripcion_array).join(" ");
@@ -163,13 +174,25 @@ function fechaIsoDia(d: Date): string {
 }
 
 async function main() {
-  const company = loadCompanyConfig();
   const config = loadArrayServiciosConfig();
+  // El radar de licencias Claude tiene reserva prioritaria de cuota (PLAN-VOLUMEN.md, Fase 0/6) y
+  // su presupuesto es 40 requests; este barrido cuesta ~111 y es exploración de otro nicho, así
+  // que no debe adelantársele. Mismo criterio que `informe` e `indexar`.
+  const forzar = process.argv.includes("--forzar");
+  if (!forzar && !radarYaCorrioHoy()) {
+    console.error(
+      "El radar de licencias Claude (`npm run radar`) todavía no corrió hoy. Este cotizador es mucho " +
+        "más caro en cuota y tiene prioridad menor — correr el radar primero, o pasar --forzar si es intencional.",
+    );
+    process.exitCode = 1;
+    return;
+  }
+  const company = loadCompanyConfig();
   configurarCuota({ script: "array-cotizar", maxRequests: presupuestoRequestsArray(config) });
 
   console.log(`Cotizador compra-agil-array — precio = ${(1 - DESCUENTO_SOBRE_PRESUPUESTO) * 100}% del presupuesto disponible por oportunidad.\n`);
 
-  const { hallazgos, variantesFallidas, codigosUnicosTraidos, candidatosConMencionEnNombre } =
+  const { hallazgos, variantesFallidas, codigosUnicosTraidos, candidatosConMencionEnNombre, descartadosPorContexto } =
     await buscarHallazgosArray(config);
 
   const ruido = codigosUnicosTraidos - candidatosConMencionEnNombre;
@@ -178,6 +201,10 @@ async function main() {
       (ruido > 0 ? ` (${ruido} descartados como ruido de \`q\`)` : "") +
       `. ${hallazgos.length} oportunidad(es) a cotizar.\n`,
   );
+
+  for (const d of descartadosPorContexto) {
+    console.log(`  (no se cotiza) ${d.codigo}: contexto desmiente ${d.categorias.join(", ")} — ${d.nombre}`);
+  }
 
   const fecha = new Date();
   const cotizaciones = new Map<string, CotizacionArrayEnlace>();
@@ -198,7 +225,7 @@ async function main() {
   // tarde sin borrar estas cotizaciones.
   guardarIndiceCotizaciones(cotizaciones);
 
-  const html = generarPaginaArrayHtml(hallazgos, config, { cotizaciones, variantesFallidas });
+  const html = generarPaginaArrayHtml(hallazgos, config, { cotizaciones, variantesFallidas, descartadosPorContexto });
   const docsDir = path.join(ROOT_DIR, "docs");
   mkdirSync(docsDir, { recursive: true });
   writeFileSync(path.join(docsDir, "array-compras-agiles.html"), html, "utf-8");

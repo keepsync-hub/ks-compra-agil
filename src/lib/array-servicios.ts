@@ -10,6 +10,14 @@ export interface CategoriaArray {
   descripcion_array: string;
   variantes: string[];
   patron_mencion: string;
+  /**
+   * Contexto en el que `patron_mencion` acierta la palabra pero se equivoca de rubro, evaluado
+   * sobre el texto completo de la ficha. Existe porque el cotizador convierte cada hallazgo en
+   * una propuesta comercial firmada: un falso positivo que en un radar de solo lectura era ruido
+   * tolerable, acá se vuelve una oferta absurda a un organismo real (ver los `_patron_excluyente_nota`
+   * de config/array-servicios.json con los casos que lo motivaron).
+   */
+  patron_excluyente?: string;
 }
 
 export interface ArrayServiciosConfig {
@@ -41,11 +49,34 @@ export function detalleMencionaCategoria(
   );
 }
 
+/** Texto completo de la ficha, que es sobre lo que se evalúa `patron_excluyente`. */
+function textoCompletoDetalle(
+  detalle: Pick<CompraAgilDetalle, "nombre" | "descripcion" | "productos_solicitados">,
+): string {
+  return [
+    detalle.nombre ?? "",
+    detalle.descripcion ?? "",
+    ...(detalle.productos_solicitados ?? []).flatMap((p) => [p.nombre ?? "", p.descripcion ?? ""]),
+  ].join("\n");
+}
+
+export function categoriaExcluidaPorContexto(
+  categoria: CategoriaArray,
+  detalle: Pick<CompraAgilDetalle, "nombre" | "descripcion" | "productos_solicitados">,
+): boolean {
+  if (!categoria.patron_excluyente) return false;
+  return new RegExp(categoria.patron_excluyente, "i").test(textoCompletoDetalle(detalle));
+}
+
 export function categoriasQueMenciona(
   categorias: CategoriaArray[],
-  detalle: Pick<CompraAgilDetalle, "descripcion" | "productos_solicitados">,
+  detalle: Pick<CompraAgilDetalle, "nombre" | "descripcion" | "productos_solicitados">,
 ): CategoriaArray[] {
-  return categorias.filter((c) => detalleMencionaCategoria(c, detalle.descripcion, detalle.productos_solicitados));
+  return categorias.filter(
+    (c) =>
+      detalleMencionaCategoria(c, detalle.descripcion, detalle.productos_solicitados) &&
+      !categoriaExcluidaPorContexto(c, detalle),
+  );
 }
 
 export interface HallazgoArray {
@@ -60,12 +91,20 @@ export interface VarianteFallidaArray {
   error: string;
 }
 
+export interface DescartePorContexto {
+  codigo: string;
+  nombre: string;
+  categorias: string[];
+}
+
 export interface ResultadoBusquedaArray {
   hallazgos: HallazgoArray[];
   variantesFallidas: VarianteFallidaArray[];
   totalVariantes: number;
   codigosUnicosTraidos: number;
   candidatosConMencionEnNombre: number;
+  /** Fichas que mencionaban una categoría pero cuyo contexto la desmiente (`patron_excluyente`). */
+  descartadosPorContexto: DescartePorContexto[];
 }
 
 // Términos genéricos (a diferencia de "Claude"): pueden traer miles de resultados poco relevantes.
@@ -119,10 +158,28 @@ export async function buscarHallazgosArray(config: ArrayServiciosConfig): Promis
   );
 
   const hallazgos: HallazgoArray[] = [];
+  const descartadosPorContexto: DescartePorContexto[] = [];
   for (const item of candidatos) {
     const detalle = await obtenerDetalleCompraAgil(item.codigo);
     const categorias = categoriasQueMenciona(config.categorias, detalle);
-    if (categorias.length === 0) continue;
+    if (categorias.length === 0) {
+      // Distinguir "no mencionaba nada" (ruido de `q`, silencioso) de "mencionaba pero el
+      // contexto la desmiente": lo segundo se reporta, porque un patrón excluyente demasiado
+      // amplio se vería como oportunidades que desaparecen sin explicación.
+      const excluidas = config.categorias.filter(
+        (c) =>
+          detalleMencionaCategoria(c, detalle.descripcion, detalle.productos_solicitados) &&
+          categoriaExcluidaPorContexto(c, detalle),
+      );
+      if (excluidas.length > 0) {
+        descartadosPorContexto.push({
+          codigo: item.codigo,
+          nombre: detalle.nombre,
+          categorias: excluidas.map((c) => c.nombre),
+        });
+      }
+      continue;
+    }
     const condiciones = extraerCondiciones(detalle);
     hallazgos.push({ item, detalle, condiciones, categorias });
   }
@@ -131,6 +188,7 @@ export async function buscarHallazgosArray(config: ArrayServiciosConfig): Promis
     hallazgos,
     variantesFallidas,
     totalVariantes,
+    descartadosPorContexto,
     codigosUnicosTraidos: encontrados.size,
     candidatosConMencionEnNombre: candidatos.length,
   };

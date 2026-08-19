@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR } from "./config.js";
+import { formatearEnChile } from "./tiempo.js";
 import type { ArrayServiciosConfig, HallazgoArray } from "./array-servicios.js";
 import { MAX_PAGINAS_POR_VARIANTE_ARRAY } from "./array-servicios.js";
 
@@ -63,6 +64,8 @@ export interface OpcionesPaginaArray {
   /** Si viene, la página se genera en modo "cotizador" con precio, PDF y adjuntos por código. */
   cotizaciones?: Map<string, CotizacionArrayEnlace>;
   variantesFallidas: { variante: string; error: string }[];
+  /** Fichas que mencionaban una categoría pero cuyo contexto la desmiente (ver patron_excluyente). */
+  descartadosPorContexto?: { codigo: string; nombre: string; categorias: string[] }[];
 }
 
 export function generarPaginaArrayHtml(
@@ -72,7 +75,10 @@ export function generarPaginaArrayHtml(
 ): string {
   const totalVariantes = config.categorias.reduce((acc, c) => acc + c.variantes.length, 0);
   const modoCotizador = opciones.cotizaciones != null;
-  const fechaGenerada = new Date().toISOString().slice(0, 10);
+  // Hora de Chile, no UTC: es la única línea que el lector usa para juzgar si los datos están
+  // frescos, y una corrida de la tarde en Chile con UTC mostraría la fecha del día siguiente
+  // junto a cierres que aún no pasan (mismo motivo por el que existe src/lib/tiempo.ts).
+  const fechaGenerada = formatearEnChile(new Date()).slice(0, 10);
 
   const porCategoria = new Map<string, HallazgoArray[]>();
   for (const c of config.categorias) porCategoria.set(c.id, []);
@@ -267,6 +273,19 @@ ${seccionesCategoria}
     ${
       opciones.variantesFallidas.length > 0
         ? `<p class="note">⚠️ ${opciones.variantesFallidas.length} de ${totalVariantes} variantes fallaron y se omitieron en esta corrida (cobertura parcial).</p>`
+        : ""
+    }
+    ${
+      (opciones.descartadosPorContexto?.length ?? 0) > 0
+        ? `<p class="note">Descartadas por contexto: la ficha usa la palabra de la categoría en otro rubro
+      (p.ej. "RPA" como <em>Remotely Piloted Aircraft</em>, o un <em>curso sobre</em> gestión de proyectos en vez de
+      una plataforma). Se listan acá para que el filtro no oculte nada en silencio — si alguna corresponde de
+      verdad, ajustar <code>patron_excluyente</code> en <code>config/array-servicios.json</code>:</p>
+    <ul class="note" style="list-style:disc;padding-left:2rem;">${opciones
+      .descartadosPorContexto!.map(
+        (d) => `<li><code>${escapeHtml(d.codigo)}</code> — ${escapeHtml(d.nombre)} <em>(${escapeHtml(d.categorias.join(", "))})</em></li>`,
+      )
+      .join("")}</ul>`
         : ""
     }
     <p class="note">Volver a correr <code>npm run ${modoCotizador ? "array-cotizar" : "array-radar"}</code> para refrescar esta página con datos actuales.</p>
