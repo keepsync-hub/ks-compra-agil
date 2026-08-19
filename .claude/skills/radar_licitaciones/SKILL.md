@@ -27,7 +27,9 @@ Lo esencial para operarlo:
   (bajarlos con `npm run adjuntos-licitacion` es opcional y hay que correrlo desde la máquina del
   usuario) — ver "El objetivo estaba mal planteado" en `licitaciones/PLAN.md`.
 - Después de correr el radar, **correr también `npm run antecedentes-licitacion`**: es gratis (no
-  gasta cuota) y es lo que deja la página con los enlaces a los documentos de cada oportunidad.
+  gasta cuota), genera la **ficha de decisión** de cada oportunidad (`decision.md`: banderas, plazos,
+  garantías, criterios, anexos, cláusulas excluyentes) y deja la página con esos datos y los enlaces
+  a los documentos. Al reportar oportunidades, citar la ficha de decisión, no impresiones.
 - **La cuota del ticket es escasa**: se agotó (429) en la segunda corrida del mismo día. Correr el
   radar contra la API una vez al día y usar `--desde-cache` para republicar sin gastar cuota.
 

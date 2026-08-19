@@ -72,6 +72,13 @@ presentar (sección 4) y criterios de evaluación (sección 6), más el archivo 
 preguntas y respuestas en `documentos/` (las respuestas del organismo modifican las bases). Eso es
 lo que decide si conviene ofertar, y ya no requiere que una persona abra el portal.
 
+**Antes de cotizar, leer `licitaciones/data/<codigo>/decision.json`** (o `decision.md`): trae las
+banderas, los días que quedan, la garantía exigida, los criterios con el peso del precio, los anexos
+que hay que presentar y las cláusulas que dejan la oferta fuera, cada dato con su cita. Si levanta
+"Falta el detalle fino: no hay adjuntos leídos", decirlo al usuario: la decisión se está tomando sin
+las bases administrativas en PDF. Puestos esos archivos en `licitaciones/data/<codigo>/adjuntos/`,
+`npm run leer-adjuntos -- <codigo>` los incorpora y rehace la ficha.
+
 Los ARCHIVOS adjuntos (PDF/DOCX de bases y formatos de anexo en blanco) son otra cosa: el portal
 los protege con reCAPTCHA por score y un CAPTCHA de imagen. No hace falta bajarlos para cotizar:
 `antecedentes.md` y `documentos.json` traen su **URL** —que es acceso suficiente— junto con la de la

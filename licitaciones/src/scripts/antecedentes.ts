@@ -15,18 +15,19 @@
  * ficha sí trae el texto de las bases; los ARCHIVOS adjuntos siguen detrás de un reCAPTCHA que este
  * script no intenta rodear — deja su URL anotada para un navegador real o una persona.
  */
-import { existsSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { LIC_ROOT_DIR } from "../lib/config.js";
 import {
   obtenerAntecedentes,
-  antecedentesAMarkdown,
   descargarPreguntasRespuestas,
   referenciasDocumentales,
   type AntecedentesLicitacion,
   type ReferenciaDocumento,
 } from "../lib/portal-ficha.js";
+import type { FichaDecision } from "../lib/decision.js";
 import { hallazgosDesdeCache } from "../lib/cache.js";
+import { escribirFichaDecision } from "../lib/ficha-decision-archivo.js";
 import { renderTarjetasLicitaciones, actualizarPaginaLicitaciones } from "../lib/pagina.js";
 
 const DATA_DIR = path.join(LIC_ROOT_DIR, "data");
@@ -53,7 +54,6 @@ function guardar(a: AntecedentesLicitacion): string {
   const dir = path.join(DATA_DIR, a.codigo);
   mkdirSync(dir, { recursive: true });
   writeFileSync(path.join(dir, "ficha-portal.html"), a.html, "utf-8");
-  writeFileSync(path.join(dir, "antecedentes.md"), antecedentesAMarkdown(a), "utf-8");
   // El HTML crudo ya quedó en su propio archivo: duplicarlo dentro del JSON lo haría inmanejable.
   const { html: _html, ...sinHtml } = a;
   writeFileSync(path.join(dir, "antecedentes.json"), JSON.stringify(sinHtml, null, 2), "utf-8");
@@ -72,9 +72,14 @@ async function guardarDocumentos(a: AntecedentesLicitacion, dir: string): Promis
     if (!documento) return undefined;
     const destino = path.join(dir, "documentos");
     mkdirSync(destino, { recursive: true });
-    const ruta = path.join(destino, documento.nombreArchivo);
+    // Nombre estable: el portal bautiza el archivo con la hora de descarga, así que cada corrida
+    // dejaba una copia nueva del mismo documento. La fecha real ya está en `obtenidoEn`.
+    const ruta = path.join(destino, "Foro_PreguntasRespuestas.xls");
+    for (const viejo of readdirSync(destino).filter((f) => /^Foro_PreguntasRespuestas_.+\.xls$/.test(f))) {
+      rmSync(path.join(destino, viejo), { force: true });
+    }
     writeFileSync(ruta, documento.contenido);
-    console.log(`    ↓ ${documento.nombreArchivo} (${documento.contenido.length} bytes) — archivo oficial, sin CAPTCHA`);
+    console.log(`    ↓ Foro_PreguntasRespuestas.xls (${documento.contenido.length} bytes) — archivo oficial, sin CAPTCHA`);
     return path.relative(process.cwd(), ruta);
   } catch (err) {
     console.warn(`    (no se pudo bajar el Excel de preguntas: ${(err as Error).message})`);
@@ -136,6 +141,21 @@ function republicarPagina(): void {
   );
 }
 
+const ICONO_BANDERA: Record<string, string> = { bloqueante: "⛔", atencion: "⚠️", favorable: "✅" };
+
+/** Lo que decide si vale la pena presentarse, en la consola de la corrida. */
+function resumirDecision(ficha: FichaDecision): void {
+  const precio = ficha.pesoPrecio !== undefined ? `precio ${ficha.pesoPrecio}%` : "sin criterios parseados";
+  const garantia = ficha.garantia.exigida ? `garantía ${ficha.garantia.monto ?? "sí"}` : "sin garantía";
+  console.log(
+    `    decisión: cierre en ${ficha.fechas.diasHastaCierre ?? "?"} día(s) · ${precio} · ${garantia} · ` +
+      `${ficha.anexos.total} anexo(s) · ${ficha.clausulasExcluyentes.length} cláusula(s) excluyente(s)`,
+  );
+  for (const b of ficha.banderas.filter((x) => x.nivel !== "favorable")) {
+    console.log(`      ${ICONO_BANDERA[b.nivel]} ${b.titulo}`);
+  }
+}
+
 async function main(): Promise<void> {
   const argumentos = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const codigos = argumentos.length > 0 ? argumentos : codigosEnCache();
@@ -160,7 +180,8 @@ async function main(): Promise<void> {
       resumir(antecedentes);
       const xlsLocal = await guardarDocumentos(antecedentes, dir);
       resumirDocumentos(guardarReferencias(antecedentes, dir, xlsLocal));
-      console.log(`    → ${path.relative(process.cwd(), dir)}/antecedentes.md\n`);
+      resumirDecision(await escribirFichaDecision(antecedentes));
+      console.log(`    → ${path.relative(process.cwd(), dir)}/decision.md (y antecedentes.md)\n`);
     } catch (err) {
       fallidas++;
       // Una licitación que falla no debe costar las demás de la corrida.

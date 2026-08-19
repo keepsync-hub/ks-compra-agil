@@ -1,6 +1,6 @@
 # Radar Licitaciones — Gestión Documental / Digitalización de Procesos / Oficina de Partes
 
-Re-render desde caché: 2026-08-19T16:38:28.115Z
+Re-render desde caché: 2026-08-19T16:52:43.727Z
 
 > Este radar corre contra la API real de Licitaciones (`api.mercadopublico.cl`), verificada en producción desde el 2026-08-19. Es de solo lectura: detectar no es cotizar, y ninguna oferta se envía sin que una persona la revise.
 >

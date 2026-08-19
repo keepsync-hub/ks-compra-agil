@@ -20,10 +20,12 @@
     "typecheck": "tsc --noEmit",
     "antecedentes-licitacion": "tsx licitaciones/src/scripts/antecedentes.ts",
     "adjuntos-licitacion": "tsx licitaciones/src/scripts/adjuntos-navegador.ts",
+    "leer-adjuntos": "tsx licitaciones/src/scripts/leer-adjuntos.ts",
     "login-portal": "tsx licitaciones/src/scripts/login-portal.ts"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
+    "pdfjs-dist": "^4.10.38",
     "playwright": "^1.47.0",
     "pptxgenjs": "^4.0.1"
   },
