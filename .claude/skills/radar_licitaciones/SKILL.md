@@ -22,7 +22,9 @@ Lo esencial para operarlo:
   de adjuntos sin login de Compra Ágil. Pero eso ya no obliga a que una persona lea las bases: la
   ficha pública del portal trae su texto completo y se baja con
   `npm run antecedentes-licitacion -- <codigo>` (sin ticket ni cuota). Solo los ARCHIVOS adjuntos
-  siguen tras un CAPTCHA de imagen — ver "Acceso a los antecedentes" en `licitaciones/PLAN.md`.
+  siguen tras reCAPTCHA + CAPTCHA de imagen (`npm run adjuntos-licitacion` lo intenta con un
+  navegador real y se detiene si lo rechazan) — ver "Acceso a los antecedentes" en
+  `licitaciones/PLAN.md`.
 - **La cuota del ticket es escasa**: se agotó (429) en la segunda corrida del mismo día. Correr el
   radar contra la API una vez al día y usar `--desde-cache` para republicar sin gastar cuota.
 

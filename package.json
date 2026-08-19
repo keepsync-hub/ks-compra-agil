@@ -18,7 +18,8 @@
     "radar-licitaciones": "tsx .claude/skills/radar_licitaciones/scripts/radar.ts",
     "cotizar-licitaciones": "tsx .claude/skills/cotizar_licitaciones/scripts/cotizar.ts",
     "typecheck": "tsc --noEmit",
-    "antecedentes-licitacion": "tsx licitaciones/src/scripts/antecedentes.ts"
+    "antecedentes-licitacion": "tsx licitaciones/src/scripts/antecedentes.ts",
+    "adjuntos-licitacion": "tsx licitaciones/src/scripts/adjuntos-navegador.ts"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

@@ -71,9 +71,10 @@ del portal —sin ticket, sin cuota y sin login— el contenido completo de las 
 presentar (sección 4) y criterios de evaluación (sección 6). Eso es lo que decide si conviene
 ofertar, y ya no requiere que una persona abra el portal.
 
-Lo que sí sigue requiriendo a una persona: los ARCHIVOS adjuntos (los PDF/DOCX de bases y los
-formatos de anexo en blanco). El portal los protege con un CAPTCHA de imagen y el agente no lo
-rodea — `antecedentes.md` deja anotada la URL del visor para abrirla en un navegador.
+Los ARCHIVOS adjuntos (PDF/DOCX de bases y formatos de anexo en blanco) son otra cosa: el portal
+los protege con reCAPTCHA por score y un CAPTCHA de imagen. `npm run adjuntos-licitacion -- <codigo>`
+intenta la única vía honesta —un navegador real al que el sitio puntúa— y se detiene si lo rechazan;
+no rodearlo nunca. Si lo rechaza, `antecedentes.md` deja anotada la URL para abrirla a mano.
 
 ## Guardrails (no negociables, iguales en espíritu a `compra-agil-ofertar`)
 

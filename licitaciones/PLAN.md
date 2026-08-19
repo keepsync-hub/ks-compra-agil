@@ -130,7 +130,9 @@ corta, verificada contra producción: **el CONTENIDO de las bases sí, los ARCHI
 | API OCDS de ChileCompra — `api.mercadopublico.cl/APISOCDS/OCDS/...` | Existe, es pública y **no consume el ticket ni su cuota**, pero **no publica `tender.documents`**: no hay URLs de documentos. Además va con meses de rezago (agosto 2026 vacío al probar). Inservible para adjuntos; ver "Uso posible" abajo. |
 | Visor de adjuntos — `Attachment/ViewAttachment.aspx?enc=…` | ❌ **reCAPTCHA Enterprise por score, exigido del lado del servidor**: un cliente HTTP plano recibe 302 → `/Procurement/403.html`. El `enc` viene en el HTML de la ficha, así que el problema no es descubrir la URL. |
 | Página de descarga tras el visor — `ViewAttachmentLC.aspx` | ❌ Además del reCAPTCHA, la descarga misma exige un **CAPTCHA de imagen** (`/Procurement/Captcha/Captcha.aspx`) que hay que transcribir, y cada archivo se baja por postback de ASP.NET dentro de esa sesión. Es una verificación humana deliberada. |
-| Microservicio de adjuntos estilo Compra Ágil — `adjunto.mercadopublico.cl/adjunto-licitacion/…` | Responde `403 Authentication parameters missing` (el gateway enruta pero exige `user_key`). No se alcanzó a probar con la clave pública del buscador en esta sesión; queda como única hipótesis abierta, barata de descartar con un `curl` desde la máquina local. |
+| Microservicio de adjuntos estilo Compra Ágil — `adjunto.mercadopublico.cl/adjunto-licitacion/…` | ❌ **Descartado.** El gateway responde `403 Authentication parameters missing`, y el bundle del buscador (`buscador.mercadopublico.cl/static/js/main.*.js`), que es el cliente canónico de ese host, solo implementa `/v1/adjuntos-compra-agil/{listar,descargar,encrypt,cotizacion/listar}`. No existe ruta de licitaciones que pedir. |
+| Portal nuevo (SPAs) — `buscador.mercadopublico.cl/licitaciones`, `consulta-mercado.mercadopublico.cl` | ❌ Sin API de adjuntos de licitaciones: el bundle del buscador no tiene ninguna ruta de licitaciones (solo la palabra, que enlaza al portal viejo) y el `/adjuntos` de consulta-mercado pertenece a **consultas al mercado**, otro instrumento. |
+| Diccionario oficial de la API (`licitaciones/docs/*.pdf`) | ❌ Ni una mención de adjuntos, anexos, documentos o archivos: no hay servicio documentado que estemos pasando por alto. |
 
 ### Lo que quedó implementado
 
@@ -145,28 +147,50 @@ portal" — con una persona. Ambos datos son ahora automáticos: la sección 8 t
 beneficiario y su vencimiento; la sección 4, los anexos administrativos/técnicos/económicos
 exigidos uno por uno; la 6, los criterios de evaluación con sus ponderaciones.
 
+### La vía del navegador real: construida, y medida
+
+Queda implementada en `licitaciones/src/scripts/adjuntos-navegador.ts`
+(`npm run adjuntos-licitacion -- <codigo> [--visible] [--diagnostico]`). Abre la ficha con un
+navegador real, hace clic en el botón de adjuntos como cualquier visitante y deja que **el propio
+reCAPTCHA del sitio** puntúe la sesión. No falsifica el token, no parchea señales de automatización,
+no usa servicios de resolución de CAPTCHA y no reintenta ante un rechazo. Si el gate deja pasar,
+baja los archivos **uno por uno** con el botón "Ver Anexo" de cada fila —nunca la descarga masiva,
+que es la que exige transcribir el CAPTCHA de imagen.
+
+Medición en este entorno (2026-08-19), corriendo el script de verdad contra 4174-29-LE26:
+
+| Cliente | Veredicto del portal |
+|---|---|
+| `fetch`/`curl` (HTTP plano) | 302 → `/Procurement/403.html` |
+| Chromium headless ejecutando el reCAPTCHA del sitio | `{"valid":false,"score":0.1}` → 403 |
+| Chromium **visible** bajo Xvfb, mismo flujo | `{"valid":false,"score":0.1}` → 403 |
+
+El umbral que aplica el portal es `0.5`. Un 0.1 desde una IP de datacenter, sin historial de
+navegación y con automatización declarada es el resultado esperable — no es un bug del código, es el
+control funcionando. (Detalle de entorno: Chromium solo logra salir por el proxy de este sandbox con
+`--ssl-version-max=tls1.2`; con TLS 1.3 da `ERR_CONNECTION_RESET`, el mismo síntoma que quedó
+documentado sin diagnosticar en `login.ts`. Eso ya está resuelto y no es lo que bloquea.)
+
 ### El límite, dicho con precisión
 
-Lo que sigue fuera de alcance automático son los **archivos** (el PDF de bases administrativas, las
-EE.TT., los formatos de anexo en blanco que hay que rellenar y firmar). No es un obstáculo técnico
-que falte resolver: es un CAPTCHA de imagen puesto a propósito para exigir a una persona. El
-proyecto no lo rodea — el guardrail de `CLAUDE.md` ("ante CAPTCHA o bloqueo del portal: detenerse y
-pedir intervención humana") aplica tal cual, y falsificar tokens o resolver CAPTCHAs con un servicio
-externo queda descartado. `antecedentes.md` deja anotada la URL del visor para que la abra un
-navegador real.
+Los **archivos** (PDF de bases administrativas, EE.TT., formatos de anexo en blanco) están detrás de
+una verificación anti-automatización deliberada, en dos capas: el score de reCAPTCHA para entrar al
+visor y un CAPTCHA de imagen para la descarga masiva. Superarlo desde acá exigiría falsear el
+fingerprint del navegador, comprar IPs residenciales o pagar un servicio que resuelva CAPTCHAs: eso
+es rodear un control de acceso, no automatizar un trámite, y el proyecto no lo hace (guardrail de
+`CLAUDE.md`).
+
+Lo único que queda por medir —y solo se puede medir allá— es si desde **la máquina del usuario**
+(IP residencial, navegador con historial, sesión de Claude Cowork local) el score sube del umbral.
+`npm run adjuntos-licitacion -- <codigo> --visible --diagnostico` responde eso en una corrida, sin
+bajar nada. Si pasa, el mismo script baja los archivos solo; si no pasa, la respuesta es definitiva y
+la descarga es un clic humano.
 
 Consecuencia práctica para el flujo de oferta: decidir **si conviene ofertar** (tope, garantías,
-plazos, criterios, anexos exigidos, excluyentes) ya no necesita a nadie. Bajar los formatos en
-blanco para **presentar** la oferta sí necesita un clic humano — el mismo punto del flujo donde ya
-se contempla intervención humana para el login y el envío.
-
-Una vía intermedia que queda sin verificar: un navegador real de Playwright ejecutando el propio
-reCAPTCHA del sitio podría alcanzar el listado (sin falsificar nada) y aun así se toparía con el
-CAPTCHA de imagen en la descarga. No se probó acá porque **Chromium no tiene salida de red en este
-sandbox** (`ERR_CONNECTION_RESET` incluso contra `example.com`, mientras `curl` con el mismo
-User-Agent llega sin problema) — el mismo bloqueo ya documentado para `login.ts`. Si se quiere
-intentar, es en la sesión de Claude Cowork local, y el resultado esperado sigue siendo "hasta el
-CAPTCHA de imagen y ahí para".
+plazos, criterios, anexos exigidos, excluyentes) ya no necesita a nadie — eso está resuelto por
+`antecedentes-licitacion`. Bajar los formatos en blanco para **presentar** la oferta puede necesitar
+un clic humano, el mismo punto del flujo donde ya se contempla intervención humana para el login y
+el envío.
 
 ### Uso posible de la API OCDS (hallazgo lateral)
 
@@ -195,6 +219,8 @@ licitaciones/
     cotizacion-pptx.ts / cotizacion-html.ts / cotizacion-pdf.ts - misma plantilla visual de KeepSync
   src/scripts/
     antecedentes.ts           - npm run antecedentes-licitacion -- <codigo>
+    adjuntos-navegador.ts     - npm run adjuntos-licitacion -- <codigo> (navegador real; el portal
+                                puntúa la sesión con reCAPTCHA y puede rechazarla)
   config/
     keywords.json             - variantes de búsqueda de gestión documental/digitalización/oficina de partes
     company.json.example      - plantilla de costos reales (placeholders COMPLETAR)

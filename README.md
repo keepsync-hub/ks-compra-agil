@@ -103,8 +103,10 @@ grilla parcial); el detalle está en "Hallazgos de la corrida de verificación" 
   <codigo>` (sin ticket, sin cuota y sin login; verificado el 2026-08-19). Ahí están las garantías
   exigidas, los anexos que hay que presentar y los criterios de evaluación. Lo único que sigue
   necesitando a una persona son los ARCHIVOS adjuntos (PDF/DOCX): el portal los protege con un
-  CAPTCHA de imagen, y el agente no lo rodea — deja anotada la URL del visor. Ver "Acceso a los
-  antecedentes" en `licitaciones/PLAN.md`.
+  CAPTCHA de imagen. `npm run adjuntos-licitacion -- <codigo>` intenta la única vía honesta (un
+  navegador real al que el sitio puntúa con su propio reCAPTCHA) y se detiene si lo rechazan: en la
+  nube da score 0.1 contra un umbral de 0.5, desde una máquina con IP residencial puede pasar. Ver
+  "Acceso a los antecedentes" en `licitaciones/PLAN.md`.
 - **No hay catálogo de costos reales** de KeepSync para gestión documental — a diferencia de
   licencias Claude, acá no existe un precio de lista público que copiar. `cotizar_licitaciones`
   sigue bloqueado por esto.
@@ -113,6 +115,7 @@ grilla parcial); el detalle está en "Hallazgos de la corrida de verificación" 
 |---|---|
 | `npm run radar-licitaciones` | Busca licitaciones activas de gestión documental/digitalización/oficina de partes, extrae condiciones, detecta recompradores. Solo lectura. |
 | `npm run antecedentes-licitacion -- <codigo>` | Baja de la ficha **pública** del portal el contenido completo de las bases (garantías, anexos exigidos, criterios de evaluación) + el foro de preguntas, a `licitaciones/data/<codigo>/antecedentes.md`. Sin ticket, sin cuota y sin login. Sin argumentos, procesa todas las licitaciones ya detectadas en caché. |
+| `npm run adjuntos-licitacion -- <codigo> [--visible] [--diagnostico]` | Intenta bajar los ARCHIVOS adjuntos abriendo el visor del portal con un navegador real. El portal puntúa la sesión con reCAPTCHA (umbral 0.5): en la nube dio 0.1 y rechaza; desde tu máquina puede pasar — `--diagnostico` lo responde sin bajar nada. No rodea el control: si lo rechazan, se detiene. |
 | `npm run cotizar-licitaciones -- <codigo>` | Genera la cotización (`.pptx` + `.pdf`) para una licitación específica, validando el tope. No envía nada. |
 
 Página de estado equivalente: `docs/licitaciones.html`, encabezada por las licitaciones abiertas
