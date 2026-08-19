@@ -39,10 +39,17 @@
  * para que Chromium pudiera salir por el proxy (sin eso: ERR_CONNECTION_RESET, el mismo síntoma
  * documentado en `login.ts`).
  */
-import { chromium, type Browser, type Page } from "playwright";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { chromium, type Browser, type BrowserContext, type Page } from "playwright";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { LIC_ROOT_DIR } from "../lib/config.js";
+import { ROOT_DIR } from "../../../src/lib/config.js";
+
+/**
+ * Sesión de portal ya autenticada, si `npm run login` la dejó guardada. Es el mismo dominio
+ * (`www.mercadopublico.cl`) que sirve el visor de adjuntos, así que las cookies aplican.
+ */
+const STORAGE_STATE_PATH = path.join(ROOT_DIR, "data", "storageState.json");
 
 const PORTAL = "https://www.mercadopublico.cl";
 /** Umbral que el propio portal aplica al score de reCAPTCHA (leído de su página). */
@@ -176,7 +183,21 @@ async function main(): Promise<void> {
 
   const browser = await abrirNavegador(visible);
   try {
-    const contexto = await browser.newContext({ acceptDownloads: true, locale: "es-CL" });
+    // Descargar las bases es exactamente lo que hace un oferente en su sesión del portal, y es la
+    // vía sancionada para llegar a estos archivos. Si `npm run login` ya dejó una sesión guardada,
+    // se usa: el gate anti-scraping apunta a visitantes anónimos, no a un proveedor identificado.
+    const conSesion = !argumento("sin-sesion") && existsSync(STORAGE_STATE_PATH);
+    console.log(
+      conSesion
+        ? `  Sesión: usando la sesión de portal guardada (${path.relative(process.cwd(), STORAGE_STATE_PATH)}).`
+        : `  Sesión: anónima. Si el portal rechaza, correr primero \`npm run login\` — con sesión de proveedor` +
+          ` no hace falta que intervenga nadie en cada descarga.`,
+    );
+    const contexto: BrowserContext = await browser.newContext({
+      acceptDownloads: true,
+      locale: "es-CL",
+      storageState: conSesion ? STORAGE_STATE_PATH : undefined,
+    });
     const page = await contexto.newPage();
     const { resultado, popup } = await pasarGate(page, codigo);
 
@@ -184,10 +205,13 @@ async function main(): Promise<void> {
 
     if (!resultado.paso) {
       console.error(
-        `\n  El portal rechazó esta sesión automatizada y no entrega los archivos.\n` +
-          `  No se reintenta ni se rodea el control (guardrail). Opciones:\n` +
-          `    - Correrlo con --visible desde tu máquina (IP e historial reales puntúan distinto).\n` +
-          `    - Abrir el visor a mano: está anotado en licitaciones/data/${codigo}/antecedentes.md\n` +
+        `\n  El portal rechazó esta sesión y no entrega los archivos.\n` +
+          `  No se reintenta ni se rodea el control (guardrail). En orden de preferencia:\n` +
+          `    1. \`npm run login\` y repetir: con sesión de proveedor la descarga es la vía sancionada,\n` +
+          `       y ese login se hace UNA vez (el 2FA lo lee el agente desde Gmail) — después cada\n` +
+          `       descarga corre sola, sin que intervenga nadie.\n` +
+          `    2. Correrlo con --visible desde tu máquina: IP e historial reales puntúan distinto.\n` +
+          `    3. Abrir el visor a mano: la URL está en licitaciones/data/${codigo}/antecedentes.md\n` +
           `  El TEXTO de las bases no necesita nada de esto: npm run antecedentes-licitacion -- ${codigo}`,
       );
       process.exitCode = 1;

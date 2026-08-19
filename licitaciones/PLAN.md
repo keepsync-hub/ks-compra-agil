@@ -171,6 +171,28 @@ control funcionando. (Detalle de entorno: Chromium solo logra salir por el proxy
 `--ssl-version-max=tls1.2`; con TLS 1.3 da `ERR_CONNECTION_RESET`, el mismo síntoma que quedó
 documentado sin diagnosticar en `login.ts`. Eso ya está resuelto y no es lo que bloquea.)
 
+### La vía sancionada: sesión de proveedor autenticada
+
+Descargar las bases es exactamente lo que hace un oferente identificado en su sesión del portal, y
+esa es la vía que ChileCompra sí contempla para estos archivos. El gate de reCAPTCHA apunta al
+scraping anónimo; una sesión de proveedor no es scraping anónimo.
+
+`adjuntos-navegador.ts` ya la usa: si existe `data/storageState.json` —el artefacto que deja
+`npm run login` (ClaveÚnica + 2FA)— abre el visor con esa sesión en vez de anónimo, y lo informa en
+consola. `--sin-sesion` fuerza el modo anónimo.
+
+Lo importante para el objetivo "sin intervención de una persona": ese login se hace **una vez**, y
+tampoco requiere a nadie — el código de doble factor llega al Gmail del usuario y el agente lo lee
+por `mcp__Gmail__*` (ver `CLAUDE.md`, "Datos ya confirmados"). Establecida la sesión, cada descarga
+posterior corre sola. Lo que queda pendiente es correrlo: el login está diferido a la sesión de
+Claude Cowork local (no hay credenciales de ClaveÚnica en el entorno de nube), igual que el resto
+del flujo de oferta.
+
+No verificado, y hay que decirlo: que con sesión autenticada el visor efectivamente no aplique el
+score de reCAPTCHA. Es lo razonable —el control existe para frenar scraping anónimo— pero se
+confirma en la primera corrida con sesión real, y si igual lo aplicara, el script se detiene como
+ahora en vez de insistir.
+
 ### El límite, dicho con precisión
 
 Los **archivos** (PDF de bases administrativas, EE.TT., formatos de anexo en blanco) están detrás de
