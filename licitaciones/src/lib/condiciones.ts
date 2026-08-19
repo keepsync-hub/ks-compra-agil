@@ -6,6 +6,8 @@ export interface CondicionesLicitacion {
   moneda_original: string;
   tipo_licitacion: string | null;
   plazo_contrato_dias: number | null;
+  /** Glosa tal como la declaró el organismo ("16 meses"), sin convertir. */
+  plazo_contrato_texto: string | null;
   garantia_seriedad_clp: number | null;
   garantia_seriedad_dias: number | null;
   garantia_fiel_cumplimiento_clp: number | null;
@@ -72,27 +74,60 @@ function detectarPlazoContratoDias(texto: string): number | null {
   return meses ? Number(meses[1]) * 30 : null;
 }
 
+/**
+ * Tabla 3.6 del diccionario oficial ("Unidad de Tiempo duración del contrato"), verificada contra
+ * las fichas reales del 2026-08-19: el organismo declara la duración en `TiempoDuracionContrato`
+ * (un número, a veces como string) y la unidad en `UnidadTiempoDuracionContrato` (un código).
+ * `PlazosContrato.Plazo`, que este módulo leía antes, no existe en la respuesta real.
+ */
+const UNIDADES_TIEMPO: Record<number, { singular: string; plural: string; dias: number }> = {
+  1: { singular: "hora", plural: "horas", dias: 1 / 24 },
+  2: { singular: "día", plural: "días", dias: 1 },
+  3: { singular: "semana", plural: "semanas", dias: 7 },
+  4: { singular: "mes", plural: "meses", dias: 30 },
+  5: { singular: "año", plural: "años", dias: 365 },
+};
+
+interface PlazoContrato {
+  dias: number | null;
+  texto: string | null;
+}
+
+function plazoContratoDeclarado(detalle: LicitacionDetalle): PlazoContrato {
+  const cantidad = Number(detalle.TiempoDuracionContrato);
+  const unidad = UNIDADES_TIEMPO[Number(detalle.UnidadTiempoDuracionContrato)];
+  if (!Number.isFinite(cantidad) || cantidad <= 0 || !unidad) return { dias: null, texto: null };
+  const glosa = cantidad === 1 ? unidad.singular : unidad.plural;
+  return { dias: Math.round(cantidad * unidad.dias), texto: `${cantidad} ${glosa}` };
+}
+
 function textoCompletoDe(detalle: LicitacionDetalle, items: ItemLicitacion[]): string {
   return [detalle.Nombre, detalle.Descripcion, ...items.map((i) => i.Descripcion)].filter(Boolean).join("\n");
 }
 
 /**
- * Extrae condiciones de una ficha de licitación. IMPORTANTE: a diferencia de
- * `src/lib/condiciones.ts` de Compra Ágil (verificado contra `presupuesto.monto_disponible_clp`
- * real), acá `MontoEstimado`/`Garantia.*` son campos SIN VERIFICAR contra producción — confirmar
- * los nombres reales apenas se tenga un `LICITACIONES_API_TICKET` válido (ver api.ts).
+ * Extrae condiciones de una ficha de licitación.
+ *
+ * Verificado contra producción el 2026-08-19 (ver api.ts): `MontoEstimado`, `Moneda` y `Tipo`
+ * llegan como se esperaba, y el plazo de contrato sale de `TiempoDuracionContrato` +
+ * `UnidadTiempoDuracionContrato`. Las garantías, en cambio, **no las expone este endpoint**: no
+ * apareció ningún campo `Garantia` en las fichas revisadas, así que `garantia_*` queda en null
+ * salvo que la ficha lo mencione en texto libre, y quien vaya a ofertar tiene que leer las bases
+ * adjuntas en el portal para saber si se exige boleta de garantía.
  */
 export function extraerCondicionesLicitacion(detalle: LicitacionDetalle): CondicionesLicitacion {
   const items = itemsDeLicitacion(detalle);
   const texto = textoCompletoDe(detalle, items);
 
+  const plazo = plazoContratoDeclarado(detalle);
   const documentosExigidos = DOCUMENTOS_CONOCIDOS.filter((d) => d.patron.test(texto)).map((d) => d.etiqueta);
 
   return {
     tope_clp: detalle.MontoEstimado ?? 0,
     moneda_original: detalle.Moneda ?? "CLP",
     tipo_licitacion: detalle.Tipo ?? null,
-    plazo_contrato_dias: detalle.PlazosContrato?.Plazo ?? detectarPlazoContratoDias(texto),
+    plazo_contrato_dias: plazo.dias ?? detectarPlazoContratoDias(texto),
+    plazo_contrato_texto: plazo.texto,
     garantia_seriedad_clp: detalle.Garantia?.MontoGarantiaSeriedad ?? null,
     garantia_seriedad_dias: detalle.Garantia?.DiasValidezGarantiaSeriedad ?? null,
     garantia_fiel_cumplimiento_clp: detalle.Garantia?.MontoGarantiaFielCumplimiento ?? null,

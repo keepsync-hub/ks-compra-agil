@@ -77,11 +77,15 @@ function filasDatos(h: HallazgoLicitacion, ahora: Date): string {
       ? fmtClp(h.condiciones.tope_clp)
       : "<span class=\"sin-dato\">no publicado por el organismo</span>",
   ]);
-  filas.push(["Cierre", glosaCierre(h.item.FechaCierre ?? h.detalle.Fechas?.FechaCierre, ahora)]);
+  filas.push(["Cierre", glosaCierre(h.detalle.FechaCierre ?? h.detalle.Fechas?.FechaCierre, ahora)]);
 
-  if (h.item.Tipo) filas.push(["Tipo", `${escapeHtml(h.item.Tipo)} — ${escapeHtml(glosaTipo(h.item.Tipo))}`]);
-  if (h.condiciones.plazo_contrato_dias != null) {
-    filas.push(["Plazo de contrato", `${h.condiciones.plazo_contrato_dias} día(s)`]);
+  // Siempre desde la ficha, nunca desde el ítem del listado: ese ítem no trae Tipo, Comprador ni
+  // monto (verificado contra producción el 2026-08-19, ver api.ts). Leerlo de `h.item` dejaba las
+  // tarjetas sin tipo, sin región y con "Organismo sin identificar".
+  const tipo = h.detalle.Tipo;
+  if (tipo) filas.push(["Tipo", `${escapeHtml(tipo)} — ${escapeHtml(glosaTipo(tipo))}`]);
+  if (h.condiciones.plazo_contrato_texto) {
+    filas.push(["Plazo de contrato", escapeHtml(h.condiciones.plazo_contrato_texto)]);
   }
   if (h.condiciones.garantia_seriedad_clp != null) {
     filas.push(["Garantía de seriedad", fmtClp(h.condiciones.garantia_seriedad_clp)]);
@@ -92,10 +96,12 @@ function filasDatos(h: HallazgoLicitacion, ahora: Date): string {
   // Solo el día: la API entrega esta fecha con hora 00:00, que no informa nada.
   const adjudicacion = fmtFecha(h.detalle.Fechas?.FechaAdjudicacion)?.slice(0, 10);
   if (adjudicacion) filas.push(["Adjudicación", escapeHtml(adjudicacion)]);
+  // El diccionario oficial define este campo como reclamos recibidos por el ORGANISMO, no por
+  // esta licitación: la etiqueta lo dice para que no se lea como "387 reclamos por esta compra".
   if (typeof h.detalle.CantidadReclamos === "number" && h.detalle.CantidadReclamos > 0) {
-    filas.push(["Reclamos", String(h.detalle.CantidadReclamos)]);
+    filas.push(["Reclamos al organismo", String(h.detalle.CantidadReclamos)]);
   }
-  const region = h.item.Comprador?.RegionUnidad;
+  const region = h.detalle.Comprador?.RegionUnidad;
   if (region) filas.push(["Región", escapeHtml(region)]);
 
   return filas.map(([k, v]) => `          <dt>${k}</dt><dd>${v}</dd>`).join("\n");
@@ -120,10 +126,10 @@ function glosaTipo(tipo: string): string {
 }
 
 function tarjeta(h: HallazgoLicitacion, ahora: Date): string {
-  const codigo = h.item.CodigoExterno;
-  const organismo = h.item.Comprador?.NombreOrganismo ?? "Organismo sin identificar";
-  const nombre = h.item.Nombre ?? "";
-  const unidad = h.item.Comprador?.NombreUnidad;
+  const codigo = h.detalle.CodigoExterno;
+  const organismo = h.detalle.Comprador?.NombreOrganismo ?? "Organismo sin identificar";
+  const nombre = h.detalle.Nombre ?? h.item.Nombre ?? "";
+  const unidad = h.detalle.Comprador?.NombreUnidad;
 
   return `      <div class="opp-card" id="${escapeHtml(codigo)}">
         <span class="codigo">${escapeHtml(codigo)}</span>
@@ -142,11 +148,10 @@ ${filasDatos(h, ahora)}
 }
 
 const ESTADO_VACIO = `      <p class="note">
-        Ninguna licitación abierta de este nicho en la última corrida del radar, o el radar
-        todavía no se ha podido correr contra la API real. Este bloque se llena solo al ejecutar
-        <code>npm run radar-licitaciones</code> con un <code>LICITACIONES_API_TICKET</code>
-        válido — hasta entonces no hay oportunidades que mostrar, y esta página no inventa
-        ninguna.
+        Ninguna licitación activa de este nicho en la última corrida del radar, o el radar no se
+        pudo correr (falta <code>LICITACIONES_API_TICKET</code>, o se agotó la cuota del ticket).
+        Este bloque se llena solo al ejecutar <code>npm run radar-licitaciones</code> — hasta
+        entonces no hay nada abierto que mostrar, y esta página no inventa ninguna licitación.
       </p>`;
 
 /** Fragmento HTML de la grilla de tarjetas (o el estado vacío), sin los marcadores. */
@@ -160,15 +165,17 @@ ${hallazgos.map((h) => tarjeta(h, ahora)).join("\n\n")}
       : ESTADO_VACIO;
 
   return `  <section>
-    <h2>Oportunidades detectadas</h2>
+    <h2>Licitaciones activas</h2>
     <p class="section-sub">
-      Licitaciones públicas abiertas que mencionan gestión documental, digitalización de procesos
-      u oficina de partes, según la última corrida de <code>npm run radar-licitaciones</code>.
+      Licitaciones públicas <strong>abiertas ahora</strong> que mencionan gestión documental,
+      digitalización de procesos u oficina de partes, según la última corrida de
+      <code>npm run radar-licitaciones</code>. Es lo único a lo que este agente dedica su cuota de
+      API: qué se puede ofertar hoy, no cómo le fue al nicho históricamente.
       El estado de cada una es <strong>detectada</strong>: el radar solo observa — cotizar es un
       paso aparte (<code>npm run cotizar-licitaciones -- &lt;codigo&gt;</code>) y el envío de una
       oferta lo hace siempre una persona.
     </p>
-    <p class="meta-corrida">${hallazgos.length} oportunidad(es) en la corrida del ${generado}.</p>
+    <p class="meta-corrida">${hallazgos.length} licitación(es) activa(s) en la corrida del ${generado}.</p>
 ${cuerpo}
   </section>`;
 }

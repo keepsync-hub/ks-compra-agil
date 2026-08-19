@@ -84,6 +84,19 @@ de mercado, igual que el radar de solo lectura.
 Réplica de este mismo radar+cotizador para **Licitaciones públicas** (no Compra Ágil) de gestión
 documental, digitalización de procesos u oficina de partes — skills `radar_licitaciones` y
 `cotizar_licitaciones`. Es un dominio distinto con su propia API (`api.mercadopublico.cl`, ticket
-separado), su propio catálogo de costos (sin precio de lista público como el de Claude) y sus
-propios insumos bloqueantes sin resolver. **Leer `licitaciones/PLAN.md` antes de tocar ese
-código** — no asumir que los guardrails y hallazgos de arriba aplican tal cual a ese dominio.
+separado) y su propio catálogo de costos (sin precio de lista público como el de Claude).
+**Leer `licitaciones/PLAN.md` antes de tocar ese código** — no asumir que los guardrails y
+hallazgos de arriba aplican tal cual a ese dominio. Dos diferencias que muerden:
+
+- El radar **está verificado contra producción desde el 2026-08-19** y publica oportunidades reales
+  en `docs/licitaciones.html`, pero **la cuota del ticket es muy escasa** (se agotó en la segunda
+  corrida del mismo día): correr contra la API una vez al día y usar
+  `npm run radar-licitaciones -- --desde-cache` para republicar sin gastar cuota.
+- Por esa cuota, **toda la API se gasta en licitaciones activas**: se eliminaron el barrido
+  histórico del nicho y su página, y `api.ts` solo expone `buscarLicitacionesActivas()` + la ficha
+  por código. Consecuencia: a diferencia del nicho Claude, acá **no hay cifras históricas** del
+  nicho — no asumir que existen ni pedirlas al radar. Ver "Decisión: solo licitaciones activas" en
+  `licitaciones/PLAN.md` antes de reponer cualquier barrido.
+- Esa API **no expone adjuntos ni garantías** de la licitación — no existe acá el servicio de
+  adjuntos sin login que sí tiene Compra Ágil. Las bases se leen en el portal, y el cotizador sigue
+  bloqueado por falta de catálogo de costos reales.

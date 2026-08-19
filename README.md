@@ -84,20 +84,33 @@ gestión documental, digitalización de procesos u oficina de partes. Vive en `l
 `.claude/skills/`. Diseño completo, diferencias respecto a Compra Ágil e insumos bloqueantes:
 ver `licitaciones/PLAN.md`.
 
-**⚠️ Sin verificar contra producción todavía** (a diferencia de todo lo de Compra Ágil arriba):
-no se dispuso de un `LICITACIONES_API_TICKET` (distinto del de Compra Ágil, se pide en
-https://www.mercadopublico.cl/Home/Api) durante la sesión en que se escribió este código, y
-tampoco hay un catálogo de costos reales de KeepSync para gestión documental — a diferencia de
-licencias Claude, acá no existe un precio de lista público que copiar. Ambos son insumos
-bloqueantes documentados en `licitaciones/PLAN.md`.
+**Radar verificado contra producción el 2026-08-19**: corrió con un `LICITACIONES_API_TICKET`
+válido (distinto del de Compra Ágil, se pide en https://www.mercadopublico.cl/Home/Api) y detectó
+oportunidades reales — publicadas en `docs/licitaciones.html`. Esa corrida corrigió varias
+suposiciones del código y destapó dos bugs (alertas de recompradores falsas, publicación de una
+grilla parcial); el detalle está en "Hallazgos de la corrida de verificación" de
+`licitaciones/PLAN.md`. Tres cosas quedan pendientes:
+
+- **La cuota del ticket es muy escasa** — se agotó en la segunda corrida del mismo día. Correr el
+  radar contra la API una vez al día; `npm run radar-licitaciones -- --desde-cache` republica lo ya
+  detectado sin gastar cuota. Por esto **toda la cuota se gasta en licitaciones activas**: se
+  eliminaron el barrido histórico del nicho (`informe-licitaciones`) y su página, y la API solo se
+  consulta por `estado=activas` y por ficha. A cambio, de este nicho no hay cifras históricas —
+  cuántas se declaran desiertas, quién se las adjudica — como sí las hay del nicho Claude.
+  Justificación completa en "Decisión: solo licitaciones activas" de `licitaciones/PLAN.md`.
+- **La API no expone adjuntos ni garantías** de la licitación (a diferencia de Compra Ágil): las
+  bases administrativas hay que leerlas en el portal antes de decidir si conviene ofertar.
+- **No hay catálogo de costos reales** de KeepSync para gestión documental — a diferencia de
+  licencias Claude, acá no existe un precio de lista público que copiar. `cotizar_licitaciones`
+  sigue bloqueado por esto.
 
 | Comando | Qué hace |
 |---|---|
 | `npm run radar-licitaciones` | Busca licitaciones activas de gestión documental/digitalización/oficina de partes, extrae condiciones, detecta recompradores. Solo lectura. |
-| `npm run informe-licitaciones` | Genera `licitaciones/output/informe-nicho-gestion-documental.md` con el barrido histórico. |
 | `npm run cotizar-licitaciones -- <codigo>` | Genera la cotización (`.pptx` + `.pdf`) para una licitación específica, validando el tope. No envía nada. |
 
-Página de estado equivalente: `docs/licitaciones.html` (+ `docs/informe-nicho-licitaciones.html`).
+Página de estado equivalente: `docs/licitaciones.html`, encabezada por las licitaciones abiertas
+detectadas en la última corrida.
 
 ## Estado y pendientes
 
