@@ -57,7 +57,7 @@ export function registrarHallazgo(state: RadarState, item: LicitacionListItem, a
     ultimo_estado: item.Estado ?? String(item.CodigoEstado ?? "desconocido"),
   };
 
-  const rut = item.Comprador?.RutOrganismo ?? item.Comprador?.NombreOrganismo ?? "desconocido";
+  const rut = item.Comprador?.RutUnidad ?? item.Comprador?.NombreOrganismo ?? "desconocido";
   const organismo = state.organismos[rut] ?? { rut, nombre: item.Comprador?.NombreOrganismo ?? "desconocido", procesos: [] };
   const procesosPreviosDelOrganismo = organismo.procesos.filter((p) => p.codigo !== codigo);
   const esReintentoDeOrganismo = esNuevo && procesosPreviosDelOrganismo.length > 0;

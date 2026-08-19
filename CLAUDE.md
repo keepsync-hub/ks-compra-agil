@@ -64,6 +64,21 @@ atribuible al comprador, lo que matiza la hipótesis de fulfillment; y (2) hay u
 como `data/state.json` está gitignored, el radar corriendo en la nube nunca detecta recompradores.
 Leerlo antes de trabajar en cobertura, cuota o priorización.
 
+## Tercer nicho: exploración de mercado para Array (`config/array-servicios.json`)
+
+`array-compras-agiles-radar` (solo lectura) y `array-compras-agiles-cotizar` buscan Compras
+Ágiles relacionadas con los servicios de [Array](http://www.array.cl/) — oficina de partes,
+gestión documental, RPA, BI, gestión de proyectos —, publicando `docs/array-compras-agiles.html`.
+El segundo skill además descarga los adjuntos de cada oportunidad y genera una cotización PDF
+**preliminar** por cada una, con **KeepSync** (no Array) como oferente (mismo
+`config/company.json` que licencias Claude) y precio = **80% del presupuesto disponible** — una
+heurística de exploración de mercado pedida explícitamente por el usuario, no un cálculo desde
+costos reales de Array (ese catálogo no existe hoy). Por eso cada PDF y la página quedan
+marcados PRELIMINAR: antes de que cualquiera de estas cotizaciones sirva para una oferta real
+hace falta resolver el mismo tipo de insumo bloqueante que el nicho Claude (¿vía real de
+fulfillment/facturación para Array, y a qué costo?) — sin resolverlo, esto es solo investigación
+de mercado, igual que el radar de solo lectura.
+
 ## Segundo nicho: Licitaciones de Gestión Documental (`licitaciones/`)
 
 Réplica de este mismo radar+cotizador para **Licitaciones públicas** (no Compra Ágil) de gestión

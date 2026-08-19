@@ -3,22 +3,31 @@
  *
  * ADVERTENCIA DE VERIFICACIÓN (a diferencia de `src/lib/api.ts` en la raíz, que sí está verificado
  * contra `api2.mercadopublico.cl` en producción — ver PLAN.md de la raíz): este cliente **no se ha
- * probado contra la API real con un ticket válido** en esta sesión. Se probó únicamente que el
- * endpoint responde (HTTP 200 con `{"Codigo":203,"Mensaje":"Ticket no válido."}` usando un ticket
- * de prueba público desactualizado), lo que confirma que el host es alcanzable pero NO confirma la
- * forma real del payload. Los nombres de campo de abajo están tomados de la documentación pública
- * histórica de esta API (estable desde hace años, a diferencia de la v2 Beta de Compra Ágil), pero
- * hay que confirmarlos con un `LICITACIONES_API_TICKET` real antes de confiar ciegamente en ellos —
- * por eso el parseo es defensivo (campos opcionales, catch amplio) en vez de asumir tipos estrictos.
+ * probado contra la API real con un ticket válido** en esta sesión (falta `LICITACIONES_API_TICKET`
+ * en el entorno). Se probó únicamente que el endpoint responde (HTTP 200 con
+ * `{"Codigo":203,"Mensaje":"Ticket no válido."}` usando un ticket de prueba público desactualizado),
+ * lo que confirma que el host es alcanzable pero NO confirma la forma real del payload en runtime.
+ *
+ * Los nombres de campo de `LicitacionListItem`/`ItemLicitacion` (incluido `Comprador`) SÍ están
+ * confirmados contra el "Diccionario de Datos" oficial de ChileCompra
+ * (`licitaciones/docs/diccionario-api-licitaciones-mercadopublico.pdf` — ojo: ese documento NO
+ * confirma los parámetros de búsqueda `estado`/`fecha`, solo `codigo`; ver más abajo). Ese
+ * diccionario corrigió un error de esta misma interfaz: el RUT del comprador es
+ * `Comprador.RutUnidad`, no `Comprador.RutOrganismo` como se había supuesto antes de tener el
+ * diccionario a mano. `Garantia` y `Adjuntos`, en cambio, siguen sin aparecer en ese diccionario —
+ * probablemente viven en otro endpoint o documento no revisado todavía — así que sus formas siguen
+ * siendo una suposición y el parseo se mantiene defensivo (campos opcionales) por eso.
  *
  * Diferencia estructural importante respecto a Compra Ágil: esta API **no tiene un parámetro de
- * búsqueda por texto libre como `q`**. Solo permite consultar por `fecha` (día de publicación),
- * `codigo` (ficha de una licitación) o `estado`. Por eso el radar de licitaciones no puede repetir
- * el patrón "~8 queries de marca" del radar de Compra Ágil: tiene que traer el listado de un estado
- * (o de una fecha) y filtrar las palabras clave LOCALMENTE sobre `Nombre`/`Descripcion` — el mismo
- * mecanismo que ya existía como filtro de ruido en Compra Ágil, pero acá es el mecanismo de
- * descubrimiento primario, no un filtro secundario. Confirmar con un ticket real si `estado=activas`
- * devuelve todas las licitaciones vigentes en una sola llamada o si hace falta paginar por fecha.
+ * búsqueda por texto libre como `q`**. El diccionario oficial solo documenta `codigo` (ficha de una
+ * licitación); `fecha` (día de publicación) y `estado` los usa ya el radar (`buscarLicitaciones`)
+ * pero **siguen sin confirmar contra el diccionario oficial** — vienen de ejemplos públicos conocidos
+ * de esta API, no de este documento. Por eso el radar de licitaciones no puede repetir el patrón
+ * "~8 queries de marca" del radar de Compra Ágil: trae el listado de un estado (o de una fecha) y
+ * filtra las palabras clave LOCALMENTE sobre `Nombre`/`Descripcion` — el mismo mecanismo que ya
+ * existía como filtro de ruido en Compra Ágil, pero acá es el mecanismo de descubrimiento primario,
+ * no un filtro secundario. Confirmar con un ticket real si `estado=activas` devuelve todas las
+ * licitaciones vigentes en una sola llamada o si hace falta paginar por fecha.
  */
 import { getApiTicket } from "./config.js";
 
@@ -43,10 +52,16 @@ export interface LicitacionListItem {
   FechaCierre?: string;
   FechaPublicacion?: string;
   Comprador?: {
-    NombreOrganismo?: string;
-    RutOrganismo?: string;
     CodigoOrganismo?: string;
+    NombreOrganismo?: string;
+    // Confirmado contra licitaciones/docs/diccionario-api-licitaciones-mercadopublico.pdf
+    // (Diccionario de Datos oficial): el campo es RutUnidad, no RutOrganismo como se había
+    // supuesto antes de tener el diccionario a mano.
+    RutUnidad?: string;
+    CodigoUnidad?: string;
     NombreUnidad?: string;
+    DireccionUnidad?: string;
+    ComunaUnidad?: string;
     RegionUnidad?: string;
   };
   Tipo?: string;

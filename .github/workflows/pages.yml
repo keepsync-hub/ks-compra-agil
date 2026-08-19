@@ -6,6 +6,7 @@ on:
       - claude/mercadopublico-agente-compras-pgyedf
       - claude/revisar-contexto-plan-ttaumn
       - claude/array-agile-purchases-page-det2d4
+      - claude/agile-purchase-opportunities-page-otyxzs
       - main
       - master
     paths:

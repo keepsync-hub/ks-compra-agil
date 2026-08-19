@@ -25,7 +25,15 @@ como el de Anthropic).
    y `cotizar.ts` de este dominio no pueden correr contra datos reales — se probó únicamente que el
    host responde (con un ticket de prueba público desactualizado, que devolvió `{"Codigo":203,
    "Mensaje":"Ticket no válido."}`, HTTP 200), lo que confirma que el endpoint es alcanzable pero no
-   verifica la forma real del payload.
+   verifica la forma real del payload en runtime.
+   - **Actualización**: se consiguió el "Diccionario de Datos" oficial de esta API
+     (`licitaciones/docs/diccionario-api-licitaciones-mercadopublico.pdf`, de chilecompra.cl) y se
+     usó para corregir `licitaciones/src/lib/api.ts` — los nombres de campo de `Comprador` e
+     `Items` ahora están confirmados contra ese documento (se corrigió un error real:
+     `Comprador.RutUnidad`, no `Comprador.RutOrganismo` como se había asumido). **Ese diccionario
+     solo documenta el parámetro `codigo`** — no confirma `estado`/`fecha` (los que usa
+     `buscarLicitaciones` para descubrimiento) ni las secciones `Garantia`/`Adjuntos`, que siguen
+     siendo una suposición sin confirmar. Sigue haciendo falta un ticket real para validar eso.
 2. **Catálogo de costos reales de KeepSync para gestión documental/digitalización**: a diferencia
    de licencias Claude (precio de lista público de Anthropic, ya cargado en `config/company.json`
    de la raíz), acá no existe un precio externo que copiar. `licitaciones/config/company.json` debe
@@ -48,7 +56,7 @@ correctamente por falta de configuración, que es el comportamiento esperado —
 | Búsqueda por texto | `q` (matching laxo del servidor) | **no existe** — solo `fecha` (día de publicación), `codigo` (ficha) o `estado`. El filtrado por palabra clave (`config/keywords.json`) es LOCAL y es el mecanismo primario de descubrimiento, no un filtro de ruido secundario como en Compra Ágil |
 | Envelope de error | HTTP 429/5xx + `{success, payload, errors}` | HTTP 200 incluso en error, con `{Codigo, Mensaje}` en vez del listado esperado (verificado: así respondió con el ticket de prueba) |
 | Adjuntos | servicio público sin login, ya probado end-to-end | `Adjuntos[].URL` de la propia ficha — las licitaciones públicas normalmente permiten descarga directa sin login, pero esto no se probó en esta sesión |
-| Tope | `presupuesto.monto_disponible_clp` (número exacto verificado) | `MontoEstimado` (nombre de campo asumido de la documentación pública histórica, sin confirmar) |
+| Tope | `presupuesto.monto_disponible_clp` (número exacto verificado) | `MontoEstimado` (nombre de campo confirmado contra el diccionario oficial — ver `licitaciones/docs/`; el valor en runtime sigue sin verificar contra un ticket real) |
 | Garantías | no aplica en Compra Ágil | Licitaciones sí suelen exigir garantía de seriedad de la oferta y de fiel cumplimiento — campos `Garantia.*` asumidos, sin confirmar |
 | Elegibilidad EMT | `convocatoria.estado_convocatoria` (1=primer llamado solo EMT) — filtro determinista verificado | No hay un campo equivalente confirmado; el tipo de licitación (`Tipo`: L1/LE/LP/LQ/LR/LS, según el monto en UTM) y la reserva MIPYME (Art. 20 Ley de Compras) son políticas a verificar, no un flag booleano simple como en Compra Ágil |
 
@@ -65,6 +73,7 @@ Espejo de la de Compra Ágil (raíz), adaptada:
 ```
 licitaciones/
   PLAN.md                    - este documento
+  docs/                       - documentación oficial de referencia (diccionario de datos de la API)
   src/lib/
     api.ts                   - cliente de api.mercadopublico.cl (SIN VERIFICAR, ver arriba)
     keywords.ts               - variantes de búsqueda + verificación local (acá es descubrimiento primario)
