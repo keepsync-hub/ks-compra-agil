@@ -107,6 +107,9 @@ function bloqueDecision(f: FichaDecision | null): string {
   if (!f) return "";
   const criticas = f.banderas.filter((b) => b.nivel !== "favorable");
   const chips = [
+    f.comerciales.montoMensualEstimado !== undefined
+      ? `$${Math.round(f.comerciales.montoMensualEstimado).toLocaleString("es-CL")}/mes`
+      : null,
     f.pesoPrecio !== undefined ? `precio ${f.pesoPrecio}%` : null,
     f.garantia.exigida ? `garantía ${f.garantia.monto ?? "sí"}` : "sin garantía",
     f.anexos.total > 0 ? `${f.anexos.total} anexos` : null,
