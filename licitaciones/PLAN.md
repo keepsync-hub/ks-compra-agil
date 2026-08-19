@@ -180,9 +180,25 @@ Descargar las bases es exactamente lo que hace un oferente identificado en su se
 esa es la vía que ChileCompra sí contempla para estos archivos. El gate de reCAPTCHA apunta al
 scraping anónimo; una sesión de proveedor no es scraping anónimo.
 
-`adjuntos-navegador.ts` ya la usa: si existe `data/storageState.json` —el artefacto que deja
-`npm run login` (ClaveÚnica + 2FA)— abre el visor con esa sesión en vez de anónimo, y lo informa en
-consola. `--sin-sesion` fuerza el modo anónimo.
+`adjuntos-navegador.ts` ya la usa: si existe `data/storageState.json` abre el visor con esa sesión
+en vez de anónimo, y lo informa en consola. `--sin-sesion` fuerza el modo anónimo.
+
+**El portal tiene credencial propia — verificado el 2026-08-19, corrigiendo lo que se había
+concluido antes.** `mercadopublico.cl/portal/login.aspx` redirige al Home, lo que hacía parecer que
+todo pasaba por ClaveÚnica; no es así. El botón "Iniciar Sesión" del Home llama a `keycloak.login()`
+y lleva a `heimdall.mercadopublico.cl` (Keycloak, realm `mercadopublico`), con formulario propio de
+usuario y contraseña (`#username-re`, `#password-re`, `#kc-login-re`) y **sin reCAPTCHA**. O sea:
+para esta sesión NO hace falta la credencial de identidad nacional, basta la cuenta del portal.
+
+`npm run login-portal` implementa ese flujo (`licitaciones/src/scripts/login-portal.ts`): entra por
+el Home —la URL de Keycloak lleva `state`/`nonce`/`code_challenge` generados, no se puede
+hardcodear—, completa el formulario con `MP_USUARIO`/`MP_CLAVE` del entorno y guarda la sesión.
+`--diagnostico` verifica los selectores sin usar credenciales (corrido: los tres encontrados).
+
+El segundo factor llega por correo desde `no-reply@digital.gob.cl`. Como el script no tiene acceso a
+MCP, usa un handshake por archivo: escribe `licitaciones/data/2fa-solicitado.json` y espera
+`2fa-codigo.txt`, que escribe el agente tras leer el correo (workflow de n8n acotado a ese
+remitente). El código se borra del disco apenas se usa.
 
 Lo importante para el objetivo "sin intervención de una persona": ese login se hace **una vez**, y
 tampoco requiere a nadie — el código de doble factor llega al Gmail del usuario y el agente lo lee
