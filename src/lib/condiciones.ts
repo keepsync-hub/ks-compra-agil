@@ -12,6 +12,8 @@ export interface Condiciones {
   documentos_exigidos: string[];
   excluyentes: string[];
   competencia_ofertas: number;
+  /** Etiquetas de acreditación exigidas por el texto (ver `detectarAcreditacionesExigidas`), p.ej. "distribuidor_autorizado". */
+  acreditaciones_exigidas: string[];
 }
 
 /** Frases que en la práctica de Compra Ágil declaran una condición de inadmisibilidad. */
@@ -34,6 +36,26 @@ const PATRONES_REQUISITO_ADJUNTO = [
   /\badjunt\w*[^.\n]*\bvigente\b[^.\n]*/gi,
   /\bsi no (?:adjunta|acompa[nñ]a|presenta|incluye)\b[^.\n]*/gi,
 ];
+
+/**
+ * Frases que declaran una exigencia de acreditación como proveedor autorizado — el gate que un
+ * comprador declaró textualmente en al menos un caso real (`output/informe-nicho-claude.md`:
+ * "Proveedores no entregan Certificado o carta vigente que acredite proveedor autorizado...").
+ * La etiqueta debe calzar con los valores usados en `acreditaciones_conocidas_faltantes` de
+ * `config/categorias.json` (ver PLAN-VOLUMEN.md, Fase 4) — solo bloquea si la categoría la declaró
+ * ahí, así que el día que se resuelva el insumo de fulfillment deja de bloquear sin tocar código.
+ */
+const PATRONES_ACREDITACION: { patron: RegExp; etiqueta: string }[] = [
+  { patron: /distribuidor(?:es)?\s+autorizado/i, etiqueta: "distribuidor_autorizado" },
+  { patron: /canal\s+oficial/i, etiqueta: "canal_oficial" },
+  { patron: /carta\s+(?:del\s+)?fabricante/i, etiqueta: "carta_fabricante" },
+  { patron: /proveedor\s+autorizado|carta\s+vigente\s+que\s+acredite/i, etiqueta: "distribuidor_autorizado" },
+];
+
+/** Etiquetas de acreditación exigidas por el texto (deduplicadas), en el mismo vocabulario que `acreditaciones_conocidas_faltantes`. */
+export function detectarAcreditacionesExigidas(texto: string): string[] {
+  return [...new Set(PATRONES_ACREDITACION.filter((p) => p.patron.test(texto)).map((p) => p.etiqueta))];
+}
 
 /** Documentos habitualmente exigidos en estas compras; se busca la mención literal en el texto. */
 const DOCUMENTOS_CONOCIDOS: { patron: RegExp; etiqueta: string }[] = [
@@ -131,5 +153,6 @@ export function extraerCondiciones(detalle: CompraAgilDetalle): Condiciones {
       ...PATRONES_REQUISITO_ADJUNTO,
     ]),
     competencia_ofertas: detalle.resumen.total_ofertas_recibidas,
+    acreditaciones_exigidas: detectarAcreditacionesExigidas(textoCompleto),
   };
 }

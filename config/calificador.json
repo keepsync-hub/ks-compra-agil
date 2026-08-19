@@ -1,0 +1,12 @@
+{
+  "pesos": {
+    "primer_llamado": 0,
+    "holgura_precio": 3,
+    "competencia_baja": 2,
+    "recomprador": 1,
+    "fracaso_previo_ganable": 2,
+    "plazo_holgado": 1
+  },
+  "umbral_ofertar": 4,
+  "_nota": "Pesos son juicio inicial, no un ajuste estadístico — cero ofertas enviadas todavía. `primer_llamado` pesa 0 a propósito: es un filtro determinista que hoy se muestra pero no se usa para priorizar (ver PLAN-VOLUMEN.md, Fase 4). Cada calificación se anexa con sus señales desglosadas a historico/calificaciones.jsonl desde el día uno para poder ajustar estos pesos contra desenlaces reales cuando haya ~10."
+}

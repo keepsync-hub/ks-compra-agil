@@ -47,6 +47,7 @@ cotizar, pero cada PDF/PPTX generado queda marcado BORRADOR hasta que se confirm
 | `npm run keywords [-- agregar <categoria> "<frase>" \| quitar "<frase>"]` | Muestra o edita las palabras que busca el radar de Compra Ágil. Las frases van a `config/categorias-extra.json` y la corrida siguiente las usa como variante `q` y como verificación local, sin tocar las regex de `categorias.json`. Equivalente por consola del formulario de `docs/index.html`. Cada frase en una categoría activa suma un request por corrida. |
 | `npm run radar` | Busca Compras Ágiles "Claude" abiertas, extrae condiciones, detecta recompradores, baja los adjuntos y **publica `docs/index.html`** (oportunidades + palabras clave). Si la cuota diaria se agota a mitad, sigue con la ficha reducida del listado en vez de abortar. Solo lectura. |
 | `npm run informe` | Regenera `output/informe-nicho-claude.md` con el barrido histórico completo (tasa de fracaso, motivos, recompradores). |
+| `npm run digest` | **Cero requests.** Prioriza las oportunidades del índice ya en caché (`data/<codigo>/detalle.json`, dejado por el radar): clasifica cada una en *Ofertar hoy* / *Revisar* / *Descartado*, calcula ventanas de republicación de los próximos 3 días y métricas de mercado por categoría (monto p25/mediana/p75, competencia, recompradores, motivos de fracaso). Escribe `output/digest-ultimo.md` y anexa cada calificación a `historico/calificaciones.jsonl`. El score es un **orden de revisión sugerido**, nunca una probabilidad de ganar (cero ofertas enviadas todavía) — ver `src/lib/calificador.ts` y PLAN-VOLUMEN.md, Fase 4. |
 | `npm run cotizar -- <codigo>` | Genera la cotización (`.pptx` fuente + `.pdf` publicable) para una compra específica, validando el tope. No envía nada. |
 | `npx tsx .claude/skills/compra-agil-ofertar/scripts/login.ts --diagnostico` | Verifica si el portal es alcanzable desde el navegador antes de intentar login real. |
 | `npm run form-fill -- <codigo>` | Completa el formulario de oferta en el portal y adjunta el PDF, sin enviar. Requiere login previo. |
@@ -151,6 +152,19 @@ detectadas en la última corrida.
 
 ## Estado y pendientes
 
+- **Inteligencia de mercado y digest priorizado (`npm run digest`): implementados** — Fases 3 y 4
+  de `PLAN-VOLUMEN.md`. `src/lib/motivos.ts` clasifica el texto declarado de cada fracaso
+  (`comprador`/`precio`/`tecnico`/`administrativo`), validado a mano contra las 29 frases no
+  repetidas de `output/informe-nicho-claude.md` (0 sin clasificar) — **falta todavía** el fixture
+  formal de 37 casos + `npm run verificar-motivos` con matriz de confusión que pide el plan.
+  `src/lib/metricas.ts` calcula percentiles de monto, tasa de fracaso, competencia mediana y
+  ventana de republicación **directamente del índice**, cero requests. `src/lib/calificador.ts`
+  aplica los bloqueantes duros (cerrado, acreditación faltante, sobre tope) y señala blandas con
+  pesos declarados en `config/calificador.json` — etiquetado siempre como "orden de revisión
+  sugerido", nunca "probabilidad de ganar", porque los pesos son juicio inicial (cero ofertas
+  enviadas). Con `historico/observaciones.jsonl` todavía chico (9 observaciones en este entorno,
+  sin `COMPRA_AGIL_API_TICKET` para hacer `npm run indexar --solo-cache` con el histórico completo
+  de 47 casos), tratar las métricas como orientativas — el digest lo dice explícitamente.
 - **Radar e informe del nicho: funcionando de punta a punta contra la API real** — encuentra las
   oportunidades abiertas reales y reproduce la tasa de fracaso medida en `PLAN.md` (~79-80%).
 - **Cotización (`cotizar.ts`): funcionando de punta a punta**, con la identidad real de KeepSync

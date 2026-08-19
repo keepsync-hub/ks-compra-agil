@@ -7,6 +7,46 @@
 
 ## Progreso de ejecución
 
+**Fases 3 y 4 — implementadas** (19-08-2026, sesión sin `COMPRA_AGIL_API_TICKET` disponible —
+todo lo de abajo corrió y se verificó **offline**, cero requests, como pide el diseño de estas dos
+fases):
+
+- `src/lib/motivos.ts` (`clasificarMotivo`): reglas ordenadas exactamente como pide este documento
+  — "error en el monto/ficha técnica/especificaciones declarado por el organismo" clasifica
+  `comprador` antes que la regla genérica de `precio`. Verificado a mano (no como fixture
+  versionado todavía) contra las 29 frases no repetidas de `output/informe-nicho-claude.md`
+  (22 de `desierta` + 7 patrones únicos de `cancelada`): 29/29 clasificadas, 0 en `sin_info`.
+  **Pendiente real de esta fase**: el fixture `historico/motivos-esperados.json` con los 37 casos
+  y `npm run verificar-motivos` con matriz de confusión — no se construyó por no tener acceso para
+  releer el texto exacto y completo contra la fuente autoritativa (el índice, no el informe
+  regenerado) en esta sesión.
+- `src/lib/metricas.ts`: `calcularMetricas` (percentiles de monto, tasa de fracaso, competencia
+  mediana, organismos recompradores, conteo de motivos), `intervalosRepublicacion` /
+  `ventanaRepublicacionEstimada` (percentiles de los días reales entre republicaciones del mismo
+  organismo) y `fracasoPrevioDelOrganismo` (para la señal `fracaso_previo_ganable` del
+  calificador). Todo sobre `historico/observaciones.jsonl` vía `leer()`/`ultimaPorCodigo()` de
+  `indice.ts` — sin tocar la API. **No se implementó** `--diagnostico-onu` ni el agrupamiento por
+  `codigo_producto` (UNSPSC) que describe la Fase 3 original — el índice hoy solo tiene 6 códigos
+  ONU distintos entre 9 observaciones, insuficiente para que esa dimensión aporte algo todavía.
+- `src/lib/calificador.ts` (`calificarOportunidad`) + `config/calificador.json`: bloqueantes duros
+  (`cerrado`, `acreditacion_faltante` — nuevo `detectarAcreditacionesExigidas` en `condiciones.ts`,
+  cotejado contra `acreditaciones_conocidas_faltantes` de la categoría — y `sobre_tope`, reusando
+  `estimarTotal` de `lineas.ts` sin generar PDF) y señales blandas ponderadas
+  (`primer_llamado` con peso 0 a propósito, `holgura_precio`, `competencia_baja`, `recomprador`,
+  `fracaso_previo_ganable`, `plazo_holgado`). Cada calificación se anexa a
+  `historico/calificaciones.jsonl` con las señales desglosadas. Probado con fixtures sintéticos
+  (caso normal, cerrado, acreditación faltante) — los tres veredictos salieron correctos.
+- `npm run digest` (`src/scripts/digest.ts`) → `output/digest-ultimo.md`: *Ofertar hoy* / *Revisar*
+  / *Descartado* (declarando explícitamente qué códigos no tienen `data/<codigo>/detalle.json` en
+  caché en vez de omitirlos en silencio) / *Ventanas de republicación* (próximos 3 días) /
+  *Métricas por categoría* / *Cuota*. Corre completo sin `config/company.json` (avisa que el
+  precio no se evaluó) y sin ticket de API — verificado en esta sesión: `ofertar=0 revisar=0
+  descartar=0 sin_cache=6` contra el índice real de 6 oportunidades `publicada` sin caché de
+  detalle en este entorno limpio.
+- **No implementado**: Fase 5 (precio ganador vía Orden de Compra) — sigue condicionada al spike
+  de la Fase 0 sobre si el cruce Compra Ágil → OC funciona, que no se corrió en esta sesión por
+  falta de ticket.
+
 **Fase 0 — implementada y validada contra producción** (18-08-2026, con `COMPRA_AGIL_API_TICKET`
 real disponible en el entorno):
 
