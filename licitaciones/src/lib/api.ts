@@ -29,25 +29,19 @@
  * ChileCompra (`licitaciones/docs/diccionario-api-licitaciones-mercadopublico.pdf`).
  *
  * Diferencia estructural importante respecto a Compra Ágil: esta API **no tiene un parámetro de
- * búsqueda por texto libre como `q`**. El diccionario oficial solo documenta `codigo` (ficha de una
- * licitación); `estado` está ahora verificado en producción y `fecha` (día de publicación) sigue sin
- * ejercitarse. Por eso el radar de licitaciones no puede repetir el patrón "~8 queries de marca" del
- * radar de Compra Ágil: trae el listado de un estado y filtra las palabras clave LOCALMENTE sobre
- * `Nombre`/`Descripcion` — el mismo mecanismo que ya existía como filtro de ruido en Compra Ágil,
- * pero acá es el mecanismo de descubrimiento primario, no un filtro secundario.
+ * búsqueda por texto libre como `q`**. Por eso el radar de licitaciones no puede repetir el patrón
+ * "~8 queries de marca" del radar de Compra Ágil: trae el listado nacional de licitaciones activas
+ * y filtra las palabras clave LOCALMENTE sobre `Nombre`/`Descripcion` — el mismo mecanismo que ya
+ * existía como filtro de ruido en Compra Ágil, pero acá es el mecanismo de descubrimiento primario,
+ * no un filtro secundario.
+ *
+ * Este módulo expone deliberadamente **solo dos llamadas**: el listado de activas y la ficha por
+ * código. Toda la cuota del ticket se gasta en saber qué está abierto ahora — ver
+ * `buscarLicitacionesActivas`.
  */
 import { getApiTicket } from "./config.js";
 
 const BASE_URL = "https://api.mercadopublico.cl";
-
-export type EstadoLicitacion =
-  | "activas"
-  | "publicada"
-  | "cerrada"
-  | "desierta"
-  | "adjudicada"
-  | "revocada"
-  | "suspendida";
 
 /** Forma flexible del ítem de listado — se tipa laxo porque no está verificado contra producción. */
 export interface LicitacionListItem {
@@ -194,17 +188,18 @@ async function apiGet<T>(query: Record<string, string>): Promise<T> {
   throw ultimoError ?? new Error("API licitaciones: fallo desconocido");
 }
 
-export interface BuscarLicitacionesParams {
-  estado?: EstadoLicitacion;
-  /** ddmmaaaa — día de publicación. La API no soporta rango de fechas ni texto libre. */
-  fecha?: string;
-}
-
-export async function buscarLicitaciones(params: BuscarLicitacionesParams): Promise<LicitacionListItem[]> {
-  const query: Record<string, string> = {};
-  if (params.estado) query.estado = params.estado;
-  if (params.fecha) query.fecha = params.fecha;
-  const payload = await apiGet<ListadoEnvelope>(query);
+/**
+ * Único listado que este dominio consulta: las licitaciones vigentes.
+ *
+ * La API acepta otros estados (`cerrada`, `desierta`, `adjudicada`, …) y un parámetro `fecha`, pero
+ * **acá no se usan a propósito**. La cuota de este ticket es muy escasa —se agotó en la segunda
+ * corrida del mismo día— y cada estado extra obliga a traerse un listado nacional completo. Se
+ * decidió gastar toda la cuota en lo único que produce valor accionable: qué está abierto ahora y
+ * la ficha de cada candidato. Si alguna vez se quiere volver a barrer el histórico, esta firma es
+ * el lugar donde ampliarla, y hay que presupuestar la cuota antes.
+ */
+export async function buscarLicitacionesActivas(): Promise<LicitacionListItem[]> {
+  const payload = await apiGet<ListadoEnvelope>({ estado: "activas" });
   return payload.Listado ?? [];
 }
 
@@ -221,11 +216,4 @@ export function itemsDeLicitacion(detalle: LicitacionDetalle): ItemLicitacion[] 
   if (!raw) return [];
   if (Array.isArray(raw)) return raw;
   return raw.Listado ?? [];
-}
-
-/** Formatea una Date como ddmmaaaa, el formato que usa `fecha` en esta API. */
-export function fechaDdmmaaaa(d: Date): string {
-  const dd = String(d.getDate()).padStart(2, "0");
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  return `${dd}${mm}${d.getFullYear()}`;
 }

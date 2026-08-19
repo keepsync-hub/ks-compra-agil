@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import path from "node:path";
 import { LIC_ROOT_DIR, loadKeywordsConfig } from "../../../../licitaciones/src/lib/config.js";
 import {
-  buscarLicitaciones,
+  buscarLicitacionesActivas,
   obtenerDetalleLicitacion,
   CuotaAgotadaError,
   type LicitacionDetalle,
@@ -177,7 +177,7 @@ async function main() {
 
   let listado: LicitacionListItem[] = [];
   try {
-    listado = await buscarLicitaciones({ estado: "activas" });
+    listado = await buscarLicitacionesActivas();
   } catch (err) {
     console.error(`No se pudo consultar la API de Licitaciones: ${(err as Error).message}`);
     if (err instanceof CuotaAgotadaError) {

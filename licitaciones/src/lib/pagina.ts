@@ -148,11 +148,10 @@ ${filasDatos(h, ahora)}
 }
 
 const ESTADO_VACIO = `      <p class="note">
-        Ninguna licitación abierta de este nicho en la última corrida del radar, o el radar
-        todavía no se ha podido correr contra la API real. Este bloque se llena solo al ejecutar
-        <code>npm run radar-licitaciones</code> con un <code>LICITACIONES_API_TICKET</code>
-        válido — hasta entonces no hay oportunidades que mostrar, y esta página no inventa
-        ninguna.
+        Ninguna licitación activa de este nicho en la última corrida del radar, o el radar no se
+        pudo correr (falta <code>LICITACIONES_API_TICKET</code>, o se agotó la cuota del ticket).
+        Este bloque se llena solo al ejecutar <code>npm run radar-licitaciones</code> — hasta
+        entonces no hay nada abierto que mostrar, y esta página no inventa ninguna licitación.
       </p>`;
 
 /** Fragmento HTML de la grilla de tarjetas (o el estado vacío), sin los marcadores. */
@@ -166,15 +165,17 @@ ${hallazgos.map((h) => tarjeta(h, ahora)).join("\n\n")}
       : ESTADO_VACIO;
 
   return `  <section>
-    <h2>Oportunidades detectadas</h2>
+    <h2>Licitaciones activas</h2>
     <p class="section-sub">
-      Licitaciones públicas abiertas que mencionan gestión documental, digitalización de procesos
-      u oficina de partes, según la última corrida de <code>npm run radar-licitaciones</code>.
+      Licitaciones públicas <strong>abiertas ahora</strong> que mencionan gestión documental,
+      digitalización de procesos u oficina de partes, según la última corrida de
+      <code>npm run radar-licitaciones</code>. Es lo único a lo que este agente dedica su cuota de
+      API: qué se puede ofertar hoy, no cómo le fue al nicho históricamente.
       El estado de cada una es <strong>detectada</strong>: el radar solo observa — cotizar es un
       paso aparte (<code>npm run cotizar-licitaciones -- &lt;codigo&gt;</code>) y el envío de una
       oferta lo hace siempre una persona.
     </p>
-    <p class="meta-corrida">${hallazgos.length} oportunidad(es) en la corrida del ${generado}.</p>
+    <p class="meta-corrida">${hallazgos.length} licitación(es) activa(s) en la corrida del ${generado}.</p>
 ${cuerpo}
   </section>`;
 }

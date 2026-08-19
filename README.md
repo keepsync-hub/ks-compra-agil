@@ -93,7 +93,11 @@ grilla parcial); el detalle está en "Hallazgos de la corrida de verificación" 
 
 - **La cuota del ticket es muy escasa** — se agotó en la segunda corrida del mismo día. Correr el
   radar contra la API una vez al día; `npm run radar-licitaciones -- --desde-cache` republica lo ya
-  detectado sin gastar cuota. El informe histórico del nicho sigue sin poder correrse por esto.
+  detectado sin gastar cuota. Por esto **toda la cuota se gasta en licitaciones activas**: se
+  eliminaron el barrido histórico del nicho (`informe-licitaciones`) y su página, y la API solo se
+  consulta por `estado=activas` y por ficha. A cambio, de este nicho no hay cifras históricas —
+  cuántas se declaran desiertas, quién se las adjudica — como sí las hay del nicho Claude.
+  Justificación completa en "Decisión: solo licitaciones activas" de `licitaciones/PLAN.md`.
 - **La API no expone adjuntos ni garantías** de la licitación (a diferencia de Compra Ágil): las
   bases administrativas hay que leerlas en el portal antes de decidir si conviene ofertar.
 - **No hay catálogo de costos reales** de KeepSync para gestión documental — a diferencia de
@@ -103,10 +107,10 @@ grilla parcial); el detalle está en "Hallazgos de la corrida de verificación" 
 | Comando | Qué hace |
 |---|---|
 | `npm run radar-licitaciones` | Busca licitaciones activas de gestión documental/digitalización/oficina de partes, extrae condiciones, detecta recompradores. Solo lectura. |
-| `npm run informe-licitaciones` | Genera `licitaciones/output/informe-nicho-gestion-documental.md` con el barrido histórico. |
 | `npm run cotizar-licitaciones -- <codigo>` | Genera la cotización (`.pptx` + `.pdf`) para una licitación específica, validando el tope. No envía nada. |
 
-Página de estado equivalente: `docs/licitaciones.html` (+ `docs/informe-nicho-licitaciones.html`).
+Página de estado equivalente: `docs/licitaciones.html`, encabezada por las licitaciones abiertas
+detectadas en la última corrida.
 
 ## Estado y pendientes
 

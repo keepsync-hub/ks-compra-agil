@@ -24,8 +24,8 @@ como el de Anthropic).
    contra `api.mercadopublico.cl` en producción. Ver "Hallazgos de la corrida de verificación".
    Queda una restricción operativa derivada: **la cuota diaria es muy escasa** — se agotó (429) en la
    segunda corrida del mismo día, a mitad de las llamadas de ficha. Eso condiciona la frecuencia del
-   radar y, sobre todo, bloquea hoy el informe histórico del nicho, que necesita traerse el listado
-   completo de tres estados distintos.
+   radar. Por eso se decidió gastar **toda** la cuota en licitaciones activas: ver "Decisión: solo
+   licitaciones activas" abajo.
 2. **Catálogo de costos reales de KeepSync para gestión documental/digitalización**: a diferencia
    de licencias Claude (precio de lista público de Anthropic, ya cargado en `config/company.json`
    de la raíz), acá no existe un precio externo que copiar. `licitaciones/config/company.json` debe
@@ -89,7 +89,30 @@ Esa verificación campo por campo ya se hizo (2026-08-19): las fichas crudas que
 `licitaciones/data/_muestra-item-listado.json` — ese directorio está gitignored, así que en un
 entorno nuevo hay que volver a generarlos con una corrida. Lo que **sigue sin verificarse** es el
 parámetro `fecha` (día de publicación), que ningún script ejercita todavía, y el barrido histórico
-por estado del informe del nicho, hoy bloqueado por la cuota.
+por estado, que ya no se hace (ver "Decisión: solo licitaciones activas").
+
+## Decisión: solo licitaciones activas (2026-08-19)
+
+Este dominio consulta **un solo listado**: `estado=activas`. La API acepta `cerrada`, `desierta`,
+`adjudicada` y un parámetro `fecha`, pero no se usan.
+
+Motivo: sin búsqueda por texto en el servidor, cada estado consultado obliga a traerse el listado
+nacional completo de ese estado y filtrar localmente. La cuota de este ticket no da para eso — se
+agotó en la segunda corrida del mismo día, a mitad de las llamadas de ficha. Entre gastar cuota en
+"qué está abierto ahora" (accionable: se puede cotizar y ofertar) y gastarla en "cómo le fue
+históricamente al nicho" (informativo), se eligió lo primero.
+
+En consecuencia se **eliminó** `scripts/informe-nicho.ts` y su comando `npm run informe-licitaciones`,
+junto con la página `docs/informe-nicho-licitaciones.html`. `buscarLicitaciones(params)` se reemplazó
+por `buscarLicitacionesActivas()`, sin parámetros: ningún camino de código puede gastar cuota en otra
+cosa que el listado de activas y las fichas de los candidatos.
+
+**Lo que se pierde, dicho explícitamente**: de este nicho no hay ni habrá cifras históricas —
+cuántas licitaciones de gestión documental se declaran desiertas, quién se las adjudica y a qué
+precio. El nicho Claude sí las tiene (`output/informe-nicho-claude.md`, 47 casos, 79% de fracaso) y
+son las que condicionaron varias decisiones de diseño allá. Acá se opera sin ese contexto: el radar
+dice qué está abierto, no si vale la pena el mercado. Si esas cifras se necesitan, hay que
+presupuestar la cuota primero y recién entonces reponer el barrido.
 
 ## Arquitectura
 
@@ -112,7 +135,7 @@ licitaciones/
   data/, output/               - igual que la raíz (gitignored salvo output/, ver .gitignore)
 
 .claude/skills/
-  radar_licitaciones/SKILL.md + scripts/{radar.ts, informe-nicho.ts}
+  radar_licitaciones/SKILL.md + scripts/radar.ts
   cotizar_licitaciones/SKILL.md + scripts/cotizar.ts
 ```
 
@@ -142,9 +165,8 @@ formulario real del portal.
    corregir los nombres de campo de `src/lib/api.ts`~~ — **hecho el 2026-08-19** (ver "Hallazgos de
    la corrida de verificación").
 2. **Medir la cuota diaria del ticket.** Se agotó en la segunda corrida del mismo día, sin
-   `Retry-After` en la respuesta. Hasta saber cuántas llamadas rinde, no se puede decidir la
-   frecuencia del radar ni si el informe histórico del nicho es viable (necesita el listado completo
-   de tres estados). Mientras tanto: una corrida real por día, y `--desde-cache` para republicar.
+   `Retry-After` en la respuesta. Mientras no se sepa cuánto rinde: una corrida real por día contra
+   la API, y `npm run radar-licitaciones -- --desde-cache` para republicar sin gastarla.
 3. Definir con el usuario qué plataforma(s) de gestión documental KeepSync puede efectivamente
    revender/implementar y a qué costo real; completar `licitaciones/config/company.json`.
 4. Confirmar la fórmula de pricing (markup/IVA) para este negocio — puede no ser la misma que la

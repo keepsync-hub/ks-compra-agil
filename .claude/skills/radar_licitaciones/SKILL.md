@@ -92,10 +92,20 @@ agotada o cuando cambió el formato del reporte/página. No toca `state.json`.
    cap de 60, el reporte se escribe igual pero la página se deja intacta. Publicar una grilla
    parcial borraría de la página oportunidades que siguen abiertas.
 
-`scripts/informe-nicho.ts` (`npm run informe-licitaciones`) hace el barrido histórico equivalente
-al de Compra Ágil, con la misma limitación: sin `q`, tiene que traer el listado completo de cada
-estado consultado (`cerrada`, `desierta`, `adjudicada`) y filtrar localmente — avisa en consola si
-el volumen de un estado parece demasiado alto para ser confiable así.
+## Toda la cuota va a las licitaciones activas
+
+Este dominio consulta **un solo listado**: `estado=activas`. La API acepta otros estados
+(`cerrada`, `desierta`, `adjudicada`) y un parámetro `fecha`, pero acá no se usan: sin `q`, cada
+estado extra obliga a traerse un listado nacional completo, y la cuota de este ticket no da para
+eso. Hubo un `informe-nicho.ts` que hacía ese barrido histórico —el equivalente al informe del
+nicho de Compra Ágil— y **se eliminó a propósito**: consumía la cuota que necesita el radar sin
+haber llegado nunca a producir cifras.
+
+Consecuencia a tener presente: de este nicho **no hay cifras históricas** (cuántas licitaciones de
+gestión documental se declaran desiertas, quién se las adjudica, a qué precio). Lo que el radar
+entrega es qué está abierto ahora, no una lectura del mercado. Si en algún momento esas cifras se
+necesitan, primero hay que presupuestar la cuota — ver `buscarLicitacionesActivas` en
+`licitaciones/src/lib/api.ts`.
 
 ## Notas
 

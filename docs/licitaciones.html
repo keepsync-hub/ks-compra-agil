@@ -124,10 +124,11 @@
     <div class="brand"><img src="assets/logo-keepsync-blanco.png" alt=""><span>KeepSync</span></div>
     <h1>Agente de Licitaciones — Gestión Documental</h1>
     <p class="subtitle">
-      Réplica del agente de Compra Ágil, para un segundo nicho: <strong>Licitaciones públicas</strong>
-      (no Compra Ágil) que piden gestión documental, digitalización de procesos u oficina de
-      partes. Mismo objetivo — monitorear oportunidades, cotizar dentro del tope y dejar todo
-      listo para revisión humana — con una API, un producto y un modelo de costos distintos.
+      Qué hay <strong>abierto ahora mismo</strong> en Licitaciones públicas (no Compra Ágil) de
+      gestión documental, digitalización de procesos u oficina de partes. Réplica del agente de
+      Compra Ágil — monitorear, cotizar dentro del tope y dejar listo para revisión humana — con
+      una API, un producto y un modelo de costos distintos. La cuota de esa API es escasa, así que
+      se gasta entera en las licitaciones activas de abajo.
     </p>
     <p class="meta">Actualizado 2026-08-19 · repo <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a> · código en <a href="https://github.com/keepsync-hub/ks-compra-agil/tree/claude/radar-licitaciones-9ksb5a/licitaciones">licitaciones/</a> · diseño completo en <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/radar-licitaciones-9ksb5a/licitaciones/PLAN.md">licitaciones/PLAN.md</a></p>
   </div>
@@ -137,15 +138,17 @@
 
 <!-- OPORTUNIDADES:INICIO (generado por `npm run radar-licitaciones` — no editar a mano) -->
   <section>
-    <h2>Oportunidades detectadas</h2>
+    <h2>Licitaciones activas</h2>
     <p class="section-sub">
-      Licitaciones públicas abiertas que mencionan gestión documental, digitalización de procesos
-      u oficina de partes, según la última corrida de <code>npm run radar-licitaciones</code>.
+      Licitaciones públicas <strong>abiertas ahora</strong> que mencionan gestión documental,
+      digitalización de procesos u oficina de partes, según la última corrida de
+      <code>npm run radar-licitaciones</code>. Es lo único a lo que este agente dedica su cuota de
+      API: qué se puede ofertar hoy, no cómo le fue al nicho históricamente.
       El estado de cada una es <strong>detectada</strong>: el radar solo observa — cotizar es un
       paso aparte (<code>npm run cotizar-licitaciones -- &lt;codigo&gt;</code>) y el envío de una
       oferta lo hace siempre una persona.
     </p>
-    <p class="meta-corrida">3 oportunidad(es) en la corrida del 2026-08-19.</p>
+    <p class="meta-corrida">3 licitación(es) activa(s) en la corrida del 2026-08-19.</p>
     <div class="card-grid">
       <div class="opp-card" id="1191449-18-LE26">
         <span class="codigo">1191449-18-LE26</span>
@@ -225,7 +228,7 @@
 
   <section>
     <h2>Estado de cada componente</h2>
-    <p class="section-sub">El radar ya está verificado contra producción; el cotizador sigue bloqueado por falta de un catálogo de costos reales.</p>
+    <p class="section-sub">El radar ya está verificado contra producción y es lo único que consume cuota; el cotizador sigue bloqueado por falta de un catálogo de costos reales.</p>
     <div class="status-grid">
       <div class="status-row">
         <span class="badge ok">Verificado contra producción</span>
@@ -233,9 +236,8 @@
         <a class="btn secondary" href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/radar-licitaciones-9ksb5a/.claude/skills/radar_licitaciones/scripts/radar.ts">Ver código</a>
       </div>
       <div class="status-row">
-        <span class="badge warn">Escrito, sin correr</span>
-        <div><div class="name">Informe del nicho</div><div class="desc">Barrido histórico por estado (cerrada/desierta/adjudicada), filtrado local por palabra clave. El ticket ya no es el bloqueo: lo es la cuota — cada estado exige traerse el listado completo, y la cuota diaria no alcanza para los tres en una misma jornada. Todavía sin cifras propias de este nicho.</div></div>
-        <a class="btn secondary" href="informe-nicho-licitaciones.html">Ver informe</a>
+        <span class="badge bad">Eliminado a propósito</span>
+        <div><div class="name">Informe histórico del nicho</div><div class="desc">Existía un barrido por estado (cerrada/desierta/adjudicada) equivalente al del nicho Claude. Se eliminó: sin búsqueda por texto, cada estado obliga a traerse el listado nacional completo, y la cuota de este ticket no da para eso sin sacrificar el radar. <strong>Consecuencia:</strong> de este nicho no hay cifras históricas — cuántas se declaran desiertas, quién se las adjudica, a qué precio. El radar dice qué está abierto, no si el mercado vale la pena.</div></div>
       </div>
       <div class="status-row">
         <span class="badge warn">Escrito, bloqueado</span>
@@ -258,7 +260,8 @@
       código: el ítem del listado no trae comprador ni monto (solo la ficha los trae), el plazo de
       contrato vive en <code>TiempoDuracionContrato</code>, y esta API <strong>no expone los
       adjuntos ni las garantías</strong> de la licitación — las bases hay que leerlas en el portal.
-      Queda pendiente cuidar la cuota: es de pocas llamadas al día.
+      Queda pendiente cuidar la cuota: es de pocas llamadas al día, y por eso se decidió gastarla
+      entera en las licitaciones activas.
     </div>
     <div class="note bad" style="margin-top:0.8rem;">
       <strong>2. Catálogo de costos reales de KeepSync para gestión documental.</strong> A
@@ -291,7 +294,7 @@
     <h2>Qué falta para operar en serio</h2>
     <ol>
       <li><s><strong><code>LICITACIONES_API_TICKET</code></strong> — solicitarlo y correr el radar contra la API real</s> — hecho el 19-08-2026; los nombres de campo de <code>licitaciones/src/lib/api.ts</code> ya están corregidos según la respuesta real.</li>
-      <li><strong>Medir la cuota diaria del ticket</strong> — se agotó en la segunda corrida del día, lo que hoy impide correr el informe histórico del nicho. Sin esa medida no se puede decidir la frecuencia del radar ni el alcance del barrido histórico.</li>
+      <li><strong>Medir la cuota diaria del ticket</strong> — se agotó en la segunda corrida del día. Mientras no se sepa cuánto rinde: una corrida real contra la API por día, y <code>--desde-cache</code> para republicar sin gastarla.</li>
       <li><strong>Definir el catálogo de costos reales</strong> de KeepSync para gestión documental y completar <code>licitaciones/config/company.json</code>.</li>
       <li><strong>Confirmar la fórmula de pricing</strong> (markup/IVA) para este negocio — el default en <code>company.json.example</code> es una plantilla razonable, no una decisión ya tomada.</li>
       <li>Correr <code>npm run cotizar-licitaciones -- &lt;codigo&gt;</code> contra una licitación real y revisar manualmente el PDF/PPTX generado.</li>
@@ -303,7 +306,7 @@
 
 <footer>
   <div class="wrap">
-    <p>La grilla de oportunidades la refresca <code>npm run radar-licitaciones</code>; el resto de la página está escrito a mano y no se actualiza solo. Las cifras del nicho (cuántas licitaciones de este tipo se declaran desiertas, cuántas se adjudican y a quién) todavía no existen: para eso falta correr el informe histórico, hoy bloqueado por la cuota del ticket.</p>
+    <p>La grilla de licitaciones activas la refresca <code>npm run radar-licitaciones</code>; el resto de la página está escrito a mano y no se actualiza solo. No hay cifras históricas de este nicho y no se van a generar mientras la cuota siga siendo la que es — la decisión y su costo están en <a href="https://github.com/keepsync-hub/ks-compra-agil/blob/claude/radar-licitaciones-9ksb5a/licitaciones/PLAN.md">licitaciones/PLAN.md</a>.</p>
     <div class="links-row">
       <a href="index.html">Agente de Compra Ágil (Claude)</a>
       <a href="https://github.com/keepsync-hub/ks-compra-agil">Repositorio</a>
