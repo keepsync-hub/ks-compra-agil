@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { LIC_ROOT_DIR } from "./config.js";
-import type { LicitacionListItem } from "./api.js";
+import type { LicitacionDetalle } from "./api.js";
 
 const STATE_PATH = path.join(LIC_ROOT_DIR, "data", "state.json");
 
@@ -49,25 +49,44 @@ export interface RegistroResultado {
   procesosPreviosDelOrganismo: ProcesoHistorico[];
 }
 
-export function registrarHallazgo(state: RadarState, item: LicitacionListItem, ahoraIso: string): RegistroResultado {
-  const codigo = item.CodigoExterno;
+/**
+ * Registra un hallazgo en el state y decide si el organismo ya había publicado procesos antes.
+ *
+ * Recibe la FICHA (`detalle`), no el ítem del listado, y eso no es un detalle de estilo: la
+ * corrida de verificación del 2026-08-19 contra producción mostró que los ítems que devuelve
+ * `estado=activas` vienen sin `Comprador`, sin `Estado`, sin `FechaPublicacion` y sin
+ * `MontoEstimado` — solo la ficha (`?codigo=`) los trae. Alimentar esta función con el ítem del
+ * listado hacía que todos los hallazgos cayeran bajo la clave "desconocido" y que cada uno
+ * después del primero se reportara como RECOMPRADOR de un organismo que no era el suyo.
+ */
+export function registrarHallazgo(state: RadarState, detalle: LicitacionDetalle, ahoraIso: string): RegistroResultado {
+  const codigo = detalle.CodigoExterno;
+  const estado = detalle.Estado ?? String(detalle.CodigoEstado ?? "desconocido");
   const esNuevo = !(codigo in state.codigos_vistos);
   state.codigos_vistos[codigo] = {
     primera_vez: state.codigos_vistos[codigo]?.primera_vez ?? ahoraIso,
-    ultimo_estado: item.Estado ?? String(item.CodigoEstado ?? "desconocido"),
+    ultimo_estado: estado,
   };
 
-  // OJO (dos salvedades, ninguna bloqueante hoy porque licitaciones/data/ está gitignored y este
-  // radar nunca corrió contra la API real):
-  // 1. Cambiar la clave de agrupación invalida cualquier state.json local previo: las entradas
-  //    viejas quedaron bajo el fallback NombreOrganismo y no se migran, así que un organismo ya
-  //    registrado se vería como nuevo y se perdería una detección de recomprador.
-  // 2. `RutUnidad` es el RUT de la UNIDAD DE COMPRA, no del organismo. Si un organismo opera
-  //    varias unidades con RUT distinto, esto lo fragmenta. El diccionario oficial confirma el
-  //    nombre del campo, no que sea el identificador correcto para agrupar por organismo —
-  //    verificar con datos reales antes de confiar en el conteo de recompradores.
-  const rut = item.Comprador?.RutUnidad ?? item.Comprador?.NombreOrganismo ?? "desconocido";
-  const organismo = state.organismos[rut] ?? { rut, nombre: item.Comprador?.NombreOrganismo ?? "desconocido", procesos: [] };
+  // `RutUnidad` es el RUT de la UNIDAD DE COMPRA, no del organismo (confirmado en el diccionario
+  // oficial). Si un organismo opera varias unidades con RUT distinto, esto lo fragmenta y se
+  // subcuentan recompradores; por eso se cae a `CodigoOrganismo`, que sí identifica al organismo,
+  // antes que al nombre. Se prefiere RutUnidad igualmente porque es el identificador estable que
+  // usa el resto del ecosistema de Mercado Público.
+  const clave = detalle.Comprador?.RutUnidad || detalle.Comprador?.CodigoOrganismo || detalle.Comprador?.NombreOrganismo;
+  if (!clave) {
+    // Sin identificador de comprador no se puede afirmar nada sobre recompra: antes esto caía en
+    // un bucket compartido "desconocido" y producía alertas falsas. Se registra el código (para
+    // que "NUEVO" siga funcionando) y se devuelve sin historial de organismo.
+    return { esNuevo, esReintentoDeOrganismo: false, procesosPreviosDelOrganismo: [] };
+  }
+
+  const organismo = state.organismos[clave] ?? {
+    rut: detalle.Comprador?.RutUnidad ?? "sin rut",
+    nombre: detalle.Comprador?.NombreOrganismo ?? "organismo desconocido",
+    procesos: [],
+  };
+  organismo.nombre = detalle.Comprador?.NombreOrganismo ?? organismo.nombre;
   const procesosPreviosDelOrganismo = organismo.procesos.filter((p) => p.codigo !== codigo);
   const esReintentoDeOrganismo = esNuevo && procesosPreviosDelOrganismo.length > 0;
 
@@ -75,15 +94,15 @@ export function registrarHallazgo(state: RadarState, item: LicitacionListItem, a
   if (!existente) {
     organismo.procesos.push({
       codigo,
-      nombre: item.Nombre,
-      fecha_publicacion: item.FechaPublicacion ?? "",
-      estado: item.Estado ?? String(item.CodigoEstado ?? "desconocido"),
-      monto_estimado_clp: item.MontoEstimado ?? 0,
+      nombre: detalle.Nombre,
+      fecha_publicacion: detalle.Fechas?.FechaPublicacion ?? detalle.FechaPublicacion ?? "",
+      estado,
+      monto_estimado_clp: detalle.MontoEstimado ?? 0,
     });
   } else {
-    existente.estado = item.Estado ?? String(item.CodigoEstado ?? "desconocido");
+    existente.estado = estado;
   }
-  state.organismos[rut] = organismo;
+  state.organismos[clave] = organismo;
 
   return { esNuevo, esReintentoDeOrganismo, procesosPreviosDelOrganismo };
 }

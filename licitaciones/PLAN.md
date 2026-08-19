@@ -2,11 +2,12 @@
 
 > Réplica del diseño de `PLAN.md` (raíz, Compra Ágil de licencias Claude) para un segundo nicho:
 > **Licitaciones públicas** (no Compra Ágil) que piden soluciones de gestión documental,
-> digitalización de procesos u oficina de partes. A diferencia del documento raíz — que está
-> verificado contra la API real de producción de Compra Ágil — este documento declara
-> explícitamente qué está verificado y qué es todavía una suposición basada en la documentación
-> pública histórica de la API clásica de Licitaciones, porque **no se dispuso de un ticket válido
-> de esa API durante la sesión en que se escribió este código**.
+> digitalización de procesos u oficina de partes. Este documento declara explícitamente qué está
+> verificado y qué sigue siendo una suposición.
+>
+> **Actualizado el 2026-08-19: el radar ya corrió contra la API real** con un
+> `LICITACIONES_API_TICKET` válido. La sección "Hallazgos de la corrida de verificación" abajo
+> reemplaza lo que hasta entonces eran suposiciones — y corrige varias que resultaron falsas.
 
 ## Alcance
 
@@ -17,23 +18,14 @@ altos, procesos más formales: garantías, bases administrativas y técnicas, ev
 comisión) y con un producto/servicio completamente distinto (no hay un precio de lista público
 como el de Anthropic).
 
-## Insumos bloqueantes (ninguno resuelto en esta sesión)
+## Insumos bloqueantes
 
-1. **`LICITACIONES_API_TICKET`**: la API clásica de Licitaciones (`api.mercadopublico.cl`) usa un
-   sistema de tickets **distinto** al de Compra Ágil (`api2.mercadopublico.cl`, ya resuelto — ver
-   `CLAUDE.md` de la raíz). Se solicita en https://www.mercadopublico.cl/Home/Api. Sin él, `radar.ts`
-   y `cotizar.ts` de este dominio no pueden correr contra datos reales — se probó únicamente que el
-   host responde (con un ticket de prueba público desactualizado, que devolvió `{"Codigo":203,
-   "Mensaje":"Ticket no válido."}`, HTTP 200), lo que confirma que el endpoint es alcanzable pero no
-   verifica la forma real del payload en runtime.
-   - **Actualización**: se consiguió el "Diccionario de Datos" oficial de esta API
-     (`licitaciones/docs/diccionario-api-licitaciones-mercadopublico.pdf`, de chilecompra.cl) y se
-     usó para corregir `licitaciones/src/lib/api.ts` — los nombres de campo de `Comprador` e
-     `Items` ahora están confirmados contra ese documento (se corrigió un error real:
-     `Comprador.RutUnidad`, no `Comprador.RutOrganismo` como se había asumido). **Ese diccionario
-     solo documenta el parámetro `codigo`** — no confirma `estado`/`fecha` (los que usa
-     `buscarLicitaciones` para descubrimiento) ni las secciones `Garantia`/`Adjuntos`, que siguen
-     siendo una suposición sin confirmar. Sigue haciendo falta un ticket real para validar eso.
+1. ~~**`LICITACIONES_API_TICKET`**~~ — **resuelto el 2026-08-19**. El ticket existe y el radar corrió
+   contra `api.mercadopublico.cl` en producción. Ver "Hallazgos de la corrida de verificación".
+   Queda una restricción operativa derivada: **la cuota diaria es muy escasa** — se agotó (429) en la
+   segunda corrida del mismo día, a mitad de las llamadas de ficha. Eso condiciona la frecuencia del
+   radar y, sobre todo, bloquea hoy el informe histórico del nicho, que necesita traerse el listado
+   completo de tres estados distintos.
 2. **Catálogo de costos reales de KeepSync para gestión documental/digitalización**: a diferencia
    de licencias Claude (precio de lista público de Anthropic, ya cargado en `config/company.json`
    de la raíz), acá no existe un precio externo que copiar. `licitaciones/config/company.json` debe
@@ -43,28 +35,61 @@ como el de Anthropic).
    `config/company.json.example` para la estructura propuesta — sigue siendo una plantilla, no una
    decisión de negocio ya tomada.
 
-Sin estos dos insumos, `radar_licitaciones` puede escribirse y revisarse pero no correrse contra
-datos reales, y `cotizar_licitaciones` no puede generar una oferta real (aunque sí puede rechazar
-correctamente por falta de configuración, que es el comportamiento esperado — ver guardrails).
+3. **Vía real de fulfillment y facturación** (el mismo insumo de fondo que en Compra Ágil de
+   licencias Claude, ver `CLAUDE.md` raíz): saber que existen licitaciones abiertas no dice nada
+   sobre si KeepSync puede implementar y facturar gestión documental. Este es el insumo que decide
+   si el nicho se convierte en venta; los otros solo deciden si el agente puede operar.
+
+Con (1) resuelto, `radar_licitaciones` ya produce oportunidades reales. `cotizar_licitaciones` sigue
+sin poder generar una oferta real por (2) — aunque sí rechaza correctamente por falta de
+configuración, que es el comportamiento esperado (ver guardrails).
+
+## Hallazgos de la corrida de verificación (2026-08-19)
+
+Primera corrida real contra `api.mercadopublico.cl` con un ticket válido. Confirmó parte del diseño
+y **desmintió varias suposiciones** que estaban escritas en el código:
+
+| Suposición previa | Qué mostró la API real |
+|---|---|
+| El ítem del listado trae los campos que el diccionario documenta bajo `Licitaciones/Listado/Licitacion/...` | **Falso.** El ítem del listado trae poco más que `CodigoExterno`, `Nombre` y `CodigoEstado`: **sin `Comprador`, sin `Estado`, sin `Tipo`, sin `FechaPublicacion`, sin `MontoEstimado`**. Todo eso solo llega pidiendo la ficha (`?codigo=`) |
+| `estado=activas` quizá pagina o hay que barrer por fecha | Devuelve **todas** las licitaciones vigentes del país en una sola llamada (4.381 en esa corrida). No hace falta paginar |
+| Los adjuntos vienen en `Adjuntos[].URL` de la ficha | **Falso.** No existe ningún campo `Adjuntos` en la ficha. Este dominio **no tiene** el equivalente al servicio de adjuntos sin login de Compra Ágil: las bases hay que leerlas en el portal |
+| Las garantías vienen en `Garantia.*` | **Falso.** Tampoco existen en la ficha. La exigencia de boleta de garantía solo aparece en las bases administrativas, fuera de la API |
+| El plazo de contrato está en `PlazosContrato.Plazo` | **Falso.** Está en `TiempoDuracionContrato` + `UnidadTiempoDuracionContrato` (tabla 3.6 del diccionario: 1 hora … 5 año) |
+| `CantidadReclamos` son los reclamos de esta licitación | **No.** Son los reclamos recibidos por el **organismo** comprador (campo 35 del diccionario; se veían valores de 387 en licitaciones chicas) |
+| `Comprador.RutUnidad` | Confirmado: existe y trae el RUT |
+| `MontoEstimado`, `Moneda`, `Tipo` | Confirmados en runtime |
+
+Dos bugs que esta corrida destapó, ya corregidos:
+
+- **Alertas de recompradores falsas.** `registrarHallazgo` agrupaba por el `Comprador` del ítem del
+  listado, que no existe: todos los hallazgos caían en una clave `"desconocido"` y cada uno después
+  del primero se declaraba "RECOMPRADOR" de un organismo que no era el suyo. Ahora agrupa por el
+  `Comprador` de la ficha y, si no hay identificador, no afirma nada sobre recompra.
+- **Publicación de una grilla parcial.** Al agotarse la cuota a mitad de corrida, el radar publicaba
+  en `docs/licitaciones.html` solo las oportunidades que alcanzó a leer, borrando de la página
+  oportunidades que seguían abiertas. Ahora una corrida incompleta **no toca la página**, y existe
+  `npm run radar-licitaciones -- --desde-cache` para republicar lo ya detectado sin gastar cuota.
 
 ## Diferencias estructurales verificadas/asumidas respecto a Compra Ágil (importante)
 
-| | Compra Ágil (raíz, verificado) | Licitaciones (este documento, sin verificar) |
+| | Compra Ágil (raíz) | Licitaciones (este documento) |
 |---|---|---|
 | Host | `api2.mercadopublico.cl` | `api.mercadopublico.cl` (API "clásica", distinta y más antigua) |
-| Auth | header `ticket` | query param `ticket` (asumido — confirmar) |
+| Auth | header `ticket` | query param `ticket` (verificado) |
 | Búsqueda por texto | `q` (matching laxo del servidor) | **no existe** — solo `fecha` (día de publicación), `codigo` (ficha) o `estado`. El filtrado por palabra clave (`config/keywords.json`) es LOCAL y es el mecanismo primario de descubrimiento, no un filtro de ruido secundario como en Compra Ágil |
 | Envelope de error | HTTP 429/5xx + `{success, payload, errors}` | HTTP 200 incluso en error, con `{Codigo, Mensaje}` en vez del listado esperado (verificado: así respondió con el ticket de prueba) |
-| Adjuntos | servicio público sin login, ya probado end-to-end | `Adjuntos[].URL` de la propia ficha — las licitaciones públicas normalmente permiten descarga directa sin login, pero esto no se probó en esta sesión |
-| Tope | `presupuesto.monto_disponible_clp` (número exacto verificado) | `MontoEstimado` (nombre de campo confirmado contra el diccionario oficial — ver `licitaciones/docs/`; el valor en runtime sigue sin verificar contra un ticket real) |
-| Garantías | no aplica en Compra Ágil | Licitaciones sí suelen exigir garantía de seriedad de la oferta y de fiel cumplimiento — campos `Garantia.*` asumidos, sin confirmar |
+| Adjuntos | servicio público sin login, ya probado end-to-end | **la API no los expone** (verificado): no hay campo `Adjuntos` en la ficha. Solo se llega a las bases por el portal |
+| Tope | `presupuesto.monto_disponible_clp` (número exacto verificado) | `MontoEstimado` (verificado en runtime; solo en la ficha, no en el listado) |
+| Garantías | no aplica en Compra Ágil | Licitaciones sí suelen exigirlas (seriedad de la oferta, fiel cumplimiento), pero **la API no las expone** (verificado): hay que leer las bases en el portal antes de decidir si conviene ofertar |
 | Elegibilidad EMT | `convocatoria.estado_convocatoria` (1=primer llamado solo EMT) — filtro determinista verificado | No hay un campo equivalente confirmado; el tipo de licitación (`Tipo`: L1/LE/LP/LQ/LR/LS, según el monto en UTM) y la reserva MIPYME (Art. 20 Ley de Compras) son políticas a verificar, no un flag booleano simple como en Compra Ágil |
 
-**Antes de confiar en el radar o el cotizador de licitaciones para una oferta real**, correr
-`npm run radar-licitaciones` con un `LICITACIONES_API_TICKET` válido, guardar una ficha de ejemplo
-cruda (`data/<codigo>/detalle.json`) y comparar campo por campo contra `licitaciones/src/lib/api.ts`
-— exactamente el mismo proceso de verificación que ya se hizo para Compra Ágil (ver PLAN.md raíz,
-sección "Hallazgos técnicos verificados").
+Esa verificación campo por campo ya se hizo (2026-08-19): las fichas crudas quedan en
+`licitaciones/data/<codigo>/detalle.json` y una muestra del ítem de listado en
+`licitaciones/data/_muestra-item-listado.json` — ese directorio está gitignored, así que en un
+entorno nuevo hay que volver a generarlos con una corrida. Lo que **sigue sin verificarse** es el
+parámetro `fecha` (día de publicación), que ningún script ejercita todavía, y el barrido histórico
+por estado del informe del nicho, hoy bloqueado por la cuota.
 
 ## Arquitectura
 
@@ -101,7 +126,7 @@ formulario real del portal.
 ## Guardrails (idénticos en espíritu a los de Compra Ágil, ver `CLAUDE.md` raíz)
 
 1. Sin envío automático — este dominio ni siquiera incluye el paso de formulario todavía.
-2. Nunca cotizar por sobre el tope presupuestario (`MontoEstimado`, una vez verificado).
+2. Nunca cotizar por sobre el tope presupuestario (`MontoEstimado`, verificado en runtime).
 3. No inventar precios: sin `licitaciones/config/company.json` real (sin placeholders
    `COMPLETAR`), no hay cotización — el loader lo rechaza a propósito, igual que en la raíz.
 4. No inventar la fórmula de negocio: `markup_pct`/`iva_pct` en `company.json.example` son un
@@ -113,13 +138,18 @@ formulario real del portal.
 
 ## Orden de trabajo pendiente
 
-1. Obtener `LICITACIONES_API_TICKET` y correr `npm run radar-licitaciones` contra la API real;
-   corregir los nombres de campo de `src/lib/api.ts` según la respuesta real (ver tabla de arriba).
-2. Definir con el usuario qué plataforma(s) de gestión documental KeepSync puede efectivamente
+1. ~~Obtener `LICITACIONES_API_TICKET` y correr `npm run radar-licitaciones` contra la API real;
+   corregir los nombres de campo de `src/lib/api.ts`~~ — **hecho el 2026-08-19** (ver "Hallazgos de
+   la corrida de verificación").
+2. **Medir la cuota diaria del ticket.** Se agotó en la segunda corrida del mismo día, sin
+   `Retry-After` en la respuesta. Hasta saber cuántas llamadas rinde, no se puede decidir la
+   frecuencia del radar ni si el informe histórico del nicho es viable (necesita el listado completo
+   de tres estados). Mientras tanto: una corrida real por día, y `--desde-cache` para republicar.
+3. Definir con el usuario qué plataforma(s) de gestión documental KeepSync puede efectivamente
    revender/implementar y a qué costo real; completar `licitaciones/config/company.json`.
-3. Confirmar la fórmula de pricing (markup/IVA) para este negocio — puede no ser la misma que la
+4. Confirmar la fórmula de pricing (markup/IVA) para este negocio — puede no ser la misma que la
    de licencias Claude.
-4. Correr `npm run cotizar-licitaciones -- <codigo>` contra una licitación real abierta y revisar
+5. Correr `npm run cotizar-licitaciones -- <codigo>` contra una licitación real abierta y revisar
    manualmente el PDF/PPTX generado antes de considerar el flujo listo para uso real.
-5. (Fuera de esta réplica) Diseñar `ofertar_licitaciones` si se decide automatizar también el
+6. (Fuera de esta réplica) Diseñar `ofertar_licitaciones` si se decide automatizar también el
    llenado del formulario del portal de Licitaciones.

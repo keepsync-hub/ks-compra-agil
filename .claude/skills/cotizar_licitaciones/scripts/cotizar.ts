@@ -111,12 +111,17 @@ async function main() {
   }));
 
   const condicionesComerciales = [
-    condiciones.plazo_contrato_dias != null
-      ? `Plazo de contrato: ${condiciones.plazo_contrato_dias} día(s) desde la adjudicación.`
+    condiciones.plazo_contrato_texto != null
+      ? `Plazo de contrato: ${condiciones.plazo_contrato_texto} desde la adjudicación.`
       : "Plazo de contrato a confirmar con el organismo.",
     "Proveedor con habilidad vigente en el Sistema de Información (Mercado Público).",
     ...condiciones.documentos_exigidos.map((d) => `Documento exigido: ${d} — adjuntar junto con la oferta.`),
   ];
+  // Las garantías casi nunca llegan por acá: la API de Licitaciones no expone la sección
+  // `Garantia` (verificado el 2026-08-19, ver licitaciones/src/lib/api.ts), así que estos dos
+  // bloques solo se llenan si la ficha las menciona en texto libre. Que no aparezcan en la
+  // cotización NO significa que el organismo no las exija — hay que leer las bases en el portal.
+
   if (condiciones.garantia_seriedad_clp != null) {
     condicionesComerciales.push(
       `Garantía de seriedad de la oferta: $${condiciones.garantia_seriedad_clp.toLocaleString("es-CL")} CLP` +

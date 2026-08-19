@@ -55,6 +55,19 @@ npm run cotizar-licitaciones -- <codigo>
      Chromium/Playwright (mismo enfoque que Compra Ágil: LibreOffice no funciona en este sandbox).
    - `cotizacion-resumen.json` con el detalle numérico.
 
+## Lo que esta cotización NO puede decirte
+
+La API de Licitaciones **no expone los adjuntos ni las garantías** de la licitación (verificado
+contra producción el 2026-08-19 — ver `licitaciones/PLAN.md`). En consecuencia:
+
+- Que la cotización generada no mencione una boleta de garantía **no significa que el organismo no
+  la exija**: la exigencia vive en las bases administrativas, que solo se leen en el portal.
+- Los "documentos exigidos" que aparecen salen de buscar frases en el texto de la ficha, no de un
+  campo estructurado. Son una pista, no la lista oficial.
+
+Antes de que una de estas cotizaciones se use para ofertar de verdad, hay que abrir la licitación
+en el portal y leer las bases.
+
 ## Guardrails (no negociables, iguales en espíritu a `compra-agil-ofertar`)
 
 1. Nunca se envía nada automáticamente — este skill ni siquiera llega al paso de formulario.

@@ -1,33 +1,40 @@
 /**
  * Cliente para la API PÚBLICA CLÁSICA de Licitaciones de Mercado Público (`api.mercadopublico.cl`).
  *
- * ADVERTENCIA DE VERIFICACIÓN (a diferencia de `src/lib/api.ts` en la raíz, que sí está verificado
- * contra `api2.mercadopublico.cl` en producción — ver PLAN.md de la raíz): este cliente **no se ha
- * probado contra la API real con un ticket válido** en esta sesión (falta `LICITACIONES_API_TICKET`
- * en el entorno). Se probó únicamente que el endpoint responde (HTTP 200 con
- * `{"Codigo":203,"Mensaje":"Ticket no válido."}` usando un ticket de prueba público desactualizado),
- * lo que confirma que el host es alcanzable pero NO confirma la forma real del payload en runtime.
+ * VERIFICADO CONTRA PRODUCCIÓN el 2026-08-19 con un `LICITACIONES_API_TICKET` válido (antes de esa
+ * fecha este módulo estaba escrito pero sin correr: los comentarios hablaban de campos "asumidos").
+ * Lo que esa corrida confirmó y corrigió:
  *
- * Los nombres de campo de `LicitacionListItem`/`ItemLicitacion` (incluido `Comprador`) SÍ están
- * confirmados contra el "Diccionario de Datos" oficial de ChileCompra
- * (`licitaciones/docs/diccionario-api-licitaciones-mercadopublico.pdf` — ojo: ese documento NO
- * confirma los parámetros de búsqueda `estado`/`fecha`, solo `codigo`; ver más abajo). Ese
- * diccionario corrigió un error de esta misma interfaz: el RUT del comprador es
- * `Comprador.RutUnidad`, no `Comprador.RutOrganismo` como se había supuesto antes de tener el
- * diccionario a mano. `Garantia` y `Adjuntos`, en cambio, siguen sin aparecer en ese diccionario —
- * probablemente viven en otro endpoint o documento no revisado todavía — así que sus formas siguen
- * siendo una suposición y el parseo se mantiene defensivo (campos opcionales) por eso.
+ * - `estado=activas` devuelve TODAS las licitaciones vigentes del país en una sola llamada, sin
+ *   paginar (4.381 en esa corrida). No hace falta barrer por fecha para tener cobertura.
+ * - El ítem del LISTADO es mucho más pobre que la ficha: trae `CodigoExterno`, `Nombre`,
+ *   `CodigoEstado` y poco más — **sin `Comprador`, sin `Estado`, sin `Tipo`, sin `FechaPublicacion`
+ *   y sin `MontoEstimado`**, todos campos que el diccionario documenta bajo la misma ruta
+ *   `Licitaciones/Listado/Licitacion/...`. Todo eso solo llega pidiendo la ficha (`?codigo=`). Por
+ *   eso cualquier consumidor que necesite comprador, monto o tipo tiene que usar el `detalle`, no
+ *   el ítem del listado (ver `historial.ts`, donde confundirlos producía alertas falsas).
+ * - `Comprador.RutUnidad` existe y trae el RUT (confirma la corrección que ya había hecho el
+ *   diccionario oficial frente a la suposición original `RutOrganismo`).
+ * - `Adjuntos` y `Garantia` **no existen en la ficha de este endpoint**: no aparecieron en ninguna
+ *   de las fichas revisadas, igual que no aparecen en el diccionario oficial. Los documentos de
+ *   las bases (donde vive la exigencia de boleta de garantía) hay que leerlos en el portal; este
+ *   dominio no tiene el equivalente al servicio de adjuntos sin login que sí existe en Compra Ágil.
+ *   Los campos se mantienen tipados y el parseo defensivo por si otro estado/tipo sí los trae.
+ * - El plazo de contrato vive en `TiempoDuracionContrato` + `UnidadTiempoDuracionContrato` (tabla
+ *   3.6 del diccionario), no en un `PlazosContrato.Plazo`, que era una suposición y no existe.
+ * - `CantidadReclamos` es, según el diccionario, el número de reclamos recibidos por el ORGANISMO,
+ *   no por esta licitación (valores como 387 en una licitación chica lo confirman en la práctica).
+ *
+ * Los nombres de campo también están confirmados contra el "Diccionario de Datos" oficial de
+ * ChileCompra (`licitaciones/docs/diccionario-api-licitaciones-mercadopublico.pdf`).
  *
  * Diferencia estructural importante respecto a Compra Ágil: esta API **no tiene un parámetro de
  * búsqueda por texto libre como `q`**. El diccionario oficial solo documenta `codigo` (ficha de una
- * licitación); `fecha` (día de publicación) y `estado` los usa ya el radar (`buscarLicitaciones`)
- * pero **siguen sin confirmar contra el diccionario oficial** — vienen de ejemplos públicos conocidos
- * de esta API, no de este documento. Por eso el radar de licitaciones no puede repetir el patrón
- * "~8 queries de marca" del radar de Compra Ágil: trae el listado de un estado (o de una fecha) y
- * filtra las palabras clave LOCALMENTE sobre `Nombre`/`Descripcion` — el mismo mecanismo que ya
- * existía como filtro de ruido en Compra Ágil, pero acá es el mecanismo de descubrimiento primario,
- * no un filtro secundario. Confirmar con un ticket real si `estado=activas` devuelve todas las
- * licitaciones vigentes en una sola llamada o si hace falta paginar por fecha.
+ * licitación); `estado` está ahora verificado en producción y `fecha` (día de publicación) sigue sin
+ * ejercitarse. Por eso el radar de licitaciones no puede repetir el patrón "~8 queries de marca" del
+ * radar de Compra Ágil: trae el listado de un estado y filtra las palabras clave LOCALMENTE sobre
+ * `Nombre`/`Descripcion` — el mismo mecanismo que ya existía como filtro de ruido en Compra Ágil,
+ * pero acá es el mecanismo de descubrimiento primario, no un filtro secundario.
  */
 import { getApiTicket } from "./config.js";
 
@@ -100,12 +107,19 @@ export interface LicitacionDetalle extends LicitacionListItem {
     [k: string]: unknown;
   };
   Items?: { Listado?: ItemLicitacion[] } | ItemLicitacion[];
+  /** No apareció en ninguna ficha verificada (2026-08-19). Se mantiene por parseo defensivo. */
   Adjuntos?: { Listado?: { Nombre?: string; URL?: string }[] } | { Nombre?: string; URL?: string }[];
+  /** Idem: este endpoint no expone las garantías; hay que leer las bases en el portal. */
   Garantia?: GarantiaLicitacion;
-  PlazosContrato?: { Plazo?: number; Glosa?: string };
+  /** Duración del contrato declarada por el organismo. Verificado: llega como string ("16"). */
+  TiempoDuracionContrato?: string | number;
+  /** Código de unidad de tiempo del campo anterior (tabla 3.6: 1 hora … 5 año). Verificado. */
+  UnidadTiempoDuracionContrato?: number;
+  TipoDuracionContrato?: string;
   Adjudicacion?: {
     Listado?: { NombreProveedor?: string; RutProveedor?: string; MontoTotalOfertaEvaluada?: number }[];
   };
+  /** Reclamos recibidos por el ORGANISMO comprador, no por esta licitación (diccionario, campo 35). */
   CantidadReclamos?: number;
 }
 
@@ -114,6 +128,23 @@ interface ListadoEnvelope {
   FechaCreacion?: string;
   Version?: string;
   Listado: LicitacionListItem[];
+}
+
+/**
+ * 429 de esta API: la cuota del ticket se agotó. Es un error de tipo propio y no un fallo más
+ * porque el llamador tiene que reaccionar distinto — dejar de pedir en vez de seguir iterando
+ * candidatos que van a fallar todos igual (guardrail: no reintentar a ciegas ante un bloqueo).
+ */
+export class CuotaAgotadaError extends Error {
+  readonly retryAfter: string | null;
+  constructor(retryAfter: string | null) {
+    super(
+      `Cuota de la API de Licitaciones agotada (429). Retry-After: ${retryAfter ?? "no informado"}. ` +
+        `No reintentar a ciegas.`,
+    );
+    this.name = "CuotaAgotadaError";
+    this.retryAfter = retryAfter;
+  }
 }
 
 const TRANSIENT_STATUS = new Set([502, 503, 504]);
@@ -140,11 +171,7 @@ async function apiGet<T>(query: Record<string, string>): Promise<T> {
     }
 
     if (res.status === 429) {
-      const retryAfter = res.headers.get("Retry-After");
-      throw new Error(
-        `Cuota de la API de Licitaciones agotada (429). Retry-After: ${retryAfter ?? "no informado"}. ` +
-          `No reintentar a ciegas.`,
-      );
+      throw new CuotaAgotadaError(res.headers.get("Retry-After"));
     }
     if (TRANSIENT_STATUS.has(res.status) && intento < MAX_INTENTOS) {
       await res.body?.cancel().catch(() => {});

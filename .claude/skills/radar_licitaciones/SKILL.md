@@ -10,14 +10,18 @@ Compra Ágil) contra la API clásica `api.mercadopublico.cl`, buscando gestión 
 digitalización de procesos y oficina de partes. No requiere credenciales del portal — solo el
 ticket de la API. No envía nada ni requiere aprobación humana: es de solo lectura.
 
-## ⚠️ Estado: sin verificar contra producción
+## Estado: verificado contra producción (2026-08-19)
 
-A diferencia de `compra-agil-radar-claude` (verificado end-to-end contra `api2.mercadopublico.cl`),
-este skill **no se ha corrido contra la API real con un ticket válido**. Leer
-`licitaciones/PLAN.md` completo antes de confiar en sus resultados — documenta qué está asumido y
-qué falta verificar (nombres de campo, si `estado=activas` pagina, formato real de `Adjuntos`,
-etc.). La primera corrida real con un ticket válido debe tratarse como una verificación, no como
-una ejecución de rutina.
+Este skill ya corrió contra la API real con un ticket válido. Esa corrida corrigió varias
+suposiciones del código — ver "Hallazgos de la corrida de verificación" en `licitaciones/PLAN.md`.
+Lo esencial para operarlo:
+
+- El ítem del **listado** es mucho más pobre que la ficha (no trae `Comprador`, `Tipo`,
+  `MontoEstimado` ni `Estado`). Cualquier consumidor de esos datos debe usar el `detalle`.
+- La API **no expone adjuntos ni garantías** de la licitación: no existe el equivalente al servicio
+  de adjuntos sin login de Compra Ágil. Las bases se leen en el portal.
+- **La cuota del ticket es escasa**: se agotó (429) en la segunda corrida del mismo día. Correr el
+  radar contra la API una vez al día y usar `--desde-cache` para republicar sin gastar cuota.
 
 ## Cuándo usar
 
@@ -35,8 +39,13 @@ una ejecución de rutina.
 ## Cómo correrlo
 
 ```bash
-npm run radar-licitaciones
+npm run radar-licitaciones                    # corrida real contra la API (gasta cuota)
+npm run radar-licitaciones -- --desde-cache   # re-render desde las fichas ya guardadas, sin API
 ```
+
+`--desde-cache` no detecta nada nuevo: vuelve a publicar el reporte y la página a partir de
+`licitaciones/data/*/detalle.json`, y lo declara así en la salida. Sirve cuando la cuota está
+agotada o cuando cambió el formato del reporte/página. No toca `state.json`.
 
 ## Qué hace (`scripts/radar.ts`)
 
@@ -51,11 +60,15 @@ npm run radar-licitaciones
 3. Extrae condiciones con `licitaciones/src/lib/condiciones.ts`: tope (`MontoEstimado`), tipo de
    licitación, plazo de contrato, garantías de seriedad/fiel cumplimiento, documentos exigidos y
    frases excluyentes.
-4. Lista los adjuntos declarados en la ficha (no los descarga: la URL de descarga directa no está
-   verificada en esta sesión, ver `licitaciones/PLAN.md`).
+4. Extrae el plazo de contrato de `TiempoDuracionContrato` + `UnidadTiempoDuracionContrato` y lo
+   reporta en la unidad que declaró el organismo ("16 meses"). **No hay adjuntos ni garantías que
+   listar**: esta API no los expone (verificado) — el reporte lo dice explícitamente para que quien
+   evalúe ofertar sepa que tiene que abrir las bases en el portal.
 5. Guarda todo en `licitaciones/data/<codigo>/{detalle.json, condiciones.json}`.
 6. Actualiza `licitaciones/data/state.json`: marca qué códigos son nuevos y qué organismos ya
-   tenían procesos previos (recompradores).
+   tenían procesos previos (recompradores). La agrupación es por el `Comprador` de la **ficha**;
+   si una ficha no trae identificador de comprador, no se afirma nada sobre recompra en vez de
+   agrupar a ciegas.
 7. Escribe `licitaciones/output/radar-ultima-corrida.md` y lo imprime en consola.
 8. Refresca la grilla de tarjetas de **oportunidades detectadas** en `docs/licitaciones.html`
    (misma vista que la de Compra Ágil en `docs/index.html`: código, organismo, tope, cierre con
@@ -75,6 +88,10 @@ npm run radar-licitaciones
    **Sin `LICITACIONES_API_TICKET` la grilla queda en su estado vacío**, que explica por qué está
    vacía. No se inventan licitaciones para llenarla.
 
+   Una **corrida incompleta no publica**: si se agota la cuota, falla alguna ficha o se alcanza el
+   cap de 60, el reporte se escribe igual pero la página se deja intacta. Publicar una grilla
+   parcial borraría de la página oportunidades que siguen abiertas.
+
 `scripts/informe-nicho.ts` (`npm run informe-licitaciones`) hace el barrido histórico equivalente
 al de Compra Ágil, con la misma limitación: sin `q`, tiene que traer el listado completo de cada
 estado consultado (`cerrada`, `desierta`, `adjudicada`) y filtrar localmente — avisa en consola si
@@ -82,7 +99,8 @@ el volumen de un estado parece demasiado alto para ser confiable así.
 
 ## Notas
 
-- La cuota de la API es probablemente diaria por ticket (asumido por analogía con Compra Ágil, sin
-  confirmar); si responde 429, el script se detiene y muestra el `Retry-After`.
+- La cuota se agota rápido y la API **no informa `Retry-After`**. Ante un 429 el script deja de
+  consultar (no reintenta a ciegas), rescata desde caché las fichas que puede, marca la corrida como
+  incompleta y no toca la página. Cuánto rinde exactamente la cuota diaria sigue sin medirse.
 - Este skill es de solo lectura. Para preparar una cotización usar `cotizar_licitaciones`, que sí
   requiere `licitaciones/config/company.json` con costos reales.
