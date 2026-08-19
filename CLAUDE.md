@@ -105,6 +105,15 @@ hallazgos de arriba aplican tal cual a ese dominio. Dos diferencias que muerden:
   del ticket, y además baja **un archivo real**: el Excel oficial de preguntas y respuestas
   (`Export/PreguntasExcel.aspx`), el único documento de los antecedentes que el portal entrega sin
   verificación humana.
+- **La decisión se lee de `decision.json`, no de las bases crudas.** Cada corrida de
+  `antecedentes-licitacion` genera la ficha de decisión (banderas ⛔/⚠️/✅ con motivo y cita, plazos y
+  días restantes, ventana de preguntas, tope, garantías, criterios con el peso del precio, anexos
+  exigidos, cláusulas excluyentes y exigencias detectadas). Consultarla antes de cotizar; todo lo que
+  afirme debe salir de ahí, con su cita — nada se infiere.
+- **Los adjuntos, cuando existan, se leen.** `npm run leer-adjuntos` extrae el texto de lo que haya
+  en `licitaciones/data/<codigo>/adjuntos/` (PDF/DOCX) y lo incorpora a la ficha citando el archivo.
+  Mientras no haya, la ficha levanta la bandera "Falta el detalle fino": no dar por completa una
+  decisión tomada solo con la ficha pública.
 - **Acceso a los documentos = su URL, no una copia local.** Cada corrida de
   `antecedentes-licitacion` deja el índice de documentos de la licitación (`documentos.json`, el
   bloque "Documentos" de `antecedentes.md` y los enlaces en cada tarjeta de `docs/licitaciones.html`)

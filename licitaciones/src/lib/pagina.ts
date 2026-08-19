@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import type { LicitacionListItem, LicitacionDetalle } from "./api.js";
 import type { CondicionesLicitacion } from "./condiciones.js";
 import type { ReferenciaDocumento } from "./portal-ficha.js";
+import type { FichaDecision } from "./decision.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** licitaciones/src/lib -> raíz del repo (docs/ vive en la raíz, no dentro de licitaciones/). */
@@ -39,6 +40,57 @@ function referenciasDeCache(codigo: string): ReferenciaDocumento[] {
   } catch {
     return [];
   }
+}
+
+function decisionDeCache(codigo: string): FichaDecision | null {
+  const ruta = path.join(REPO_ROOT, "licitaciones", "data", codigo, "decision.json");
+  if (!existsSync(ruta)) return null;
+  try {
+    return JSON.parse(readFileSync(ruta, "utf-8")) as FichaDecision;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Lo que decide si vale la pena presentarse, en la tarjeta: las banderas que exigen mirar y los
+ * datos que casi siempre las causan (peso del precio, garantía, cantidad de anexos). Cada bandera
+ * viene con el motivo y la sección de donde salió, así que acá se muestra el título y el motivo
+ * queda en el `title` del elemento — la página no resume ni reinterpreta nada.
+ */
+function bloqueDecision(codigo: string): string {
+  const f = decisionDeCache(codigo);
+  if (!f) return "";
+  const criticas = f.banderas.filter((b) => b.nivel !== "favorable");
+  const chips = [
+    f.pesoPrecio !== undefined ? `precio ${f.pesoPrecio}%` : null,
+    f.garantia.exigida ? `garantía ${f.garantia.monto ?? "sí"}` : "sin garantía",
+    f.anexos.total > 0 ? `${f.anexos.total} anexos` : null,
+    f.fechas.ventanaPreguntasAbierta === true ? "preguntas abiertas" : "preguntas cerradas",
+    f.adjuntos.faltan ? "sin adjuntos leídos" : `${f.adjuntos.leidos.length} adjunto(s) leídos`,
+  ].filter((c): c is string => Boolean(c));
+
+  const alertas = criticas
+    .map(
+      (b) =>
+        `            <li title="${escapeHtml(b.motivo)} (${escapeHtml(b.fuente)})">${escapeHtml(b.titulo)}</li>`,
+    )
+    .join("\n");
+
+  return `
+        <div class="decision">
+          <div class="chips">${chips.map((c) => `<span>${escapeHtml(c)}</span>`).join("")}</div>${
+            criticas.length > 0
+              ? `
+          <details>
+            <summary>${criticas.length} punto(s) a revisar antes de cotizar</summary>
+            <ul>
+${alertas}
+            </ul>
+          </details>`
+              : ""
+          }
+        </div>`;
 }
 
 /**
@@ -181,7 +233,7 @@ function tarjeta(h: HallazgoLicitacion, ahora: Date): string {
         }
         <dl>
 ${filasDatos(h, ahora)}
-        </dl>${enlacesDocumentos(codigo)}
+        </dl>${bloqueDecision(codigo)}${enlacesDocumentos(codigo)}
         <div class="cta">
           <span class="badge warn">Detectada — cotización pendiente</span>
           <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=${encodeURIComponent(codigo)}">Ver en el portal</a>

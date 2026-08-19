@@ -120,10 +120,23 @@ grilla parcial); el detalle está en "Hallazgos de la corrida de verificación" 
 | Comando | Qué hace |
 |---|---|
 | `npm run radar-licitaciones` | Busca licitaciones activas de gestión documental/digitalización/oficina de partes, extrae condiciones, detecta recompradores. Solo lectura. |
+| `npm run leer-adjuntos -- [<codigo>]` | Extrae el texto de los archivos que haya en `licitaciones/data/<codigo>/adjuntos/` (PDF con `pdfjs`, DOCX/XLSX con un lector de ZIP propio) y **rehace la ficha de decisión** incorporándolos, citando cada exigencia al archivo. Es el paso siguiente al clic humano en el visor del portal. |
 | `npm run antecedentes-licitacion -- [<codigo> ...]` | Baja de la ficha **pública** del portal el contenido completo de las bases (garantías, anexos exigidos, criterios de evaluación) + el foro de preguntas, a `licitaciones/data/<codigo>/antecedentes.md`, **y el archivo Excel oficial de preguntas y respuestas** a `documentos/`. Escribe el **índice de documentos** (`documentos.json`) y **republica `docs/licitaciones.html`** con esos enlaces en cada tarjeta. Sin ticket, sin cuota, sin login y sin CAPTCHA. Sin argumentos, procesa todas las licitaciones en caché. |
 | `npm run login-portal [-- --diagnostico] [--visible]` | Inicia sesión en el portal vía **ClaveÚnica** (`MP_USUARIO`/`MP_CLAVE` del entorno) y guarda `data/storageState.json`. El código de doble factor lo escribe el agente en `licitaciones/data/2fa-codigo.txt` tras leerlo del correo. `--diagnostico` verifica los selectores **sin usar credenciales**. Verificado contra producción el 2026-08-19. |
 | `npm run adjuntos-licitacion -- <codigo> [--con-login] [--visible] [--diagnostico] [--sin-sesion]` | Baja los ARCHIVOS adjuntos abriendo el visor del portal con un navegador real. `--con-login` autentica en el mismo contexto antes de abrir el visor (`storageState.json` por sí solo **no** restaura la sesión del portal). Medido en la nube: score 0–0.1 contra umbral 0.5, autenticado o no → rechaza. `--diagnostico` responde si el gate deja pasar sin bajar nada. No rodea el control: si lo rechazan, se detiene. |
 | `npm run cotizar-licitaciones -- <codigo>` | Genera la cotización (`.pptx` + `.pdf`) para una licitación específica, validando el tope. No envía nada. |
+
+### Ficha de decisión
+
+`antecedentes-licitacion` no deja solo el texto de las bases: genera `decision.json` / `decision.md`
+con lo que responde **si vale la pena presentarse**, todo citado a la sección de la que salió —
+banderas (⛔/⚠️/✅), plazos y días restantes, ventana de preguntas, tope, garantías, criterios de
+evaluación con el peso del precio, anexos exigidos, cláusulas que dejan la oferta fuera y exigencias
+detectadas en el texto. El resumen sale en cada tarjeta de `docs/licitaciones.html`.
+
+Si los adjuntos (bases administrativas, EE.TT.) no se han leído, la ficha lo dice como bandera en
+vez de dar la decisión por completa. Puestos esos archivos en `licitaciones/data/<codigo>/adjuntos/`,
+`npm run leer-adjuntos` los incorpora.
 
 Página de estado equivalente: `docs/licitaciones.html`, encabezada por las licitaciones abiertas
 detectadas en la última corrida.

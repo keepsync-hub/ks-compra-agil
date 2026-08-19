@@ -75,6 +75,15 @@
   .opp-card dt { color: var(--gray-dim); }
   .opp-card dd { margin: 0; }
   .opp-card .sin-dato { color: var(--gray-dim); font-style: italic; }
+  /* Resumen de la ficha de decisión (licitaciones/data/<codigo>/decision.json): los datos que
+     deciden si vale la pena presentarse. Los motivos y su fuente van en el title de cada punto. */
+  .opp-card .decision { margin: 0.3rem 0; display: flex; flex-direction: column; gap: 0.35rem; }
+  .opp-card .decision .chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .opp-card .decision .chips span { background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 999px; padding: 0.1rem 0.55rem; font-size: 0.76rem; color: var(--gray); }
+  .opp-card .decision details { font-size: 0.82rem; }
+  .opp-card .decision summary { cursor: pointer; color: var(--warn, #e0a300); }
+  .opp-card .decision ul { margin: 0.35rem 0 0; padding-left: 1.1rem; color: var(--gray); display: flex; flex-direction: column; gap: 0.2rem; }
+
   /* Índice de documentos de la licitación. La página no aloja archivos: los referencia — tener la
      URL del documento es tener acceso a él. `.humano` marca el único que exige abrirse en el
      portal (su visor corre reCAPTCHA por score), para no prometer que un script lo baja. */
@@ -173,10 +182,20 @@
           <dt>Reclamos al organismo</dt><dd>387</dd>
           <dt>Región</dt><dd>Región Metropolitana de Santiago</dd>
         </dl>
+        <div class="decision">
+          <div class="chips"><span>precio 40%</span><span>sin garantía</span><span>3 anexos</span><span>preguntas abiertas</span><span>sin adjuntos leídos</span></div>
+          <details>
+            <summary>2 punto(s) a revisar antes de cotizar</summary>
+            <ul>
+            <li title="Son reclamos recibidos por el comprador en el sistema, no de esta licitación: señal de trato con proveedores. (API (CantidadReclamos))">El organismo acumula 387 reclamos</li>
+            <li title="Esta ficha se armó solo con la ficha pública. Las bases administrativas y las EE.TT. en PDF pueden traer exigencias que no aparecen ahí. Bajarlos a licitaciones/data/&lt;codigo&gt;/adjuntos/ (un clic en el visor del portal, o `npm run adjuntos-licitacion -- &lt;codigo&gt; --con-login` desde una máquina con IP residencial) y correr `npm run leer-adjuntos` para incorporarlos. (estado local)">Falta el detalle fino: no hay adjuntos leídos</li>
+            </ul>
+          </details>
+        </div>
         <details class="docs">
           <summary>Documentos publicados por el organismo</summary>
           <ul>
-            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=NLuERzj%2f0kbthYLR5H%2bdk9%2bgoJxDOqun5rh8VBSWFrW%2bDDPyiKRgKeM%2bZG1lLflxBIaJvmgBTOa771DMlO0DkgTBZCT1KhRe56Q8jvVCHMPkcRCDsTfkUMeOpA5H4Dq3gbQ9FaCF37thlvYA%2bCs1CjzaBU4nxtrbllICKItZH6DnTlAa3qGBUE%2fj2LKLKoPb4oOSZ%2b%2fDeu3deSfstxSrIoHSYzEHeNmDOKHcAAGW6cvAAe9K%2bH%2b09iB5zQHqfj2%2bTs35c0Ea7shPg0rvquK6IPHnsw9D6JXVvFy5Uny1Ygm2oru15oRSkjzqlpudl6jS" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=ht9pDcP5uLvVO%2bljbUNrzsUdph%2fX5HQKWFPeng167N3dXcKQGaN9QYBrrymkPDew9HCt1Vif863j%2brJZ5iRYgUx5DpWxRFDBu21tKwwMWZZfmk%2fRFKHzm9aXxdirj6nNU%2bQ2ceS9205BJRtc%2fAz6ho7PlbUbgvSlMV7hrxS8J3f5zUwe1PagoyshA8ZFIfBut9isAUEQkKPlOvVD6CZZEfLYlzmS7iOWDCpza3WERG3LWmFSQ6RsjsSyNi050hdJbnLoWErFat%2fwd1ac9sRZlHUarYrQAoZcQeP2E0s72x70areOCteAvMXb5WxlSQwH" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=lKvtFRpL4uKTdjKPd1yxSKU2+FAWc2Ju5ByDjBQsxFzpZzt8jPmROwYPPMDTY16x">Foro de preguntas y respuestas</a></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=lKvtFRpL4uKTdjKPd1yxSKU2+FAWc2Ju5ByDjBQsxFzpZzt8jPmROwYPPMDTY16x">Excel oficial de preguntas y respuestas</a></li>
           </ul>
@@ -201,10 +220,24 @@
           <dt>Reclamos al organismo</dt><dd>45</dd>
           <dt>Región</dt><dd>Región del Ñuble</dd>
         </dl>
+        <div class="decision">
+          <div class="chips"><span>precio 40%</span><span>garantía 5%</span><span>8 anexos</span><span>preguntas cerradas</span><span>sin adjuntos leídos</span></div>
+          <details>
+            <summary>6 punto(s) a revisar antes de cotizar</summary>
+            <ul>
+            <li title="Quedan ~2 día(s) para presentar la oferta (cierre 2026-08-21T15:00:00). (sección 3 (Etapas y plazos))">Cierra en menos de 48 horas</li>
+            <li title="La ventana de consultas cerró el 2026-08-10T15:00:00: las dudas de las bases no se podrán aclarar. (sección 3 (Etapas y plazos))">Ya no se pueden hacer preguntas</li>
+            <li title="Garantía fiel de Cumplimiento de Contrato por 5%, vigente hasta 2027-03-11T00:00:00. Hay que poder emitirla (costo financiero y plazo). (sección 8 (Garantías requeridas))">Exige garantía</li>
+            <li title="Todo el servicio debe prestarlo el propio oferente. (sección 7 (Montos y duración del contrato))">Prohíbe subcontratación</li>
+            <li title="Esta ficha se armó solo con la ficha pública. Las bases administrativas y las EE.TT. en PDF pueden traer exigencias que no aparecen ahí. Bajarlos a licitaciones/data/&lt;codigo&gt;/adjuntos/ (un clic en el visor del portal, o `npm run adjuntos-licitacion -- &lt;codigo&gt; --con-login` desde una máquina con IP residencial) y correr `npm run leer-adjuntos` para incorporarlos. (estado local)">Falta el detalle fino: no hay adjuntos leídos</li>
+            <li title="Documentos Administrativos: 5 · Documentos Técnicos: 2 · Documentos Económicos: 1 (sección 4 (Antecedentes para incluir en la oferta))">8 documento(s) exigidos en la oferta</li>
+            </ul>
+          </details>
+        </div>
         <details class="docs">
           <summary>Documentos publicados por el organismo</summary>
           <ul>
-            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=850%2bFrkC%2fb2LPTJQoppW2Yn5EM%2f33psOYB5t94JjGbjIzRTEmWf4LPlTGwBOX1U3QaAwli1%2bGkHkAF52fNgx7do2Enuznd3YHJUE85JD6CBSA5bxoLr9FVnTo%2fohOdKmxWkQe5LC%2fWbShQFTKFDcsYqWp58v0Hubz2PDOZyEyZHESPQYx2QQD1%2b7XicKmJ4xNnv%2bA%2bGVi2E8qZDijOSS57M9Ba3RxB6Om6Lu5fOnyzpNtNq5Y93AxPAgL4dEPmgdWktQF5SuZdY8llNfXH6bPyq2yleCfItU1g4cmE%2fIfvQZQxwflohJCBPnF4xrBJN%2f" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=JW7YyZoEpcYD8Kr6wkwCGYgomQ7M8cBGCs2TAtnWDi12hYG19%2b0snrkqd5e83ZpqiQHoMt4dONn31ca%2fE1YCnuaGwDd9YP6OsHd1dVcbSnH6TbnCcs0uVQuB42IQjCxX1JzwPkr3WAUxDMKHJtKqHC0UVdTuGIvKYA3AfUeDFk57hzOrXnaKLOazuxDlj0wTDSXTJIEzCBvUSw4ZrcFVucAqPy2GS90cN2qC4Vf2gvSRPunMQ0%2fFVFCLZavs%2bT4o1DKj6lJz3HVk%2fc2GN3xOcoufiproJL3vYeZFr8teaSNaKJOgRahpWPrO4Eha0Uom" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=uGfnGMmKV6ls5F2Xx5UnW2sTm5rxNqi4IQyEH86Dvvi5Ey9jvDhdTT2hNQc3xcbG">Foro de preguntas y respuestas</a></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=uGfnGMmKV6ls5F2Xx5UnW2sTm5rxNqi4IQyEH86Dvvi5Ey9jvDhdTT2hNQc3xcbG">Excel oficial de preguntas y respuestas</a></li>
           </ul>
@@ -229,10 +262,21 @@
           <dt>Reclamos al organismo</dt><dd>46</dd>
           <dt>Región</dt><dd>Región Aysén del General Carlos Ibáñez del Campo</dd>
         </dl>
+        <div class="decision">
+          <div class="chips"><span>precio 30%</span><span>garantía 5%</span><span>3 anexos</span><span>preguntas abiertas</span><span>sin adjuntos leídos</span></div>
+          <details>
+            <summary>3 punto(s) a revisar antes de cotizar</summary>
+            <ul>
+            <li title="Garantía fiel de Cumplimiento de Contrato por 5%, vigente hasta 2027-11-30T00:00:00. Hay que poder emitirla (costo financiero y plazo). (sección 8 (Garantías requeridas))">Exige garantía</li>
+            <li title="70% de la evaluación depende de criterios técnicos y administrativos, no del precio. (sección 6 (Criterios de evaluación))">El precio pesa 30%</li>
+            <li title="Esta ficha se armó solo con la ficha pública. Las bases administrativas y las EE.TT. en PDF pueden traer exigencias que no aparecen ahí. Bajarlos a licitaciones/data/&lt;codigo&gt;/adjuntos/ (un clic en el visor del portal, o `npm run adjuntos-licitacion -- &lt;codigo&gt; --con-login` desde una máquina con IP residencial) y correr `npm run leer-adjuntos` para incorporarlos. (estado local)">Falta el detalle fino: no hay adjuntos leídos</li>
+            </ul>
+          </details>
+        </div>
         <details class="docs">
           <summary>Documentos publicados por el organismo</summary>
           <ul>
-            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=tWTgO20YdXzZUevYy%2ff0apAFbChldW1L0OspaiQppnw%2f7hCLdLje5vnCOtuxO5eJYD4J1%2bymd3VJAWMvjMS2kRuIcLRpF2L2ST0EEm7Y2jEISngn%2fFhXbKQs%2fa%2bSTGmLO1GtcaVP%2fKhpnh5FV5oDgHHcOiVb8wLO3XTWguzW3U0bz4MNSrCApEDDE7ni7DNTlOT84v4Soez7P94ous3SKHmuEEeBnjYFF1heruIO4H5%2byrdNfnNvEMXwXmnnSNPw%2fiwOLh4UfP9eMuci2B8tp9HFADHs664%2fJ3X8RLk1NvMsZZEl5uExmSV7yKkHpBM2" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=jgH6r85ebGXtnY41rozvkMbRVjrJh4TOZaQaOhSBC4sE0ACkiU%2fzvM%2bmmt6F7zkyinX2V%2fRpmjrinfCvacgpGuMw%2bA%2fZcrnJ%2fLgyzv5aRe%2fXP5LNirhAhwji4RqzA%2fvCM4tosEOpZmuJEuA8a8mx50aOclVGO%2fV6FxsF23wsEgepoVaVlzDnbTeGZQiL9izXoKQhtuL9dNUmucWahE9p4%2bTQFuuG%2bO0B2v5EEhQ%2bW0v%2fsENIDuO%2bGuYW9t7HjujyZtHcM4M%2fg4MeBhYuywpLZPDULSGFB1gqhFP8bmJprcrdU%2bq9JBDcc1OUbDx7ekHV" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=zzCqw+eHfR6SOua4qKgZd/QFbEo/pc9m9yGHwQ0Rtk1qMZ0HUgvH1vCKwvM6XtOF">Foro de preguntas y respuestas</a></li>
             <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=zzCqw+eHfR6SOua4qKgZd/QFbEo/pc9m9yGHwQ0Rtk1qMZ0HUgvH1vCKwvM6XtOF">Excel oficial de preguntas y respuestas</a></li>
           </ul>

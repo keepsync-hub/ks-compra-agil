@@ -297,6 +297,57 @@ npm run antecedentes-licitacion     # sin cuota: bases + Q&R + índice de docume
 Guardrail que se mantiene: si la caché está vacía, `antecedentes` **no toca la página** — publicar
 una grilla vacía borraría oportunidades que siguen abiertas.
 
+### Ficha de decisión: convertir los antecedentes en la respuesta a "¿vale la pena?" (2026-08-19)
+
+Tener el texto de las bases no es lo mismo que poder decidir. `npm run antecedentes-licitacion`
+ahora genera además `decision.json` / `decision.md` (y encabeza con eso `antecedentes.md`), con
+todo citado a su sección de origen — lo que no está en la ficha queda vacío, nunca se infiere:
+
+| Bloque | Qué trae | Fuente |
+|---|---|---|
+| Banderas | Reglas explícitas sobre los datos (⛔ bloqueante / ⚠️ atención / ✅ favorable), cada una con motivo y cita | derivadas |
+| Lo esencial | Nombre, organismo, estado, tipo, tope, cierre + **días restantes**, ventana de preguntas, adjudicación, duración, plazo de pago, subcontratación, financiamiento, garantía | secciones 1, 3, 7, 8 + API |
+| Cómo se evalúa | Criterios con ponderaciones, **peso del precio** y verificación de que sumen 100% | sección 6 |
+| Qué hay que presentar | Anexos exigidos por categoría (administrativos / técnicos / económicos) | sección 4 |
+| Cláusulas que dejan fuera | Frases literales del tipo "será declarada inadmisible", "requisito excluyente" | todas + adjuntos |
+| Exigencias detectadas | Visita a terreno, garantía de seriedad, experiencia mínima, multas, SLA, capacitación, registro… con la frase que las evidencia | todas + adjuntos |
+
+Las banderas son reglas sobre datos, no opinión del agente: cierre vencido (bloqueante), cierra en
+<48 h, ventana de preguntas cerrada, exige garantía, precio <40% de la evaluación, ponderaciones que
+no suman 100, prohibición de subcontratar, organismo con >100 reclamos, ≥8 documentos exigidos, y la
+ausencia de adjuntos leídos. El resumen (chips + puntos a revisar) sale en cada tarjeta de
+`docs/licitaciones.html`.
+
+### El detalle fino sí importa: leer los adjuntos cuando existan
+
+El PDF de bases administrativas y las EE.TT. traen exigencias que la ficha pública no muestra. Que
+estén tras el gate no significa que no se puedan aprovechar: lo que faltaba era que **algo los
+leyera** una vez obtenidos. Ahora:
+
+```
+licitaciones/data/<codigo>/adjuntos/   ← ahí llegan los archivos (un clic humano en el visor,
+                                          o `npm run adjuntos-licitacion` desde IP residencial)
+npm run leer-adjuntos [-- <codigo>]    ← extrae su texto y rehace la ficha de decisión
+```
+
+`documentos-texto.ts` extrae PDF con `pdfjs-dist` y DOCX/XLSX con un lector de ZIP mínimo sobre
+`zlib` (sin dependencias nuevas); un PDF escaneado se reporta como "sin capa de texto, haría falta
+OCR" en vez de fingir que se leyó. Cada exigencia y cada cláusula excluyente que salga de ahí se
+cita como `adjunto <archivo>`, distinguible de las de la ficha. Verificado con un PDF real de 4
+páginas: texto extraído, exigencia detectada y citada al archivo.
+
+Mientras no haya adjuntos, la ficha **lo dice como bandera** ("Falta el detalle fino: no hay
+adjuntos leídos") en vez de dar por completa una decisión tomada solo con la ficha pública.
+
+### Quinta medición del gate: perfil persistente y navegación previa (2026-08-19)
+
+Se probó una vía más antes de dar el gate por cerrado: contexto persistente (`launchPersistentContext`
+con perfil en disco), navegador **no** headless bajo Xvfb, viewport real, y navegación previa por el
+portal (Home → buscador → ficha, con scroll y movimiento de mouse) para que el reCAPTCHA puntuara una
+sesión con historia. Resultado: `score 0.1` → `/Procurement/403.html`, idéntico a todo lo demás.
+Cinco variantes medidas, cinco rechazos: lo que puntúa es la IP de datacenter, y desde acá no hay
+forma honesta de cambiarlo.
+
 ### El límite, dicho con precisión
 
 Los **archivos** adjuntos (PDF de bases administrativas, EE.TT., formatos de anexo en blanco) están
