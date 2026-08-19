@@ -65,6 +65,19 @@ npm run array-cotizar
    `src/lib/array-pagina.ts`) con el precio, la fecha de generación, el enlace al PDF y la lista
    de adjuntos por tarjeta, más un aviso fijo explicando que el precio es preliminar.
 
+## Estado de lo publicado hoy
+
+La página publicada (`docs/array-compras-agiles.html`) sale del **radar**, sin cotizaciones: el
+código está probado de punta a punta contra la API real, pero `config/company.json` está
+gitignored y no existe en el entorno de la nube donde se escribió esto, así que ahí no se pueden
+generar cotizaciones legítimas — solo saldrían con una identidad inventada, que es justo lo que
+los guardrails prohíben. **Para poblar la página con precios y PDFs hay que correr
+`npm run array-cotizar` en una máquina que tenga el `config/company.json` real** y commitear el
+resultado (los PDF de `docs/array-cotizaciones/` y su `index.json`).
+
+Corolario importante: nunca commitear un `docs/array-compras-agiles.html` en modo cotizador sin
+commitear también los PDF que enlaza — la página quedaría con descargas rotas.
+
 ## Interacción con `array-compras-agiles-radar`
 
 Ambos skills escriben el mismo `docs/array-compras-agiles.html`. Para que correr el radar (que
