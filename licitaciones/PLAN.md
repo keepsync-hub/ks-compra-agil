@@ -239,27 +239,78 @@ Un rechazo cuesta un intento contra una cuenta que se bloquea, así que el scrip
 diagnosticar es reintentar, que es justo lo que no hay que hacer. `--diagnostico` verifica los
 selectores sin usar credenciales.
 
+### El objetivo estaba mal planteado: acceso es la URL, no el archivo (2026-08-19, corrección de fondo)
+
+Todo lo anterior de esta sección persigue **bajar los bytes** de los adjuntos, y por eso terminó en
+un callejón: cuatro variantes medidas, cuatro rechazos, y una máquina de login construida para una
+hipótesis que resultó falsa. Vale la pena decir por qué el planteamiento estaba mal, porque el error
+no fue técnico:
+
+- **Confundimos custodia con acceso.** Las URLs de los documentos son públicas, estables y ya las
+  tenemos: la ficha las emite. Tener la URL de un documento *es* tener acceso a él. Guardar una
+  copia local solo agrega valor si un programa va a **leer** ese archivo — y lo que un programa
+  necesita leer (garantías, anexos exigidos, criterios, plazos, tope) **ya viene en texto** desde la
+  ficha, parseado en `antecedentes.md`. Lo que queda tras el gate son los formatos de anexo en
+  blanco: papeles para **presentar** la oferta, no para **decidirla**.
+- **Optimizamos el paso equivocado.** El clic humano que el gate obliga cae exactamente donde el
+  flujo ya tiene una persona (revisar y enviar la oferta). Automatizarlo no ahorraba un paso: lo
+  movía de lugar.
+- **El costo era real y recurrente.** La vía de descarga exige navegador, sesión, 2FA y ~40 s por
+  licitación, y falla. La vía de referencia cuesta **dos GET sin autenticación** y no falla nunca.
+
+Contraargumentos honestos a este cambio, y qué se hace con cada uno:
+
+| Objeción | Respuesta |
+|---|---|
+| "Un enlace no es el archivo: si el `enc` caduca, la referencia se pudre." | Por eso el índice incluye **siempre** la URL canónica (`DetailsAcquisition.aspx?idlicitacion=<codigo>`), que no caduca y desde la cual se vuelve a obtener el visor. El deep link es comodidad, no dependencia. |
+| "Sin el PDF no se puede analizar el contenido con un programa." | El contenido que decide ya está en texto (9 secciones + foro). Lo que no se parsea son los formatos en blanco, que no tienen contenido que analizar. |
+| "Para ofertar hay que adjuntar esos anexos." | Cierto, y ahí hay una persona igual. El índice le deja el enlace a un clic, con nombre y contexto. |
+| "¿No conviene igual intentar bajarlos por si el gate deja pasar?" | Sí, pero como opción, no como camino: `npm run adjuntos-licitacion -- <codigo> --con-login --visible` sigue existiendo para correrlo desde la máquina del usuario. Dejó de ser un pendiente bloqueante. |
+
+### Lo que se implementó: índice de documentos como dato de primera clase
+
+`referenciasDocumentales()` en `portal-ficha.ts` arma, por licitación, el índice de sus documentos
+con un campo `acceso` que dice sin ambigüedad quién puede seguir cada URL:
+
+| Documento | `acceso` | Costo |
+|---|---|---|
+| Bases y condiciones (ficha pública) | `directo` | 1 GET, ya parseado a texto |
+| Foro de preguntas y respuestas | `directo` | 1 GET |
+| Excel oficial de preguntas y respuestas | `directo` | 1 GET, y se guarda en disco |
+| Archivos adjuntos (PDF/DOCX, formatos de anexo) | `navegador` | 0 — es la URL del visor; la abre una persona |
+
+Queda en `licitaciones/data/<codigo>/documentos.json`, en el bloque "Documentos de esta licitación"
+de `antecedentes.md`, y —lo que importa para operar— **en cada tarjeta de `docs/licitaciones.html`**,
+que es donde alguien decide si vale la pena ofertar. Antes esa página no enlazaba ningún documento:
+el enlace al visor existía solo dentro de un archivo de caché gitignored, o sea, en la práctica no
+existía.
+
+`npm run antecedentes-licitacion` además **republica la página** al terminar (desde
+`hallazgosDesdeCache()`, movido a `licitaciones/src/lib/cache.ts` para que radar y antecedentes lo
+compartan), así que el flujo completo es:
+
+```
+npm run radar-licitaciones          # 1 vez al día: detecta y gasta cuota del ticket
+npm run antecedentes-licitacion     # sin cuota: bases + Q&R + índice de documentos + publica
+```
+
+Guardrail que se mantiene: si la caché está vacía, `antecedentes` **no toca la página** — publicar
+una grilla vacía borraría oportunidades que siguen abiertas.
+
 ### El límite, dicho con precisión
 
-Los **archivos** (PDF de bases administrativas, EE.TT., formatos de anexo en blanco) están detrás de
-una verificación anti-automatización deliberada, en dos capas: el score de reCAPTCHA para entrar al
-visor y un CAPTCHA de imagen para la descarga masiva. Superarlo desde acá exigiría falsear el
-fingerprint del navegador, comprar IPs residenciales o pagar un servicio que resuelva CAPTCHAs: eso
-es rodear un control de acceso, no automatizar un trámite, y el proyecto no lo hace (guardrail de
+Los **archivos** adjuntos (PDF de bases administrativas, EE.TT., formatos de anexo en blanco) están
+detrás de una verificación anti-automatización deliberada, en dos capas: el score de reCAPTCHA para
+entrar al visor y un CAPTCHA de imagen para la descarga masiva. Superarlo desde acá exigiría falsear
+el fingerprint del navegador, comprar IPs residenciales o pagar un servicio que resuelva CAPTCHAs:
+eso es rodear un control de acceso, no automatizar un trámite, y el proyecto no lo hace (guardrail de
 `CLAUDE.md`).
 
-Lo único que queda por medir —y solo se puede medir allá— es si desde **la máquina del usuario**
-(IP residencial, navegador con historial, sesión de Claude Cowork local) el score sube del umbral.
-`npm run adjuntos-licitacion -- <codigo> --con-login --visible --diagnostico` responde eso en una
-corrida, sin bajar nada; el login ya no es un pendiente, corre solo con `MP_USUARIO`/`MP_CLAVE` y el
-lector de correo. Si pasa, el mismo script baja los archivos solo; si no pasa, la respuesta es definitiva y
-la descarga es un clic humano.
-
-Consecuencia práctica para el flujo de oferta: decidir **si conviene ofertar** (tope, garantías,
-plazos, criterios, anexos exigidos, excluyentes) ya no necesita a nadie — eso está resuelto por
-`antecedentes-licitacion`. Bajar los formatos en blanco para **presentar** la oferta puede necesitar
-un clic humano, el mismo punto del flujo donde ya se contempla intervención humana para el login y
-el envío.
+Con el índice de documentos, ese límite dejó de ser un bloqueo del flujo: lo que el gate protege son
+los archivos, no su ubicación, y la ubicación es lo que el agente necesita entregar. Si alguien
+quiere igual los bytes, `npm run adjuntos-licitacion -- <codigo> --con-login --visible --diagnostico`
+sigue ahí para correrlo desde una máquina con IP residencial — es una mejora opcional, no un
+requisito.
 
 ### Uso posible de la API OCDS (hallazgo lateral)
 

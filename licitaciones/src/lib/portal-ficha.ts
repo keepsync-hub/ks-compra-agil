@@ -172,7 +172,7 @@ function indiceSeccion(html: string, numero: number): number {
 
 function tituloSeccion(html: string, numero: number): string | null {
   const m = html.match(new RegExp(`id="lblTitulo${numero}"[^>]*>([^<]*)<`));
-  return m ? decodificarEntidades(m[1]).trim() : null;
+  return m?.[1] ? decodificarEntidades(m[1]).trim() : null;
 }
 
 /**
@@ -189,7 +189,9 @@ export function parsearSecciones(html: string): SeccionFicha[] {
 
   const secciones: SeccionFicha[] = [];
   for (let i = 0; i < marcadores.length; i++) {
-    const { numero, inicio } = marcadores[i];
+    const marcador = marcadores[i];
+    if (!marcador) continue;
+    const { numero, inicio } = marcador;
     if (numero > MAX_SECCIONES) continue; // marcador posterior: solo sirve como corte
     const fin = marcadores[i + 1]?.inicio ?? html.length;
     const titulo = tituloSeccion(html, numero) ?? `Sección ${numero}`;
@@ -215,9 +217,9 @@ export function parsearEnlaces(html: string, urlFicha: string): EnlacesFicha {
   const enlaces: EnlacesFicha = { ficha: urlFicha };
   // El botón de adjuntos abre el visor con un `enc` ya emitido dentro del propio HTML público.
   const visor = html.match(/([.\/A-Za-z]*Attachment\/ViewAttachment\.aspx\?enc=[^'"&\s]+)/);
-  if (visor) enlaces.visorAdjuntos = absolutizar(visor[1]);
+  if (visor?.[1]) enlaces.visorAdjuntos = absolutizar(visor[1]);
   const foro = html.match(/href="(\/Foros\/[^"]+)"/);
-  if (foro) enlaces.foroPreguntas = absolutizar(foro[1]);
+  if (foro?.[1]) enlaces.foroPreguntas = absolutizar(foro[1]);
   return enlaces;
 }
 
@@ -289,9 +291,8 @@ export async function obtenerAntecedentes(
 export async function descargarPreguntasRespuestas(
   urlForo: string,
 ): Promise<{ nombreArchivo: string; contenido: Buffer } | null> {
-  const qs = new URL(urlForo).searchParams.get("qs");
-  if (!qs) return null;
-  const url = `${PORTAL}/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=${encodeURIComponent(qs)}`;
+  const url = urlPreguntasRespuestas(urlForo);
+  if (!url) return null;
   const res = await fetchPortal(url, "Descarga del Excel de preguntas y respuestas");
   if (!res.ok) return null;
   const disposicion = res.headers.get("content-disposition") ?? "";
@@ -304,6 +305,90 @@ export async function descargarPreguntasRespuestas(
   return { nombreArchivo: nombre || "preguntas-respuestas.xls", contenido };
 }
 
+/**
+ * Cómo se llega a un documento. `directo` = un `fetch` plano lo trae (sin login, sin CAPTCHA, sin
+ * cuota). `navegador` = la URL es pública y estable, pero el portal la sirve solo a un navegador
+ * real que pase su reCAPTCHA por score — un clic de una persona, no de este agente.
+ */
+export type AccesoDocumento = "directo" | "navegador";
+
+export interface ReferenciaDocumento {
+  clave: "ficha" | "adjuntos" | "foro" | "preguntas-respuestas";
+  titulo: string;
+  url: string;
+  acceso: AccesoDocumento;
+  /** Ruta relativa al repo, si además el archivo quedó en disco. */
+  archivoLocal?: string;
+  nota?: string;
+}
+
+/**
+ * URL del Excel oficial de preguntas y respuestas, derivada del `qs` del foro.
+ *
+ * El `qs` se copia **crudo**, tal como lo emite el portal, sin decodificar ni re-codificar: es
+ * base64 y suele traer `+`, que `URLSearchParams` interpretaría como espacio y devolvería como
+ * `%20`. El portal tolera ambas formas, pero reproducir la suya exacta evita depender de esa
+ * tolerancia.
+ */
+export function urlPreguntasRespuestas(urlForo: string): string | null {
+  const qs = urlForo.match(/[?&]qs=([^&#]*)/)?.[1];
+  return qs ? `${PORTAL}/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=${qs}` : null;
+}
+
+/**
+ * Índice de los documentos de la licitación **como referencias**, que es lo que este proyecto
+ * necesita: tener la URL de un documento ya es tener acceso a él. Bajar los bytes solo hace falta
+ * para leerlos con un programa —y el texto de las bases ya viene parseado en `secciones`—, así que
+ * el índice no depende de pasar ningún control: se arma con lo que la ficha pública entrega.
+ *
+ * Por eso `acceso` es parte del dato y no una nota al pie: quien consuma esto sabe, sin probar,
+ * cuáles puede seguir un script y cuál necesita el clic de una persona.
+ */
+export function referenciasDocumentales(
+  a: AntecedentesLicitacion,
+  extras: { preguntasRespuestasLocal?: string } = {},
+): ReferenciaDocumento[] {
+  const referencias: ReferenciaDocumento[] = [
+    {
+      clave: "ficha",
+      titulo: "Bases y condiciones (ficha pública)",
+      url: `${PORTAL}/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=${encodeURIComponent(a.codigo)}`,
+      acceso: "directo",
+      archivoLocal: `licitaciones/data/${a.codigo}/antecedentes.md`,
+      nota: "URL canónica y estable: el texto completo de las bases, ya leído y parseado.",
+    },
+  ];
+  if (a.enlaces.visorAdjuntos) {
+    referencias.push({
+      clave: "adjuntos",
+      titulo: "Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)",
+      url: a.enlaces.visorAdjuntos,
+      acceso: "navegador",
+      nota: "Visor del portal con reCAPTCHA por score. La URL es la referencia; abrirla es un clic humano.",
+    });
+  }
+  if (a.enlaces.foroPreguntas) {
+    referencias.push({
+      clave: "foro",
+      titulo: "Foro de preguntas y respuestas",
+      url: a.enlaces.foroPreguntas,
+      acceso: "directo",
+    });
+    const xls = urlPreguntasRespuestas(a.enlaces.foroPreguntas);
+    if (xls) {
+      referencias.push({
+        clave: "preguntas-respuestas",
+        titulo: "Excel oficial de preguntas y respuestas",
+        url: xls,
+        acceso: "directo",
+        archivoLocal: extras.preguntasRespuestasLocal,
+        nota: "Las respuestas del organismo modifican las bases.",
+      });
+    }
+  }
+  return referencias;
+}
+
 export function antecedentesAMarkdown(a: AntecedentesLicitacion): string {
   const lineas: string[] = [
     `# Antecedentes de la licitación ${a.codigo}`,
@@ -311,14 +396,13 @@ export function antecedentesAMarkdown(a: AntecedentesLicitacion): string {
     `> Leído de la ficha pública del portal el ${a.obtenidoEn} — sin ticket, sin cuota y sin login.`,
     `> Es el contenido de las bases tal como lo publica el organismo comprador, no un documento nuestro.`,
     "",
-    `- Ficha: ${a.enlaces.ficha}`,
   ];
-  if (a.enlaces.foroPreguntas) lineas.push(`- Foro de preguntas y respuestas: ${a.enlaces.foroPreguntas}`);
-  if (a.enlaces.visorAdjuntos) {
-    lineas.push(
-      `- Archivos adjuntos (PDF/DOCX de bases y formatos de anexo): ${a.enlaces.visorAdjuntos}`,
-      `  ⚠ Ese visor exige reCAPTCHA del lado del servidor: se abre con un navegador real, no con este agente.`,
-    );
+  lineas.push("## Documentos de esta licitación", "");
+  for (const r of referenciasDocumentales(a)) {
+    const marca = r.acceso === "directo" ? "descargable por script" : "abrir en un navegador (reCAPTCHA del portal)";
+    lineas.push(`- **${r.titulo}** — ${marca}`, `  ${r.url}`);
+    if (r.archivoLocal) lineas.push(`  ↳ en disco: \`${r.archivoLocal}\``);
+    if (r.nota) lineas.push(`  ${r.nota}`);
   }
   lineas.push("");
   for (const s of a.secciones) {

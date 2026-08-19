@@ -104,10 +104,19 @@ hallazgos de arriba aplican tal cual a ese dominio. Dos diferencias que muerden:
   parsea (garantías, anexos exigidos, criterios de evaluación, foro de preguntas) sin gastar cuota
   del ticket, y además baja **un archivo real**: el Excel oficial de preguntas y respuestas
   (`Export/PreguntasExcel.aspx`), el único documento de los antecedentes que el portal entrega sin
-  verificación humana. Los ARCHIVOS adjuntos están tras reCAPTCHA por score + un CAPTCHA de imagen:
-  `npm run adjuntos-licitacion -- <codigo>` intenta la única vía honesta (navegador real que el
-  sitio puntúa con su propio reCAPTCHA, sin falsificar nada) y se detiene si lo rechazan. Nunca
-  rodear ese control.
+  verificación humana.
+- **Acceso a los documentos = su URL, no una copia local.** Cada corrida de
+  `antecedentes-licitacion` deja el índice de documentos de la licitación (`documentos.json`, el
+  bloque "Documentos" de `antecedentes.md` y los enlaces en cada tarjeta de `docs/licitaciones.html`)
+  con un campo `acceso`: `directo` (un `fetch` lo trae: ficha, foro, Excel de preguntas) o
+  `navegador` (la URL del visor de adjuntos, que abre una persona). Bajar los bytes de los adjuntos
+  **no es un pendiente del flujo**: lo que decide si conviene ofertar ya viene en texto, y los
+  formatos de anexo en blanco se necesitan al presentar la oferta, donde ya hay una persona. Ver "El
+  objetivo estaba mal planteado" en `licitaciones/PLAN.md`.
+- Los ARCHIVOS adjuntos están tras reCAPTCHA por score + un CAPTCHA de imagen:
+  `npm run adjuntos-licitacion -- <codigo> [--con-login]` intenta la única vía honesta (navegador
+  real que el sitio puntúa con su propio reCAPTCHA, sin falsificar nada) y se detiene si lo
+  rechazan. Es opcional, para correr desde la máquina del usuario. Nunca rodear ese control.
 - **El login al portal ya funciona sin intervención humana, y aun así no abre los adjuntos**
   (verificado end-to-end el 2026-08-19). `npm run login-portal` autentica con **ClaveÚnica** —el
   portal no tiene credencial propia para un RUN chileno; el formulario usuario/contraseña de

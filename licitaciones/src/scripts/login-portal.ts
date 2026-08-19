@@ -217,9 +217,9 @@ async function escribirCodigo(page: Page, codigo: string): Promise<void> {
   const casillas = page.locator(CANDIDATO_2FA_DIGITOS);
   const cuantas = await casillas.count().catch(() => 0);
   if (cuantas >= codigo.length) {
-    for (let i = 0; i < codigo.length; i++) {
+    for (const [i, digito] of [...codigo].entries()) {
       await casillas.nth(i).click();
-      await casillas.nth(i).pressSequentially(codigo[i], { delay: 60 });
+      await casillas.nth(i).pressSequentially(digito, { delay: 60 });
     }
     return;
   }

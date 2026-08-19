@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { LicitacionListItem, LicitacionDetalle } from "./api.js";
 import type { CondicionesLicitacion } from "./condiciones.js";
+import type { ReferenciaDocumento } from "./portal-ficha.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** licitaciones/src/lib -> raíz del repo (docs/ vive en la raíz, no dentro de licitaciones/). */
@@ -22,6 +23,47 @@ export interface HallazgoLicitacion {
   item: LicitacionListItem;
   detalle: LicitacionDetalle;
   condiciones: CondicionesLicitacion;
+}
+
+/**
+ * Índice de documentos que dejó `npm run antecedentes-licitacion` para esta licitación, si corrió.
+ * Se lee de disco en vez de pedirlo por parámetro para no acoplar el radar al portal: si no está,
+ * la tarjeta simplemente muestra un enlace menos.
+ */
+function referenciasDeCache(codigo: string): ReferenciaDocumento[] {
+  const ruta = path.join(REPO_ROOT, "licitaciones", "data", codigo, "documentos.json");
+  if (!existsSync(ruta)) return [];
+  try {
+    const datos = JSON.parse(readFileSync(ruta, "utf-8")) as { documentos?: ReferenciaDocumento[] };
+    return datos.documentos ?? [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Los documentos, como enlaces. Tener la URL es tener el documento: la página no los aloja ni los
+ * duplica, los referencia — y dice cuáles abre un script y cuál necesita el clic de una persona
+ * (el visor de adjuntos del portal, tras su reCAPTCHA).
+ */
+function enlacesDocumentos(codigo: string): string {
+  const referencias = referenciasDeCache(codigo).filter((r) => r.clave !== "ficha");
+  if (referencias.length === 0) return "";
+  const items = referencias
+    .map(
+      (r) =>
+        `            <li><a href="${escapeHtml(r.url)}"${r.acceso === "navegador" ? ' class="humano"' : ""}>${escapeHtml(
+          r.titulo,
+        )}</a>${r.acceso === "navegador" ? ' <span class="hint">abre en el portal</span>' : ""}</li>`,
+    )
+    .join("\n");
+  return `
+        <details class="docs">
+          <summary>Documentos publicados por el organismo</summary>
+          <ul>
+${items}
+          </ul>
+        </details>`;
 }
 
 function escapeHtml(s: string): string {
@@ -139,7 +181,7 @@ function tarjeta(h: HallazgoLicitacion, ahora: Date): string {
         }
         <dl>
 ${filasDatos(h, ahora)}
-        </dl>
+        </dl>${enlacesDocumentos(codigo)}
         <div class="cta">
           <span class="badge warn">Detectada — cotización pendiente</span>
           <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=${encodeURIComponent(codigo)}">Ver en el portal</a>

@@ -21,10 +21,13 @@ Lo esencial para operarlo:
 - La API **no expone adjuntos ni garantías** de la licitación: no existe el equivalente al servicio
   de adjuntos sin login de Compra Ágil. Pero eso ya no obliga a que una persona lea las bases: la
   ficha pública del portal trae su texto completo y se baja con
-  `npm run antecedentes-licitacion -- <codigo>` (sin ticket ni cuota). Solo los ARCHIVOS adjuntos
-  siguen tras reCAPTCHA + CAPTCHA de imagen (`npm run adjuntos-licitacion` lo intenta con un
-  navegador real y se detiene si lo rechazan) — ver "Acceso a los antecedentes" en
-  `licitaciones/PLAN.md`.
+  `npm run antecedentes-licitacion` (sin ticket ni cuota), que además publica el **índice de
+  documentos** de cada licitación en su tarjeta de `docs/licitaciones.html`. Los ARCHIVOS adjuntos
+  siguen tras reCAPTCHA, pero eso ya no bloquea: se entrega su URL, que es acceso suficiente
+  (bajarlos con `npm run adjuntos-licitacion` es opcional y hay que correrlo desde la máquina del
+  usuario) — ver "El objetivo estaba mal planteado" en `licitaciones/PLAN.md`.
+- Después de correr el radar, **correr también `npm run antecedentes-licitacion`**: es gratis (no
+  gasta cuota) y es lo que deja la página con los enlaces a los documentos de cada oportunidad.
 - **La cuota del ticket es escasa**: se agotó (429) en la segunda corrida del mismo día. Correr el
   radar contra la API una vez al día y usar `--desde-cache` para republicar sin gastar cuota.
 

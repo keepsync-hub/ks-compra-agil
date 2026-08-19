@@ -75,6 +75,15 @@
   .opp-card dt { color: var(--gray-dim); }
   .opp-card dd { margin: 0; }
   .opp-card .sin-dato { color: var(--gray-dim); font-style: italic; }
+  /* Índice de documentos de la licitación. La página no aloja archivos: los referencia — tener la
+     URL del documento es tener acceso a él. `.humano` marca el único que exige abrirse en el
+     portal (su visor corre reCAPTCHA por score), para no prometer que un script lo baja. */
+  .opp-card .docs { margin: 0.2rem 0 0.4rem; font-size: 0.84rem; }
+  .opp-card .docs summary { cursor: pointer; color: var(--accent-light); }
+  .opp-card .docs ul { margin: 0.4rem 0 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.3rem; }
+  .opp-card .docs a { color: var(--gray); }
+  .opp-card .docs a.humano { color: var(--white); }
+  .opp-card .docs .hint { color: var(--gray-dim); font-size: 0.78rem; }
   .opp-card .cta { margin-top: auto; padding-top: 0.6rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
   .meta-corrida { color: var(--gray-dim); font-size: 0.85rem; margin: 0 0 1rem; }
 
@@ -164,6 +173,14 @@
           <dt>Reclamos al organismo</dt><dd>387</dd>
           <dt>Región</dt><dd>Región Metropolitana de Santiago</dd>
         </dl>
+        <details class="docs">
+          <summary>Documentos publicados por el organismo</summary>
+          <ul>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=NLuERzj%2f0kbthYLR5H%2bdk9%2bgoJxDOqun5rh8VBSWFrW%2bDDPyiKRgKeM%2bZG1lLflxBIaJvmgBTOa771DMlO0DkgTBZCT1KhRe56Q8jvVCHMPkcRCDsTfkUMeOpA5H4Dq3gbQ9FaCF37thlvYA%2bCs1CjzaBU4nxtrbllICKItZH6DnTlAa3qGBUE%2fj2LKLKoPb4oOSZ%2b%2fDeu3deSfstxSrIoHSYzEHeNmDOKHcAAGW6cvAAe9K%2bH%2b09iB5zQHqfj2%2bTs35c0Ea7shPg0rvquK6IPHnsw9D6JXVvFy5Uny1Ygm2oru15oRSkjzqlpudl6jS" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=lKvtFRpL4uKTdjKPd1yxSKU2+FAWc2Ju5ByDjBQsxFzpZzt8jPmROwYPPMDTY16x">Foro de preguntas y respuestas</a></li>
+            <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=lKvtFRpL4uKTdjKPd1yxSKU2+FAWc2Ju5ByDjBQsxFzpZzt8jPmROwYPPMDTY16x">Excel oficial de preguntas y respuestas</a></li>
+          </ul>
+        </details>
         <div class="cta">
           <span class="badge warn">Detectada — cotización pendiente</span>
           <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=1191449-18-LE26">Ver en el portal</a>
@@ -184,6 +201,14 @@
           <dt>Reclamos al organismo</dt><dd>45</dd>
           <dt>Región</dt><dd>Región del Ñuble</dd>
         </dl>
+        <details class="docs">
+          <summary>Documentos publicados por el organismo</summary>
+          <ul>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=850%2bFrkC%2fb2LPTJQoppW2Yn5EM%2f33psOYB5t94JjGbjIzRTEmWf4LPlTGwBOX1U3QaAwli1%2bGkHkAF52fNgx7do2Enuznd3YHJUE85JD6CBSA5bxoLr9FVnTo%2fohOdKmxWkQe5LC%2fWbShQFTKFDcsYqWp58v0Hubz2PDOZyEyZHESPQYx2QQD1%2b7XicKmJ4xNnv%2bA%2bGVi2E8qZDijOSS57M9Ba3RxB6Om6Lu5fOnyzpNtNq5Y93AxPAgL4dEPmgdWktQF5SuZdY8llNfXH6bPyq2yleCfItU1g4cmE%2fIfvQZQxwflohJCBPnF4xrBJN%2f" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=uGfnGMmKV6ls5F2Xx5UnW2sTm5rxNqi4IQyEH86Dvvi5Ey9jvDhdTT2hNQc3xcbG">Foro de preguntas y respuestas</a></li>
+            <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=uGfnGMmKV6ls5F2Xx5UnW2sTm5rxNqi4IQyEH86Dvvi5Ey9jvDhdTT2hNQc3xcbG">Excel oficial de preguntas y respuestas</a></li>
+          </ul>
+        </details>
         <div class="cta">
           <span class="badge warn">Detectada — cotización pendiente</span>
           <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=4174-29-LE26">Ver en el portal</a>
@@ -204,6 +229,14 @@
           <dt>Reclamos al organismo</dt><dd>46</dd>
           <dt>Región</dt><dd>Región Aysén del General Carlos Ibáñez del Campo</dd>
         </dl>
+        <details class="docs">
+          <summary>Documentos publicados por el organismo</summary>
+          <ul>
+            <li><a href="https://www.mercadopublico.cl/Procurement/Modules/Attachment/ViewAttachment.aspx?enc=tWTgO20YdXzZUevYy%2ff0apAFbChldW1L0OspaiQppnw%2f7hCLdLje5vnCOtuxO5eJYD4J1%2bymd3VJAWMvjMS2kRuIcLRpF2L2ST0EEm7Y2jEISngn%2fFhXbKQs%2fa%2bSTGmLO1GtcaVP%2fKhpnh5FV5oDgHHcOiVb8wLO3XTWguzW3U0bz4MNSrCApEDDE7ni7DNTlOT84v4Soez7P94ous3SKHmuEEeBnjYFF1heruIO4H5%2byrdNfnNvEMXwXmnnSNPw%2fiwOLh4UfP9eMuci2B8tp9HFADHs664%2fJ3X8RLk1NvMsZZEl5uExmSV7yKkHpBM2" class="humano">Archivos adjuntos del organismo (PDF/DOCX, formatos de anexo)</a> <span class="hint">abre en el portal</span></li>
+            <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=zzCqw+eHfR6SOua4qKgZd/QFbEo/pc9m9yGHwQ0Rtk1qMZ0HUgvH1vCKwvM6XtOF">Foro de preguntas y respuestas</a></li>
+            <li><a href="https://www.mercadopublico.cl/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=zzCqw+eHfR6SOua4qKgZd/QFbEo/pc9m9yGHwQ0Rtk1qMZ0HUgvH1vCKwvM6XtOF">Excel oficial de preguntas y respuestas</a></li>
+          </ul>
+        </details>
         <div class="cta">
           <span class="badge warn">Detectada — cotización pendiente</span>
           <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=5038-3-LE26">Ver en el portal</a>
@@ -259,7 +292,10 @@
       radar corrió contra producción el 19-08-2026. Esa corrida corrigió varias suposiciones del
       código: el ítem del listado no trae comprador ni monto (solo la ficha los trae), el plazo de
       contrato vive en <code>TiempoDuracionContrato</code>, y esta API <strong>no expone los
-      adjuntos ni las garantías</strong> de la licitación — las bases hay que leerlas en el portal.
+      adjuntos ni las garantías</strong> de la licitación. Eso se resolvió por otra vía: la ficha
+      pública del portal sí trae el texto completo de las bases (garantías, anexos exigidos,
+      criterios de evaluación) y el índice de documentos de cada licitación, que es lo que enlaza
+      cada tarjeta de arriba — tener la URL de un documento es tener acceso a él.
       Queda pendiente cuidar la cuota: es de pocas llamadas al día, y por eso se decidió gastarla
       entera en las licitaciones activas.
     </div>
@@ -282,7 +318,7 @@
           <tr><td>Búsqueda</td><td><code>q</code> por variantes de marca, en el servidor</td><td>sin búsqueda por texto — filtrado local sobre el listado por estado</td></tr>
           <tr><td>Producto</td><td>licencias Claude, precio de lista público (Anthropic)</td><td>gestión documental/digitalización, catálogo de costos propio de KeepSync</td></tr>
           <tr><td>Garantías</td><td>no aplica</td><td>seriedad de la oferta / fiel cumplimiento de contrato, habituales en licitaciones — <strong>la API no las expone</strong>: hay que leer las bases en el portal</td></tr>
-          <tr><td>Adjuntos</td><td>descargables sin login por un servicio no documentado</td><td>no expuestos por la API — solo en el portal</td></tr>
+          <tr><td>Adjuntos</td><td>descargables sin login por un servicio no documentado</td><td>no expuestos por la API; su URL se obtiene de la ficha pública y se publica como enlace (el visor exige reCAPTCHA, o sea un clic humano)</td></tr>
           <tr><td>Cuota del ticket</td><td>holgada para el uso diario del radar</td><td>muy escasa: se agotó en la segunda corrida del mismo día</td></tr>
           <tr><td>Formulario del portal</td><td>escrito, diferido a sesión local (Cowork)</td><td>fuera de alcance de esta réplica — no diseñado</td></tr>
         </tbody>

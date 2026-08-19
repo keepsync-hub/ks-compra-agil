@@ -22,8 +22,12 @@ import {
   obtenerAntecedentes,
   antecedentesAMarkdown,
   descargarPreguntasRespuestas,
+  referenciasDocumentales,
   type AntecedentesLicitacion,
+  type ReferenciaDocumento,
 } from "../lib/portal-ficha.js";
+import { hallazgosDesdeCache } from "../lib/cache.js";
+import { renderTarjetasLicitaciones, actualizarPaginaLicitaciones } from "../lib/pagina.js";
 
 const DATA_DIR = path.join(LIC_ROOT_DIR, "data");
 
@@ -61,19 +65,36 @@ function guardar(a: AntecedentesLicitacion): string {
  * Excel de preguntas y respuestas del foro (las respuestas del organismo modifican las bases). Los
  * demás adjuntos viven tras el CAPTCHA del visor — para esos, `npm run adjuntos-licitacion`.
  */
-async function guardarDocumentos(a: AntecedentesLicitacion, dir: string): Promise<void> {
-  if (!a.enlaces.foroPreguntas) return;
+async function guardarDocumentos(a: AntecedentesLicitacion, dir: string): Promise<string | undefined> {
+  if (!a.enlaces.foroPreguntas) return undefined;
   try {
     const documento = await descargarPreguntasRespuestas(a.enlaces.foroPreguntas);
-    if (!documento) return;
+    if (!documento) return undefined;
     const destino = path.join(dir, "documentos");
     mkdirSync(destino, { recursive: true });
     const ruta = path.join(destino, documento.nombreArchivo);
     writeFileSync(ruta, documento.contenido);
     console.log(`    ↓ ${documento.nombreArchivo} (${documento.contenido.length} bytes) — archivo oficial, sin CAPTCHA`);
+    return path.relative(process.cwd(), ruta);
   } catch (err) {
     console.warn(`    (no se pudo bajar el Excel de preguntas: ${(err as Error).message})`);
+    return undefined;
   }
+}
+
+/**
+ * El entregable de este comando, además del texto: el índice de documentos con su URL. Tener la URL
+ * ya es tener acceso al documento — bajar los bytes solo hace falta para leerlos con un programa, y
+ * el texto de las bases ya viene parseado. `documentos.json` es lo que consume la página publicada.
+ */
+function guardarReferencias(a: AntecedentesLicitacion, dir: string, xlsLocal?: string): ReferenciaDocumento[] {
+  const referencias = referenciasDocumentales(a, { preguntasRespuestasLocal: xlsLocal });
+  writeFileSync(
+    path.join(dir, "documentos.json"),
+    JSON.stringify({ codigo: a.codigo, obtenidoEn: a.obtenidoEn, documentos: referencias }, null, 2),
+    "utf-8",
+  );
+  return referencias;
 }
 
 /** Una línea por sección, para que la corrida se pueda revisar sin abrir los archivos. */
@@ -83,11 +104,36 @@ function resumir(a: AntecedentesLicitacion): void {
     console.log(`    ${s.numero}. ${s.titulo} — ${s.texto.length} car. ${primeraLinea ? `· ${primeraLinea}…` : ""}`);
   }
   if (a.foro) console.log(`    foro de preguntas: ${a.foro.length} car.`);
-  if (a.enlaces.visorAdjuntos) {
-    console.log(`    adjuntos (requieren navegador real, reCAPTCHA): ${a.enlaces.visorAdjuntos}`);
-  } else {
-    console.log(`    esta licitación no publica archivos adjuntos en la ficha`);
+}
+
+function resumirDocumentos(referencias: ReferenciaDocumento[]): void {
+  for (const r of referencias) {
+    console.log(`    ${r.acceso === "directo" ? "→" : "↗"} ${r.titulo}`);
+    console.log(`      ${r.url}`);
   }
+  if (!referencias.some((r) => r.clave === "adjuntos")) {
+    console.log(`    (esta licitación no publica archivos adjuntos en la ficha)`);
+  }
+}
+
+/**
+ * Deja la página publicada al día con los enlaces recién descubiertos, sin gastar cuota: se
+ * reconstruye desde las fichas ya cacheadas. Si la caché está vacía **no se toca la página** —
+ * publicar una grilla vacía borraría oportunidades que siguen abiertas (mismo criterio que el
+ * radar ante una corrida incompleta).
+ */
+function republicarPagina(): void {
+  const { hallazgos } = hallazgosDesdeCache();
+  if (hallazgos.length === 0) {
+    console.log("Página no tocada: no hay fichas vigentes en caché (correr `npm run radar-licitaciones`).");
+    return;
+  }
+  const ok = actualizarPaginaLicitaciones(renderTarjetasLicitaciones(hallazgos));
+  console.log(
+    ok
+      ? `Página actualizada con los enlaces a documentos de ${hallazgos.length} licitación(es): docs/licitaciones.html`
+      : "No se pudo actualizar docs/licitaciones.html (faltan los marcadores OPORTUNIDADES).",
+  );
 }
 
 async function main(): Promise<void> {
@@ -112,7 +158,8 @@ async function main(): Promise<void> {
       const antecedentes = await obtenerAntecedentes(codigo);
       const dir = guardar(antecedentes);
       resumir(antecedentes);
-      await guardarDocumentos(antecedentes, dir);
+      const xlsLocal = await guardarDocumentos(antecedentes, dir);
+      resumirDocumentos(guardarReferencias(antecedentes, dir, xlsLocal));
       console.log(`    → ${path.relative(process.cwd(), dir)}/antecedentes.md\n`);
     } catch (err) {
       fallidas++;
@@ -120,6 +167,8 @@ async function main(): Promise<void> {
       console.error(`    ✗ ${(err as Error).message}\n`);
     }
   }
+
+  republicarPagina();
 
   if (fallidas > 0) {
     console.error(`${fallidas} de ${codigos.length} licitación(es) no se pudieron leer.`);

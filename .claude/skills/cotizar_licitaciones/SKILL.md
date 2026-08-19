@@ -73,9 +73,12 @@ preguntas y respuestas en `documentos/` (las respuestas del organismo modifican 
 lo que decide si conviene ofertar, y ya no requiere que una persona abra el portal.
 
 Los ARCHIVOS adjuntos (PDF/DOCX de bases y formatos de anexo en blanco) son otra cosa: el portal
-los protege con reCAPTCHA por score y un CAPTCHA de imagen. `npm run adjuntos-licitacion -- <codigo>`
-intenta la única vía honesta —un navegador real al que el sitio puntúa— y se detiene si lo rechazan;
-no rodearlo nunca. Si lo rechaza, `antecedentes.md` deja anotada la URL para abrirla a mano.
+los protege con reCAPTCHA por score y un CAPTCHA de imagen. No hace falta bajarlos para cotizar:
+`antecedentes.md` y `documentos.json` traen su **URL** —que es acceso suficiente— junto con la de la
+ficha, el foro y el Excel de preguntas, cada una marcada `directo` o `navegador`. Citar esas URLs
+como referencia en vez de prometer una copia local. Bajarlos (`npm run adjuntos-licitacion --
+<codigo> --con-login`) es opcional y solo funciona desde una máquina con IP residencial; no rodear
+nunca ese control.
 
 ## Guardrails (no negociables, iguales en espíritu a `compra-agil-ofertar`)
 

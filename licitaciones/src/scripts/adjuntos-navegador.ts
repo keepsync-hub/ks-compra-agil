@@ -131,20 +131,23 @@ async function pasarGate(page: Page, codigo: string): Promise<{ resultado: Resul
 
 /** Lee la grilla de adjuntos ya renderizada (solo se llega acá si el gate dejó pasar). */
 async function listarGrilla(popup: Page): Promise<AdjuntoLicitacion[]> {
-  return popup.evaluate(() => {
-    const filas = Array.from(document.querySelectorAll("#DWNL_grdId tr"));
-    const texto = (fila: Element, sufijo: string) =>
-      (fila.querySelector(`span[id$="_${sufijo}"]`) as HTMLElement | null)?.innerText?.trim() || undefined;
-    return filas
+  // Se evalúa como string a propósito: el callback corre en el navegador, y tipar su DOM acá
+  // obligaría a meter la lib "dom" en un proyecto que es Node.
+  return popup.evaluate(`(() => {
+    const texto = (fila, sufijo) => {
+      const span = fila.querySelector('span[id$="_' + sufijo + '"]');
+      return span && span.innerText ? span.innerText.trim() : undefined;
+    };
+    return Array.from(document.querySelectorAll("#DWNL_grdId tr"))
       .map((fila) => ({
-        archivo: texto(fila, "File") ?? "",
+        archivo: texto(fila, "File") || "",
         tipo: texto(fila, "Type"),
         descripcion: texto(fila, "Description"),
         tamano: texto(fila, "FileLength"),
         fecha: texto(fila, "AtcDateTime"),
       }))
       .filter((a) => a.archivo !== "");
-  });
+  })()`) as Promise<AdjuntoLicitacion[]>;
 }
 
 async function descargarUnoAUno(popup: Page, adjuntos: AdjuntoLicitacion[], destino: string): Promise<void> {
@@ -152,7 +155,9 @@ async function descargarUnoAUno(popup: Page, adjuntos: AdjuntoLicitacion[], dest
   const botones = popup.locator('#DWNL_grdId input[type="image"][id$="_search"]');
   const total = await botones.count();
   for (let i = 0; i < total && i < adjuntos.length; i++) {
-    const nombre = adjuntos[i].archivo;
+    const adjunto = adjuntos[i];
+    if (!adjunto) continue;
+    const nombre = adjunto.archivo;
     try {
       const [descarga] = await Promise.all([
         popup.waitForEvent("download", { timeout: 60_000 }),
@@ -160,7 +165,7 @@ async function descargarUnoAUno(popup: Page, adjuntos: AdjuntoLicitacion[], dest
       ]);
       const ruta = path.join(destino, descarga.suggestedFilename() || nombre);
       await descarga.saveAs(ruta);
-      adjuntos[i].rutaLocal = ruta;
+      adjunto.rutaLocal = ruta;
       console.log(`    ✓ ${nombre}`);
     } catch {
       // Si el portal responde con un mensaje en vez de un archivo (p. ej. exigiendo el CAPTCHA de

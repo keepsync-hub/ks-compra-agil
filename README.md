@@ -102,9 +102,11 @@ grilla parcial); el detalle está en "Hallazgos de la corrida de verificación" 
   completo de las bases — y eso ya se lee automáticamente con `npm run antecedentes-licitacion --
   <codigo>` (sin ticket, sin cuota y sin login; verificado el 2026-08-19). Ahí están las garantías
   exigidas, los anexos que hay que presentar y los criterios de evaluación. Lo único que sigue
-  necesitando a una persona son los ARCHIVOS adjuntos (PDF/DOCX): el portal los protege con un
-  CAPTCHA de imagen. `npm run adjuntos-licitacion -- <codigo>` intenta la única vía honesta (un
-  navegador real al que el sitio puntúa con su propio reCAPTCHA) y se detiene si lo rechazan.
+  necesitando a una persona son los ARCHIVOS adjuntos (PDF/DOCX): el portal los protege con
+  reCAPTCHA por score. **Eso dejó de bloquear el flujo**: tener la URL de un documento es tener
+  acceso a él, así que cada licitación publica su índice de documentos (ficha, foro, Excel de
+  preguntas y respuestas, visor de adjuntos) con un campo que dice cuáles baja un script y cuál
+  abre una persona. Los enlaces salen en cada tarjeta de `docs/licitaciones.html`.
 - **El login al portal ya corre solo, y aun así no abre los adjuntos** (verificado end-to-end el
   2026-08-19). `npm run login-portal` autentica con ClaveÚnica y el agente lee el código de doble
   factor del correo, sin que intervenga nadie. Pero abrir el visor **con esa sesión autenticada**
@@ -118,7 +120,7 @@ grilla parcial); el detalle está en "Hallazgos de la corrida de verificación" 
 | Comando | Qué hace |
 |---|---|
 | `npm run radar-licitaciones` | Busca licitaciones activas de gestión documental/digitalización/oficina de partes, extrae condiciones, detecta recompradores. Solo lectura. |
-| `npm run antecedentes-licitacion -- <codigo>` | Baja de la ficha **pública** del portal el contenido completo de las bases (garantías, anexos exigidos, criterios de evaluación) + el foro de preguntas, a `licitaciones/data/<codigo>/antecedentes.md`, **y el archivo Excel oficial de preguntas y respuestas** a `documentos/`. Sin ticket, sin cuota, sin login y sin CAPTCHA. Sin argumentos, procesa todas las licitaciones ya detectadas en caché. |
+| `npm run antecedentes-licitacion -- [<codigo> ...]` | Baja de la ficha **pública** del portal el contenido completo de las bases (garantías, anexos exigidos, criterios de evaluación) + el foro de preguntas, a `licitaciones/data/<codigo>/antecedentes.md`, **y el archivo Excel oficial de preguntas y respuestas** a `documentos/`. Escribe el **índice de documentos** (`documentos.json`) y **republica `docs/licitaciones.html`** con esos enlaces en cada tarjeta. Sin ticket, sin cuota, sin login y sin CAPTCHA. Sin argumentos, procesa todas las licitaciones en caché. |
 | `npm run login-portal [-- --diagnostico] [--visible]` | Inicia sesión en el portal vía **ClaveÚnica** (`MP_USUARIO`/`MP_CLAVE` del entorno) y guarda `data/storageState.json`. El código de doble factor lo escribe el agente en `licitaciones/data/2fa-codigo.txt` tras leerlo del correo. `--diagnostico` verifica los selectores **sin usar credenciales**. Verificado contra producción el 2026-08-19. |
 | `npm run adjuntos-licitacion -- <codigo> [--con-login] [--visible] [--diagnostico] [--sin-sesion]` | Baja los ARCHIVOS adjuntos abriendo el visor del portal con un navegador real. `--con-login` autentica en el mismo contexto antes de abrir el visor (`storageState.json` por sí solo **no** restaura la sesión del portal). Medido en la nube: score 0–0.1 contra umbral 0.5, autenticado o no → rechaza. `--diagnostico` responde si el gate deja pasar sin bajar nada. No rodea el control: si lo rechazan, se detiene. |
 | `npm run cotizar-licitaciones -- <codigo>` | Genera la cotización (`.pptx` + `.pdf`) para una licitación específica, validando el tope. No envía nada. |
