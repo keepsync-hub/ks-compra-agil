@@ -17,6 +17,13 @@ data/*
 # (ver docs/index.html). Quedan marcadas BORRADOR mientras config/company.json no tenga la
 # identidad real de la empresa confirmada.
 
+# Excepción dentro de output/: los adjuntos que publica el ORGANISMO COMPRADOR (bases, anexos,
+# formularios) no son un entregable nuestro y se pueden volver a bajar del portal en cualquier
+# momento con `npm run array-cotizar`. Versionarlos solo agrega binarios de terceros que crecen
+# sin techo. Las cotizaciones que sí generamos (los .pdf de output/array/<codigo>/) se versionan
+# igual que el resto de output/.
+output/array/*/adjuntos/
+
 # mismo criterio para el dominio de licitaciones (licitaciones/) — secretos y caché no se
 # versionan, licitaciones/output/ sí.
 licitaciones/config/company.json

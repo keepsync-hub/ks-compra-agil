@@ -57,7 +57,16 @@ export function registrarHallazgo(state: RadarState, item: LicitacionListItem, a
     ultimo_estado: item.Estado ?? String(item.CodigoEstado ?? "desconocido"),
   };
 
-  const rut = item.Comprador?.RutOrganismo ?? item.Comprador?.NombreOrganismo ?? "desconocido";
+  // OJO (dos salvedades, ninguna bloqueante hoy porque licitaciones/data/ está gitignored y este
+  // radar nunca corrió contra la API real):
+  // 1. Cambiar la clave de agrupación invalida cualquier state.json local previo: las entradas
+  //    viejas quedaron bajo el fallback NombreOrganismo y no se migran, así que un organismo ya
+  //    registrado se vería como nuevo y se perdería una detección de recomprador.
+  // 2. `RutUnidad` es el RUT de la UNIDAD DE COMPRA, no del organismo. Si un organismo opera
+  //    varias unidades con RUT distinto, esto lo fragmenta. El diccionario oficial confirma el
+  //    nombre del campo, no que sea el identificador correcto para agrupar por organismo —
+  //    verificar con datos reales antes de confiar en el conteo de recompradores.
+  const rut = item.Comprador?.RutUnidad ?? item.Comprador?.NombreOrganismo ?? "desconocido";
   const organismo = state.organismos[rut] ?? { rut, nombre: item.Comprador?.NombreOrganismo ?? "desconocido", procesos: [] };
   const procesosPreviosDelOrganismo = organismo.procesos.filter((p) => p.codigo !== codigo);
   const esReintentoDeOrganismo = esNuevo && procesosPreviosDelOrganismo.length > 0;

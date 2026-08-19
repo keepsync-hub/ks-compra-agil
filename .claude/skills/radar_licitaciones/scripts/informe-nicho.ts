@@ -78,7 +78,7 @@ async function main() {
 
   const organismos = new Map<string, { nombre: string; procesos: LicitacionListItem[] }>();
   for (const c of casos) {
-    const rut = c.Comprador?.RutOrganismo ?? c.Comprador?.NombreOrganismo ?? "desconocido";
+    const rut = c.Comprador?.RutUnidad ?? c.Comprador?.NombreOrganismo ?? "desconocido";
     const entry = organismos.get(rut) ?? { nombre: c.Comprador?.NombreOrganismo ?? "desconocido", procesos: [] };
     entry.procesos.push(c);
     organismos.set(rut, entry);

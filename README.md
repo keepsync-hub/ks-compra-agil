@@ -14,8 +14,15 @@ es el diagrama del flujo completo paso a paso — qué hace cada skill y en qué
 detiene para que una persona actúe (incluida la sesión de Claude Cowork local para login +
 formulario). `docs/array-compras-agiles.html` es una página aparte, de exploración de mercado
 para [Array](http://www.array.cl/) (no para el nicho Claude de KeepSync) — ver
-`npm run array-radar` más abajo. Se publica vía `.github/workflows/pages.yml` en cada push a la
-rama por defecto.
+`npm run array-radar` (solo lectura) y `npm run array-cotizar` (agrega cotización PDF preliminar
+por oportunidad, oferente KeepSync) más abajo. Se publica vía `.github/workflows/pages.yml`.
+
+**Ojo con la publicación**: el entorno `github-pages` del repo solo acepta despliegues desde
+`claude/mercadopublico-agente-compras-pgyedf`. Agregar otra rama al `on.push.branches` del
+workflow hace que la corrida *arranque*, pero el deploy falla en ~1 segundo por la regla de
+protección del entorno (así fallaron las corridas de `claude/array-agile-purchases-page-det2d4` y
+`claude/revisar-contexto-plan-ttaumn`). Para que un cambio en `docs/` llegue al sitio público hay
+que mergearlo a esa rama, o habilitar la rama nueva en Settings → Environments → `github-pages`.
 
 ## Setup
 
@@ -45,6 +52,7 @@ cotizar, pero cada PDF/PPTX generado queda marcado BORRADOR hasta que se confirm
 | `npm run diagnostico-api` | Diagnóstico único de la API (¿`q` es opcional?, forma del payload, filtros de fecha, ticket clásico) — ver `PLAN-VOLUMEN.md`, Fase 0. Escribe `output/diagnostico-api.md`. |
 | `npm run cuota` | Muestra el consumo de cuota de hoy y la convergencia pasiva del límite diario medido (`historico/cuota.jsonl`). Cero requests. |
 | `npm run array-radar` | Busca Compras Ágiles publicadas relacionadas con los servicios de [Array](http://www.array.cl/) (oficina de partes, gestión documental/firma electrónica, RPA, BI, gestión de proyectos) y regenera `docs/array-compras-agiles.html`. Exploración de mercado independiente del nicho Claude — solo lectura. |
+| `npm run array-cotizar` | Igual búsqueda que `array-radar`, más descarga de adjuntos y una cotización PDF preliminar por oportunidad (oferente KeepSync, precio = 80% del presupuesto disponible — no un costo real de Array, ver `.claude/skills/array-compras-agiles-cotizar/SKILL.md`). Regenera `docs/array-compras-agiles.html` con precio y PDF enlazado por tarjeta, y deja `docs/array-cotizaciones/index.json` para que `array-radar` no borre las cotizaciones al refrescar. |
 | `npm run typecheck` | `tsc --noEmit`. |
 
 ## Agentes de GitHub Copilot (cloud agent)
