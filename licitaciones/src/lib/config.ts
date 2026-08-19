@@ -94,6 +94,11 @@ export interface CategoriaKeyword {
   descripcion_array?: string;
   /** Regex (string, case-insensitive al compilar) que descubre la licitación. */
   patron_mencion: string;
+  /**
+   * Textos que se le piden al buscador público del portal (`buscador-portal.ts`), que sí filtra
+   * por texto en el servidor. Es el barrido grueso; la precisión la pone `patron_mencion`.
+   */
+  consultas_portal?: string[];
   /** Contexto donde `patron_mencion` acierta la palabra pero se equivoca de rubro (ej. "RPA" = dron). */
   patron_excluyente?: string;
 }

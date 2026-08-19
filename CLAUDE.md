@@ -79,24 +79,32 @@ hace falta resolver el mismo tipo de insumo bloqueante que el nicho Claude (¿v�
 fulfillment/facturación para Array, y a qué costo?) — sin resolverlo, esto es solo investigación
 de mercado, igual que el radar de solo lectura.
 
-## Segundo nicho: Licitaciones de Gestión Documental (`licitaciones/`)
+## Segundo nicho: Licitaciones públicas para los servicios de Array (`licitaciones/`)
 
-Réplica de este mismo radar+cotizador para **Licitaciones públicas** (no Compra Ágil) de gestión
-documental, digitalización de procesos u oficina de partes — skills `radar_licitaciones` y
-`cotizar_licitaciones`. Es un dominio distinto con su propia API (`api.mercadopublico.cl`, ticket
-separado) y su propio catálogo de costos (sin precio de lista público como el de Claude).
-**Leer `licitaciones/PLAN.md` antes de tocar ese código** — no asumir que los guardrails y
-hallazgos de arriba aplican tal cual a ese dominio. Dos diferencias que muerden:
+Réplica de este mismo radar+cotizador para **Licitaciones públicas** (no Compra Ágil) que piden los
+servicios del catálogo de [Array](http://www.array.cl/) — oficina de partes electrónica, seguimiento
+de trámites, gestión documental y firma electrónica, RPA, business intelligence y plataformas de
+gestión de proyectos —, skills `radar_licitaciones` y `cotizar_licitaciones`. Es el mismo nicho que
+`array-compras-agiles-radar` cubre en Compra Ágil, en otro instrumento de compra, con su propia API
+y su propio catálogo de costos (sin precio de lista público como el de Claude).
+**Leer `licitaciones/PLAN.md` antes de tocar ese código** — no asumir que los guardrails y hallazgos
+de arriba aplican tal cual a ese dominio. Lo que hay que saber para operarlo:
 
-- El radar **está verificado contra producción desde el 2026-08-19** y publica oportunidades reales
-  en `docs/licitaciones.html`, pero **la cuota del ticket es muy escasa** (se agotó en la segunda
-  corrida del mismo día): correr contra la API una vez al día y usar
-  `npm run radar-licitaciones -- --desde-cache` para republicar sin gastar cuota.
-- Por esa cuota, **toda la API se gasta en licitaciones activas**: se eliminaron el barrido
-  histórico del nicho y su página, y `api.ts` solo expone `buscarLicitacionesActivas()` + la ficha
-  por código. Consecuencia: a diferencia del nicho Claude, acá **no hay cifras históricas** del
-  nicho — no asumir que existen ni pedirlas al radar. Ver "Decisión: solo licitaciones activas" en
-  `licitaciones/PLAN.md` antes de reponer cualquier barrido.
+- **El radar no gasta cuota de API.** Corre entero sobre fuentes públicas del portal: descubre por el
+  buscador público (`npm run radar-licitaciones`), que **sí filtra por texto** —la API no puede— y
+  entrega nombre y descripción completos; y arma cada ficha desde la ficha pública de la licitación.
+  El `LICITACIONES_API_TICKET` quedó como opción (`--con-api`), no como requisito: su cuota es tan
+  escasa que se agotaba antes de la primera ficha, y lo único exclusivo que aporta
+  (`CantidadReclamos`) el portal ya lo entrega mejor desglosado (reclamos **por pago no oportuno**
+  sobre compras de 12 meses). Ver "El descubrimiento también es gratis" en `licitaciones/PLAN.md`.
+- Los patrones del nicho viven en `licitaciones/config/keywords.json` (mismo contrato que
+  `config/array-servicios.json`) y la config manda de verdad: editar ese archivo cambia qué busca el
+  radar. Ojo con los excluyentes — más texto encuentra más licitaciones y también más falsos
+  positivos (residuos "con gestión documental", servidores "para administrar un gestor documental").
+- El radar publica `docs/licitaciones.html`, que **solo contiene lo que sirve para evaluar una
+  licitación** (tope o tramo de monto, plazos, garantías, criterios con su ponderación, anexos,
+  banderas con su cita, cómo paga el organismo, documentos). Las secciones de estado del proyecto se
+  eliminaron a propósito: eso se lee en el repo.
 - Esa API **no expone adjuntos ni garantías** de la licitación — no existe acá el servicio de
   adjuntos sin login que sí tiene Compra Ágil. Pero eso **ya no obliga a que una persona lea las
   bases**: la ficha pública del portal (`DetailsAcquisition.aspx?idlicitacion=<codigo>`) sirve su

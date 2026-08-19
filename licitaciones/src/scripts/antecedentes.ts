@@ -15,19 +15,13 @@
  * ficha sí trae el texto de las bases; los ARCHIVOS adjuntos siguen detrás de un reCAPTCHA que este
  * script no intenta rodear — deja su URL anotada para un navegador real o una persona.
  */
-import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { LIC_ROOT_DIR } from "../lib/config.js";
-import {
-  obtenerAntecedentes,
-  descargarPreguntasRespuestas,
-  referenciasDocumentales,
-  type AntecedentesLicitacion,
-  type ReferenciaDocumento,
-} from "../lib/portal-ficha.js";
+import type { AntecedentesLicitacion, ReferenciaDocumento } from "../lib/portal-ficha.js";
 import type { FichaDecision } from "../lib/decision.js";
 import { hallazgosDesdeCache } from "../lib/cache.js";
-import { escribirFichaDecision } from "../lib/ficha-decision-archivo.js";
+import { procesarAntecedentes } from "../lib/antecedentes-pipeline.js";
 import { renderTarjetasLicitaciones, actualizarPaginaLicitaciones } from "../lib/pagina.js";
 
 const DATA_DIR = path.join(LIC_ROOT_DIR, "data");
@@ -48,58 +42,6 @@ function codigosEnCache(): string[] {
     )
     .map((d) => d.name)
     .sort();
-}
-
-function guardar(a: AntecedentesLicitacion): string {
-  const dir = path.join(DATA_DIR, a.codigo);
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(path.join(dir, "ficha-portal.html"), a.html, "utf-8");
-  // El HTML crudo ya quedó en su propio archivo: duplicarlo dentro del JSON lo haría inmanejable.
-  const { html: _html, ...sinHtml } = a;
-  writeFileSync(path.join(dir, "antecedentes.json"), JSON.stringify(sinHtml, null, 2), "utf-8");
-  return dir;
-}
-
-/**
- * Baja los ARCHIVOS de antecedentes que el portal entrega sin verificación humana. Hoy es uno: el
- * Excel de preguntas y respuestas del foro (las respuestas del organismo modifican las bases). Los
- * demás adjuntos viven tras el CAPTCHA del visor — para esos, `npm run adjuntos-licitacion`.
- */
-async function guardarDocumentos(a: AntecedentesLicitacion, dir: string): Promise<string | undefined> {
-  if (!a.enlaces.foroPreguntas) return undefined;
-  try {
-    const documento = await descargarPreguntasRespuestas(a.enlaces.foroPreguntas);
-    if (!documento) return undefined;
-    const destino = path.join(dir, "documentos");
-    mkdirSync(destino, { recursive: true });
-    // Nombre estable: el portal bautiza el archivo con la hora de descarga, así que cada corrida
-    // dejaba una copia nueva del mismo documento. La fecha real ya está en `obtenidoEn`.
-    const ruta = path.join(destino, "Foro_PreguntasRespuestas.xls");
-    for (const viejo of readdirSync(destino).filter((f) => /^Foro_PreguntasRespuestas_.+\.xls$/.test(f))) {
-      rmSync(path.join(destino, viejo), { force: true });
-    }
-    writeFileSync(ruta, documento.contenido);
-    console.log(`    ↓ Foro_PreguntasRespuestas.xls (${documento.contenido.length} bytes) — archivo oficial, sin CAPTCHA`);
-    return path.relative(process.cwd(), ruta);
-  } catch (err) {
-    console.warn(`    (no se pudo bajar el Excel de preguntas: ${(err as Error).message})`);
-    return undefined;
-  }
-}
-
-/**
- * El entregable de este comando, además del texto: el índice de documentos con su URL. Tener la URL
- * ya es tener acceso al documento — bajar los bytes solo hace falta para leerlos con un programa, y
- * el texto de las bases ya viene parseado. `documentos.json` es lo que consume la página publicada.
- */
-function guardarReferencias(a: AntecedentesLicitacion, dir: string, xlsLocal?: string): ReferenciaDocumento[] {
-  const referencias = referenciasDocumentales(a, { preguntasRespuestasLocal: xlsLocal });
-  writeFileSync(
-    path.join(dir, "documentos.json"),
-    JSON.stringify({ codigo: a.codigo, obtenidoEn: a.obtenidoEn, documentos: referencias }, null, 2),
-    "utf-8",
-  );
-  return referencias;
 }
 
 /** Una línea por sección, para que la corrida se pueda revisar sin abrir los archivos. */
@@ -175,12 +117,10 @@ async function main(): Promise<void> {
   for (const codigo of codigos) {
     console.log(`  ${codigo}`);
     try {
-      const antecedentes = await obtenerAntecedentes(codigo);
-      const dir = guardar(antecedentes);
+      const { antecedentes, referencias, decision, dir } = await procesarAntecedentes(codigo, (m) => console.log(m));
       resumir(antecedentes);
-      const xlsLocal = await guardarDocumentos(antecedentes, dir);
-      resumirDocumentos(guardarReferencias(antecedentes, dir, xlsLocal));
-      resumirDecision(await escribirFichaDecision(antecedentes));
+      resumirDocumentos(referencias);
+      resumirDecision(decision);
       console.log(`    → ${path.relative(process.cwd(), dir)}/decision.md (y antecedentes.md)\n`);
     } catch (err) {
       fallidas++;

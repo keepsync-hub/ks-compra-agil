@@ -6,6 +6,7 @@ import { categoriasDeDetalle } from "./keywords.js";
 import type { CondicionesLicitacion } from "./condiciones.js";
 import type { ReferenciaDocumento } from "./portal-ficha.js";
 import type { Bandera, FichaDecision } from "./decision.js";
+import type { FichaBuscador } from "./buscador-portal.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** licitaciones/src/lib -> raíz del repo (docs/ vive en la raíz, no dentro de licitaciones/). */
@@ -49,6 +50,20 @@ function referenciasDeCache(codigo: string): ReferenciaDocumento[] {
     return datos.documentos ?? [];
   } catch {
     return [];
+  }
+}
+
+/**
+ * Lo que dejó el radar del buscador público: rango de monto cuando el organismo no publica el
+ * monto exacto, y el comportamiento de pago del comprador. Gratis, y no está en la API.
+ */
+function buscadorDeCache(codigo: string): FichaBuscador | null {
+  const ruta = path.join(REPO_ROOT, "licitaciones", "data", codigo, "buscador.json");
+  if (!existsSync(ruta)) return null;
+  try {
+    return JSON.parse(readFileSync(ruta, "utf-8")) as FichaBuscador;
+  } catch {
+    return null;
   }
 }
 
@@ -216,14 +231,20 @@ function glosaCierre(fechaCierre: string | undefined, ahora: Date): string {
  * chica puede no traer casi ninguno: se omite la fila en vez de imprimir "—", para que la
  * tarjeta no mienta sobre lo que el organismo declaró.
  */
-function filasDatos(h: HallazgoLicitacion, f: FichaDecision | null, ahora: Date): string {
+function filasDatos(h: HallazgoLicitacion, f: FichaDecision | null, b: FichaBuscador | null, ahora: Date): string {
   const filas: [string, string][] = [];
 
+  // Cuando el organismo no publica el monto exacto, el buscador igual muestra el tramo en UTM
+  // ("Entre 100 y 1000 UTM"). Es menos que un tope, pero es la única cifra que hay: decirla es
+  // mejor que decir "no publicado" a secas, y no se convierte a pesos porque el portal no lo hace.
+  const rango = !b?.montoEsDisponible && b?.montoTexto && !/^[\d.]+$/.test(b.montoTexto) ? b.montoTexto : null;
   filas.push([
     "Tope",
     h.condiciones.tope_clp > 0
       ? fmtClp(h.condiciones.tope_clp)
-      : "<span class=\"sin-dato\">no publicado por el organismo</span>",
+      : rango
+        ? `${escapeHtml(rango)} <span class="sin-dato">(tramo; el organismo no publicó el monto)</span>`
+        : "<span class=\"sin-dato\">no publicado por el organismo</span>",
   ]);
   filas.push(["Cierre", glosaCierre(h.detalle.FechaCierre ?? h.detalle.Fechas?.FechaCierre, ahora)]);
 
@@ -264,8 +285,21 @@ function filasDatos(h: HallazgoLicitacion, f: FichaDecision | null, ahora: Date)
   // Solo el día: la API entrega esta fecha con hora 00:00, que no informa nada.
   const adjudicacion = fmtFecha(h.detalle.Fechas?.FechaAdjudicacion)?.slice(0, 10);
   if (adjudicacion) filas.push(["Adjudicación", escapeHtml(adjudicacion)]);
+  // Cómo paga el comprador, en sus últimos 12 meses. Es el dato que decide si el contrato se
+  // financia solo o hay que aguantar la mora: el portal publica ambas cifras y el porcentaje es
+  // aritmética sobre ellas, no una interpretación.
+  if (typeof b?.comprasEfectuadas === "number" && typeof b.reclamosPagoNoOportuno === "number") {
+    const pct = b.comprasEfectuadas > 0 ? Math.round((b.reclamosPagoNoOportuno / b.comprasEfectuadas) * 100) : null;
+    filas.push([
+      "Pago del organismo",
+      `${b.reclamosPagoNoOportuno.toLocaleString("es-CL")} reclamo(s) por pago no oportuno en ` +
+        `${b.comprasEfectuadas.toLocaleString("es-CL")} compras (12 meses)` +
+        (pct != null ? ` — <strong>${pct}%</strong>` : ""),
+    ]);
+  }
   // El diccionario oficial define este campo como reclamos recibidos por el ORGANISMO, no por
   // esta licitación: la etiqueta lo dice para que no se lea como "387 reclamos por esta compra".
+  // Solo llega cuando la ficha vino de la API (`--con-api`).
   if (typeof h.detalle.CantidadReclamos === "number" && h.detalle.CantidadReclamos > 0) {
     filas.push(["Reclamos al organismo", String(h.detalle.CantidadReclamos)]);
   }
@@ -313,6 +347,7 @@ function badgeCierre(fechaCierre: string | undefined, ahora: Date): string {
 function tarjeta(h: HallazgoLicitacion, ahora: Date): string {
   const codigo = h.detalle.CodigoExterno;
   const ficha = decisionDeCache(codigo);
+  const buscador = buscadorDeCache(codigo);
   const organismo = h.detalle.Comprador?.NombreOrganismo ?? "Organismo sin identificar";
   // El `Nombre` llega truncado (~50 car.) tanto en el listado de la API como en la ficha del
   // portal; la `Descripcion` es el texto completo de lo que el organismo está pidiendo, y es lo
@@ -328,7 +363,7 @@ function tarjeta(h: HallazgoLicitacion, ahora: Date): string {
           unidad ? `\n        <span class="unidad">${escapeHtml(unidad)}</span>` : ""
         }${descripcion ? `\n        <p class="descripcion">${escapeHtml(descripcion)}</p>` : ""}
         <dl>
-${filasDatos(h, ficha, ahora)}
+${filasDatos(h, ficha, buscador, ahora)}
         </dl>${bloqueDecision(ficha)}${enlacesDocumentos(codigo)}
         <div class="cta">
           ${badgeCierre(h.detalle.FechaCierre ?? h.detalle.Fechas?.FechaCierre, ahora)}
