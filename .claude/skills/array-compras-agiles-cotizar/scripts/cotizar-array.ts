@@ -1,12 +1,22 @@
 import { mkdirSync, writeFileSync, copyFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR, loadCompanyConfig } from "../../../../src/lib/config.js";
-import { loadArrayServiciosConfig, buscarHallazgosArray, type HallazgoArray } from "../../../../src/lib/array-servicios.js";
+import {
+  loadArrayServiciosConfig,
+  buscarHallazgosArray,
+  presupuestoRequestsArray,
+  type HallazgoArray,
+} from "../../../../src/lib/array-servicios.js";
 import { descargarAdjuntosSiExisten } from "../../../../src/lib/adjuntos.js";
 import { generarCotizacionArrayPdf, type CotizacionArrayData } from "../../../../src/lib/array-cotizacion.js";
-import { generarPaginaArrayHtml, type CotizacionArrayEnlace } from "../../../../src/lib/array-pagina.js";
+import {
+  generarPaginaArrayHtml,
+  guardarIndiceCotizaciones,
+  type CotizacionArrayEnlace,
+} from "../../../../src/lib/array-pagina.js";
 import { nombreArchivoCotizacion } from "../../../../src/lib/nombre-archivo.js";
 import { cierreYaPaso } from "../../../../src/lib/tiempo.js";
+import { configurarCuota } from "../../../../src/lib/cuota.js";
 
 /** Precio de exploración de mercado: 80% del presupuesto disponible, pedido explícitamente por el usuario. */
 const DESCUENTO_SOBRE_PRESUPUESTO = 0.2;
@@ -26,6 +36,16 @@ async function cotizarHallazgo(
     console.warn(`  ${codigo}: ya cerró (${h.item.fechas.fecha_cierre}, hora de Chile) — se omite.`);
     return null;
   }
+  // Sin tope no hay precio: toda la fórmula de esta página es un porcentaje del presupuesto
+  // disponible, así que un tope 0/ausente daría una cotización de $0. Se omite en vez de emitir
+  // un PDF sin sentido — mismo criterio que el cotizador de licitaciones.
+  if (!(h.condiciones.tope_clp > 0)) {
+    console.warn(
+      `  ${codigo}: la ficha no informa un presupuesto disponible (tope=${h.condiciones.tope_clp}) — ` +
+        `no se puede derivar un precio como % del tope. Se omite; revisar manualmente.`,
+    );
+    return null;
+  }
 
   const dirSalida = path.join(ROOT_DIR, "output", "array", codigo);
   mkdirSync(dirSalida, { recursive: true });
@@ -39,10 +59,18 @@ async function cotizarHallazgo(
         const dirAdjuntos = path.join(dirSalida, "adjuntos");
         mkdirSync(dirAdjuntos, { recursive: true });
         for (const a of adjuntos) {
-          writeFileSync(path.join(dirAdjuntos, a.nombreArchivo), a.contenido);
+          // `nombreArchivo` viene del servicio de adjuntos, que NO es API documentada (ver
+          // src/lib/adjuntos.ts): se trata como entrada no confiable. `basename` evita que un
+          // nombre con `../` escriba fuera de output/array/<codigo>/adjuntos/.
+          const nombreSeguro = path.basename(a.nombreArchivo);
+          if (!nombreSeguro || nombreSeguro === "." || nombreSeguro === "..") {
+            console.warn(`  ${codigo}: adjunto con nombre inutilizable ("${a.nombreArchivo}") — se omite.`);
+            continue;
+          }
+          writeFileSync(path.join(dirAdjuntos, nombreSeguro), a.contenido);
+          nombresAdjuntos.push(nombreSeguro);
         }
-        nombresAdjuntos = adjuntos.map((a) => a.nombreArchivo);
-        console.log(`  ${codigo}: ${adjuntos.length} adjunto(s) descargado(s).`);
+        console.log(`  ${codigo}: ${nombresAdjuntos.length} adjunto(s) descargado(s).`);
       }
     } catch (err) {
       console.warn(`  ${codigo}: no se pudieron descargar adjuntos — ${(err as Error).message}`);
@@ -50,9 +78,10 @@ async function cotizarHallazgo(
   }
 
   // Precio = 80% del presupuesto disponible. Se desglosa neto/IVA solo para mostrarlo en el PDF;
-  // el total (lo único que importa contra el tope) es siempre <= tope por construcción.
+  // el total (lo único que importa contra el tope) es siempre <= tope por construcción, y el
+  // desglose se deriva del total para que redondear el neto nunca lo altere.
   const totalClp = Math.round(h.condiciones.tope_clp * (1 - DESCUENTO_SOBRE_PRESUPUESTO));
-  const netoClp = Math.round(totalClp / 1.19);
+  const netoClp = Math.round(totalClp / (1 + company.pricing.iva_pct / 100));
   const ivaClp = totalClp - netoClp;
 
   const categoriaNombre = h.categorias.map((c) => c.nombre).join(" + ");
@@ -111,26 +140,32 @@ async function cotizarHallazgo(
     "utf-8",
   );
 
-  // docs/ es lo único que publica GitHub Pages: se copia ahí para poder enlazarlo desde la página.
+  // docs/ es lo único que publica GitHub Pages: se copia ahí SOLO nuestra cotización, para poder
+  // enlazarla desde la página. Los adjuntos del organismo comprador se quedan en output/ a
+  // propósito — ver la nota en CotizacionArrayEnlace.adjuntos.
   const dirDocs = path.join(ROOT_DIR, "docs", "array-cotizaciones", codigo);
   mkdirSync(dirDocs, { recursive: true });
   copyFileSync(rutaPdf, path.join(dirDocs, nombreArchivoPdf));
-  for (const nombre of nombresAdjuntos) {
-    copyFileSync(path.join(dirSalida, "adjuntos", nombre), path.join(dirDocs, nombre));
-  }
 
   return {
     enlace: {
       precioClp: totalClp,
       archivoPdfRelativo: `array-cotizaciones/${codigo}/${nombreArchivoPdf}`,
       adjuntos: nombresAdjuntos,
+      generado: fechaIsoDia(fecha),
     },
   };
+}
+
+/** AAAA-MM-DD en hora local del proceso, consistente con `nombreArchivoCotizacion`. */
+function fechaIsoDia(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
 async function main() {
   const company = loadCompanyConfig();
   const config = loadArrayServiciosConfig();
+  configurarCuota({ script: "array-cotizar", maxRequests: presupuestoRequestsArray(config) });
 
   console.log(`Cotizador compra-agil-array — precio = ${(1 - DESCUENTO_SOBRE_PRESUPUESTO) * 100}% del presupuesto disponible por oportunidad.\n`);
 
@@ -158,6 +193,10 @@ async function main() {
       console.warn(`  ${h.item.codigo}: no se pudo generar la cotización — ${(err as Error).message}`);
     }
   }
+
+  // Índice versionado primero: es lo que deja que `npm run array-radar` refresque la página más
+  // tarde sin borrar estas cotizaciones.
+  guardarIndiceCotizaciones(cotizaciones);
 
   const html = generarPaginaArrayHtml(hallazgos, config, { cotizaciones, variantesFallidas });
   const docsDir = path.join(ROOT_DIR, "docs");

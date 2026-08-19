@@ -1,8 +1,9 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR } from "../../../../src/lib/config.js";
-import { loadArrayServiciosConfig, buscarHallazgosArray } from "../../../../src/lib/array-servicios.js";
-import { generarPaginaArrayHtml } from "../../../../src/lib/array-pagina.js";
+import { loadArrayServiciosConfig, buscarHallazgosArray, presupuestoRequestsArray } from "../../../../src/lib/array-servicios.js";
+import { generarPaginaArrayHtml, leerIndiceCotizaciones } from "../../../../src/lib/array-pagina.js";
+import { configurarCuota } from "../../../../src/lib/cuota.js";
 
 function fmtClp(n: number): string {
   return `$${n.toLocaleString("es-CL")} CLP`;
@@ -12,6 +13,7 @@ async function main() {
   const ahoraIso = new Date().toISOString();
   const config = loadArrayServiciosConfig();
   const totalVariantes = config.categorias.reduce((acc, c) => acc + c.variantes.length, 0);
+  configurarCuota({ script: "array-radar", maxRequests: presupuestoRequestsArray(config) });
 
   console.log(
     `Radar compra-agil-array — ${config.categorias.length} categorías de servicio, ${totalVariantes} variantes de búsqueda, estado=publicada\n`,
@@ -99,8 +101,16 @@ async function main() {
   writeFileSync(path.join(outputDir, "array-compras-agiles.md"), reporte, "utf-8");
   console.log("\n" + reporte);
 
-  // --- Página HTML (solo lectura: sin cotizaciones — ver npm run array-cotizar) ---
-  const html = generarPaginaArrayHtml(hallazgos, config, { variantesFallidas });
+  // --- Página HTML ---
+  // Este script no cotiza, pero tampoco debe BORRAR las cotizaciones que dejó `npm run
+  // array-cotizar`: ambos escriben el mismo archivo, y el radar puede correr programado (ver la
+  // automatización de Copilot en README.md). Se releen del índice versionado y se vuelven a
+  // renderizar las que sigan correspondiendo a una oportunidad abierta.
+  const cotizaciones = leerIndiceCotizaciones();
+  const html = generarPaginaArrayHtml(hallazgos, config, {
+    variantesFallidas,
+    cotizaciones: cotizaciones.size > 0 ? cotizaciones : undefined,
+  });
   const docsDir = path.join(ROOT_DIR, "docs");
   mkdirSync(docsDir, { recursive: true });
   writeFileSync(path.join(docsDir, "array-compras-agiles.html"), html, "utf-8");

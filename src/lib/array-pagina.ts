@@ -1,3 +1,6 @@
+import { existsSync, readFileSync, mkdirSync, writeFileSync } from "node:fs";
+import path from "node:path";
+import { ROOT_DIR } from "./config.js";
 import type { ArrayServiciosConfig, HallazgoArray } from "./array-servicios.js";
 import { MAX_PAGINAS_POR_VARIANTE_ARRAY } from "./array-servicios.js";
 
@@ -13,7 +16,47 @@ function fmtClp(n: number): string {
 export interface CotizacionArrayEnlace {
   precioClp: number;
   archivoPdfRelativo: string; // ruta relativa a docs/, ej. "array-cotizaciones/1234-56-COT26/Q-....pdf"
-  adjuntos: string[]; // nombres de archivo descargados, vacío si no había ninguno
+  /**
+   * Nombres de los adjuntos del organismo comprador descargados a `output/array/<codigo>/adjuntos/`.
+   * Se listan por nombre pero NO se republican en GitHub Pages: son documentos del organismo, no
+   * nuestros, y ya están disponibles en el portal oficial (al que enlaza la tarjeta). Publicarlos
+   * bajo nuestro sitio atribuiría procedencia ajena y haría crecer el repo con binarios de terceros
+   * que además se pueden volver a descargar en cualquier momento.
+   */
+  adjuntos: string[];
+  /** AAAA-MM-DD en que se generó la cotización (puede ser anterior a la corrida del radar). */
+  generado: string;
+}
+
+/**
+ * Índice versionado de cotizaciones, en `docs/` para que sobreviva a un checkout limpio en la nube
+ * (a diferencia de `data/`, que está gitignored). Es lo que permite que `npm run array-radar`
+ * refresque las oportunidades sin borrar las cotizaciones que dejó `npm run array-cotizar`.
+ */
+const INDICE_COTIZACIONES_PATH = path.join(ROOT_DIR, "docs", "array-cotizaciones", "index.json");
+
+export function leerIndiceCotizaciones(): Map<string, CotizacionArrayEnlace> {
+  if (!existsSync(INDICE_COTIZACIONES_PATH)) return new Map();
+  try {
+    const raw = JSON.parse(readFileSync(INDICE_COTIZACIONES_PATH, "utf-8")) as Record<string, CotizacionArrayEnlace>;
+    return new Map(Object.entries(raw));
+  } catch {
+    // Índice corrupto o de un formato anterior: se ignora en vez de abortar la corrida. La página
+    // simplemente sale sin cotizaciones, y la próxima corrida de `array-cotizar` lo reescribe.
+    return new Map();
+  }
+}
+
+/** Fusiona sobre lo ya indexado: una corrida parcial no debe perder cotizaciones anteriores. */
+export function guardarIndiceCotizaciones(nuevas: Map<string, CotizacionArrayEnlace>): void {
+  const combinado = leerIndiceCotizaciones();
+  for (const [codigo, enlace] of nuevas) combinado.set(codigo, enlace);
+  mkdirSync(path.dirname(INDICE_COTIZACIONES_PATH), { recursive: true });
+  writeFileSync(
+    INDICE_COTIZACIONES_PATH,
+    JSON.stringify(Object.fromEntries([...combinado.entries()].sort()), null, 2),
+    "utf-8",
+  );
 }
 
 export interface OpcionesPaginaArray {
@@ -45,14 +88,22 @@ export function generarPaginaArrayHtml(
                 const elegible =
                   h.item.convocatoria.estado_convocatoria === 1 ? "primer llamado — EMT puede ofertar" : "segundo llamado";
                 const cot = opciones.cotizaciones?.get(h.item.codigo);
+                const listaAdjuntos =
+                  cot && cot.adjuntos.length > 0
+                    ? `<details class="adjuntos"><summary>${cot.adjuntos.length} documento(s) del organismo descargado(s)</summary>
+            <ul>${cot.adjuntos.map((a) => `<li>${escapeHtml(a)}</li>`).join("")}</ul>
+            <p>Descargados a <code>output/array/${escapeHtml(h.item.codigo)}/adjuntos/</code>. No se republican acá: son documentos del organismo comprador y se obtienen desde su ficha en el portal.</p>
+          </details>`
+                    : "";
                 const bloqueCotizacion = modoCotizador
                   ? cot
                     ? `
         <div class="note ok">
-          Cotización preliminar KeepSync: <strong>${fmtClp(cot.precioClp)}</strong> (80% del presupuesto disponible).
-          ${cot.adjuntos.length > 0 ? `${cot.adjuntos.length} adjunto(s) del organismo descargado(s).` : "Sin adjuntos declarados por el organismo."}
-        </div>`
-                    : `<div class="note">No se pudo generar cotización automática para este código — revisar manualmente.</div>`
+          Cotización preliminar KeepSync: <strong>${fmtClp(cot.precioClp)}</strong> (80% del presupuesto disponible)<span class="gen"> · generada ${escapeHtml(cot.generado)}</span>.
+          ${cot.adjuntos.length === 0 ? " Sin adjuntos declarados por el organismo." : ""}
+        </div>
+        ${listaAdjuntos}`
+                    : `<div class="note">Sin cotización generada para este código en la última corrida de <code>npm run array-cotizar</code> — revisar manualmente.</div>`
                   : "";
                 return `
       <div class="opp-card">
@@ -146,6 +197,11 @@ ${cards}
   .btn.secondary:hover { border-color: var(--accent-light); color: var(--accent-light); }
   .note { background: var(--card-alt); border: 1px solid var(--border); border-left: 3px solid var(--warn); border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.86rem; color: var(--gray); }
   .note.ok { border-left-color: var(--ok); }
+  .note .gen { color: var(--gray-dim); }
+  .adjuntos { font-size: 0.82rem; color: var(--gray); }
+  .adjuntos summary { cursor: pointer; color: var(--accent-light); }
+  .adjuntos ul { margin: 0.5rem 0; padding-left: 1.1rem; word-break: break-word; }
+  .adjuntos p { color: var(--gray-dim); margin: 0.4rem 0 0; }
   code, .mono { font-family: ui-monospace, Menlo, monospace; }
   a { color: var(--accent-light); }
   a:hover { color: var(--white); }

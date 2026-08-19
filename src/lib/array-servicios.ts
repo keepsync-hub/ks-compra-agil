@@ -74,6 +74,21 @@ export interface ResultadoBusquedaArray {
 // solo acota volumen, no precisión.
 export const MAX_PAGINAS_POR_VARIANTE_ARRAY = 3;
 
+/** Margen para los `GET /v2/compra-agil/{codigo}` de detalle, más un colchón de reintentos. */
+const PRESUPUESTO_DETALLES_ARRAY = 60;
+
+/**
+ * Presupuesto de requests por corrida para los scripts de Array, en el mismo formato que
+ * `categorias.presupuesto_requests_por_corrida` usa para el radar de Claude. Es el techo del
+ * circuit breaker local de `src/lib/cuota.ts`: sin él, estos scripts (los más caros del repo —
+ * búsquedas genéricas con varias páginas por variante) podrían comerse la cuota diaria que
+ * comparten con el radar de licencias Claude, que es la reserva prioritaria.
+ */
+export function presupuestoRequestsArray(config: ArrayServiciosConfig): number {
+  const variantes = config.categorias.reduce((acc, c) => acc + c.variantes.length, 0);
+  return variantes * MAX_PAGINAS_POR_VARIANTE_ARRAY + PRESUPUESTO_DETALLES_ARRAY;
+}
+
 /**
  * Búsqueda + filtrado completo de Compras Ágiles relacionadas con los servicios de Array: barre
  * `config/array-servicios.json`, descarta ruido local con `textoMencionaCategoria`, y trae el
