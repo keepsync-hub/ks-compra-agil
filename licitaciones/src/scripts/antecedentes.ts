@@ -18,7 +18,12 @@
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { LIC_ROOT_DIR } from "../lib/config.js";
-import { obtenerAntecedentes, antecedentesAMarkdown, type AntecedentesLicitacion } from "../lib/portal-ficha.js";
+import {
+  obtenerAntecedentes,
+  antecedentesAMarkdown,
+  descargarPreguntasRespuestas,
+  type AntecedentesLicitacion,
+} from "../lib/portal-ficha.js";
 
 const DATA_DIR = path.join(LIC_ROOT_DIR, "data");
 
@@ -49,6 +54,26 @@ function guardar(a: AntecedentesLicitacion): string {
   const { html: _html, ...sinHtml } = a;
   writeFileSync(path.join(dir, "antecedentes.json"), JSON.stringify(sinHtml, null, 2), "utf-8");
   return dir;
+}
+
+/**
+ * Baja los ARCHIVOS de antecedentes que el portal entrega sin verificación humana. Hoy es uno: el
+ * Excel de preguntas y respuestas del foro (las respuestas del organismo modifican las bases). Los
+ * demás adjuntos viven tras el CAPTCHA del visor — para esos, `npm run adjuntos-licitacion`.
+ */
+async function guardarDocumentos(a: AntecedentesLicitacion, dir: string): Promise<void> {
+  if (!a.enlaces.foroPreguntas) return;
+  try {
+    const documento = await descargarPreguntasRespuestas(a.enlaces.foroPreguntas);
+    if (!documento) return;
+    const destino = path.join(dir, "documentos");
+    mkdirSync(destino, { recursive: true });
+    const ruta = path.join(destino, documento.nombreArchivo);
+    writeFileSync(ruta, documento.contenido);
+    console.log(`    ↓ ${documento.nombreArchivo} (${documento.contenido.length} bytes) — archivo oficial, sin CAPTCHA`);
+  } catch (err) {
+    console.warn(`    (no se pudo bajar el Excel de preguntas: ${(err as Error).message})`);
+  }
 }
 
 /** Una línea por sección, para que la corrida se pueda revisar sin abrir los archivos. */
@@ -87,6 +112,7 @@ async function main(): Promise<void> {
       const antecedentes = await obtenerAntecedentes(codigo);
       const dir = guardar(antecedentes);
       resumir(antecedentes);
+      await guardarDocumentos(antecedentes, dir);
       console.log(`    → ${path.relative(process.cwd(), dir)}/antecedentes.md\n`);
     } catch (err) {
       fallidas++;

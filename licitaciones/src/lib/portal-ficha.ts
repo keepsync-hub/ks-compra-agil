@@ -274,6 +274,36 @@ export async function obtenerAntecedentes(
   return antecedentes;
 }
 
+/**
+ * Descarga el documento Excel oficial de preguntas y respuestas del foro.
+ *
+ * VERIFICADO el 2026-08-19 (4174-29-LE26): `Export/PreguntasExcel.aspx?qs=<el mismo qs del foro>`
+ * responde `200 application/vnd.ms-excel` con `Content-Disposition: attachment` — un archivo real
+ * de ~32 KB — a un `fetch` plano, sin login, sin CAPTCHA y sin navegador. Es el único ARCHIVO de
+ * los antecedentes de una licitación que el portal entrega sin verificación humana, y las
+ * respuestas del organismo modifican las bases, así que vale la pena tenerlo en disco.
+ *
+ * Devuelve `null` si esta licitación no tiene foro o el portal no entrega el archivo — es
+ * complementario, no debe costar el resto de la corrida.
+ */
+export async function descargarPreguntasRespuestas(
+  urlForo: string,
+): Promise<{ nombreArchivo: string; contenido: Buffer } | null> {
+  const qs = new URL(urlForo).searchParams.get("qs");
+  if (!qs) return null;
+  const url = `${PORTAL}/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=${encodeURIComponent(qs)}`;
+  const res = await fetchPortal(url, "Descarga del Excel de preguntas y respuestas");
+  if (!res.ok) return null;
+  const disposicion = res.headers.get("content-disposition") ?? "";
+  const nombre = disposicion.match(/filename=([^;]+)/)?.[1]?.trim();
+  const contenido = Buffer.from(await res.arrayBuffer());
+  // Un HTML de error entra igual con 200: exigir que pese algo y no empiece como página.
+  if (contenido.length < 1024 || contenido.subarray(0, 15).toString("latin1").toLowerCase().includes("<!doctype")) {
+    return null;
+  }
+  return { nombreArchivo: nombre || "preguntas-respuestas.xls", contenido };
+}
+
 export function antecedentesAMarkdown(a: AntecedentesLicitacion): string {
   const lineas: string[] = [
     `# Antecedentes de la licitación ${a.codigo}`,

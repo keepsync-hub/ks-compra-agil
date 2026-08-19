@@ -127,6 +127,7 @@ corta, verificada contra producción: **el CONTENIDO de las bases sí, los ARCHI
 | `api.mercadopublico.cl` (ficha con ticket) | Sin campo `Adjuntos` ni `Garantia`. Ya estaba documentado arriba. |
 | **Ficha pública del portal** — `DetailsAcquisition.aspx?idlicitacion=<codigo>` | ✅ **Funciona.** 302 → ficha con `qs` cifrado, que `fetch` sigue sin cookies ni sesión: HTTP 200 con ~240 KB de HTML que traen **las 9 secciones de las bases** (`<div id="Ficha1..9">`). Sin login, sin CAPTCHA, sin ticket, sin cuota. Es la ruta implementada. |
 | **Foro público de preguntas y respuestas** — `/Foros/Modules/FNormal/PopUps/PublicView.aspx?qs=` | ✅ Funciona igual de abierto. Sus aclaraciones modifican las bases, así que se baja junto con la ficha. |
+| **Excel oficial de preguntas y respuestas** — `/Foros/Modules/FNormal/Export/PreguntasExcel.aspx?qs=` | ✅ **Un ARCHIVO de verdad, sin ninguna verificación humana.** Responde `200 application/vnd.ms-excel` + `Content-Disposition: attachment` a un `fetch` plano — verificado bajando 3 archivos distintos (32 KB / 16 KB / 6 KB) para las 3 licitaciones del radar. Es el único documento de los antecedentes que el portal entrega sin CAPTCHA, y ya se baja solo. |
 | API OCDS de ChileCompra — `api.mercadopublico.cl/APISOCDS/OCDS/...` | Existe, es pública y **no consume el ticket ni su cuota**, pero **no publica `tender.documents`**: no hay URLs de documentos. Además va con meses de rezago (agosto 2026 vacío al probar). Inservible para adjuntos; ver "Uso posible" abajo. |
 | Visor de adjuntos — `Attachment/ViewAttachment.aspx?enc=…` | ❌ **reCAPTCHA Enterprise por score, exigido del lado del servidor**: un cliente HTTP plano recibe 302 → `/Procurement/403.html`. El `enc` viene en el HTML de la ficha, así que el problema no es descubrir la URL. |
 | Página de descarga tras el visor — `ViewAttachmentLC.aspx` | ❌ Además del reCAPTCHA, la descarga misma exige un **CAPTCHA de imagen** (`/Procurement/Captcha/Captcha.aspx`) que hay que transcribir, y cada archivo se baja por postback de ASP.NET dentro de esa sesión. Es una verificación humana deliberada. |
@@ -139,7 +140,9 @@ corta, verificada contra producción: **el CONTENIDO de las bases sí, los ARCHI
 `licitaciones/src/lib/portal-ficha.ts` + `npm run antecedentes-licitacion -- <codigo>`
 (sin argumentos: todas las licitaciones ya detectadas en caché). Por cada una escribe en
 `licitaciones/data/<codigo>/`: `ficha-portal.html` (crudo), `antecedentes.md` (las 9 secciones en
-texto + foro) y `antecedentes.json`. Verificado sobre 4174-29-LE26, 5038-3-LE26 y 1191449-18-LE26.
+texto + foro), `antecedentes.json` y **`documentos/Foro_PreguntasRespuestas_*.xls`**, el archivo
+oficial de preguntas y respuestas bajado del portal. Verificado sobre 4174-29-LE26, 5038-3-LE26 y
+1191449-18-LE26: los tres `.xls` llegaron con contenido real y distinto entre sí.
 
 Esto **corrige dos afirmaciones de este mismo documento**: que las garantías "solo aparecen en las
 bases administrativas, fuera de la API" y que los documentos exigidos "hay que leerlos en el

@@ -102,7 +102,9 @@ hallazgos de arriba aplican tal cual a ese dominio. Dos diferencias que muerden:
   bases**: la ficha pública del portal (`DetailsAcquisition.aspx?idlicitacion=<codigo>`) sirve su
   texto completo sin login ni CAPTCHA, y `npm run antecedentes-licitacion -- <codigo>` lo baja y
   parsea (garantías, anexos exigidos, criterios de evaluación, foro de preguntas) sin gastar cuota
-  del ticket. Los ARCHIVOS adjuntos están tras reCAPTCHA por score + un CAPTCHA de imagen:
+  del ticket, y además baja **un archivo real**: el Excel oficial de preguntas y respuestas
+  (`Export/PreguntasExcel.aspx`), el único documento de los antecedentes que el portal entrega sin
+  verificación humana. Los ARCHIVOS adjuntos están tras reCAPTCHA por score + un CAPTCHA de imagen:
   `npm run adjuntos-licitacion -- <codigo>` intenta la única vía honesta (navegador real que el
   sitio puntúa con su propio reCAPTCHA, sin falsificar nada) y se detiene si lo rechazan — en la
   nube da 0.1 contra un umbral de 0.5; desde la máquina del usuario puede pasar, `--diagnostico` lo

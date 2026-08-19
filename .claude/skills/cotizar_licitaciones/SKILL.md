@@ -68,8 +68,9 @@ contra producción el 2026-08-19 — ver `licitaciones/PLAN.md`). En consecuenci
 **Corré `npm run antecedentes-licitacion -- <codigo>` antes de cotizar.** Baja de la ficha pública
 del portal —sin ticket, sin cuota y sin login— el contenido completo de las bases a
 `licitaciones/data/<codigo>/antecedentes.md`: garantías exigidas (sección 8), anexos que hay que
-presentar (sección 4) y criterios de evaluación (sección 6). Eso es lo que decide si conviene
-ofertar, y ya no requiere que una persona abra el portal.
+presentar (sección 4) y criterios de evaluación (sección 6), más el archivo Excel oficial de
+preguntas y respuestas en `documentos/` (las respuestas del organismo modifican las bases). Eso es
+lo que decide si conviene ofertar, y ya no requiere que una persona abra el portal.
 
 Los ARCHIVOS adjuntos (PDF/DOCX de bases y formatos de anexo en blanco) son otra cosa: el portal
 los protege con reCAPTCHA por score y un CAPTCHA de imagen. `npm run adjuntos-licitacion -- <codigo>`
