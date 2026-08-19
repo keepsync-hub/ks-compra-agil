@@ -106,8 +106,16 @@ hallazgos de arriba aplican tal cual a ese dominio. Dos diferencias que muerden:
   (`Export/PreguntasExcel.aspx`), el único documento de los antecedentes que el portal entrega sin
   verificación humana. Los ARCHIVOS adjuntos están tras reCAPTCHA por score + un CAPTCHA de imagen:
   `npm run adjuntos-licitacion -- <codigo>` intenta la única vía honesta (navegador real que el
-  sitio puntúa con su propio reCAPTCHA, sin falsificar nada) y se detiene si lo rechazan — en la
-  nube da 0.1 contra un umbral de 0.5; desde la máquina del usuario puede pasar, `--diagnostico` lo
-  responde sin bajar nada. Nunca rodear ese control. Ver "Acceso a los
-  antecedentes" en `licitaciones/PLAN.md`. El cotizador sigue bloqueado por falta de catálogo de
-  costos reales.
+  sitio puntúa con su propio reCAPTCHA, sin falsificar nada) y se detiene si lo rechazan. Nunca
+  rodear ese control.
+- **El login al portal ya funciona sin intervención humana, y aun así no abre los adjuntos**
+  (verificado end-to-end el 2026-08-19). `npm run login-portal` autentica con **ClaveÚnica** —el
+  portal no tiene credencial propia para un RUN chileno; el formulario usuario/contraseña de
+  Keycloak es la pestaña "Extranjero"— usando `MP_USUARIO`/`MP_CLAVE` del entorno, y el código de
+  6 caracteres lo lee el agente del Gmail del usuario con el workflow de n8n "Lector codigo 2FA
+  Mercado Publico" (handshake por archivo: el script pide, el agente escribe `2fa-codigo.txt`).
+  Pero el gate del visor de adjuntos **puntúa el navegador y la IP, no la identidad**: medido con
+  sesión ClaveÚnica autenticada en el mismo contexto (`npm run adjuntos-licitacion -- <codigo>
+  --con-login`) da score 0 contra umbral 0.5, igual que anónimo. Correrlo desde la máquina del
+  usuario es lo único que queda por probar. Ver "Acceso a los antecedentes" en
+  `licitaciones/PLAN.md`. El cotizador sigue bloqueado por falta de catálogo de costos reales.

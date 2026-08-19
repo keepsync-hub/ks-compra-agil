@@ -174,43 +174,70 @@ control funcionando. (Detalle de entorno: Chromium solo logra salir por el proxy
 `--ssl-version-max=tls1.2`; con TLS 1.3 da `ERR_CONNECTION_RESET`, el mismo síntoma que quedó
 documentado sin diagnosticar en `login.ts`. Eso ya está resuelto y no es lo que bloquea.)
 
-### La vía sancionada: sesión de proveedor autenticada
+### La vía sancionada: sesión de proveedor autenticada — probada, y NO alcanza
 
-Descargar las bases es exactamente lo que hace un oferente identificado en su sesión del portal, y
-esa es la vía que ChileCompra sí contempla para estos archivos. El gate de reCAPTCHA apunta al
-scraping anónimo; una sesión de proveedor no es scraping anónimo.
+La hipótesis era: descargar las bases es lo que hace un oferente identificado en su sesión, el gate
+de reCAPTCHA apunta al scraping anónimo, así que con sesión de proveedor debería pasar.
+**Probada end-to-end el 2026-08-19 con la ClaveÚnica real del usuario: no pasa.** El visor sigue
+puntuando la sesión y rechazándola.
 
-`adjuntos-navegador.ts` ya la usa: si existe `data/storageState.json` abre el visor con esa sesión
-en vez de anónimo, y lo informa en consola. `--sin-sesion` fuerza el modo anónimo.
+| Sesión con que se abrió el visor de 4174-29-LE26 | Veredicto |
+|---|---|
+| Anónima, Chromium headless | `score 0.1` (umbral 0.5) → 403 |
+| Anónima, Chromium visible bajo Xvfb | `score 0.1` → 403 |
+| `data/storageState.json` restaurado | `score 0` → 403 |
+| **ClaveÚnica autenticada en el mismo contexto del navegador** (`--con-login`) | `score 0` → 403 |
 
-**El portal tiene credencial propia — verificado el 2026-08-19, corrigiendo lo que se había
-concluido antes.** `mercadopublico.cl/portal/login.aspx` redirige al Home, lo que hacía parecer que
-todo pasaba por ClaveÚnica; no es así. El botón "Iniciar Sesión" del Home llama a `keycloak.login()`
-y lleva a `heimdall.mercadopublico.cl` (Keycloak, realm `mercadopublico`), con formulario propio de
-usuario y contraseña (`#username-re`, `#password-re`, `#kc-login-re`) y **sin reCAPTCHA**. O sea:
-para esta sesión NO hace falta la credencial de identidad nacional, basta la cuenta del portal.
+Conclusión, que corrige lo que este documento daba por razonable: **el gate no distingue entre
+visitante anónimo y proveedor autenticado**. Puntúa el navegador y la IP, no la identidad. Desde
+esta nube el score es 0–0.1 contra un umbral de 0.5, autenticado o no. Lo que queda por probar es lo
+mismo de antes —correrlo desde la máquina del usuario, con IP residencial e historial real— pero ya
+sin la esperanza de que el login lo resuelva: si allá pasa, será por el score del entorno.
 
-`npm run login-portal` implementa ese flujo (`licitaciones/src/scripts/login-portal.ts`): entra por
-el Home —la URL de Keycloak lleva `state`/`nonce`/`code_challenge` generados, no se puede
-hardcodear—, completa el formulario con `MP_USUARIO`/`MP_CLAVE` del entorno y guarda la sesión.
-`--diagnostico` verifica los selectores sin usar credenciales (corrido: los tres encontrados).
+Un hallazgo secundario, que importa para cualquier otro uso de la sesión:
+**`data/storageState.json` no restaura la sesión del portal.** Verificado: restaurando ese archivo,
+`mercadopublico.cl/Home` vuelve a ofrecer "Iniciar Sesión". Las cookies que sobreviven son las del
+IdP (`heimdall`: `AUTH_SESSION_ID`, `KEYCLOAK_IDENTITY`), pero el token del SPA vive en memoria
+(`response_mode=fragment`) y el portal viejo (`/Procurement/`) emite un `ASP.NET_SessionId` anónimo
+nuevo. Por eso `adjuntos-navegador.ts` tiene `--con-login`: autentica **en el mismo contexto** del
+navegador que después abre el visor, que es la única forma de que la descarga ocurra dentro de una
+sesión de verdad.
 
-El segundo factor llega por correo desde `no-reply@digital.gob.cl`. Como el script no tiene acceso a
-MCP, usa un handshake por archivo: escribe `licitaciones/data/2fa-solicitado.json` y espera
-`2fa-codigo.txt`, que escribe el agente tras leer el correo (workflow de n8n acotado a ese
-remitente). El código se borra del disco apenas se usa.
+### Login al portal: qué autentica realmente (verificado end-to-end el 2026-08-19)
 
-Lo importante para el objetivo "sin intervención de una persona": ese login se hace **una vez**, y
-tampoco requiere a nadie — el código de doble factor llega al Gmail del usuario y el agente lo lee
-por `mcp__Gmail__*` (ver `CLAUDE.md`, "Datos ya confirmados"). Establecida la sesión, cada descarga
-posterior corre sola. Lo que queda pendiente es correrlo: el login está diferido a la sesión de
-Claude Cowork local (no hay credenciales de ClaveÚnica en el entorno de nube), igual que el resto
-del flujo de oferta.
+`npm run login-portal` **funciona contra producción**: corrido en este entorno terminó en
+`Sesión establecida. URL final: https://www.mercadopublico.cl/Home`. Tres correcciones a lo que
+decía este documento, cada una encontrada rompiéndose contra el sitio real:
 
-No verificado, y hay que decirlo: que con sesión autenticada el visor efectivamente no aplique el
-score de reCAPTCHA. Es lo razonable —el control existe para frenar scraping anónimo— pero se
-confirma en la primera corrida con sesión real, y si igual lo aplicara, el script se detiene como
-ahora en vez de insistir.
+1. **El portal NO tiene credencial propia para un proveedor chileno.** La página de Keycloak
+   (`heimdall.mercadopublico.cl`, realm `mercadopublico`) tiene dos pestañas: **ClaveÚnica**
+   (`#liClaveUnica`, la activa, con un único enlace `#zocial-oidc` que federa a
+   `accounts.claveunica.gob.cl`) y **Extranjero** (`#liExtranjero`). El formulario de usuario y
+   contraseña `#username-re` / `#password-re` / `#kc-login-re` que se había encontrado en el HTML
+   **existe pero está oculto**: es el de la pestaña Extranjero, para oferentes sin RUN. Por eso la
+   primera corrida real murió con "element is not visible". Con RUN chileno la puerta es ClaveÚnica.
+2. **Los selectores del viejo `login.ts` sí existen**: `#uname` y `#pword` son los campos vigentes de
+   ClaveÚnica. Lo que no funciona es `page.fill()`: el botón `#login-submit` nace `disabled` y la
+   página lo habilita escuchando eventos de teclado, así que hay que escribir tecla por tecla
+   (`pressSequentially`). Con `fill` el botón queda deshabilitado para siempre.
+3. **Entre la clave y el código hay una pantalla intermedia.** Aceptada la clave, ClaveÚnica muestra
+   "ClaveÚnica necesita validar tu identidad · Te enviaremos un código de 6 dígitos a tu correo
+   registrado" con un botón **Continuar**, y el correo **no se envía** hasta ese clic. Sin darlo, la
+   sesión se queda ahí — que desde afuera se parece exactamente a un rechazo de credenciales, y así
+   se malinterpretó la primera corrida real.
+
+El código son 6 caracteres **alfanuméricos** (p. ej. `0MRGFM`), no seis dígitos, y vence a los
+5 minutos. Llega desde `no-reply@digital.gob.cl`. Como el script no tiene acceso a MCP, usa un
+handshake por archivo: escribe `licitaciones/data/2fa-solicitado.json` y espera `2fa-codigo.txt`,
+que escribe el agente tras leer el correo con el workflow de n8n **"Lector codigo 2FA Mercado
+Publico"** (acotado a ese remitente; devuelve solo `{codigo, enviadoEn, vigente}`, no el correo). El
+código se borra del disco apenas se usa. Verificado dos veces seguidas: el ciclo completo —login,
+"Continuar", lectura del correo, código escrito, sesión establecida— corre sin que intervenga nadie.
+
+Un rechazo cuesta un intento contra una cuenta que se bloquea, así que el script ahora deja
+`licitaciones/data/login-fallido.png` y `.txt` al fallar: sin evidencia, la única forma de
+diagnosticar es reintentar, que es justo lo que no hay que hacer. `--diagnostico` verifica los
+selectores sin usar credenciales.
 
 ### El límite, dicho con precisión
 
@@ -223,8 +250,9 @@ es rodear un control de acceso, no automatizar un trámite, y el proyecto no lo 
 
 Lo único que queda por medir —y solo se puede medir allá— es si desde **la máquina del usuario**
 (IP residencial, navegador con historial, sesión de Claude Cowork local) el score sube del umbral.
-`npm run adjuntos-licitacion -- <codigo> --visible --diagnostico` responde eso en una corrida, sin
-bajar nada. Si pasa, el mismo script baja los archivos solo; si no pasa, la respuesta es definitiva y
+`npm run adjuntos-licitacion -- <codigo> --con-login --visible --diagnostico` responde eso en una
+corrida, sin bajar nada; el login ya no es un pendiente, corre solo con `MP_USUARIO`/`MP_CLAVE` y el
+lector de correo. Si pasa, el mismo script baja los archivos solo; si no pasa, la respuesta es definitiva y
 la descarga es un clic humano.
 
 Consecuencia práctica para el flujo de oferta: decidir **si conviene ofertar** (tope, garantías,

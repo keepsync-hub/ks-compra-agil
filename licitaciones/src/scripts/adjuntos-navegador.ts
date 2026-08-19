@@ -3,6 +3,7 @@
  * abriendo el visor del portal con un navegador real.
  *
  *   npm run adjuntos-licitacion -- <codigo>              # headless
+ *   npm run adjuntos-licitacion -- <codigo> --con-login  # autenticado con ClaveÚnica (MP_USUARIO/MP_CLAVE)
  *   npm run adjuntos-licitacion -- <codigo> --visible    # navegador visible (puntúa mejor)
  *   npm run adjuntos-licitacion -- <codigo> --diagnostico # solo informa si el gate deja pasar
  *
@@ -21,11 +22,12 @@
  *
  * ── Estado de verificación (2026-08-19) ──────────────────────────────────────────────────────
  *
- * Verificado hasta el gate, y **rechazado en este entorno**: el portal devolvió `score: 0.1` contra
- * un umbral de `0.5`, tanto headless como con navegador visible bajo Xvfb. Es el resultado esperable
- * de una IP de datacenter sin historial de navegación, no un bug del código. Correrlo desde la
- * máquina del usuario (sesión de Claude Cowork local, IP residencial) es la única forma de saber si
- * ahí el score alcanza; `--diagnostico` responde eso en una corrida sin bajar nada.
+ * Verificado hasta el gate, y **rechazado en este entorno en las cuatro variantes probadas**: sesión
+ * anónima headless (`score 0.1`), anónima visible bajo Xvfb (`0.1`), `storageState.json` restaurado
+ * (`0`) y —lo que zanja la hipótesis— **ClaveÚnica autenticada en el mismo contexto** (`0`), contra
+ * un umbral de `0.5`. O sea: el gate puntúa el navegador y la IP, no la identidad; estar
+ * autenticado como proveedor NO lo relaja. Correrlo desde la máquina del usuario (IP residencial,
+ * historial real) es lo único que queda por medir; `--diagnostico` responde eso sin bajar nada.
  *
  * Lo que queda del otro lado del gate y **no se pudo verificar** por lo mismo: la grilla `DWNL_grdId`
  * lista los archivos con un botón "Ver Anexo" por fila (postback ASP.NET). El CAPTCHA de imagen que
@@ -42,6 +44,7 @@
 import { chromium, type Browser, type BrowserContext, type Page } from "playwright";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { login, rutaSegunUsuario, sinSecretos } from "./login-portal.js";
 import { LIC_ROOT_DIR } from "../lib/config.js";
 import { ROOT_DIR } from "../../../src/lib/config.js";
 
@@ -183,12 +186,15 @@ async function main(): Promise<void> {
 
   const browser = await abrirNavegador(visible);
   try {
-    // Descargar las bases es exactamente lo que hace un oferente en su sesión del portal, y es la
-    // vía sancionada para llegar a estos archivos. Si `npm run login` ya dejó una sesión guardada,
-    // se usa: el gate anti-scraping apunta a visitantes anónimos, no a un proveedor identificado.
-    const conSesion = !argumento("sin-sesion") && existsSync(STORAGE_STATE_PATH);
+    // `storageState.json` se sigue aceptando por compatibilidad, pero VERIFICADO el 2026-08-19: no
+    // restaura la sesión del portal (el token del SPA vive en memoria, no en cookies). Para abrir el
+    // visor autenticado de verdad hay que loguearse en este mismo contexto: `--con-login`.
+    const conLogin = argumento("con-login");
+    const conSesion = !conLogin && !argumento("sin-sesion") && existsSync(STORAGE_STATE_PATH);
     console.log(
-      conSesion
+      conLogin
+        ? "  Sesión: se iniciará sesión en este mismo contexto antes de abrir el visor."
+        : conSesion
         ? `  Sesión: usando la sesión de portal guardada (${path.relative(process.cwd(), STORAGE_STATE_PATH)}).`
         : `  Sesión: anónima. Si el portal rechaza, correr primero \`npm run login\` — con sesión de proveedor` +
           ` no hace falta que intervenga nadie en cada descarga.`,
@@ -199,6 +205,18 @@ async function main(): Promise<void> {
       storageState: conSesion ? STORAGE_STATE_PATH : undefined,
     });
     const page = await contexto.newPage();
+
+    // `--con-login`: autentica en ESTE contexto antes de abrir el visor. Hace falta porque la sesión
+    // del portal no sobrevive a `storageState.json` — verificado el 2026-08-19: restaurando ese
+    // archivo el Home vuelve a ofrecer "Iniciar Sesión", porque el token del SPA vive en memoria.
+    if (conLogin) {
+      const usuario = process.env.MP_USUARIO;
+      const clave = process.env.MP_CLAVE;
+      if (!usuario || !clave) throw new Error("--con-login necesita MP_USUARIO y MP_CLAVE en el entorno.");
+      console.log("  Autenticando en este mismo contexto (--con-login)…");
+      await login(page, rutaSegunUsuario(usuario), usuario, clave);
+    }
+
     const { resultado, popup } = await pasarGate(page, codigo);
 
     console.log(`  Gate del visor: score ${resultado.score ?? "no informado"} (umbral ${UMBRAL_SCORE}) → ${resultado.paso ? "PASA" : "RECHAZA"}`);
@@ -206,12 +224,14 @@ async function main(): Promise<void> {
     if (!resultado.paso) {
       console.error(
         `\n  El portal rechazó esta sesión y no entrega los archivos.\n` +
-          `  No se reintenta ni se rodea el control (guardrail). En orden de preferencia:\n` +
-          `    1. \`npm run login\` y repetir: con sesión de proveedor la descarga es la vía sancionada,\n` +
-          `       y ese login se hace UNA vez (el 2FA lo lee el agente desde Gmail) — después cada\n` +
-          `       descarga corre sola, sin que intervenga nadie.\n` +
-          `    2. Correrlo con --visible desde tu máquina: IP e historial reales puntúan distinto.\n` +
-          `    3. Abrir el visor a mano: la URL está en licitaciones/data/${codigo}/antecedentes.md\n` +
+          `  No se reintenta ni se rodea el control (guardrail).\n` +
+          (conLogin
+            ? `  Ya se probó autenticado: el gate puntúa el navegador y la IP, no la identidad, así que\n` +
+              `  la sesión de proveedor no lo relaja (medido: score 0 con login, 0.1 anónimo, umbral 0.5).\n`
+            : `  Probar con --con-login no cuesta nada, pero medido el 2026-08-19 tampoco alcanzó.\n`) +
+          `  Queda una sola vía sin rodear nada:\n` +
+          `    1. Correrlo desde tu máquina (IP residencial, historial real): --con-login --visible.\n` +
+          `    2. Abrir el visor a mano: la URL está en licitaciones/data/${codigo}/antecedentes.md\n` +
           `  El TEXTO de las bases no necesita nada de esto: npm run antecedentes-licitacion -- ${codigo}`,
       );
       process.exitCode = 1;
@@ -235,6 +255,7 @@ async function main(): Promise<void> {
 }
 
 main().catch((err) => {
-  console.error(err instanceof Error ? err.message : err);
+  const mensaje = err instanceof Error ? err.message : String(err);
+  console.error(sinSecretos(mensaje, [process.env.MP_CLAVE, process.env.MP_USUARIO]));
   process.exitCode = 1;
 });
