@@ -57,6 +57,23 @@ npm run radar-licitaciones
 6. Actualiza `licitaciones/data/state.json`: marca qué códigos son nuevos y qué organismos ya
    tenían procesos previos (recompradores).
 7. Escribe `licitaciones/output/radar-ultima-corrida.md` y lo imprime en consola.
+8. Refresca la grilla de tarjetas de **oportunidades detectadas** en `docs/licitaciones.html`
+   (misma vista que la de Compra Ágil en `docs/index.html`: código, organismo, tope, cierre con
+   aviso de "cierra hoy/mañana", tipo L1/LE/LP/…, garantías y plazo de contrato).
+
+   Solo se reemplaza el bloque entre los marcadores
+   `<!-- OPORTUNIDADES:INICIO ... -->` y `<!-- OPORTUNIDADES:FIN -->`: el resto de esa página es
+   análisis escrito a mano (insumos bloqueantes, diferencias con Compra Ágil, qué falta para
+   operar) que una corrida del radar **no** debe pisar. Si los marcadores no están, el script
+   avisa y deja la página intacta en vez de reescribirla. El generador vive en
+   `licitaciones/src/lib/pagina.ts`.
+
+   Cada tarjeta omite las filas que la ficha no informa, en vez de imprimir "—": las licitaciones
+   chicas traen pocos campos y la tarjeta no debe sugerir que el organismo declaró algo que no
+   declaró. Cuando no hay tope publicado lo dice explícitamente en vez de mostrar `$0`.
+
+   **Sin `LICITACIONES_API_TICKET` la grilla queda en su estado vacío**, que explica por qué está
+   vacía. No se inventan licitaciones para llenarla.
 
 `scripts/informe-nicho.ts` (`npm run informe-licitaciones`) hace el barrido histórico equivalente
 al de Compra Ágil, con la misma limitación: sin `q`, tiene que traer el listado completo de cada
