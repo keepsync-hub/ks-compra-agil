@@ -124,6 +124,55 @@ export function ventanaRepublicacionEstimada(categoria?: string): Percentiles | 
   return percentiles(intervalosRepublicacion(categoria).flatMap((r) => r.intervalos_dias));
 }
 
+export interface PerfilOrganismo {
+  rut: string;
+  organismo: string;
+  n_procesos: number; // códigos únicos en el índice
+  n_con_desenlace: number;
+  tasa_fracaso_pct: number | null;
+  monto: Percentiles | null;
+  motivos: Record<CategoriaMotivo, number>;
+  ultimo_fracaso: Observacion | null; // el fracaso terminal más reciente, si lo hay
+}
+
+/**
+ * Perfil por organismo comprador (RUT) — la respuesta directa, con datos propios, a lo que
+ * plataformas como Licify venden como "perfil de comprador": acá sale del índice histórico ya
+ * versionado, cero requests, y solo para organismos con >=2 códigos observados (si aparece una
+ * sola vez todavía no hay historial que perfilar).
+ */
+export function perfilesOrganismosRecompradores(categoria?: string): PerfilOrganismo[] {
+  const lista = [...ultimaPorCodigo(leer(categoria ? { categoria } : undefined)).values()];
+  const porOrganismo = new Map<string, Observacion[]>();
+  for (const o of lista) {
+    const l = porOrganismo.get(o.rut) ?? [];
+    l.push(o);
+    porOrganismo.set(o.rut, l);
+  }
+
+  const perfiles: PerfilOrganismo[] = [];
+  for (const [rut, items] of porOrganismo) {
+    if (items.length < 2) continue;
+    const conDesenlace = items.filter((o) => ESTADOS_TERMINALES.has(o.estado));
+    const fracasos = conDesenlace.filter((o) => ESTADOS_FRACASO.has(o.estado));
+    const motivos: Record<CategoriaMotivo, number> = { comprador: 0, precio: 0, tecnico: 0, administrativo: 0, sin_info: 0 };
+    for (const o of fracasos) motivos[clasificarMotivo(o.estado === "desierta" ? o.motivo_desierta : o.motivo_cancelacion).categoria]++;
+    const ultimoFracaso = [...fracasos].sort((a, b) => b.fecha_publicacion.localeCompare(a.fecha_publicacion))[0] ?? null;
+
+    perfiles.push({
+      rut,
+      organismo: items[0]!.organismo,
+      n_procesos: items.length,
+      n_con_desenlace: conDesenlace.length,
+      tasa_fracaso_pct: conDesenlace.length > 0 ? (fracasos.length / conDesenlace.length) * 100 : null,
+      monto: percentiles(items.map((o) => o.monto_disponible_clp).filter((m) => m > 0)),
+      motivos,
+      ultimo_fracaso: ultimoFracaso,
+    });
+  }
+  return perfiles.sort((a, b) => b.n_procesos - a.n_procesos);
+}
+
 /**
  * Para un organismo (RUT) dado, su fracaso terminal más reciente ANTES del código actual, si
  * existe — usado por `calificador.ts` para la señal `fracaso_previo_ganable`: un fracaso previo

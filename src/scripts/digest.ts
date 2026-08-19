@@ -16,8 +16,9 @@ import { categoriasActivas } from "../lib/categorias.js";
 import { leer, ultimaPorCodigo, type Observacion } from "../lib/indice.js";
 import { extraerCondiciones } from "../lib/condiciones.js";
 import { calificarOportunidad, anexarCalificacion, type Calificacion } from "../lib/calificador.js";
-import { calcularMetricas, ventanaRepublicacionEstimada } from "../lib/metricas.js";
+import { calcularMetricas, ventanaRepublicacionEstimada, perfilesOrganismosRecompradores } from "../lib/metricas.js";
 import { ledgerHoy } from "../lib/cuota.js";
+import { clasificarMotivo } from "../lib/motivos.js";
 import { fechaChileAUtc, formatearEnChile } from "../lib/tiempo.js";
 import type { CompraAgilDetalle } from "../lib/api.js";
 
@@ -154,6 +155,26 @@ function main(): void {
     lineas.push(`- Motivos de fracaso clasificados: comprador=${m.motivos.comprador} · precio=${m.motivos.precio} · técnico=${m.motivos.tecnico} · administrativo=${m.motivos.administrativo} · sin_info=${m.motivos.sin_info}`);
     lineas.push("");
   }
+
+  lineas.push("## Organismos con historial (recompradores)");
+  lineas.push("");
+  const perfiles = categoriasActivas().flatMap((cat) => perfilesOrganismosRecompradores(cat.id));
+  if (perfiles.length === 0) {
+    lineas.push("_Ningún organismo con 2+ procesos en el índice todavía._");
+  } else {
+    for (const p of perfiles) {
+      lineas.push(
+        `- **${p.organismo}** — ${p.n_procesos} proceso(s) en el índice` +
+          (p.tasa_fracaso_pct !== null ? `, ${p.tasa_fracaso_pct.toFixed(0)}% de fracaso (n=${p.n_con_desenlace})` : "") +
+          (p.monto ? `, monto mediano $${Math.round(p.monto.mediana).toLocaleString("es-CL")}` : ""),
+      );
+      if (p.ultimo_fracaso) {
+        const cl = clasificarMotivo(p.ultimo_fracaso.estado === "desierta" ? p.ultimo_fracaso.motivo_desierta : p.ultimo_fracaso.motivo_cancelacion);
+        lineas.push(`  - Último fracaso (${p.ultimo_fracaso.codigo}, ${p.ultimo_fracaso.fecha_publicacion}): clasificado "${cl.categoria}" — ${cl.regla}`);
+      }
+    }
+  }
+  lineas.push("");
 
   const cuota = ledgerHoy();
   lineas.push("## Cuota");
