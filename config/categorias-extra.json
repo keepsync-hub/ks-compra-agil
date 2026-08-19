@@ -1,0 +1,7 @@
+{
+  "_que_es": "Palabras clave agregadas a mano, encima de las categorías de categorias.json. Existe para que ampliar el radar de Compra Ágil no exija editar una regex: acá se escriben frases tal cual, y la corrida siguiente las usa como variante de búsqueda `q` contra la API (descubrimiento) y como verificación local sobre el texto de cada compra.",
+  "_como_se_agrega": "Desde docs/index.html (formulario 'Qué palabras busca el radar', que deja el JSON listo para pegar acá) o con `npm run keywords -- agregar <categoria> \"<frase>\"`. Categorías válidas: los `id` de categorias.json.",
+  "_como_se_compara": "Comparación literal e insensible a mayúsculas, tildes y espacios de más — no es una regex. Una frase de dos palabras exige que aparezcan juntas y en ese orden.",
+  "_ojo_con_la_cuota": "Cada frase agregada a una categoría ACTIVA suma un request `q` por corrida del radar (ver `presupuesto_requests_por_corrida` de esa categoría en categorias.json).",
+  "terminos": []
+}

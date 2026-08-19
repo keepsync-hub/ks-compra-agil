@@ -1,6 +1,6 @@
 # Radar Licitaciones — Servicios de Array (array.cl)
 
-Re-render desde caché: 2026-08-19T17:59:45.609Z
+Re-render desde caché: 2026-08-19T18:37:03.987Z
 
 > Radar de solo lectura: detectar no es cotizar, y ninguna oferta se envía sin que una persona la revise.
 >

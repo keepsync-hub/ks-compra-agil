@@ -123,6 +123,25 @@ interface ApiEnvelope<T> {
   errors: unknown;
 }
 
+/**
+ * 429 de la API de Compra Ágil: la cuota diaria del ticket se agotó. Es un tipo propio y no un
+ * Error más porque el llamador debe reaccionar distinto — dejar de pedir y seguir con lo que ya
+ * tiene, en vez de abortar la corrida entera (guardrail: ante un bloqueo, detenerse, no reintentar
+ * a ciegas). Antes de tener esta clase, una cuota agotada a mitad de corrida tiraba abajo el radar
+ * y no se publicaba nada, ni siquiera lo que ya se había encontrado.
+ */
+export class CuotaApiAgotadaError extends Error {
+  readonly retryAfter: string | null;
+  constructor(retryAfter: string | null) {
+    super(
+      `Cuota diaria de la API agotada (429). Retry-After: ${retryAfter ?? "no informado"}. ` +
+        `No reintentar a ciegas: esperar al reset diario.`,
+    );
+    this.name = "CuotaApiAgotadaError";
+    this.retryAfter = retryAfter;
+  }
+}
+
 // 502/503/504 son fallos transitorios del gateway del API (no cuota agotada): se reintentan.
 // 429 nunca se reintenta acá — es cuota diaria y hay que esperar al reset (ver guardrail).
 const TRANSIENT_STATUS = new Set([502, 503, 504]);
@@ -156,9 +175,7 @@ async function apiGet<T>(pathAndQuery: string): Promise<T> {
     if (res.status === 429) {
       const retryAfter = res.headers.get("Retry-After");
       registrar429(retryAfter);
-      throw new Error(
-        `Cuota diaria de la API agotada (429). Retry-After: ${retryAfter ?? "no informado"}. No reintentar a ciegas: esperar al reset diario.`,
-      );
+      throw new CuotaApiAgotadaError(retryAfter);
     }
     if (TRANSIENT_STATUS.has(res.status) && intento < MAX_INTENTOS) {
       await res.body?.cancel().catch(() => {});
@@ -237,4 +254,49 @@ export async function buscarCompraAgil(params: BuscarCompraAgilParams): Promise<
 
 export async function obtenerDetalleCompraAgil(codigo: string): Promise<CompraAgilDetalle> {
   return apiGet<CompraAgilDetalle>(`/v2/compra-agil/${encodeURIComponent(codigo)}`);
+}
+
+/**
+ * Ficha reducida armada con lo que ya trae el ítem del LISTADO, para cuando la cuota se agota
+ * antes de poder pedir el detalle.
+ *
+ * El listado de esta API es generoso —a diferencia del de Licitaciones, que llega truncado y sin
+ * descripción—: trae tope, cierre, comprador, región, cuántas ofertas se han recibido, si es
+ * primer llamado (reservado a Empresas de Menor Tamaño) y los nombres de los adjuntos. Con eso
+ * alcanza para decidir si conviene mirar la compra.
+ *
+ * Lo que NO trae, y por eso queda vacío en vez de inventado: `descripcion`,
+ * `productos_solicitados`, el plazo de entrega y los contadores de multas/demandas. Quien consuma
+ * esta ficha debe declarar que es reducida — ver `fuente` en `HallazgoCompraAgil`.
+ */
+export function detalleDesdeListado(item: CompraAgilListItem): CompraAgilDetalle {
+  return {
+    codigo: item.codigo,
+    nombre: item.nombre,
+    descripcion: "",
+    estado: item.estado,
+    convocatoria: {
+      estado_convocatoria: item.convocatoria.estado_convocatoria,
+      descripcion: item.convocatoria.descripcion,
+      fecha_cierre_primer_llamado: item.fechas.fecha_cierre_primer_llamado,
+      fecha_cierre_segundo_llamado: item.fechas.fecha_cierre_segundo_llamado,
+    },
+    fechas: {
+      fecha_publicacion: item.fechas.fecha_publicacion,
+      fecha_cierre: item.fechas.fecha_cierre,
+      fecha_ultimo_cambio: item.fechas.fecha_ultimo_cambio,
+    },
+    documentos: item.documentos,
+    presupuesto: {
+      tipo_presupuesto: "",
+      moneda: item.montos.moneda,
+      presupuesto_estimado: item.montos.monto_disponible_clp,
+      monto_disponible: item.montos.monto_disponible,
+      monto_disponible_clp: item.montos.monto_disponible_clp,
+    },
+    institucion: item.institucion,
+    productos_solicitados: [],
+    resumen: { multa_sancion: 0, total_ofertas_recibidas: item.resumen.total_ofertas_recibidas, total_demandas: 0 },
+    motivos: item.motivos,
+  };
 }

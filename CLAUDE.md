@@ -11,6 +11,21 @@ históricos, 79% de fracaso, patrón de recompradores — cifras vivas en
 `output/informe-nicho-claude.md`, regenerables con `npm run informe`) que condiciona varias
 decisiones de diseño.
 
+## Las páginas publicadas (`docs/`)
+
+`docs/index.html` (Compras Ágiles de licencias Claude) y `docs/licitaciones.html` (licitaciones de
+los servicios de Array) son **páginas de resultados, no de estado del proyecto**: cada corrida del
+radar respectivo refresca sus dos bloques entre marcadores (oportunidades y palabras clave) y todo
+lo demás se eliminó a pedido del usuario — el estado del agente se lee en este archivo, `PLAN.md`,
+`PLAN-VOLUMEN.md` y `README.md`. Al tocar esas páginas, mantener el criterio: si un párrafo no ayuda
+a decidir si participar en una compra concreta, no va ahí.
+
+Las dos publican también **qué palabras busca el radar**, con un formulario para agregar. Como son
+estáticas (GitHub Pages) no pueden escribir en el repo: lo agregado queda en el navegador marcado
+como pendiente, y se persiste pegando el JSON en `config/categorias-extra.json` (Compra Ágil) o
+`licitaciones/config/keywords-extra.json` (licitaciones), o con `npm run keywords` /
+`npm run keywords-licitaciones`. Esos dos archivos son de **frases literales**, no de regex.
+
 ## Estado del proyecto
 
 Implementado y probado contra la API real: scaffolding, el skill `compra-agil-radar-claude`
