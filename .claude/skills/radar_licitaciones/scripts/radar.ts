@@ -8,7 +8,12 @@ import {
   type LicitacionDetalle,
   type LicitacionListItem,
 } from "../../../../licitaciones/src/lib/api.js";
-import { itemMencionaKeyword, detalleMencionaKeyword } from "../../../../licitaciones/src/lib/keywords.js";
+import {
+  itemMencionaKeyword,
+  detalleMencionaKeyword,
+  categoriasDeDetalle,
+  categoriasKeyword,
+} from "../../../../licitaciones/src/lib/keywords.js";
 import { itemsDeLicitacion } from "../../../../licitaciones/src/lib/api.js";
 import { extraerCondicionesLicitacion } from "../../../../licitaciones/src/lib/condiciones.js";
 import { cargarState, guardarState, registrarHallazgo } from "../../../../licitaciones/src/lib/historial.js";
@@ -25,15 +30,24 @@ import {
 // vigentes del país (4.381 en la corrida de verificación del 2026-08-19), y esta API no permite
 // filtrar por texto en el servidor (a diferencia de Compra Ágil, ver PLAN.md). Este cap evita
 // agotar la cuota diaria del ticket pidiendo fichas de más — si se alcanza, el reporte lo declara.
-const MAX_DETALLES_POR_CORRIDA = 60;
+const MAX_DETALLES_POR_CORRIDA_DEFAULT = 60;
+
+/** `--max=N` sube o baja el cap de fichas de esta corrida (cada ficha es una llamada a la API). */
+function capDeCorrida(): number {
+  const arg = process.argv.find((a) => a.startsWith("--max="));
+  const n = arg ? Number.parseInt(arg.slice("--max=".length), 10) : NaN;
+  return Number.isFinite(n) && n > 0 ? n : MAX_DETALLES_POR_CORRIDA_DEFAULT;
+}
 
 const DATA_DIR = path.join(LIC_ROOT_DIR, "data");
 
 function filaReporte(h: HallazgoLicitacion, marcas: string[]): string {
   const { detalle, condiciones } = h;
+  const servicios = categoriasDeDetalle(detalle, itemsDeLicitacion(detalle)).map((c) => c.nombre);
   return [
     `### ${detalle.CodigoExterno} — ${detalle.Comprador?.NombreOrganismo ?? "organismo desconocido"}`,
     `- ${detalle.Nombre}`,
+    servicios.length > 0 ? `- Servicio Array: ${servicios.join(", ")}` : null,
     `- Cierre: ${detalle.FechaCierre ?? detalle.Fechas?.FechaCierre ?? "sin dato"}`,
     `- Tipo: ${condiciones.tipo_licitacion ?? "sin dato"}`,
     condiciones.tope_clp > 0
@@ -53,9 +67,15 @@ const NOTA_ALCANCE = [
     `producción desde el 2026-08-19. Es de solo lectura: detectar no es cotizar, y ninguna oferta se ` +
     `envía sin que una persona la revise.`,
   `>`,
+  `>`,
+  `> El nicho buscado es el catálogo de servicios de **Array** (array.cl): oficina de partes ` +
+    `electrónica, seguimiento de trámites, gestión documental y firma electrónica, RPA, business ` +
+    `intelligence y plataformas de gestión de proyectos. Los patrones viven en ` +
+    `\`licitaciones/config/keywords.json\`.`,
+  `>`,
   `> Esta API **no expone los adjuntos ni las garantías** de la licitación (a diferencia de Compra ` +
-    `Ágil): las bases administrativas —donde vive la exigencia de boleta de garantía— hay que leerlas ` +
-    `en el portal antes de decidir si conviene ofertar.`,
+    `Ágil): eso sale de la ficha pública del portal con \`npm run antecedentes-licitacion\`, que no ` +
+    `gasta cuota y deja la ficha de decisión de cada oportunidad.`,
 ];
 
 function escribirSalidas(reporte: string, hallazgos: HallazgoLicitacion[], actualizarPagina: boolean): void {
@@ -89,7 +109,7 @@ function correrDesdeCache(ahoraIso: string): void {
   );
 
   const reporte = [
-    `# Radar Licitaciones — Gestión Documental / Digitalización de Procesos / Oficina de Partes`,
+    `# Radar Licitaciones — Servicios de Array (array.cl)`,
     ``,
     `Re-render desde caché: ${ahoraIso}`,
     ``,
@@ -128,7 +148,11 @@ async function main() {
   }
 
   console.log(
-    `Radar licitaciones — gestión documental / digitalización de procesos / oficina de partes.\n` +
+    `Radar licitaciones — servicios de Array (array.cl): ` +
+      categoriasKeyword()
+        .map((c) => c.nombre)
+        .join(", ") +
+      `.\n` +
       `Consultando estado=activas (esta API no soporta búsqueda por texto; el filtrado por palabra ` +
       `clave es local, ver PLAN.md de licitaciones/).\n`,
   );
@@ -158,17 +182,27 @@ async function main() {
       JSON.stringify({ corrida: ahoraIso, campos: Object.keys(listado[0]), ejemplo: listado[0] }, null, 2),
       "utf-8",
     );
+    // Y el listado ENTERO: es una sola llamada, pero es la llamada que trae el universo nacional.
+    // Guardarlo permite ajustar los patrones de `config/keywords.json` y ver a quiénes habría
+    // pescado, sin gastar otra vez la cuota (que se agota en la segunda corrida del día).
+    writeFileSync(
+      path.join(DATA_DIR, "_listado-activas.json"),
+      JSON.stringify({ corrida: ahoraIso, cantidad: listado.length, listado }, null, 2),
+      "utf-8",
+    );
   }
 
   const candidatos = listado.filter(itemMencionaKeyword);
-  console.log(`${candidatos.length} con mención local de gestión documental / digitalización / oficina de partes.`);
+  console.log(`${candidatos.length} con mención local de algún servicio de Array.`);
 
-  const aRevisar = candidatos.slice(0, MAX_DETALLES_POR_CORRIDA);
+  const maxDetalles = capDeCorrida();
+  const aRevisar = candidatos.slice(0, maxDetalles);
   const truncado = candidatos.length > aRevisar.length;
   if (truncado) {
     console.warn(
       `⚠ ${candidatos.length - aRevisar.length} candidato(s) no se revisaron en esta corrida (cap de ` +
-        `${MAX_DETALLES_POR_CORRIDA} para no agotar la cuota diaria). Volver a correr para cubrir el resto.`,
+        `${maxDetalles} para no agotar la cuota diaria). Volver a correr para cubrir el resto, o subir el ` +
+        `cap con --max=N si la cuota lo permite.`,
     );
   }
 
@@ -251,7 +285,7 @@ async function main() {
   const corridaCompleta = cuotaAgotada == null && sinFicha.length === 0 && !truncado;
 
   const reporte = [
-    `# Radar Licitaciones — Gestión Documental / Digitalización de Procesos / Oficina de Partes`,
+    `# Radar Licitaciones — Servicios de Array (array.cl)`,
     ``,
     `Corrida: ${ahoraIso}`,
     ``,
@@ -278,7 +312,7 @@ async function main() {
     ``,
     `${listado.length} licitación(es) activa(s) en el listado, ${candidatos.length} con mención local de la ` +
       `palabra clave, ${aRevisar.length} candidato(s) a revisar` +
-      (truncado ? ` (cap de ${MAX_DETALLES_POR_CORRIDA} alcanzado — volver a correr)` : "") +
+      (truncado ? ` (cap de ${maxDetalles} alcanzado — volver a correr)` : "") +
       `: ${fichasFrescas} ficha(s) traída(s) de la API` +
       (fichasDesdeCache > 0 ? `, ${fichasDesdeCache} reusada(s) desde caché` : "") +
       (sinFicha.length > 0 ? `, ${sinFicha.length} sin ficha (${sinFicha.join(", ")})` : "") +

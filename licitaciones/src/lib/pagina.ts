@@ -1,10 +1,11 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import type { LicitacionListItem, LicitacionDetalle } from "./api.js";
+import { itemsDeLicitacion, type LicitacionListItem, type LicitacionDetalle } from "./api.js";
+import { categoriasDeDetalle } from "./keywords.js";
 import type { CondicionesLicitacion } from "./condiciones.js";
 import type { ReferenciaDocumento } from "./portal-ficha.js";
-import type { FichaDecision } from "./decision.js";
+import type { Bandera, FichaDecision } from "./decision.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** licitaciones/src/lib -> raíz del repo (docs/ vive en la raíz, no dentro de licitaciones/). */
@@ -12,10 +13,13 @@ const REPO_ROOT = path.resolve(__dirname, "..", "..", "..");
 const PAGINA_PATH = path.join(REPO_ROOT, "docs", "licitaciones.html");
 
 /**
- * Marcadores dentro de `docs/licitaciones.html`. Solo se reemplaza lo que hay entre ellos: el
- * resto de esa página es análisis escrito a mano (insumos bloqueantes, diferencias con Compra
- * Ágil, qué falta para operar) que una corrida del radar no debe pisar. Es la diferencia con
- * `docs/array-compras-agiles.html`, que sí se genera entera porque no tiene prosa curada.
+ * Marcadores dentro de `docs/licitaciones.html`. Solo se reemplaza lo que hay entre ellos; lo que
+ * queda fuera es la cabecera y el pie de la página.
+ *
+ * Esa página tuvo secciones escritas a mano sobre el estado del proyecto (insumos bloqueantes,
+ * diferencias con Compra Ágil, qué falta para operar) y se eliminaron a pedido del usuario: la
+ * página es para decidir sobre licitaciones, y el estado del agente se lee en el repo. Si se
+ * vuelve a agregar prosa, va fuera de los marcadores — el radar sigue sin pisarla.
  */
 const MARCA_INICIO = "<!-- OPORTUNIDADES:INICIO (generado por `npm run radar-licitaciones` — no editar a mano) -->";
 const MARCA_FIN = "<!-- OPORTUNIDADES:FIN -->";
@@ -24,6 +28,12 @@ export interface HallazgoLicitacion {
   item: LicitacionListItem;
   detalle: LicitacionDetalle;
   condiciones: CondicionesLicitacion;
+  /**
+   * De dónde salieron los datos de la ficha: `"api"` (ticket, cuota) o `"portal"` (ficha pública,
+   * gratis — ver `detalle-portal.ts`). La tarjeta es la misma; la diferencia es que la del portal
+   * no trae los reclamos del organismo, y la página no debe sugerir que sí.
+   */
+  fuente?: "api" | "portal";
 }
 
 /**
@@ -53,13 +63,32 @@ function decisionDeCache(codigo: string): FichaDecision | null {
 }
 
 /**
- * Lo que decide si vale la pena presentarse, en la tarjeta: las banderas que exigen mirar y los
- * datos que casi siempre las causan (peso del precio, garantía, cantidad de anexos). Cada bandera
- * viene con el motivo y la sección de donde salió, así que acá se muestra el título y el motivo
- * queda en el `title` del elemento — la página no resume ni reinterpreta nada.
+ * `decision.json` lo consume tanto la persona que opera el agente (en `decision.md`, con rutas y
+ * comandos) como esta página, que es pública y solo debe hablar de la licitación. Esa bandera es
+ * la única que describe el estado local del repo: acá se enuncia el hecho que sí importa para
+ * evaluar — que las bases en PDF todavía no se leyeron y pueden agregar exigencias.
  */
-function bloqueDecision(codigo: string): string {
-  const f = decisionDeCache(codigo);
+function paraLaPagina(b: Bandera): Bandera {
+  if (b.fuente !== "estado local") return b;
+  return {
+    ...b,
+    titulo: "Las bases en PDF no están leídas",
+    motivo:
+      "Esta evaluación se armó con la ficha pública de la licitación. Las bases administrativas y " +
+      "las especificaciones técnicas en PDF, que se abren desde el portal, pueden agregar " +
+      "exigencias que no aparecen en la ficha.",
+    fuente: "alcance de esta ficha",
+  };
+}
+
+/**
+ * Lo que decide si vale la pena presentarse, en la tarjeta: las banderas que exigen mirar, los
+ * datos que casi siempre las causan (peso del precio, garantía, cantidad de anexos) y los
+ * criterios de evaluación con su ponderación. Cada bandera viene con el motivo y la sección de
+ * donde salió, así que acá se muestra el título y el motivo queda en el `title` del elemento — la
+ * página no resume ni reinterpreta nada.
+ */
+function bloqueDecision(f: FichaDecision | null): string {
   if (!f) return "";
   const criticas = f.banderas.filter((b) => b.nivel !== "favorable");
   const chips = [
@@ -67,15 +96,40 @@ function bloqueDecision(codigo: string): string {
     f.garantia.exigida ? `garantía ${f.garantia.monto ?? "sí"}` : "sin garantía",
     f.anexos.total > 0 ? `${f.anexos.total} anexos` : null,
     f.fechas.ventanaPreguntasAbierta === true ? "preguntas abiertas" : "preguntas cerradas",
-    f.adjuntos.faltan ? "sin adjuntos leídos" : `${f.adjuntos.leidos.length} adjunto(s) leídos`,
+    f.adjuntos.faltan ? "bases en PDF sin leer" : `${f.adjuntos.leidos.length} adjunto(s) leídos`,
   ].filter((c): c is string => Boolean(c));
 
   const alertas = criticas
+    .map(paraLaPagina)
     .map(
       (b) =>
         `            <li title="${escapeHtml(b.motivo)} (${escapeHtml(b.fuente)})">${escapeHtml(b.titulo)}</li>`,
     )
     .join("\n");
+
+  // Con qué se evalúa la oferta: es lo que dice si se compite por precio o por antecedentes, y no
+  // cabe en un chip. Sale de la sección 6 de las bases, ya parseada en decision.json.
+  const criterios =
+    f.criterios.length > 0
+      ? `
+          <details>
+            <summary>Criterios de evaluación${
+              f.sumaPonderaciones !== undefined && Math.round(f.sumaPonderaciones) !== 100
+                ? ` (las ponderaciones suman ${f.sumaPonderaciones}%)`
+                : ""
+            }</summary>
+            <ul>
+${f.criterios
+  .map(
+    (c) =>
+      `            <li${c.observaciones ? ` title="${escapeHtml(c.observaciones)}"` : ""}>${escapeHtml(
+        c.nombre,
+      )} — <strong>${c.ponderacion}%</strong></li>`,
+  )
+  .join("\n")}
+            </ul>
+          </details>`
+      : "";
 
   return `
         <div class="decision">
@@ -89,7 +143,7 @@ ${alertas}
             </ul>
           </details>`
               : ""
-          }
+          }${criterios}
         </div>`;
 }
 
@@ -162,7 +216,7 @@ function glosaCierre(fechaCierre: string | undefined, ahora: Date): string {
  * chica puede no traer casi ninguno: se omite la fila en vez de imprimir "—", para que la
  * tarjeta no mienta sobre lo que el organismo declaró.
  */
-function filasDatos(h: HallazgoLicitacion, ahora: Date): string {
+function filasDatos(h: HallazgoLicitacion, f: FichaDecision | null, ahora: Date): string {
   const filas: [string, string][] = [];
 
   filas.push([
@@ -187,6 +241,26 @@ function filasDatos(h: HallazgoLicitacion, ahora: Date): string {
   if (h.condiciones.garantia_fiel_cumplimiento_clp != null) {
     filas.push(["Garantía fiel cumpl.", fmtClp(h.condiciones.garantia_fiel_cumplimiento_clp)]);
   }
+  // La API no expone las garantías (verificado): las que se muestran salen de la sección 8 de las
+  // bases, ya parseada en decision.json. Hay que poder emitirla, así que es dato de decisión.
+  if (f?.garantia.exigida && h.condiciones.garantia_fiel_cumplimiento_clp == null) {
+    const glosa = [f.garantia.tipo, f.garantia.monto ? `por ${f.garantia.monto}` : null]
+      .filter(Boolean)
+      .join(" ");
+    filas.push([
+      "Garantía exigida",
+      escapeHtml(glosa || "sí") +
+        (f.garantia.vencimiento ? ` <span class="sin-dato">(vence ${escapeHtml(f.garantia.vencimiento.slice(0, 10))})</span>` : ""),
+    ]);
+  }
+  // Cuándo se cierran las preguntas: pasada esa fecha, una duda de las bases ya no se aclara.
+  if (f?.fechas.finPreguntas) {
+    filas.push([
+      "Preguntas hasta",
+      `${escapeHtml(f.fechas.finPreguntas.replace("T", " ").slice(0, 16))}` +
+        (f.fechas.ventanaPreguntasAbierta === false ? ' <span class="sin-dato">(cerradas)</span>' : ""),
+    ]);
+  }
   // Solo el día: la API entrega esta fecha con hora 00:00, que no informa nada.
   const adjudicacion = fmtFecha(h.detalle.Fechas?.FechaAdjudicacion)?.slice(0, 10);
   if (adjudicacion) filas.push(["Adjudicación", escapeHtml(adjudicacion)]);
@@ -197,6 +271,12 @@ function filasDatos(h: HallazgoLicitacion, ahora: Date): string {
   }
   const region = h.detalle.Comprador?.RegionUnidad;
   if (region) filas.push(["Región", escapeHtml(region)]);
+
+  // Por qué esta licitación está en la lista: qué servicio del catálogo de Array (array.cl) la
+  // pescó. Sin esta fila la tarjeta no dice si es un gestor documental, un RPA o un BI — que es lo
+  // primero que hay que saber para decidir si vale la pena leer las bases.
+  const servicios = categoriasDeDetalle(h.detalle, itemsDeLicitacion(h.detalle)).map((c) => c.nombre);
+  if (servicios.length > 0) filas.push(["Servicio Array", escapeHtml(servicios.join(" · "))]);
 
   return filas.map(([k, v]) => `          <dt>${k}</dt><dd>${v}</dd>`).join("\n");
 }
@@ -219,10 +299,26 @@ function glosaTipo(tipo: string): string {
   return tabla[tipo.trim().toUpperCase()] ?? "tipo no reconocido";
 }
 
+/** Cuánto queda para ofertar, como etiqueta escaneable: es lo que ordena la grilla. */
+function badgeCierre(fechaCierre: string | undefined, ahora: Date): string {
+  const dias = diasHastaCierre(fechaCierre, ahora);
+  if (dias == null) return `<span class="badge warn">Sin fecha de cierre informada</span>`;
+  if (dias < 0) return `<span class="badge bad">Ya cerró</span>`;
+  if (dias === 0) return `<span class="badge bad">Cierra hoy</span>`;
+  if (dias === 1) return `<span class="badge bad">Cierra mañana</span>`;
+  const clase = dias <= 5 ? "warn" : "ok";
+  return `<span class="badge ${clase}">Quedan ${dias} días para ofertar</span>`;
+}
+
 function tarjeta(h: HallazgoLicitacion, ahora: Date): string {
   const codigo = h.detalle.CodigoExterno;
+  const ficha = decisionDeCache(codigo);
   const organismo = h.detalle.Comprador?.NombreOrganismo ?? "Organismo sin identificar";
+  // El `Nombre` llega truncado (~50 car.) tanto en el listado de la API como en la ficha del
+  // portal; la `Descripcion` es el texto completo de lo que el organismo está pidiendo, y es lo
+  // primero que hay que leer para saber si la licitación es del rubro o no.
   const nombre = h.detalle.Nombre ?? h.item.Nombre ?? "";
+  const descripcion = h.detalle.Descripcion;
   const unidad = h.detalle.Comprador?.NombreUnidad;
 
   return `      <div class="opp-card" id="${escapeHtml(codigo)}">
@@ -230,46 +326,62 @@ function tarjeta(h: HallazgoLicitacion, ahora: Date): string {
         <span class="org">${escapeHtml(organismo)}</span>
         <span class="nombre">${escapeHtml(nombre)}</span>${
           unidad ? `\n        <span class="unidad">${escapeHtml(unidad)}</span>` : ""
-        }
+        }${descripcion ? `\n        <p class="descripcion">${escapeHtml(descripcion)}</p>` : ""}
         <dl>
-${filasDatos(h, ahora)}
-        </dl>${bloqueDecision(codigo)}${enlacesDocumentos(codigo)}
+${filasDatos(h, ficha, ahora)}
+        </dl>${bloqueDecision(ficha)}${enlacesDocumentos(codigo)}
         <div class="cta">
-          <span class="badge warn">Detectada — cotización pendiente</span>
-          <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=${encodeURIComponent(codigo)}">Ver en el portal</a>
+          ${badgeCierre(h.detalle.FechaCierre ?? h.detalle.Fechas?.FechaCierre, ahora)}
+          <a class="btn secondary" href="https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?idlicitacion=${encodeURIComponent(codigo)}">Ver en el portal y ofertar</a>
         </div>
       </div>`;
 }
 
 const ESTADO_VACIO = `      <p class="note">
-        Ninguna licitación activa de este nicho en la última corrida del radar, o el radar no se
-        pudo correr (falta <code>LICITACIONES_API_TICKET</code>, o se agotó la cuota del ticket).
-        Este bloque se llena solo al ejecutar <code>npm run radar-licitaciones</code> — hasta
-        entonces no hay nada abierto que mostrar, y esta página no inventa ninguna licitación.
+        Ninguna licitación abierta de estos servicios en la última revisión, o no se pudo consultar
+        la API (falta <code>LICITACIONES_API_TICKET</code>, o se agotó la cuota del ticket). Esta
+        página no inventa licitaciones: si no hay nada, no muestra nada.
       </p>`;
+
+/** Primero lo que cierra antes: el plazo es lo que decide si todavía se alcanza a ofertar. */
+function porCierre(a: HallazgoLicitacion, b: HallazgoLicitacion): number {
+  const f = (h: HallazgoLicitacion) => h.detalle.FechaCierre ?? h.detalle.Fechas?.FechaCierre ?? "9999";
+  return f(a).localeCompare(f(b)) || a.detalle.CodigoExterno.localeCompare(b.detalle.CodigoExterno);
+}
 
 /** Fragmento HTML de la grilla de tarjetas (o el estado vacío), sin los marcadores. */
 export function renderTarjetasLicitaciones(hallazgos: HallazgoLicitacion[], ahora: Date = new Date()): string {
   const generado = ahora.toISOString().slice(0, 10);
+  const ordenados = [...hallazgos].sort(porCierre);
   const cuerpo =
-    hallazgos.length > 0
+    ordenados.length > 0
       ? `    <div class="card-grid">
-${hallazgos.map((h) => tarjeta(h, ahora)).join("\n\n")}
+${ordenados.map((h) => tarjeta(h, ahora)).join("\n\n")}
     </div>`
       : ESTADO_VACIO;
 
+  // De dónde salen los datos: la ficha de la API (ticket con cuota) o la ficha pública del portal
+  // (gratis). Importa para leer la tarjeta: la del portal no trae los reclamos del organismo.
+  const dePortal = ordenados.filter((h) => h.fuente === "portal").length;
+  const origen =
+    dePortal === 0
+      ? "Datos de la ficha oficial de cada licitación (API de Mercado Público) y de las bases publicadas en el portal."
+      : dePortal === ordenados.length
+        ? "Datos leídos de la ficha pública y las bases de cada licitación en el portal de Mercado Público."
+        : `Datos de la ficha oficial (API) y, en ${dePortal} de ${ordenados.length}, de la ficha pública del portal.`;
+
   return `  <section>
-    <h2>Licitaciones activas</h2>
+    <h2>Licitaciones abiertas</h2>
     <p class="section-sub">
-      Licitaciones públicas <strong>abiertas ahora</strong> que mencionan gestión documental,
-      digitalización de procesos u oficina de partes, según la última corrida de
-      <code>npm run radar-licitaciones</code>. Es lo único a lo que este agente dedica su cuota de
-      API: qué se puede ofertar hoy, no cómo le fue al nicho históricamente.
-      El estado de cada una es <strong>detectada</strong>: el radar solo observa — cotizar es un
-      paso aparte (<code>npm run cotizar-licitaciones -- &lt;codigo&gt;</code>) y el envío de una
-      oferta lo hace siempre una persona.
+      Licitaciones públicas de <strong>mercadopublico.cl abiertas ahora</strong> que piden alguno de
+      los servicios de <a href="http://www.array.cl/">Array</a>: oficina de partes electrónica,
+      seguimiento de trámites, gestión documental y firma electrónica, automatización de procesos
+      (RPA), business intelligence y plataformas de gestión de proyectos. Cada tarjeta trae lo que
+      decide si conviene presentarse — tope, plazos, garantías, criterios de evaluación, anexos
+      exigidos y los documentos publicados por el organismo — con su fuente citada; nada está
+      inferido.
     </p>
-    <p class="meta-corrida">${hallazgos.length} licitación(es) activa(s) en la corrida del ${generado}.</p>
+    <p class="meta-corrida">${ordenados.length} licitación(es) abierta(s) · revisado el ${generado} · ${origen}</p>
 ${cuerpo}
   </section>`;
 }

@@ -1,14 +1,21 @@
 ---
 name: radar_licitaciones
-description: Monitorea Licitaciones públicas en mercadopublico.cl sobre gestión documental, digitalización de procesos u oficina de partes. Usar cuando el usuario pida revisar licitaciones nuevas de este tipo, correr el radar de licitaciones, o preguntar qué licitaciones de gestión documental están abiertas ahora mismo.
+description: Monitorea Licitaciones públicas en mercadopublico.cl que piden servicios del catálogo de Array (array.cl) — oficina de partes electrónica, seguimiento de trámites, gestión documental y firma electrónica, RPA, business intelligence y plataformas de gestión de proyectos. Usar cuando el usuario pida revisar licitaciones nuevas de este tipo, correr el radar de licitaciones, o preguntar qué licitaciones de estos servicios están abiertas ahora mismo.
 ---
 
-# Radar de Licitaciones — Gestión Documental / Digitalización de Procesos / Oficina de Partes
+# Radar de Licitaciones — servicios de Array (array.cl)
 
 Réplica de `compra-agil-radar-claude` (raíz) para un segundo nicho: **Licitaciones públicas** (no
-Compra Ágil) contra la API clásica `api.mercadopublico.cl`, buscando gestión documental,
-digitalización de procesos y oficina de partes. No requiere credenciales del portal — solo el
-ticket de la API. No envía nada ni requiere aprobación humana: es de solo lectura.
+Compra Ágil) contra la API clásica `api.mercadopublico.cl`, buscando el **catálogo de servicios de
+[Array](http://www.array.cl/)** — el mismo nicho que `array-compras-agiles-radar` cubre en Compra
+Ágil: oficina de partes electrónica, seguimiento de trámites, gestión documental y firma
+electrónica, automatización de procesos (RPA), business intelligence y plataformas de gestión de
+proyectos. No requiere credenciales del portal — solo el ticket de la API. No envía nada ni
+requiere aprobación humana: es de solo lectura.
+
+Las categorías, con su `patron_mencion` y su `patron_excluyente`, viven en
+`licitaciones/config/keywords.json` (mismo contrato que `config/array-servicios.json`). Editar ese
+archivo cambia lo que el radar busca: los patrones se compilan desde ahí, no están en el código.
 
 ## Estado: verificado contra producción (2026-08-19)
 
@@ -36,7 +43,7 @@ Lo esencial para operarlo:
 ## Cuándo usar
 
 - El usuario pide "correr el radar de licitaciones", "qué hay abierto de gestión documental /
-  oficina de partes / digitalización de procesos".
+  oficina de partes / RPA / BI / gestión de proyectos", o "licitaciones para los servicios de Array".
 - Antes de armar una cotización con `cotizar_licitaciones`, para tener el detalle ya descargado en
   `licitaciones/data/<codigo>/`.
 
@@ -50,20 +57,28 @@ Lo esencial para operarlo:
 
 ```bash
 npm run radar-licitaciones                    # corrida real contra la API (gasta cuota)
+npm run radar-licitaciones -- --max=20        # baja (o sube) el cap de fichas de esta corrida
 npm run radar-licitaciones -- --desde-cache   # re-render desde las fichas ya guardadas, sin API
 ```
 
-`--desde-cache` no detecta nada nuevo: vuelve a publicar el reporte y la página a partir de
-`licitaciones/data/*/detalle.json`, y lo declara así en la salida. Sirve cuando la cuota está
-agotada o cuando cambió el formato del reporte/página. No toca `state.json`.
+`--desde-cache` no detecta nada nuevo: vuelve a publicar el reporte y la página a partir de lo que
+haya en `licitaciones/data/<codigo>/` — la ficha de la API (`detalle.json`) si existe y, si no, la
+ficha pública del portal (`antecedentes.json`, ver el punto 5 más abajo). Lo declara así en la
+salida. Sirve cuando la cuota está agotada o cuando cambió el formato del reporte/página. No toca
+`state.json`.
 
 ## Qué hace (`scripts/radar.ts`)
 
 1. Consulta `estado=activas` en la API clásica de Licitaciones. **Esta API no soporta búsqueda por
-   texto** (a diferencia de `q` en Compra Ágil): el filtrado por las variantes de
-   `licitaciones/config/keywords.json` (`Gestión Documental`, `Digitalización de Procesos`,
-   `Oficina de Partes`, etc.) es **local**, sobre `Nombre`/`Descripcion` del listado — es el
-   mecanismo de descubrimiento primario, no un filtro de ruido secundario.
+   texto** (a diferencia de `q` en Compra Ágil): el filtrado por las categorías de
+   `licitaciones/config/keywords.json` es **local**, sobre el `Nombre` del listado — es el
+   mecanismo de descubrimiento primario, no un filtro de ruido secundario. Dos cosas que se
+   verificaron el 2026-08-19 y condicionan los patrones: el ítem del listado **no trae
+   `Descripcion`** (solo `CodigoExterno`, `Nombre`, `CodigoEstado` y `FechaCierre`), y el `Nombre`
+   viene **truncado a ~50 caracteres** ("CONTRATACIÓN DE SERVICIO DE DIGITALIZACIÓN DOCUMEN"). Por
+   eso los patrones matchean prefijos: exigir la palabra completa pierde licitaciones reales.
+   El listado nacional completo queda guardado en `licitaciones/data/_listado-activas.json`, así
+   que se pueden probar patrones nuevos contra la última corrida **sin gastar cuota**.
 2. Trae el detalle (ficha) de cada candidato — con un cap de 60 por corrida para no agotar la
    cuota diaria del ticket ante un listado `activas` potencialmente muy grande — y confirma
    localmente que el detalle también menciona la palabra clave (descarta falsos positivos).
@@ -77,6 +92,15 @@ agotada o cuando cambió el formato del reporte/página. No toca `state.json`.
    `npm run antecedentes-licitacion` (sin argumentos toma las licitaciones ya detectadas en caché):
    los baja de la ficha pública del portal sin gastar cuota.
 5. Guarda todo en `licitaciones/data/<codigo>/{detalle.json, condiciones.json}`.
+
+   **Si la cuota se agota antes de las fichas, la página igual se puede armar**: corriendo
+   `npm run antecedentes-licitacion -- <codigo>` (gratis) queda `antecedentes.json`, y
+   `licitaciones/src/lib/detalle-portal.ts` reconstruye desde ahí una ficha equivalente —
+   organismo, tope, tipo, moneda, plazo de contrato y fechas salen de las secciones 1, 2, 3 y 7 de
+   la ficha pública. Lo único que no se puede reconstruir es `CantidadReclamos` (solo existe en la
+   API) y se omite en vez de inventarse. Así la única llamada indispensable a la API es la del
+   listado. Ocurrió en la corrida del 2026-08-19: la cuota se agotó justo después del listado y
+   las 5 licitaciones se publicaron íntegras por esta vía.
 6. Actualiza `licitaciones/data/state.json`: marca qué códigos son nuevos y qué organismos ya
    tenían procesos previos (recompradores). La agrupación es por el `Comprador` de la **ficha**;
    si una ficha no trae identificador de comprador, no se afirma nada sobre recompra en vez de
@@ -87,11 +111,19 @@ agotada o cuando cambió el formato del reporte/página. No toca `state.json`.
    aviso de "cierra hoy/mañana", tipo L1/LE/LP/…, garantías y plazo de contrato).
 
    Solo se reemplaza el bloque entre los marcadores
-   `<!-- OPORTUNIDADES:INICIO ... -->` y `<!-- OPORTUNIDADES:FIN -->`: el resto de esa página es
-   análisis escrito a mano (insumos bloqueantes, diferencias con Compra Ágil, qué falta para
-   operar) que una corrida del radar **no** debe pisar. Si los marcadores no están, el script
-   avisa y deja la página intacta en vez de reescribirla. El generador vive en
-   `licitaciones/src/lib/pagina.ts`.
+   `<!-- OPORTUNIDADES:INICIO ... -->` y `<!-- OPORTUNIDADES:FIN -->`; fuera de ellos quedan la
+   cabecera y el pie. Esa página **ya no lleva secciones de estado del proyecto** (insumos
+   bloqueantes, diferencias con Compra Ágil, qué falta para operar): se eliminaron a pedido del
+   usuario para que la página solo contenga lo que sirve para evaluar una licitación. Si los
+   marcadores no están, el script avisa y deja la página intacta en vez de reescribirla. El
+   generador vive en `licitaciones/src/lib/pagina.ts`.
+
+   Cada tarjeta trae: código, organismo y unidad, la **descripción completa** del objeto licitado
+   (el `Nombre` llega truncado en ambas fuentes), tope, cierre con los días que faltan, tipo
+   L1/LE/LP/…, plazo de contrato, garantía exigida, cierre de la ventana de preguntas,
+   adjudicación estimada, región, **a qué servicio de Array corresponde**, las banderas de la
+   ficha de decisión con su cita, los **criterios de evaluación con su ponderación** y los
+   documentos publicados por el organismo. Se ordenan por cierre: primero lo que vence antes.
 
    Cada tarjeta omite las filas que la ficha no informa, en vez de imprimir "—": las licitaciones
    chicas traen pocos campos y la tarjeta no debe sugerir que el organismo declaró algo que no
@@ -101,8 +133,10 @@ agotada o cuando cambió el formato del reporte/página. No toca `state.json`.
    vacía. No se inventan licitaciones para llenarla.
 
    Una **corrida incompleta no publica**: si se agota la cuota, falla alguna ficha o se alcanza el
-   cap de 60, el reporte se escribe igual pero la página se deja intacta. Publicar una grilla
-   parcial borraría de la página oportunidades que siguen abiertas.
+   cap de fichas, el reporte se escribe igual pero la página se deja intacta. Publicar una grilla
+   parcial borraría de la página oportunidades que siguen abiertas. Para publicar igual, primero
+   completar las fichas que falten con `npm run antecedentes-licitacion -- <codigo>` y después
+   `npm run radar-licitaciones -- --desde-cache`.
 
 ## Toda la cuota va a las licitaciones activas
 
@@ -114,7 +148,7 @@ nicho de Compra Ágil— y **se eliminó a propósito**: consumía la cuota que 
 haber llegado nunca a producir cifras.
 
 Consecuencia a tener presente: de este nicho **no hay cifras históricas** (cuántas licitaciones de
-gestión documental se declaran desiertas, quién se las adjudica, a qué precio). Lo que el radar
+estos servicios se declaran desiertas, quién se las adjudica, a qué precio). Lo que el radar
 entrega es qué está abierto ahora, no una lectura del mercado. Si en algún momento esas cifras se
 necesitan, primero hay que presupuestar la cuota — ver `buscarLicitacionesActivas` en
 `licitaciones/src/lib/api.ts`.

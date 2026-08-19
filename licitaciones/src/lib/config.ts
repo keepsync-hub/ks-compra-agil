@@ -83,8 +83,23 @@ export function loadCompanyConfig(): CompanyConfigLicitaciones {
   return JSON.parse(raw) as CompanyConfigLicitaciones;
 }
 
+/**
+ * Una categoría del catálogo de servicios de Array (http://www.array.cl/) tal como se busca en
+ * licitaciones. Mismo contrato que `config/array-servicios.json` (Compra Ágil), con los patrones
+ * adaptados a la redacción de bases de licitación.
+ */
+export interface CategoriaKeyword {
+  id: string;
+  nombre: string;
+  descripcion_array?: string;
+  /** Regex (string, case-insensitive al compilar) que descubre la licitación. */
+  patron_mencion: string;
+  /** Contexto donde `patron_mencion` acierta la palabra pero se equivoca de rubro (ej. "RPA" = dron). */
+  patron_excluyente?: string;
+}
+
 export interface KeywordsConfig {
-  variantes: string[];
+  categorias: CategoriaKeyword[];
 }
 
 export function loadKeywordsConfig(): KeywordsConfig {

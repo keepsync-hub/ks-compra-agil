@@ -14,6 +14,8 @@ import { LIC_ROOT_DIR } from "./config.js";
 import type { LicitacionDetalle } from "./api.js";
 import { extraerCondicionesLicitacion } from "./condiciones.js";
 import { cierreYaPaso } from "./tiempo.js";
+import { detalleDesdeAntecedentes } from "./detalle-portal.js";
+import type { AntecedentesLicitacion } from "./portal-ficha.js";
 import type { HallazgoLicitacion } from "./pagina.js";
 
 export const DATA_DIR = path.join(LIC_ROOT_DIR, "data");
@@ -24,6 +26,22 @@ export function fichaCacheada(codigo: string): LicitacionDetalle | null {
   if (!existsSync(ruta)) return null;
   try {
     return JSON.parse(readFileSync(ruta, "utf-8")) as LicitacionDetalle;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Ficha reconstruida desde la ficha PÚBLICA del portal que dejó `antecedentes-licitacion`. Es el
+ * plan B cuando la cuota del ticket se agota antes de poder pedir el detalle a la API: trae
+ * organismo, tope, tipo, plazos y fechas — todo lo que necesita la tarjeta — sin gastar cuota.
+ */
+export function fichaDesdePortal(codigo: string): LicitacionDetalle | null {
+  const ruta = path.join(DATA_DIR, codigo, "antecedentes.json");
+  if (!existsSync(ruta)) return null;
+  try {
+    const antecedentes = JSON.parse(readFileSync(ruta, "utf-8")) as AntecedentesLicitacion;
+    return detalleDesdeAntecedentes(antecedentes);
   } catch {
     return null;
   }
@@ -46,7 +64,10 @@ export function hallazgosDesdeCache(): { hallazgos: HallazgoLicitacion[]; cerrad
   let cerradas = 0;
   for (const entrada of readdirSync(DATA_DIR, { withFileTypes: true })) {
     if (!entrada.isDirectory()) continue;
-    const detalle = fichaCacheada(entrada.name);
+    // La ficha de la API manda cuando existe (es la fuente con los reclamos del organismo); si la
+    // cuota no alcanzó a traerla, la ficha pública del portal alcanza para armar la tarjeta.
+    const deApi = fichaCacheada(entrada.name);
+    const detalle = deApi ?? fichaDesdePortal(entrada.name);
     if (!detalle) continue;
     const cierre = detalle.FechaCierre ?? detalle.Fechas?.FechaCierre;
     if (cierre && cierreYaPaso(cierre)) {
@@ -54,8 +75,8 @@ export function hallazgosDesdeCache(): { hallazgos: HallazgoLicitacion[]; cerrad
       continue;
     }
     const condiciones = extraerCondicionesLicitacion(detalle);
-    guardarFicha(detalle, condiciones); // reescribe condiciones.json con el extractor vigente
-    hallazgos.push({ item: detalle, detalle, condiciones });
+    if (deApi) guardarFicha(detalle, condiciones); // reescribe condiciones.json con el extractor vigente
+    hallazgos.push({ item: detalle, detalle, condiciones, fuente: deApi ? "api" : "portal" });
   }
   hallazgos.sort((a, b) => a.detalle.CodigoExterno.localeCompare(b.detalle.CodigoExterno));
   return { hallazgos, cerradas };

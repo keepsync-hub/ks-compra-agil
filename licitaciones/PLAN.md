@@ -1,4 +1,4 @@
-# Agente de Licitaciones — Gestión Documental, digitalización de procesos, Oficina de Partes
+# Agente de Licitaciones — servicios de Array (array.cl)
 
 > Réplica del diseño de `PLAN.md` (raíz, Compra Ágil de licencias Claude) para un segundo nicho:
 > **Licitaciones públicas** (no Compra Ágil) que piden soluciones de gestión documental,
@@ -11,12 +11,43 @@
 
 ## Alcance
 
-Licitaciones públicas de mercadopublico.cl (no Compra Ágil) cuyo objeto sea gestión documental,
-digitalización de procesos u oficina de partes — el mismo tipo de necesidad de transformación
-digital que Compra Ágil de Claude, pero en el instrumento de compra "Licitación" (montos más
-altos, procesos más formales: garantías, bases administrativas y técnicas, evaluación por
-comisión) y con un producto/servicio completamente distinto (no hay un precio de lista público
-como el de Anthropic).
+Licitaciones públicas de mercadopublico.cl (no Compra Ágil) cuyo objeto sea alguno de los
+**servicios del catálogo de [Array](http://www.array.cl/)**: oficina de partes electrónica,
+seguimiento de trámites, gestión documental y firma electrónica, automatización de procesos
+(RPA/DBA), business intelligence y plataformas de gestión de proyectos. Es el mismo tipo de
+necesidad de transformación digital que Compra Ágil de Claude, pero en el instrumento de compra
+"Licitación" (montos más altos, procesos más formales: garantías, bases administrativas y
+técnicas, evaluación por comisión) y con un producto/servicio completamente distinto (no hay un
+precio de lista público como el de Anthropic).
+
+### Cambio de nicho: de "gestión documental" a los servicios de Array (2026-08-19)
+
+Este dominio nació buscando tres frases —gestión documental, digitalización de procesos, oficina de
+partes— con una regex **hardcodeada** en `keywords.ts`, mientras `config/keywords.json` se cargaba
+sin que nadie leyera su contenido: editar la config no cambiaba nada.
+
+A pedido del usuario el nicho pasó a ser el catálogo completo de Array, el mismo que ya usa
+`array-compras-agiles-radar` en Compra Ágil. Ahora `licitaciones/config/keywords.json` tiene la
+misma forma que `config/array-servicios.json` (categorías con `patron_mencion` y
+`patron_excluyente`) y **es la config la que manda**: `keywords.ts` compila los patrones desde ahí.
+Cada hallazgo declara a qué servicio de Array corresponde, en el reporte y en la tarjeta publicada.
+
+Dos cosas que descubrió la primera corrida con el nicho ampliado, y que hay que tener presentes
+antes de tocar los patrones:
+
+- **El ítem del listado no trae `Descripcion`** (solo `CodigoExterno`, `Nombre`, `CodigoEstado` y
+  `FechaCierre`), y el `Nombre` viene **truncado a ~50 caracteres**: `722-5-LE26` aparece como
+  "CONTRATACIÓN DE SERVICIO DE DIGITALIZACIÓN DOCUMEN". Todo el descubrimiento ocurre sobre ese
+  texto corto, así que los patrones matchean **prefijos** ("documen", "proceso"): exigir la palabra
+  completa perdía licitaciones reales. Lo que quede fuera del corte es invisible para el radar —
+  una licitación de oficina de partes cuyo nombre empiece con el organismo no se detecta, y no hay
+  forma de saberlo sin pedir 4.500 fichas.
+- **Ampliar el nicho no amplió los resultados**: de 4.508 licitaciones activas, las 5 detectadas
+  son todas de gestión documental/digitalización. Cero de RPA, BI, seguimiento de trámites,
+  oficina de partes o gestión de proyectos. No es que los patrones fallen — esas palabras
+  simplemente no aparecen en ningún nombre del listado nacional de ese día (verificado grepeando
+  `licitaciones/data/_listado-activas.json`, que ahora queda guardado justo para poder probar
+  patrones sin gastar cuota).
 
 ## Insumos bloqueantes
 
@@ -113,6 +144,58 @@ precio. El nicho Claude sí las tiene (`output/informe-nicho-claude.md`, 47 caso
 son las que condicionaron varias decisiones de diseño allá. Acá se opera sin ese contexto: el radar
 dice qué está abierto, no si vale la pena el mercado. Si esas cifras se necesitan, hay que
 presupuestar la cuota primero y recién entonces reponer el barrido.
+
+## La cuota alcanzó solo para el listado, y aun así se publicó (2026-08-19)
+
+Segunda medición de la cuota del ticket, con el nicho ya ampliado a los servicios de Array. La
+corrida trajo el listado nacional completo (4.508 licitaciones activas) y **la primera llamada de
+ficha ya respondió 429**: la cuota diaria se había gastado en corridas anteriores del mismo día.
+Cero fichas de la API.
+
+Antes eso significaba no poder publicar: sin `detalle.json` no había organismo, ni tope, ni tipo,
+ni plazo — la tarjeta no se podía armar y la página se dejaba intacta (que es lo correcto: publicar
+una grilla parcial borra oportunidades abiertas). Pero **esos datos también están en la ficha
+pública del portal**, que ya se descarga gratis para los antecedentes:
+
+| Dato de la tarjeta | Sección de la ficha pública |
+|---|---|
+| Nombre, estado, descripción, tipo (LE/LP/…), moneda | 1. Características de la licitación |
+| Organismo, unidad, RUT, dirección, comuna, región | 2. Organismo demandante |
+| Publicación, preguntas, cierre, apertura, adjudicación | 3. Etapas y plazos |
+| Monto total estimado (el tope), duración del contrato | 7. Montos y duración del contrato |
+
+`licitaciones/src/lib/detalle-portal.ts` arma con eso un `LicitacionDetalle` equivalente, y
+`hallazgosDesdeCache()` lo usa cuando falta el de la API (la de la API manda si existe). Lo único
+que no se puede reconstruir es `CantidadReclamos` —reclamos recibidos por el organismo, que solo
+expone la API— y se omite en vez de inventarse; la página declara de qué fuente salieron los datos.
+
+Consecuencia práctica: **la única llamada indispensable a la API es la del listado**. Con una sola
+llamada al día el radar descubre, y todo lo demás (fichas, bases, garantías, criterios, anexos,
+documentos) sale del portal sin cuota. Las 5 licitaciones publicadas el 2026-08-19 se armaron
+enteras por esta vía.
+
+El listado nacional crudo queda ahora en `licitaciones/data/_listado-activas.json`: es lo que
+permite probar patrones nuevos de `config/keywords.json` contra la última corrida real sin gastar
+otra llamada.
+
+## La página publicada: solo lo que sirve para evaluar una licitación (2026-08-19)
+
+`docs/licitaciones.html` tenía, además de la grilla, cinco secciones sobre el estado del proyecto
+(por qué está separada de Compra Ágil, estado de cada componente, insumos bloqueantes, diferencias
+con Compra Ágil, qué falta para operar). **Se eliminaron a pedido del usuario**: esa página es para
+decidir sobre licitaciones, y el estado del agente se lee en el repo (este documento, `CLAUDE.md`,
+`README.md`). Quedan la cabecera, la grilla y un pie de una línea.
+
+La grilla, a cambio, quedó más completa — cada tarjeta trae la descripción completa del objeto
+licitado (el `Nombre` llega truncado en ambas fuentes), el servicio de Array al que corresponde, la
+garantía exigida, el cierre de la ventana de preguntas y los criterios de evaluación con su
+ponderación; se ordenan por cierre, primero lo que vence antes. Nada de eso se infiere: sale de la
+ficha de decisión, con su cita.
+
+Una nota de tono que conviene mantener: `decision.json` lo consumen dos públicos distintos. La
+bandera "no hay adjuntos leídos" trae rutas y comandos porque `decision.md` lo lee quien opera el
+agente; en la página esa misma bandera se enuncia como el hecho que importa para evaluar ("las
+bases en PDF no están leídas y pueden agregar exigencias"). La traducción vive en `pagina.ts`.
 
 ## Acceso a los antecedentes y a los documentos (2026-08-19)
 
@@ -383,7 +466,9 @@ licitaciones/
   src/lib/
     api.ts                   - cliente de api.mercadopublico.cl (verificado 2026-08-19)
     portal-ficha.ts           - antecedentes desde la ficha PÚBLICA del portal (sin ticket ni cuota)
-    keywords.ts               - variantes de búsqueda + verificación local (acá es descubrimiento primario)
+    keywords.ts               - compila los patrones de config/keywords.json (descubrimiento primario)
+    detalle-portal.ts         - reconstruye la ficha (organismo, tope, tipo, plazos) desde la ficha
+                                pública del portal, cuando la cuota no alcanzó para pedirla a la API
     condiciones.ts            - tope, garantías, plazo, documentos exigidos, excluyentes
     config.ts, historial.ts, tiempo.ts, nombre-archivo.ts
     pricing.ts                - cotiza por catálogo de costos propio (no hay precio de lista externo)
@@ -393,7 +478,7 @@ licitaciones/
     adjuntos-navegador.ts     - npm run adjuntos-licitacion -- <codigo> (navegador real; el portal
                                 puntúa la sesión con reCAPTCHA y puede rechazarla)
   config/
-    keywords.json             - variantes de búsqueda de gestión documental/digitalización/oficina de partes
+    keywords.json             - categorías del catálogo de Array (patron_mencion + patron_excluyente)
     company.json.example      - plantilla de costos reales (placeholders COMPLETAR)
   data/, output/               - igual que la raíz (gitignored salvo output/, ver .gitignore)
 
