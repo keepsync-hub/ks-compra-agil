@@ -18,6 +18,7 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 import { ROOT_DIR } from "./config.js";
 import { obtenerDetalleCompraAgil, type CompraAgilDetalle } from "./api.js";
+import { cierreYaPaso } from "./tiempo.js";
 
 const INDICE_PATH = path.join(ROOT_DIR, "historico", "observaciones.jsonl");
 
@@ -183,6 +184,95 @@ export function anexar(o: Omit<Observacion, "hash">): ResultadoAnexar {
   mkdirSync(path.dirname(INDICE_PATH), { recursive: true });
   appendFileSync(INDICE_PATH, linea + "\n", "utf-8");
   return { escrita: true, motivo: ultima ? "cambio" : "nueva" };
+}
+
+/**
+ * Reconstruye una ficha a partir de una observación del índice. Gemela de `detalleDesdeListado`
+ * (`src/lib/api.ts`) y con el mismo contrato: lo que la proyección no guarda queda **vacío**, no
+ * inventado — `descripcion`, `productos_solicitados` y `documentos`. Quien la consuma debe
+ * declarar que es una ficha reducida.
+ */
+export function detalleDesdeObservacion(o: Observacion): CompraAgilDetalle {
+  return {
+    codigo: o.codigo,
+    nombre: o.nombre,
+    descripcion: "",
+    // `id_estado` no se proyecta al índice (nadie lo consume) y `glosa` tampoco: se repite el
+    // código en vez de inventar una glosa que no se observó.
+    estado: { id_estado: 0, codigo: o.estado, glosa: o.estado },
+    convocatoria: {
+      estado_convocatoria: o.estado_convocatoria,
+      descripcion: o.estado_convocatoria === 1 ? "Primer llamado" : "Segundo llamado",
+      fecha_cierre_primer_llamado: o.estado_convocatoria === 1 ? o.fecha_cierre : "",
+      fecha_cierre_segundo_llamado: o.estado_convocatoria === 2 ? o.fecha_cierre : "",
+    },
+    fechas: {
+      fecha_publicacion: o.fecha_publicacion,
+      fecha_cierre: o.fecha_cierre,
+      fecha_ultimo_cambio: o.fecha_ultimo_cambio,
+    },
+    documentos: [],
+    presupuesto: {
+      tipo_presupuesto: "",
+      moneda: o.moneda,
+      presupuesto_estimado: o.presupuesto_estimado,
+      monto_disponible: o.monto_disponible_clp,
+      monto_disponible_clp: o.monto_disponible_clp,
+    },
+    institucion: {
+      rut: o.rut,
+      organismo_comprador: o.organismo,
+      unidad_compra: o.unidad_compra,
+      region: o.region,
+      nombre_region: o.nombre_region,
+    },
+    productos_solicitados: [],
+    resumen: {
+      multa_sancion: o.multa_sancion,
+      total_ofertas_recibidas: o.total_ofertas_recibidas,
+      total_demandas: o.total_demandas,
+    },
+    motivos: {
+      motivo_desierta: o.motivo_desierta,
+      motivo_cancelacion: o.motivo_cancelacion,
+      motivo_seleccion: o.motivo_seleccion,
+    },
+    entrega: o.plazo_entrega_dias != null ? { plazo_entrega_dias: o.plazo_entrega_dias } : {},
+  };
+}
+
+export interface OportunidadArrastrada {
+  observacion: Observacion;
+  detalle: CompraAgilDetalle;
+}
+
+/**
+ * Oportunidades que una corrida anterior SÍ vio, siguen abiertas y esta corrida no alcanzó a
+ * re-verificar (típicamente porque se agotó la cuota antes de llegar a su categoría).
+ *
+ * Existe para que la grilla de `docs/index.html` deje de ser todo-o-nada. Antes, una corrida
+ * incompleta no publicaba nada —para no borrar oportunidades vivas— y la página quedaba congelada
+ * indefinidamente. Arrastrando lo que el índice ya sabe, nada desaparece y la página se puede
+ * publicar siempre, declarando qué no se pudo re-verificar hoy.
+ *
+ * La fuente tiene que ser `historico/observaciones.jsonl`, que está versionado: `data/` es
+ * gitignored y no existe en el checkout limpio con el que corre el agente en la nube.
+ */
+export function oportunidadesArrastradas(
+  categoriasActivasIds: string[],
+  codigosYaVistos: Set<string>,
+  ahora: Date = new Date(),
+): OportunidadArrastrada[] {
+  const activas = new Set(categoriasActivasIds);
+  const arrastradas: OportunidadArrastrada[] = [];
+  for (const o of ultimaPorCodigo().values()) {
+    if (o.estado !== "publicada") continue;
+    if (!activas.has(o.categoria)) continue;
+    if (codigosYaVistos.has(o.codigo)) continue;
+    if (cierreYaPaso(o.fecha_cierre, ahora)) continue;
+    arrastradas.push({ observacion: o, detalle: detalleDesdeObservacion(o) });
+  }
+  return arrastradas;
 }
 
 const ESTADOS_TERMINALES = new Set(["desierta", "cancelada", "cerrada", "proveedor_seleccionado"]);

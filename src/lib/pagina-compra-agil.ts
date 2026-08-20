@@ -35,8 +35,11 @@ const REPO_CATEGORIAS_EXTRA_URL =
   `https://github.com/keepsync-hub/ks-compra-agil/edit/${REPO_RAMA_POR_DEFECTO}/config/categorias-extra.json`;
 
 export interface HallazgoCompraAgil {
+  /** Categoría principal: la primera (de mayor prioridad) que confirmó la compra. Es la que se anexa al índice. */
   categoriaId: string;
   categoriaNombre: string;
+  /** Todas las categorías que confirmaron esta compra, en etiqueta corta. Una compra puede caer en varias. */
+  categoriasNombresCortos: string[];
   detalle: CompraAgilDetalle;
   condiciones: Condiciones;
   /** Nombres de los adjuntos que el radar alcanzó a descargar (`data/<codigo>/attachments/`). */
@@ -45,9 +48,13 @@ export interface HallazgoCompraAgil {
   /**
    * `"api"` = ficha completa. `"listado"` = ficha reducida, porque la cuota diaria se agotó antes
    * de poder pedirla: trae tope, cierre, comprador, competencia y tipo de llamado, pero no la
-   * descripción, los productos ni el plazo de entrega. La tarjeta lo dice en vez de disimularlo.
+   * descripción, los productos ni el plazo de entrega. `"indice"` = ni siquiera se pudo mirar el
+   * listado hoy; la ficha viene de `historico/observaciones.jsonl`, o sea de la última corrida que
+   * sí la vio. La tarjeta lo dice en vez de disimularlo.
    */
-  fuente: "api" | "listado";
+  fuente: "api" | "listado" | "indice";
+  /** Solo para `fuente: "indice"`: cuándo fue la última vez que el radar sí verificó esta compra. */
+  observadoEn?: string;
 }
 
 function escapeHtml(s: string): string {
@@ -149,6 +156,7 @@ function chips(h: HallazgoCompraAgil, historial: HistorialOrganismo | null): str
     h.condiciones.excluyentes.length > 0 ? `${h.condiciones.excluyentes.length} cláusula(s) excluyente(s)` : null,
     h.detalle.documentos.length > 0 ? `${h.detalle.documentos.length} adjunto(s)` : "sin adjuntos",
     historial && historial.desiertas > 0 ? `${historial.desiertas} desierta(s) antes` : null,
+    h.fuente === "indice" ? "sin re-verificar hoy" : null,
   ].filter((c): c is string => Boolean(c));
   return `<div class="chips">${valores.map((c) => `<span>${escapeHtml(c)}</span>`).join("")}</div>`;
 }
@@ -214,13 +222,21 @@ function filasDatos(h: HallazgoCompraAgil, historial: HistorialOrganismo | null,
     filas.push(["Multas/sanciones del organismo", String(d.resumen.multa_sancion)]);
   }
   if (d.institucion.nombre_region) filas.push(["Región", escapeHtml(d.institucion.nombre_region)]);
-  filas.push(["Categoría del radar", escapeHtml(h.categoriaNombre)]);
   if (h.fuente === "listado") {
     filas.push([
       "Detalle",
       '<span class="sin-dato">ficha resumida: la cuota diaria de la API se agotó antes de poder leer ' +
         "la ficha completa. Falta la descripción, los productos pedidos y el plazo de entrega — " +
         'están en la ficha del portal.</span>',
+    ]);
+  }
+  if (h.fuente === "indice") {
+    filas.push([
+      "Verificado",
+      '<span class="sin-dato">la corrida de hoy no alcanzó a re-verificar esta compra (se agotó la ' +
+        "cuota de la API antes de llegar a su categoría). Los datos son de la última corrida que sí " +
+        `la vio${h.observadoEn ? `, el ${escapeHtml(h.observadoEn.slice(0, 10))}` : ""}: puede haberse ` +
+        "cancelado o cerrado desde entonces. Confirmar en el portal antes de ofertar.</span>",
     ]);
   }
 
@@ -299,7 +315,9 @@ ${items}
 function tarjeta(h: HallazgoCompraAgil, ahora: Date): string {
   const d = h.detalle;
   const historial = historialDelOrganismo(d.institucion.rut, d.codigo);
+  const nichos = h.categoriasNombresCortos.length > 0 ? h.categoriasNombresCortos : [h.categoriaNombre];
   return `      <div class="opp-card" id="${escapeHtml(d.codigo)}">
+        <span class="cat-tags">${nichos.map((n) => `<span class="cat-tag">${escapeHtml(n)}</span>`).join("")}</span>
         <span class="codigo">${escapeHtml(d.codigo)}</span>
         <span class="org">${escapeHtml(d.institucion.organismo_comprador)}</span>
         <span class="nombre">${escapeHtml(d.nombre)}</span>${
@@ -319,9 +337,9 @@ ${filasDatos(h, historial, ahora)}
 }
 
 const ESTADO_VACIO = `      <p class="note">
-        Ninguna Compra Ágil abierta de estas palabras clave en la última corrida del radar. Es lo
-        normal: son ventanas de días y el nicho es chico. Esta página no inventa oportunidades — si
-        no hay nada abierto, no muestra nada.
+        Ninguna Compra Ágil abierta de estas palabras clave en la última corrida del radar, en
+        ninguno de los nichos que busca. Es lo normal: son ventanas de días y los nichos son
+        chicos. Esta página no inventa oportunidades — si no hay nada abierto, no muestra nada.
       </p>`;
 
 /** Primero lo que cierra antes: el plazo es lo que decide si todavía se alcanza a ofertar. */
@@ -330,8 +348,28 @@ function porCierre(a: HallazgoCompraAgil, b: HallazgoCompraAgil): number {
   return f(a).localeCompare(f(b)) || a.detalle.codigo.localeCompare(b.detalle.codigo);
 }
 
+/** "3 licencias Claude · 2 cursos BI / datos" — para saber de un vistazo qué nicho está produciendo. */
+function desglosePorNicho(hallazgos: HallazgoCompraAgil[]): string {
+  const cuenta = new Map<string, number>();
+  for (const h of hallazgos) {
+    const nichos = h.categoriasNombresCortos.length > 0 ? h.categoriasNombresCortos : [h.categoriaNombre];
+    for (const n of nichos) cuenta.set(n, (cuenta.get(n) ?? 0) + 1);
+  }
+  // "3 × Licencias Claude" y no "3 licencias claude": el nombre corto es un rótulo, no un
+  // sustantivo que se pueda pluralizar sin quedar mal ("1 cursos ia").
+  return [...cuenta.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([n, c]) => `${c} × ${n}`)
+    .join(" · ");
+}
+
 /** Fragmento HTML de la grilla de tarjetas (o el estado vacío), sin los marcadores. */
-export function renderTarjetasCompraAgil(hallazgos: HallazgoCompraAgil[], ahora: Date = new Date()): string {
+export function renderTarjetasCompraAgil(
+  hallazgos: HallazgoCompraAgil[],
+  ahora: Date = new Date(),
+  /** Categorías que esta corrida no alcanzó a barrer: lo que las tarjetas `fuente: "indice"` explican. */
+  categoriasSinBarrer: string[] = [],
+): string {
   const generado = ahora.toISOString().slice(0, 10);
   const ordenados = [...hallazgos].sort(porCierre);
   const cuerpo =
@@ -341,17 +379,32 @@ ${ordenados.map((h) => tarjeta(h, ahora)).join("\n\n")}
     </div>`
       : ESTADO_VACIO;
 
+  const aviso =
+    categoriasSinBarrer.length > 0
+      ? `    <p class="note">
+      La corrida de hoy no alcanzó a revisar ${categoriasSinBarrer.length} categoría(s) —
+      ${escapeHtml(categoriasSinBarrer.join(", "))}—. Sus oportunidades se muestran igual, con los
+      datos de la última corrida que sí las vio y marcadas <em>sin re-verificar hoy</em>: se
+      prefiere una tarjeta vieja y declarada como tal antes que hacerla desaparecer sin avisar.
+    </p>
+`
+      : "";
+
+  const desglose = desglosePorNicho(ordenados);
   return `  <section>
     <h2>Compras Ágiles abiertas</h2>
     <p class="section-sub">
       Compras Ágiles de <strong>mercadopublico.cl publicadas y recibiendo ofertas ahora</strong> que
-      mencionan las palabras del radar. Cada tarjeta reúne lo que decide si conviene participar:
-      cuánto hay, hasta cuándo, quién puede ofertar, cuánta competencia ya se presentó, qué piden
-      exactamente, qué documentos exige y qué frases dejan una oferta fuera — más lo que este mismo
-      comprador hizo en sus compras anteriores. Todo sale de la ficha oficial; nada está inferido.
+      mencionan las palabras del radar, en cualquiera de sus nichos. Cada tarjeta reúne lo que
+      decide si conviene participar: cuánto hay, hasta cuándo, quién puede ofertar, cuánta
+      competencia ya se presentó, qué piden exactamente, qué documentos exige y qué frases dejan una
+      oferta fuera — más lo que este mismo comprador hizo en sus compras anteriores. Todo sale de la
+      ficha oficial; nada está inferido.
     </p>
-    <p class="meta-corrida">${ordenados.length} Compra(s) Ágil(es) abierta(s) · revisado el ${generado}</p>
-${cuerpo}
+    <p class="meta-corrida">${ordenados.length} Compra(s) Ágil(es) abierta(s)${
+      desglose ? ` · ${escapeHtml(desglose)}` : ""
+    } · revisado el ${generado}</p>
+${aviso}${cuerpo}
   </section>`;
 }
 
@@ -390,6 +443,10 @@ export interface CategoriaPublicadaCompraAgil {
   variantes: string[];
   extra: string[];
   regex: string;
+  /** `patron_requerido` compilado, si la categoría exige además hablar del servicio (curso, asesoría…). */
+  requerido?: string;
+  /** `patron_excluyente` compilado, si la categoría descarta un rubro que usa las mismas palabras. */
+  excluyente?: string;
 }
 
 export function renderKeywordsCompraAgil(categorias: CategoriaPublicadaCompraAgil[]): string {
@@ -408,7 +465,26 @@ export function renderKeywordsCompraAgil(categorias: CategoriaPublicadaCompraAgi
         <details class="kw-patron">
           <summary>Cómo confirma que la compra es de este tipo</summary>
           <p>Se le piden esas palabras a la API y después se confirma sobre el texto de la compra con:</p>
-          <code>${escapeHtml(c.regex)}</code>
+          <code>${escapeHtml(c.regex)}</code>${
+            c.requerido
+              ? `
+          <p>Y además el texto tiene que hablar del servicio que se busca, no solo de la materia:</p>
+          <code>${escapeHtml(c.requerido)}</code>`
+              : ""
+          }${
+            c.excluyente
+              ? `
+          <p>Se descarta la compra, aunque calce todo lo anterior, si el texto contiene:</p>
+          <code>${escapeHtml(c.excluyente)}</code>`
+              : ""
+          }${
+            c.requerido || c.excluyente
+              ? `
+          <p class="kw-nota">Una palabra agregada a mano amplía la búsqueda y la mención, pero
+          <strong>no salta estos dos filtros</strong>: agregar "Looker" hace que el radar la busque,
+          no que acepte una compra que no es un curso.</p>`
+              : ""
+          }
         </details>
       </div>`,
     )
@@ -422,9 +498,11 @@ export function renderKeywordsCompraAgil(categorias: CategoriaPublicadaCompraAgi
     <h2>Qué palabras busca el radar</h2>
     <p class="section-sub">
       Con estas palabras se le pregunta a la API de Compra Ágil qué hay publicado; lo que vuelve se
-      confirma sobre el nombre, la descripción y los productos de cada compra. Las categorías
-      marcadas <em>inactiva</em> no se consultan todavía. Si ves un término que debería estar y no
-      está, agrégalo acá abajo.
+      confirma sobre el nombre, la descripción y los productos de cada compra. Varias categorías
+      exigen además que la compra sea del <em>servicio</em> que se busca —un curso de Power BI, no
+      una licencia de Power BI—: eso se ve abriendo "Cómo confirma que la compra es de este tipo".
+      Las categorías marcadas <em>inactiva</em> no se consultan todavía. Si ves un término que
+      debería estar y no está, agrégalo acá abajo.
     </p>
     <div class="kw-grid">
 ${tarjetas}
@@ -440,7 +518,7 @@ ${tarjetas}
       </p>
       <div class="kw-form-row">
         <select id="kw-categoria" aria-label="Categoría">${opciones}</select>
-        <input id="kw-termino" type="text" placeholder="ej: Claude Sonnet" aria-label="Palabra o frase">
+        <input id="kw-termino" type="text" placeholder="ej: Looker Studio" aria-label="Palabra o frase">
         <button class="btn" id="kw-agregar" type="button">Agregar</button>
       </div>
       <p class="kw-aviso" id="kw-aviso" hidden></p>

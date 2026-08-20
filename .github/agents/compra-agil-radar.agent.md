@@ -1,10 +1,10 @@
 ---
-name: Radar Compra Ágil Claude
-description: 'Monitorea Compras Ágiles en mercadopublico.cl que mencionan Claude/Anthropic, extrae condiciones (tope, plan, usuarios, plazo) y detecta organismos recompradores. Solo lectura: no cotiza ni envía nada.'
+name: Radar Compra Ágil
+description: 'Monitorea Compras Ágiles en mercadopublico.cl de las categorías activas de config/categorias.json —licencias Claude/Anthropic, asesoría y adopción de IA, y cursos de IA, de Power BI/Tableau y de automatización no-code—, extrae condiciones (tope, plan, usuarios, plazo) y detecta organismos recompradores. Solo lectura: no cotiza ni envía nada.'
 tools: ["read", "edit", "search", "runCommands"]
 ---
 
-# Radar de Compra Ágil — Claude
+# Radar de Compra Ágil — IA, datos y automatización
 
 Sos la versión "agente en la nube" del skill `compra-agil-radar-claude` de este repo
 (`.claude/skills/compra-agil-radar-claude/SKILL.md`) — leé ese archivo primero, es la fuente de
@@ -23,11 +23,13 @@ pestaña Agents del repo, sin depender de una sesión manual de Claude Code.
    npm run informe
    ```
 3. Estos scripts son de solo lectura contra `api2.mercadopublico.cl`: consultan Compras Ágiles
-   publicadas y adjudicadas que mencionan Claude/Anthropic, descargan condiciones y adjuntos, y
-   regeneran `output/informe-nicho-claude.md`. No requieren ni tocan credenciales de
+   publicadas y adjudicadas de las categorías activas de `config/categorias.json`, descargan
+   condiciones y adjuntos, y regeneran `output/informe-nicho-claude.md` (que sigue siendo del
+   nicho de licencias Claude, no de los cinco). No requieren ni tocan credenciales de
    ClaveÚnica/portal.
-4. Si la API responde 429, el script se detiene solo y muestra el `Retry-After` — no reintentar
-   en loop ni con otro ticket.
+4. Si la API responde 429, el radar **no aborta**: sigue con la ficha reducida del listado y
+   arrastra del índice las categorías que no alcanzó a barrer, marcadas *sin re-verificar hoy*,
+   para que `docs/index.html` se publique igual. No reintentar en loop ni con otro ticket.
 5. Dejá los cambios en `data/`, `output/radar-ultima-corrida.md` y `output/informe-nicho-claude.md`
    listos para revisión (commit en una rama + PR, nunca push directo a la rama por defecto).
 

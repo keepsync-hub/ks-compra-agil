@@ -7,6 +7,43 @@
 
 ## Progreso de ejecución
 
+**Fase 1 — completada, y con dos correcciones a lo que decía este documento** (20-08-2026):
+
+- **Las categorías ya no están todas apagadas**: se agregaron y activaron cuatro nichos de
+  servicios —`bi-capacitacion`, `automatizacion-capacitacion`, `ia-capacitacion`, `ia-asesoria`—,
+  con lo que el radar corre con cinco categorías activas. Lo que este documento daba como condición
+  para activarlas ("la cuota diaria todavía no tiene una cota inferior confiable") resultó estar
+  mal fundado: ver la corrección de cuota abajo.
+- **Corrección 1 — la cuota nunca estuvo tan apretada, y la medición estaba ciega.** El "58
+  requests, 0 429" de la Fase 0 y el "≥70 requests/día sin 429" de esta fase vivían en
+  `data/cuota/`, que es gitignored: se perdieron. `historico/cuota.jsonl` solo registraba días
+  **con** 429 (`anexarRollup()` se llamaba únicamente desde `registrar429()`), así que su única
+  línea —429 a las 9 requests el 19-08— era todo lo que quedaba, y `resumenCuota().cota_inferior`
+  era `null` estructuralmente. Medido de nuevo el 20-08: **83 requests en un día, 0 códigos 429**.
+  `cerrarDiasPendientes()` cierra ahora también los días sin 429, para que la medición converja.
+- **Corrección 2 — el barrido por categoría era la ineficiencia de raíz.** El diseño original
+  ("una vuelta por cada categoría activa") hace que dos categorías que comparten una variante
+  paguen la búsqueda dos veces, y que una compra que cae en dos categorías pague dos detalles. Se
+  reemplazó por **un barrido único de la unión de las variantes**, con clasificación de cada
+  superviviente contra todas las categorías. Con cinco categorías activas la corrida cuesta 11
+  consultas + 1 detalle por código único, no 5 × sus variantes.
+- **Corrección 3 — `q` no busca la frase, hace OR de los tokens.** Medido con
+  `npm run radar -- --sondeo --q="Claude Pro"`: 34 resultados dominados por "Pro" (CANVA PRO, DRONE
+  DJI MINI 5 PRO, PRO-RETENCION). La nota de este documento sobre "8 variantes × estado" y el
+  comentario del radar que decía que las multi-palabra son subconjuntos apuntaban en la dirección
+  correcta pero por la razón equivocada: no son subconjuntos, son **superconjuntos ruidosos**. Las
+  cuatro variantes multi-palabra de `claude` se eliminaron (8 → 4).
+- **Corrección 4 — una corrida incompleta congelaba la página, en vez de protegerla.** La regla
+  "si alguna variante falló, no se publica la grilla" existía para no borrar oportunidades vivas;
+  con más categorías activas su efecto real habría sido una página detenida indefinidamente. Ahora
+  las categorías sin barrer se arrastran desde `historico/observaciones.jsonl` marcadas *sin
+  re-verificar hoy* (`oportunidadesArrastradas`, `src/lib/indice.ts`), así que nada desaparece y la
+  grilla se publica siempre que al menos una consulta haya llegado a la API.
+- **Nuevo en el embudo**: `patron_requerido` y `patron_excluyente` por categoría, evaluados sobre el
+  texto concatenado de la ficha. Sin el primero, "inteligencia artificial" o "Power BI" capturan la
+  compra de *licencias*, que es otro negocio. Lo que descartan se publica en el reporte
+  (`## Descartados por el filtro estricto`) para poder afinarlos con casos reales y sin gastar cuota.
+
 **Fases 3 y 4 — implementadas** (19-08-2026, sesión sin `COMPRA_AGIL_API_TICKET` disponible —
 todo lo de abajo corrió y se verificó **offline**, cero requests, como pide el diseño de estas dos
 fases):
@@ -59,6 +96,9 @@ real disponible en el entorno):
   real**: 58 requests acumuladas en el día entre radar/informe/diagnóstico, 0 códigos 429 — primer
   dato real hacia la cota inferior del límite diario (ver `npm run cuota`; el rollup histórico
   todavía no tiene ninguna fila porque no se llegó a un 429 en esta sesión).
+  **Corregido el 20-08-2026**: ese dato se perdió, porque vivía en `data/cuota/` (gitignored) y el
+  rollup versionado solo anotaba días *con* 429. Ver "Fase 1 — completada" al inicio de esta
+  sección; la medición vigente es 83 requests/día sin 429.
 - Ahorro `proveedor_seleccionado`: 8→1 variante. **Confirmado en producción**: la corrida real
   encontró 0 casos, igual que antes, a un octavo del costo (ver `output/radar-ultima-corrida.md`).
 - `informe-nicho.ts` ahora rechaza correr sin `--forzar` si el radar no corrió hoy (reserva
