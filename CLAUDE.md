@@ -1,8 +1,14 @@
 # ks-compra-agil
 
-Agente que monitorea Compras Ágiles en mercadopublico.cl que piden licencias Claude/Anthropic,
-prepara una cotización dentro del tope presupuestario, y deja lista una oferta (formulario +
-PDF) para revisión y envío manual de un humano.
+Agente que monitorea Compras Ágiles en mercadopublico.cl de cinco nichos —licencias
+Claude/Anthropic, asesoría y adopción de inteligencia artificial, y cursos de IA, de Power
+BI/Tableau y de automatización no-code (n8n, Make, Zapier, Power Automate)—, prepara una cotización
+dentro del tope presupuestario, y deja lista una oferta (formulario + PDF) para revisión y envío
+manual de un humano.
+
+El nicho de licencias sigue frenado por el insumo bloqueante de más abajo; los cuatro nichos de
+servicios (asesoría y cursos) se agregaron el 2026-08-20 justamente porque no dependen de él:
+capacitar y asesorar es algo que KeepSync puede facturar por sí mismo.
 
 **Antes de escribir código, lee `PLAN.md` completo.** Contiene el diseño validado contra la API
 real de producción (no supuestos): estructura de datos verificada, endpoints reales, un
@@ -13,14 +19,19 @@ decisiones de diseño.
 
 ## Las páginas publicadas (`docs/`)
 
-`docs/index.html` (Compras Ágiles de licencias Claude) y `docs/licitaciones.html` (licitaciones de
+`docs/index.html` (Compras Ágiles de los cinco nichos: licencias Claude, asesoría/adopción de IA, y
+cursos de IA, de Power BI/Tableau y de automatización) y `docs/licitaciones.html` (licitaciones de
 los servicios de Array) son **páginas de resultados, no de estado del proyecto**: cada corrida del
 radar respectivo refresca sus dos bloques entre marcadores (oportunidades y palabras clave) y todo
 lo demás se eliminó a pedido del usuario — el estado del agente se lee en este archivo, `PLAN.md`,
 `PLAN-VOLUMEN.md` y `README.md`. Al tocar esas páginas, mantener el criterio: si un párrafo no ayuda
 a decidir si participar en una compra concreta, no va ahí.
 
-Las dos publican también **qué palabras busca el radar**, con un formulario para agregar. Como son
+Las dos publican también **qué palabras busca el radar**, con un formulario para agregar. En la de
+Compra Ágil, cada categoría publica además su `patron_requerido` y su `patron_excluyente` cuando los
+tiene: varias exigen que la compra sea del **servicio** buscado y no solo que mencione la materia
+—un *curso* de Power BI, no una *licencia* de Power BI—, y una palabra agregada a mano amplía la
+búsqueda pero **no salta esos dos filtros**. Como son
 estáticas (GitHub Pages) no pueden escribir en el repo: lo agregado queda en el navegador marcado
 como pendiente, y se persiste pegando el JSON en `config/categorias-extra.json` (Compra Ágil) o
 `licitaciones/config/keywords-extra.json` (licitaciones), o con `npm run keywords` /
@@ -29,7 +40,8 @@ como pendiente, y se persiste pegando el JSON en `config/categorias-extra.json` 
 ## Estado del proyecto
 
 Implementado y probado contra la API real: scaffolding, el skill `compra-agil-radar-claude`
-(radar + informe del nicho) y el skill `compra-agil-ofertar` (cotizador con PDF publicable),
+(radar multi-nicho + informe del nicho Claude) y el skill `compra-agil-ofertar` (cotizador con PDF
+publicable),
 más la página de estado en GitHub Pages (`docs/`). El login a ClaveÚnica y el llenado del
 formulario del portal (`login.ts` / `form-fill.ts`) tienen toda la lógica escrita pero están
 diferidos a una sesión con **Claude Cowork en una máquina local** — ver `docs/flujo.html` para
@@ -68,6 +80,21 @@ humano y nunca el agente (ver guardrails abajo). El radar y el informe del nicho
 - **No inventar precios** — requieren `config/company.json` con costos reales del usuario.
 - Ante CAPTCHA o bloqueo del portal: detenerse y pedir intervención humana, no reintentar a
   ciegas.
+
+## Lo que se sabe de la cuota de la API (medido, no supuesto)
+
+`historico/cuota.jsonl` registraba **solo los días con 429** (`anexarRollup()` se llamaba únicamente
+desde `registrar429()`), así que su única línea —429 a las 9 requests el 19-08-2026— parecía decir
+que el límite diario era ridículamente bajo, y no había ninguna cota inferior con la cual
+contrastarla: era `null` estructuralmente. El 20-08-2026 se midió de nuevo: **83 requests en un día,
+0 códigos 429**. El 429 del 19-08 fue un episodio, no el límite. `cerrarDiasPendientes()`
+(`src/lib/cuota.ts`) ahora cierra también los días sin 429, así que `npm run cuota` puede converger.
+
+Aun así, la corrida ya no depende de que la cuota alcance: los errores de cuota no se confunden con
+una variante rota, y **las categorías que no se alcanzaron a barrer se arrastran del índice** hacia
+la página, marcadas *sin re-verificar hoy*. `docs/index.html` se publica siempre, salvo que ninguna
+consulta haya llegado a la API. La regla anterior era todo-o-nada, y su efecto real era una página
+congelada con oportunidades ya cerradas y sin ningún aviso.
 
 ## Plan de crecimiento (`PLAN-VOLUMEN.md`)
 

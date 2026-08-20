@@ -50,6 +50,11 @@ const PATRONES_ACREDITACION: { patron: RegExp; etiqueta: string }[] = [
   { patron: /canal\s+oficial/i, etiqueta: "canal_oficial" },
   { patron: /carta\s+(?:del\s+)?fabricante/i, etiqueta: "carta_fabricante" },
   { patron: /proveedor\s+autorizado|carta\s+vigente\s+que\s+acredite/i, etiqueta: "distribuidor_autorizado" },
+  // Las Compras Ágiles de capacitación suelen exigir ser OTEC registrada en SENCE. Se detecta para
+  // que la exigencia aparezca en la tarjeta; NO está en `acreditaciones_conocidas_faltantes` de las
+  // categorías de cursos porque no está confirmado si KeepSync lo es — declararlo ahí haría que el
+  // calificador las descarte solas, y eso es una decisión del usuario, no un supuesto del agente.
+  { patron: /\botec\b|organismo\s+t[eé]cnico\s+de\s+capacitaci[oó]n|\bsence\b/i, etiqueta: "otec_sence" },
 ];
 
 /** Etiquetas de acreditación exigidas por el texto (deduplicadas), en el mismo vocabulario que `acreditaciones_conocidas_faltantes`. */

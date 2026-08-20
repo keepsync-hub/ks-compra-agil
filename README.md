@@ -44,8 +44,8 @@ cotizar, pero cada PDF/PPTX generado queda marcado BORRADOR hasta que se confirm
 
 | Comando | Qué hace |
 |---|---|
-| `npm run keywords [-- agregar <categoria> "<frase>" \| quitar "<frase>"]` | Muestra o edita las palabras que busca el radar de Compra Ágil. Las frases van a `config/categorias-extra.json` y la corrida siguiente las usa como variante `q` y como verificación local, sin tocar las regex de `categorias.json`. Equivalente por consola del formulario de `docs/index.html`. Cada frase en una categoría activa suma un request por corrida. |
-| `npm run radar` | Busca Compras Ágiles "Claude" abiertas, extrae condiciones, detecta recompradores, baja los adjuntos y **publica `docs/index.html`** (oportunidades + palabras clave). Si la cuota diaria se agota a mitad, sigue con la ficha reducida del listado en vez de abortar. Solo lectura. |
+| `npm run keywords [-- agregar <categoria> "<frase>" \| quitar "<frase>"]` | Muestra o edita las palabras que busca el radar de Compra Ágil. Las frases van a `config/categorias-extra.json` y la corrida siguiente las usa como variante `q` y como verificación local, sin tocar las regex de `categorias.json`. Equivalente por consola del formulario de `docs/index.html`. Cada frase en una categoría activa suma al menos un request por corrida. Rechaza frases con la palabra suelta "de" (la API responde 500 a cualquier `q` que la incluya). Una frase agregada amplía el descubrimiento y la mención, pero **no** exime del `patron_requerido` ni del `patron_excluyente` de su categoría. |
+| `npm run radar [-- --solo=<ids> \| --sondeo \| --q="<frase>"]` | Busca las Compras Ágiles abiertas de las **cinco categorías activas** (licencias Claude/Anthropic; asesoría y adopción de IA; cursos de IA; cursos de Power BI/Tableau; cursos de automatización n8n/Make/Zapier/Power Automate), extrae condiciones, detecta recompradores, baja los adjuntos y **publica `docs/index.html`** (oportunidades + palabras clave). Consulta la **unión** de las variantes de todas las categorías —no una vuelta por categoría— y pide **un solo detalle por código**, con el que clasifica la compra contra todas. Si la cuota se agota, sigue con la ficha reducida del listado, y lo que no alcanzó a barrer lo **arrastra del índice** marcado *sin re-verificar hoy* en vez de dejar la página congelada. `--solo` limita las categorías (las demás se arrastran igual); `--sondeo` es un dry-run de 1 request por consulta que imprime volumen y precisión sin pedir detalles ni escribir en `docs/`, y deja `output/sondeo-variantes.md`. Solo lectura. |
 | `npm run informe` | Regenera `output/informe-nicho-claude.md` con el barrido histórico completo (tasa de fracaso, motivos, recompradores). |
 | `npm run digest` | **Cero requests.** Prioriza las oportunidades del índice ya en caché (`data/<codigo>/detalle.json`, dejado por el radar): clasifica cada una en *Ofertar hoy* / *Revisar* / *Descartado*, calcula ventanas de republicación de los próximos 3 días, métricas de mercado por categoría (monto p25/mediana/p75, competencia, recompradores, motivos de fracaso) y **perfil por organismo comprador** (procesos, tasa de fracaso, monto mediano, último fracaso clasificado) para los que ya aparecen 2+ veces en el índice — el equivalente, con datos propios, a los "perfiles de comprador" que venden plataformas como Licify. Escribe `output/digest-ultimo.md` y anexa cada calificación a `historico/calificaciones.jsonl`. El score es un **orden de revisión sugerido**, nunca una probabilidad de ganar (cero ofertas enviadas todavía) — ver `src/lib/calificador.ts` y PLAN-VOLUMEN.md, Fase 4. |
 | `npm run cotizar -- <codigo>` | Genera la cotización (`.pptx` fuente + `.pdf` publicable) para una compra específica, validando el tope. No envía nada. |
@@ -167,6 +167,16 @@ detectadas en la última corrida.
   de 47 casos), tratar las métricas como orientativas — el digest lo dice explícitamente.
 - **Radar e informe del nicho: funcionando de punta a punta contra la API real** — encuentra las
   oportunidades abiertas reales y reproduce la tasa de fracaso medida en `PLAN.md` (~79-80%).
+- **Radar multi-nicho, verificado en producción el 2026-08-20**: con las cinco categorías activas,
+  11 consultas únicas trajeron 21 códigos, de los que 5 pasaron el filtro (3 licencias Claude, 1
+  curso de Power BI, 1 capacitación en IA). Lo medido ese día, que condicionó el diseño: el `q` de
+  la API **hace OR de los tokens, no busca la frase** (`"Claude Pro"` devolvía 34 resultados
+  dominados por "Pro": CANVA PRO, DRONE DJI MINI 5 PRO, PRO-RETENCION), así que las variantes
+  multi-palabra se eliminaron; `n8n`, `Zapier` y `Make.com` devuelven 0 resultados hoy (ese mercado
+  todavía no existe en Compra Ágil, pero cuestan 1 request y son la única puerta si aparece); y el
+  `patron_requerido` de `ia-asesoria` se afinó con un falso positivo real —una compra de licencias
+  Claude entraba como "asesoría" porque el catálogo del plan dice "habilitación anticipada de
+  nuevas funcionalidades"—. 83 requests ese día, 0 códigos 429.
 - **Cotización (`cotizar.ts`): funcionando de punta a punta**, con la identidad real de KeepSync
   ya cargada. Genera `.pptx` (fuente editable) y `.pdf` (artefacto final a publicar/enviar,
   `archivo_publicable` en `cotizacion-resumen.json`). El PDF se renderiza con Chromium/Playwright

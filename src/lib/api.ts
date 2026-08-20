@@ -217,9 +217,37 @@ export interface BuscarCompraAgilParams {
 
 const PAGE_SIZE_MAX = 50; // documentado en PLAN.md; hoy solo había piso, no techo — un caller podía pedir más de lo que la API sirve.
 
-interface Paginacion {
+export interface Paginacion {
   total_paginas?: number;
   total_resultados?: number;
+}
+
+export interface PaginaCompraAgil {
+  items: CompraAgilListItem[];
+  paginacion?: Paginacion;
+}
+
+/**
+ * Una sola página del listado. Separada de `buscarCompraAgil` porque el modo `--sondeo` del radar
+ * necesita exactamente esto: una request por variante, y el `total_resultados` que el bucle de
+ * paginación consume y descarta — que es el dato que dice si una `q` es demasiado genérica antes
+ * de gastar la cuota de una corrida entera en ella.
+ */
+export async function buscarCompraAgilPagina(params: {
+  q: string;
+  estado?: EstadoCompraAgil;
+  tamanoPagina?: number;
+  numeroPagina?: number;
+}): Promise<PaginaCompraAgil> {
+  const tamanoPagina = Math.min(Math.max(params.tamanoPagina ?? 50, PAGE_SIZE_MIN), PAGE_SIZE_MAX);
+  const qs = new URLSearchParams({
+    q: params.q,
+    tamano_pagina: String(tamanoPagina),
+    numero_pagina: String(params.numeroPagina ?? 1),
+  });
+  if (params.estado) qs.set("estado", params.estado);
+  const payload = await apiGet<{ items: CompraAgilListItem[]; paginacion?: Paginacion }>(`/v2/compra-agil?${qs.toString()}`);
+  return { items: payload.items ?? [], paginacion: payload.paginacion };
 }
 
 /** Trae todas las páginas para una consulta `q` dada, deduplicando no es responsabilidad de esta función. */
@@ -230,13 +258,12 @@ export async function buscarCompraAgil(params: BuscarCompraAgilParams): Promise<
   // Guardrail de seguridad: no dar más vueltas por consulta aunque la API pagine mal.
   const topePaginas = params.maxPaginas ?? 20;
   for (; pagina <= topePaginas; pagina++) {
-    const qs = new URLSearchParams({
+    const payload = await buscarCompraAgilPagina({
       q: params.q,
-      tamano_pagina: String(tamanoPagina),
-      numero_pagina: String(pagina),
+      estado: params.estado,
+      tamanoPagina,
+      numeroPagina: pagina,
     });
-    if (params.estado) qs.set("estado", params.estado);
-    const payload = await apiGet<{ items: CompraAgilListItem[]; paginacion?: Paginacion }>(`/v2/compra-agil?${qs.toString()}`);
     const pageItems = payload.items ?? [];
     items.push(...pageItems);
     // `payload.paginacion.total_paginas` (verificado contra producción el 18-08-2026, ver

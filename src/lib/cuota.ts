@@ -8,7 +8,7 @@
  * (`configurarCuota`) y `contarRequest()` corta antes de superarlo, para que un script nuevo
  * (indexar, informe) no pueda comerse el presupuesto del radar diario.
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync, appendFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR } from "./config.js";
 import { formatearEnChile } from "./tiempo.js";
@@ -81,6 +81,35 @@ export function configurarCuota(opts: { script: string; maxRequests: number }): 
   scriptActual = opts.script;
   maxRequestsActual = opts.maxRequests;
   requestsEnEstaCorrida = 0;
+  cerrarDiasPendientes();
+}
+
+/**
+ * Cierra en el rollup versionado los días ya terminados que hasta ahora solo vivían en
+ * `data/cuota/`, que es gitignored.
+ *
+ * Sin esto, `anexarRollup()` se llamaba únicamente desde `registrar429()`: el rollup registraba
+ * solo los días CON 429, y `resumenCuota().cota_inferior` —el máximo de requests de un día que NO
+ * llegó al límite, que es justamente la cota que sirve para decidir cuántas categorías caben en
+ * una corrida— era `null` para siempre. La medición pasiva que describe la cabecera de este
+ * archivo nunca podía converger por un lado.
+ */
+export function cerrarDiasPendientes(): void {
+  if (!existsSync(CUOTA_DIR)) return;
+  const hoy = fechaChileHoy();
+  const yaEnRollup = new Set(leerRollup().map((d) => d.fecha));
+  for (const archivo of readdirSync(CUOTA_DIR).sort()) {
+    if (!archivo.endsWith(".json")) continue;
+    const fecha = archivo.slice(0, -".json".length);
+    // El día de hoy todavía puede sumar requests: se cierra recién mañana.
+    if (fecha >= hoy || yaEnRollup.has(fecha)) continue;
+    try {
+      const l = JSON.parse(readFileSync(path.join(CUOTA_DIR, archivo), "utf-8")) as LedgerDia;
+      if (l.fecha === fecha) anexarRollup(l);
+    } catch {
+      // Un ledger viejo corrupto no puede impedir que arranque el radar de hoy.
+    }
+  }
 }
 
 /** La llama `apiGet` antes de cada fetch. Lanza `CuotaLocalAgotadaError` si supera el presupuesto de esta corrida. */

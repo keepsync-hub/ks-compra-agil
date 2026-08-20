@@ -5,20 +5,65 @@ import type { CompraAgilListItem, CompraAgilDetalle, ProductoSolicitado } from "
 
 export type PricingModo = "planes_usd" | "manual";
 
+/** El mismo default que `buscarCompraAgil`: una categoría que no declara nada se comporta igual que antes. */
+const MAX_PAGINAS_POR_VARIANTE_DEFAULT = 20;
+
 export interface CategoriaNegocio {
   id: string;
   nombre: string;
+  /** Etiqueta corta para el chip de categoría de cada tarjeta en docs/index.html. Default: `nombre`. */
+  nombre_corto?: string;
   activa: boolean;
   variantes_q: string[];
   verificacion_regex: string;
   verificacion_flags?: string;
+  /**
+   * Segunda puerta del filtro: además de mencionar la materia (`verificacion_regex`), el texto
+   * tiene que hablar del SERVICIO que se busca — "curso"/"capacitación" para las categorías de
+   * formación, "asesoría"/"implementación" para las de servicio profesional.
+   *
+   * Se evalúa sobre el texto COMPLETO concatenado de la ficha, no campo por campo como
+   * `mencionaCategoria`: la co-ocurrencia que interesa ("curso" + "Power BI") casi siempre vive en
+   * campos distintos —el nombre dice "Curso de capacitación" y el producto dice "Power BI"—, así
+   * que ninguna regex sobre un campo suelto puede expresarla.
+   */
+  patron_requerido?: string;
+  /**
+   * Tercera puerta: contexto en el que la categoría acierta la palabra pero se equivoca de rubro,
+   * evaluado también sobre el texto completo. Mismo mecanismo que `patron_excluyente` de
+   * config/array-servicios.json. Se agrega **solo con un caso real que lo motive**, citado en
+   * `_patron_excluyente_nota` — un excluyente conjeturado descarta oportunidades verdaderas sin
+   * que nadie se entere.
+   */
+  patron_excluyente?: string;
+  /** Tope de páginas por variante `q`. Default: el de `buscarCompraAgil` (20). */
+  max_paginas_por_variante?: number;
+  /** Barrer también `estado=proveedor_seleccionado` (1 request extra por corrida). Default: true. */
+  barrer_adjudicaciones?: boolean;
   pricing: { modo: PricingModo };
   presupuesto_requests_por_corrida: number;
   acreditaciones_conocidas_faltantes: string[];
 }
 
-export interface CategoriaCompilada extends Omit<CategoriaNegocio, "verificacion_regex" | "verificacion_flags"> {
+export interface CategoriaCompilada
+  extends Omit<
+    CategoriaNegocio,
+    | "verificacion_regex"
+    | "verificacion_flags"
+    | "patron_requerido"
+    | "patron_excluyente"
+    | "nombre_corto"
+    | "max_paginas_por_variante"
+    | "barrer_adjudicaciones"
+  > {
   regex: RegExp;
+  /** `patron_requerido` compilado, o `null` si la categoría no exige nada más que la mención. */
+  requerido: RegExp | null;
+  /** `patron_excluyente` compilado, o `null`. */
+  excluyente: RegExp | null;
+  nombreCorto: string;
+  maxPaginasPorVariante: number;
+  barrerAdjudicaciones: boolean;
   /**
    * Frases agregadas a mano para esta categoría (`config/categorias-extra.json`). Se usan en los
    * dos lados del embudo: como variante `q` contra la API (descubrimiento) y como verificación
@@ -52,12 +97,41 @@ function normalizar(texto: string): string {
     .trim();
 }
 
+/**
+ * La palabra suelta "de" en un `q` es un quirk verificado del endpoint `/v2/compra-agil`: responde
+ * `500 ERROR_INTERNO` de forma reproducible, no es un fallo transitorio de gateway (ver
+ * `.claude/skills/array-compras-agiles-radar/SKILL.md`). Se valida al compilar y no al consultar
+ * para que el error salte al escribir la config, no a mitad de una corrida que ya gastó cuota.
+ */
+const DE_SUELTO = /(^|\s)de(\s|$)/i;
+
+function compilarPatron(id: string, campo: string, patron: string | undefined, flags: string): RegExp | null {
+  if (patron == null || patron === "") return null;
+  try {
+    return new RegExp(patron, flags);
+  } catch (err) {
+    throw new Error(
+      `config/categorias.json: regex inválida en "${campo}" de la categoría "${id}": ${(err as Error).message}`,
+    );
+  }
+}
+
 function compilar(cat: CategoriaNegocio, extras: TerminoExtra[]): CategoriaCompilada {
   if (!/^[a-z0-9-]+$/.test(cat.id)) {
     throw new Error(
       `config/categorias.json: id inválido "${cat.id}" — debe cumplir /^[a-z0-9-]+$/ (se usa como componente ` +
         `de ruta en data/ y output/).`,
     );
+  }
+  for (const variante of cat.variantes_q) {
+    if (DE_SUELTO.test(variante)) {
+      throw new Error(
+        `config/categorias.json: la variante "${variante}" de la categoría "${cat.id}" contiene la palabra ` +
+          `suelta "de". Quirk verificado del endpoint /v2/compra-agil: cualquier \`q\` con "de" suelto ` +
+          `responde 500 ERROR_INTERNO de forma reproducible. El buscador es laxo, así que quitarla encuentra ` +
+          `lo mismo ("Oficina Partes" trae "Oficina de Partes").`,
+      );
+    }
   }
   const flags = cat.verificacion_flags ?? "i";
   // Con el flag "g" (o "y"), RegExp.test() conserva `lastIndex` entre llamadas: en un bucle que
@@ -70,14 +144,30 @@ function compilar(cat: CategoriaNegocio, extras: TerminoExtra[]): CategoriaCompi
         `Usar solo "i" o dejar vacío.`,
     );
   }
-  let regex: RegExp;
-  try {
-    regex = new RegExp(cat.verificacion_regex, flags);
-  } catch (err) {
-    throw new Error(`config/categorias.json: regex inválida en categoría "${cat.id}": ${(err as Error).message}`);
+  const regex = compilarPatron(cat.id, "verificacion_regex", cat.verificacion_regex, flags);
+  if (!regex) {
+    throw new Error(`config/categorias.json: la categoría "${cat.id}" no tiene verificacion_regex.`);
   }
-  const { verificacion_regex: _vr, verificacion_flags: _vf, ...resto } = cat;
-  return { ...resto, regex, extra: extras.filter((t) => t.categoria === cat.id).map((t) => t.termino.trim()) };
+  const {
+    verificacion_regex: _vr,
+    verificacion_flags: _vf,
+    patron_requerido: _pr,
+    patron_excluyente: _pe,
+    nombre_corto: _nc,
+    max_paginas_por_variante: _mp,
+    barrer_adjudicaciones: _ba,
+    ...resto
+  } = cat;
+  return {
+    ...resto,
+    regex,
+    requerido: compilarPatron(cat.id, "patron_requerido", cat.patron_requerido, flags),
+    excluyente: compilarPatron(cat.id, "patron_excluyente", cat.patron_excluyente, flags),
+    nombreCorto: cat.nombre_corto ?? cat.nombre,
+    maxPaginasPorVariante: cat.max_paginas_por_variante ?? MAX_PAGINAS_POR_VARIANTE_DEFAULT,
+    barrerAdjudicaciones: cat.barrer_adjudicaciones ?? true,
+    extra: extras.filter((t) => t.categoria === cat.id).map((t) => t.termino.trim()),
+  };
 }
 
 export const CATEGORIAS_EXTRA_PATH_REL = "config/categorias-extra.json";
@@ -159,4 +249,47 @@ export function detalleMencionaCategoria(
 /** Firma de conveniencia sobre el detalle completo (evita repetir `.descripcion`/`.productos_solicitados` en cada caller). */
 export function detalleCompraAgilMencionaCategoria(cat: CategoriaCompilada, detalle: CompraAgilDetalle): boolean {
   return detalleMencionaCategoria(cat, detalle.descripcion, detalle.productos_solicitados);
+}
+
+/**
+ * Texto completo de la ficha, que es sobre lo que se evalúan `requerido` y `excluyente`.
+ *
+ * Gemela de la función homónima de `src/lib/array-servicios.ts`, y no compartida a propósito: son
+ * dos configs con dos formas distintas de categoría, y el repo mantiene los dos dominios
+ * deliberadamente sin acoplar.
+ */
+export function textoCompletoDetalle(
+  detalle: Pick<CompraAgilDetalle, "nombre" | "descripcion" | "productos_solicitados">,
+): string {
+  return [
+    detalle.nombre ?? "",
+    detalle.descripcion ?? "",
+    ...(detalle.productos_solicitados ?? []).flatMap((p) => [p.nombre ?? "", p.descripcion ?? ""]),
+  ].join("\n");
+}
+
+/**
+ * Por qué no alcanza con `true`/`false`: un descarte por `requerido`/`excluyente` no es lo mismo
+ * que "no menciona nada". El primero hay que reportarlo con el código concreto (un excluyente
+ * demasiado ancho se ve como oportunidades que desaparecen sin explicación); el segundo es ruido
+ * esperable del `q` laxo y no vale la pena listarlo.
+ */
+export type ResultadoConfirmacion = "confirmada" | "no-menciona" | "falta-requerido" | "excluida";
+
+/** Las tres puertas del filtro, en orden, sobre un texto ya concatenado. */
+export function confirmarCategoriaEnTexto(cat: CategoriaCompilada, texto: string): ResultadoConfirmacion {
+  if (!mencionaCategoria(cat, texto)) return "no-menciona";
+  if (cat.requerido && !cat.requerido.test(texto)) return "falta-requerido";
+  if (cat.excluyente && cat.excluyente.test(texto)) return "excluida";
+  return "confirmada";
+}
+
+/** Nivel 1 del embudo: solo el `nombre` del listado, que es lo único que se tiene sin pagar el detalle. */
+export function itemConfirmaCategoria(cat: CategoriaCompilada, item: CompraAgilListItem): ResultadoConfirmacion {
+  return confirmarCategoriaEnTexto(cat, item.nombre ?? "");
+}
+
+/** Nivel 2 del embudo: el texto completo de la ficha (nombre + descripción + productos). */
+export function detalleConfirmaCategoria(cat: CategoriaCompilada, detalle: CompraAgilDetalle): ResultadoConfirmacion {
+  return confirmarCategoriaEnTexto(cat, textoCompletoDetalle(detalle));
 }

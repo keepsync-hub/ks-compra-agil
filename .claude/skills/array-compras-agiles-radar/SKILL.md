@@ -50,6 +50,11 @@ npm run array-radar
   `compra-agil-ofertar` (no hay oferta que enviar).
 - La cuota de la API es diaria por ticket, compartida con el radar de Claude — si responde 429,
   el script se detiene y muestra el `Retry-After`.
+- **Nota cruzada con el radar principal**: desde el 2026-08-20, `npm run radar` (nicho propio de
+  KeepSync) **sí busca cursos y capacitaciones** — tiene categorías dedicadas a eso. Este radar los
+  sigue excluyendo a propósito (`patron_excluyente` de `pmo`), porque acá lo que se busca es una
+  *plataforma* de Array, no formación sobre ella. Los dos excluyentes dicen cosas opuestas y ambos
+  están bien: son nichos distintos. No "corregir" uno para que se parezca al otro.
 - Los patrones de categoría son intencionalmente específicos (nombres de sistema/plataforma tal
   como Array los describe en array.cl) para evitar ruido de términos genéricos como
   "automatización" o "gestión" solos.

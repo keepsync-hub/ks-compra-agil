@@ -9,7 +9,12 @@
  * como variante `q` contra la API (descubrimiento) y como verificación local del texto. Es la misma
  * vía que ofrece el formulario de `docs/index.html`, para quien prefiere no pasar por el navegador.
  *
- * Ojo con la cuota: cada frase agregada a una categoría ACTIVA suma un request por corrida.
+ * Ojo con la cuota: cada frase agregada a una categoría ACTIVA suma un request por corrida (o
+ * varios, si esa categoría declara `max_paginas_por_variante` > 1).
+ *
+ * Una frase agregada amplía el DESCUBRIMIENTO y la MENCIÓN, pero **no exime** del
+ * `patron_requerido` ni del `patron_excluyente` de su categoría: agregar "Looker" hace que el
+ * radar la busque, no que acepte una compra que no es un curso.
  *
  * Lo que este comando NO hace: tocar `categorias.json`. Sus `verificacion_regex` están afinadas
  * contra casos reales y validadas al compilar; ampliarlas es trabajo de código, no de CLI.
@@ -41,6 +46,8 @@ function listar(): void {
     console.log(`  ${c.id} — ${c.nombre}${c.activa ? "" : "   [inactiva: no se consulta]"}`);
     console.log(`    variantes q:        ${variantesDeBusqueda(c).join(" · ")}`);
     console.log(`    verificación local: ${c.regex}`);
+    if (c.requerido) console.log(`    además exige:       ${c.requerido}`);
+    if (c.excluyente) console.log(`    descarta si dice:   ${c.excluyente}`);
     if (c.extra.length > 0) console.log(`    agregadas a mano:   ${c.extra.join(" · ")}`);
     console.log();
   }
@@ -63,6 +70,18 @@ function agregar(categoria: string, termino: string): void {
   const limpio = termino.trim();
   if (limpio.length < 3) {
     console.error(`"${limpio}" es demasiado corto: una palabra clave de 1 o 2 caracteres pesca cualquier cosa.`);
+    process.exitCode = 1;
+    return;
+  }
+  // Una frase agregada acá se convierte en un `q` contra la API, y un `q` con la palabra suelta
+  // "de" responde 500 ERROR_INTERNO de forma reproducible. Sin esta validación, agregarla rompería
+  // la corrida siguiente sin que quede claro por qué.
+  if (/(^|\s)de(\s|$)/i.test(limpio)) {
+    console.error(
+      `"${limpio}" tiene la palabra suelta "de", y el endpoint /v2/compra-agil responde 500 a cualquier ` +
+        `consulta que la incluya. Escribirla sin ella encuentra lo mismo: el buscador de la API es laxo ` +
+        `("Oficina Partes" trae "Oficina de Partes").`,
+    );
     process.exitCode = 1;
     return;
   }
