@@ -150,6 +150,34 @@ vez de dar la decisión por completa. Puestos esos archivos en `licitaciones/dat
 Página de estado equivalente: `docs/licitaciones.html`, encabezada por las licitaciones abiertas
 detectadas en la última corrida.
 
+## Estudio de mercado del universo completo
+
+Tres comandos, y solo el primero gasta cuota:
+
+```bash
+npm run mercado -- --forzar        # mide (5 etapas por valor decreciente, ~110 requests)
+npm run estudio                    # analiza y publica (0 requests)
+npm run criterios                  # propone criterios nuevos (0 requests)
+```
+
+`npm run mercado` mide en cinco etapas ordenadas de mayor a menor valor, para que un corte por cuota
+se lleve siempre lo menos importante: **A** tamaño del universo por estado, **B** dimensionamiento de
+~40 términos (1 request c/u), **C** muestra sistemática del universo sin `q` (el estrato anti-sesgo),
+**D** desenlaces de la lista corta (tasa de éxito real, sobre estados terminales), **E** profundidad
+y calibración. Cada etapa escribe apenas termina, así que un 429 degrada el informe en vez de
+perderlo, y lo no medido se registra como `null` — nunca como 0. Flags: `--etapas=bcde`,
+`--max-requests=N`, `--muestra=N`.
+
+`npm run estudio` produce `output/estudio-mercado.md`, `output/estudio-mercado.json` y
+`docs/estudio-mercado.html`. `npm run estudio -- --muestra=20` imprime compras concretas por familia
+para auditar las regex a mano, que es la única forma real de ver falsos negativos sin fixtures.
+
+Tres correcciones metodológicas que salieron de medir y que conviene no re-descubrir: `tamano_pagina`
+va en **25** (con 50 la API da 504 tres de cada cuatro veces); `total_resultados` de una `q` es una
+**cota superior contaminada** porque el buscador entra en la descripción, y hay que corregirla por la
+precisión medida sobre los 10 nombres de muestra; y la API **topea** ese total en 10.000, así que los
+estados terminales son cotas inferiores. Todo está anotado en `CLAUDE.md`.
+
 ## Estado y pendientes
 
 - **Inteligencia de mercado y digest priorizado (`npm run digest`): implementados** — Fases 3 y 4

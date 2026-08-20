@@ -1,0 +1,85 @@
+{
+  "_que_es": "Propuestas de criterios de búsqueda derivadas de output/estudio-mercado.md. Archivo INERTE: ningún script del radar lo carga. Promover una propuesta = copiarla a config/categorias.json con activa: false, y recién ahí empieza el ciclo normal (sondeo → activar).",
+  "_generado_por": "npm run criterios",
+  "_regla_de_admision": "Familia de capa \"fina\" + veredicto servible o por-definir + tamaño corregido ≥ 5 compras abiertas + al menos una variante con precisión medida ≥50%.",
+  "_no_son_ofertables": "Ninguna propuesta habilita una oferta: sin catálogo de costos de servicios de KeepSync no se puede poner precio bajo el tope. Ver config/keepsync-oferta.json → insumos_bloqueantes.",
+  "generado_en": "2026-08-20T16:51:54.074Z",
+  "rechazadas": [
+    {
+      "id": "automatizacion-documental",
+      "motivo": "tamaño corregido ≈1 < umbral 5"
+    }
+  ],
+  "propuestas": [
+    {
+      "id": "datos-ia",
+      "nombre": "Datos, analítica e inteligencia artificial",
+      "nombre_corto": "Datos / IA",
+      "activa": false,
+      "variantes_q": [
+        "inteligencia"
+      ],
+      "_variantes_nota": "Derivadas de la medición del 2026-08-20 y filtradas por precisión ≥50%: inteligencia (9 crudo × 67% ≈ 6). Los términos de la familia que NO pasaron el filtro se descartaron a propósito: una `q` de baja precisión gasta un request por corrida para traer otro rubro.",
+      "verificacion_regex": "\\b(inteligencia\\s+artificial|artificial\\s+intelligence|ia\\s+generativa|machine\\s+learning|aprendizaje\\s+autom[aá]tico|modelos?\\s+de\\s+lenguaje|llm|chatgpt|claude|anthropic|copilot|gemini|power\\s?bi|tableau|qlik|looker|business\\s+intelligence|inteligencia\\s+de\\s+negocios|anal[ií]tica\\s+de\\s+datos|ciencia\\s+de\\s+datos|visualizaci[oó]n\\s+de\\s+datos|gobierno\\s+de\\s+datos|base\\s+de\\s+datos|tableros?\\s+de\\s+control|dashboards?)\\b",
+      "verificacion_flags": "i",
+      "pricing": {
+        "modo": "manual"
+      },
+      "max_paginas_por_variante": 2,
+      "barrer_adjudicaciones": false,
+      "presupuesto_requests_por_corrida": 2,
+      "acreditaciones_conocidas_faltantes": [],
+      "_evidencia_mercado": "Medido el 2026-08-20: datos 569 crudo × 10% precisión ≈ 57 (el término suelto es puro ruido administrativo — \"complete todos los datos\"); inteligencia 9 × 67% ≈ 6; analitica 1; chatbot 0. La muestra de `q=curso` trae dos casos reales: \"CURSO DE GOBIERNO DE DATOS EN EL SECTOR PÚBLICO\" y \"LIDERAZGO PÚBLICO CON DATOS E INTELIGENCIA ARTIFICIAL\". · Tamaño corregido de la familia ≈56 compras abiertas.",
+      "_veredicto_keepsync": "servible (A=si, B=si, C=no) · ofertable: NO — falta catálogo de costos de servicios",
+      "_costo_real": "+2 requests por corrida del radar (presupuesto actual de las activas: 42). Ninguna de sus variantes se consulta hoy."
+    },
+    {
+      "id": "capacitacion-ti-datos",
+      "nombre": "Capacitación en TI, datos e IA",
+      "nombre_corto": "Cursos TI / datos / IA",
+      "activa": false,
+      "variantes_q": [
+        "curso",
+        "capacitacion",
+        "inteligencia"
+      ],
+      "_variantes_nota": "Derivadas de la medición del 2026-08-20 y filtradas por precisión ≥50%: curso (126 crudo × 80% ≈ 101); capacitacion (53 crudo × 80% ≈ 42); inteligencia (9 crudo × 67% ≈ 6). Los términos de la familia que NO pasaron el filtro se descartaron a propósito: una `q` de baja precisión gasta un request por corrida para traer otro rubro.",
+      "verificacion_regex": "\\b(inteligencia\\s+artificial|ia\\s+generativa|machine\\s+learning|chatgpt|claude|copilot|power\\s?bi|tableau|excel|business\\s+intelligence|anal[ií]tica\\s+de\\s+datos|gobierno\\s+de\\s+datos|ciencia\\s+de\\s+datos|programaci[oó]n|python|ofim[aá]tica|inform[aá]tic[ao]|digital(?:es)?|transformaci[oó]n\\s+digital|ciberseguridad|n8n|zapier|power\\s+automate|automatizaci[oó]n)\\b",
+      "patron_requerido": "\\b(cursos?|capacitaci[oó]n(?:es)?|capacitar|taller(?:es)?|diplomado|seminario|webinar|bootcamp|entrenamiento|formaci[oó]n|relator(?:es|[ií]a)?|instructor(?:es|a)?|docente|clases?|charlas?)\\b",
+      "verificacion_flags": "i",
+      "pricing": {
+        "modo": "manual"
+      },
+      "max_paginas_por_variante": 2,
+      "barrer_adjudicaciones": false,
+      "presupuesto_requests_por_corrida": 6,
+      "acreditaciones_conocidas_faltantes": [],
+      "_evidencia_mercado": "Es la intersección de las dos familias más relevantes: capacitación (≈103+101+42 según términos) e IA/datos. Casos reales en las muestras del 2026-08-20: \"CURSO DE GOBIERNO DE DATOS EN EL SECTOR PÚBLICO\" y \"CONTRATACIÓN DEL CURSO LIDERAZGO PÚBLICO CON DATOS E INTELIGENCIA ARTIFICIAL\". · Tamaño corregido de la familia ≈101 compras abiertas.",
+      "_veredicto_keepsync": "por-definir (A=parcial, B=si, C=no-se-sabe) · ofertable: NO — falta catálogo de costos de servicios",
+      "_costo_real": "+6 requests por corrida del radar (presupuesto actual de las activas: 42). Ninguna de sus variantes se consulta hoy."
+    },
+    {
+      "id": "asesoria-consultoria",
+      "nombre": "Asesoría y consultoría profesional",
+      "nombre_corto": "Asesoría",
+      "activa": false,
+      "variantes_q": [
+        "asesoria",
+        "consultoria"
+      ],
+      "_variantes_nota": "Derivadas de la medición del 2026-08-20 y filtradas por precisión ≥50%: asesoria (6 crudo × 100% ≈ 6); consultoria (2 crudo × 100% ≈ 2). Los términos de la familia que NO pasaron el filtro se descartaron a propósito: una `q` de baja precisión gasta un request por corrida para traer otro rubro.",
+      "verificacion_regex": "\\b(asesor[ií]as?|asesorar|consultor[ií]as?|acompa[nñ]amiento\\s+t[eé]cnico|servicios?\\s+profesionales?|diagn[oó]stico\\s+(?:organizacional|institucional|t[eé]cnico)|hoja\\s+de\\s+ruta|estudio\\s+t[eé]cnico|levantamiento\\s+de\\s+procesos?)\\b",
+      "verificacion_flags": "i",
+      "pricing": {
+        "modo": "manual"
+      },
+      "max_paginas_por_variante": 2,
+      "barrer_adjudicaciones": false,
+      "presupuesto_requests_por_corrida": 4,
+      "acreditaciones_conocidas_faltantes": [],
+      "_evidencia_mercado": "Medido el 2026-08-20: asesoria 7 crudo × 100% precisión ≈ 7; consultoria 2 × 100% ≈ 2. Volumen chico pero precisión perfecta — a diferencia de `desarrollo` o `datos`, acá la palabra sí identifica el rubro. · Tamaño corregido de la familia ≈6 compras abiertas.",
+      "_veredicto_keepsync": "servible (A=si, B=si, C=no) · ofertable: NO — falta catálogo de costos de servicios",
+      "_costo_real": "+4 requests por corrida del radar (presupuesto actual de las activas: 42). Ninguna de sus variantes se consulta hoy."
+    }
+  ]
+}

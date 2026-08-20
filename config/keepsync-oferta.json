@@ -1,0 +1,226 @@
+{
+  "_que_es": "Lo que KeepSync declara públicamente que entrega, y el JUICIO sobre qué familias del estudio de mercado puede servir. NINGUNA cifra de este archivo sale de una medición del mercado — las cifras están en output/estudio-mercado.md y se citan desde acá, no se recalculan.",
+  "_quien_firma": "Los veredictos llevan `quien` y `fecha`. En esta primera versión los emitió el agente sobre la evidencia medida, y quedan PENDIENTES DE APROBACIÓN del usuario: son una propuesta, no una decisión tomada.",
+  "catalogo": {
+    "fuente_url": "https://keepsync.ai/services.json",
+    "fecha_lectura": "2026-08-20",
+    "_nota_fuente": "Congelado a propósito: `npm run estudio` es un script de 0 requests y offline. Re-leer el catálogo en cada corrida metería una dependencia de red en el análisis. Para refrescarlo, actualizar este bloque a mano y anotar la fecha.",
+    "descripcion": "KeepSync diseña y opera asistentes de IA dentro de las herramientas que las empresas ya usan, para liberar a los equipos del trabajo repetitivo.",
+    "slogan": "Aumentar · Delegar · Crear",
+    "servicios": [
+      {
+        "id": "comercial-ventas",
+        "nombre": "Comercial y ventas",
+        "descripcion": "Seguimiento de cotizaciones, CRM al día y alertas de oportunidades. Entrega: alertas + CRM al día, cada semana."
+      },
+      {
+        "id": "atencion-clientes",
+        "nombre": "Atención a clientes",
+        "descripcion": "Ordena las solicitudes que entran, responde lo inicial y deriva cada caso a la persona correcta. Entrega: bandeja clasificada y derivada, en minutos."
+      },
+      {
+        "id": "admin-finanzas",
+        "nombre": "Administración y finanzas",
+        "descripcion": "Junta información dispersa, recuerda lo importante y prepara reportes y revisiones. Entrega: reporte consolidado, cada semana."
+      },
+      {
+        "id": "operaciones",
+        "nombre": "Operaciones",
+        "descripcion": "Vigila tareas y pendientes, actualiza estados y entrega el resumen de la semana. Entrega: resumen de pendientes, cada lunes."
+      }
+    ],
+    "metodologia": [
+      "Descubrimiento — 30 minutos, sin costo",
+      "Diseño — el cliente aprueba el alcance antes de empezar",
+      "Despliegue — primer resultado visible en ≤30 días, sobre las herramientas que ya usa",
+      "Operación 24/7 — el cliente ve el resultado, no el proceso"
+    ],
+    "casos": [
+      "Kompu.cl (e-commerce)",
+      "Grupo Arenys (holding/finanzas)",
+      "Castillo Yoma Abogados (legal)"
+    ],
+    "proveedores_ia": [
+      "Anthropic",
+      "Google Gemini",
+      "OpenAI",
+      "Microsoft Copilot"
+    ],
+    "integraciones": [
+      "ERP",
+      "Softland",
+      "correo",
+      "planillas",
+      "CRM"
+    ],
+    "precios_publicos": false,
+    "_lineas_facturables_confirmadas": "PLAN-VOLUMEN.md:205-211 registra como confirmado con el usuario que KeepSync puede facturar cuatro líneas: servicios propios (gestión documental, digitalización, consultoría), reventa Claude, reventa de otras licencias, y desarrollo a medida."
+  },
+  "insumos_bloqueantes": [
+    {
+      "id": "sin-catalogo-de-costos-de-servicios",
+      "activo": true,
+      "confirmado_por_el_usuario": "2026-08-20",
+      "descripcion": "No existe catálogo de costos reales de KeepSync para servicios: ni valor hora de asesoría o relatoría, ni costo por proyecto, ni costo mensual de operación. config/company.json solo modela planes Claude con precio de lista en USD; las cinco categorías de servicio de config/categorias.json declaran pricing.modo=\"manual\" justamente por eso, y licitaciones/config/company.json.example tiene el molde con sus 6 ítems en costo_clp: 0.",
+      "que_bloquea": "Sin esto una familia puede declararse SERVIBLE pero nunca OFERTABLE: no se puede saber si cabe bajo el tope de la compra ni si deja margen. Es el mismo tipo de insumo que mantiene marcadas PRELIMINAR a todas las cotizaciones de Array."
+    },
+    {
+      "id": "otec-sence-sin-confirmar",
+      "activo": true,
+      "descripcion": "No está confirmado si KeepSync es OTEC registrada en SENCE. src/lib/condiciones.ts:53-58 detecta la exigencia en las fichas pero deliberadamente NO la declara faltante, porque asumirlo haría que el calificador descarte solas todas las compras de capacitación — y eso es decisión del usuario, no supuesto del agente.",
+      "que_bloquea": "Condiciona toda la familia de capacitación, que es donde el estudio mide el mayor volumen que KeepSync toca."
+    }
+  ],
+  "criterios": [
+    {
+      "id": "A",
+      "pregunta": "¿Hay un servicio del catálogo público de KeepSync que cubra el objeto de la familia?",
+      "fuente": "keepsync.ai/services.json",
+      "valores": [
+        "si",
+        "parcial",
+        "no"
+      ]
+    },
+    {
+      "id": "B",
+      "pregunta": "¿Se entrega remoto, en ≤30 días, sin activo físico ni presencia regional?",
+      "fuente": "metodología declarada (4 pasos, despliegue ≤30 días)",
+      "valores": [
+        "si",
+        "no",
+        "no-se-sabe"
+      ]
+    },
+    {
+      "id": "C",
+      "pregunta": "¿Exige acreditación, canal o representación que KeepSync no tiene?",
+      "fuente": "acreditaciones detectadas en las fichas (src/lib/condiciones.ts)",
+      "valores": [
+        "si",
+        "no",
+        "no-se-sabe"
+      ]
+    },
+    {
+      "id": "D",
+      "pregunta": "¿Hay costo conocido para fijar precio bajo el tope?",
+      "fuente": "config/company.json",
+      "valores": [
+        "si",
+        "no"
+      ]
+    }
+  ],
+  "_regla": "servible = A∈{si,parcial} ∧ B=si ∧ C=no. ofertable = servible ∧ D=si. Con el insumo bloqueante activo, D=no para todas → ninguna familia es ofertable hoy.",
+  "veredictos": [
+    {
+      "familia_id": "asesoria-consultoria",
+      "A": "si",
+      "A_evidencia": "Los cuatro servicios del catálogo (comercial y ventas, atención a clientes, administración y finanzas, operaciones) son exactamente asesoría + implementación + operación de procesos.",
+      "B": "si",
+      "B_evidencia": "Metodología declarada: descubrimiento remoto de 30 min, despliegue en ≤30 días sobre las herramientas que el cliente ya usa. Sin activo físico ni presencia regional.",
+      "C": "no",
+      "C_evidencia": "No se detectaron acreditaciones exigidas en las fichas de esta familia.",
+      "D": "no",
+      "D_evidencia": "insumo bloqueante sin-catalogo-de-costos-de-servicios",
+      "veredicto": "servible",
+      "ofertable": false,
+      "quien": "agente (pendiente de aprobación del usuario)",
+      "fecha": "2026-08-20"
+    },
+    {
+      "familia_id": "datos-ia",
+      "A": "si",
+      "A_evidencia": "«Administración y finanzas: junta la información dispersa y prepara reportes» y «Operaciones: resúmenes semanales» son analítica y consolidación de datos operada con IA — el objeto de esta familia.",
+      "B": "si",
+      "B_evidencia": "Mismo despliegue remoto ≤30 días. Proveedores de IA declarados: Anthropic, Gemini, OpenAI, Copilot.",
+      "C": "no",
+      "C_evidencia": "Sin acreditaciones detectadas para servicios de analítica.",
+      "D": "no",
+      "D_evidencia": "insumo bloqueante sin-catalogo-de-costos-de-servicios",
+      "veredicto": "servible",
+      "ofertable": false,
+      "quien": "agente (pendiente de aprobación del usuario)",
+      "fecha": "2026-08-20"
+    },
+    {
+      "familia_id": "automatizacion-documental",
+      "A": "si",
+      "A_evidencia": "«Atención a clientes: ordena las solicitudes que entran y deriva cada caso» es automatización de flujo documental; es el corazón de lo que KeepSync vende.",
+      "B": "si",
+      "B_evidencia": "Despliegue remoto ≤30 días sobre herramientas existentes.",
+      "C": "no",
+      "C_evidencia": "Sin acreditaciones detectadas.",
+      "D": "no",
+      "D_evidencia": "insumo bloqueante sin-catalogo-de-costos-de-servicios",
+      "veredicto": "servible",
+      "ofertable": false,
+      "quien": "agente (pendiente de aprobación del usuario)",
+      "fecha": "2026-08-20"
+    },
+    {
+      "familia_id": "capacitacion-ti-datos",
+      "A": "parcial",
+      "A_evidencia": "El catálogo público NO lista formación como servicio: lista cuatro servicios gestionados. Pero PLAN-VOLUMEN.md:205-211 registra que KeepSync puede facturar servicios propios, y el repo ya tiene tres categorías de cursos activas desde el 2026-08-20.",
+      "B": "si",
+      "B_evidencia": "Relatoría remota, sin activo físico. Los plazos de estas compras (5 días de entrega en los casos observados) caben en la metodología.",
+      "C": "no-se-sabe",
+      "C_evidencia": "Las Compras Ágiles de capacitación suelen exigir OTEC registrada en SENCE (src/lib/condiciones.ts:53-58) y NO está confirmado si KeepSync lo es.",
+      "D": "no",
+      "D_evidencia": "insumo bloqueante sin-catalogo-de-costos-de-servicios",
+      "veredicto": "por-definir",
+      "ofertable": false,
+      "quien": "agente (pendiente de aprobación del usuario)",
+      "fecha": "2026-08-20"
+    },
+    {
+      "familia_id": "capacitacion",
+      "A": "parcial",
+      "A_evidencia": "Igual que capacitacion-ti-datos, pero sobre TODA la formación, incluida la que no tiene nada que ver con TI (lengua de señas, primeros auxilios, apicultura). KeepSync no tiene por qué poder dictarla.",
+      "B": "si",
+      "B_evidencia": "Solo para la fracción que sea remota y de materia propia.",
+      "C": "no-se-sabe",
+      "C_evidencia": "Mismo OTEC/SENCE sin confirmar.",
+      "D": "no",
+      "D_evidencia": "insumo bloqueante sin-catalogo-de-costos-de-servicios",
+      "veredicto": "por-definir",
+      "ofertable": false,
+      "quien": "agente (pendiente de aprobación del usuario)",
+      "fecha": "2026-08-20"
+    },
+    {
+      "familia_id": "ti-servicios",
+      "A": "parcial",
+      "A_evidencia": "«Desarrollo a medida» es una de las cuatro líneas facturables confirmadas (PLAN-VOLUMEN.md:205-211), aunque no aparece en el catálogo público del sitio.",
+      "B": "no-se-sabe",
+      "B_evidencia": "Un sistema informático a medida difícilmente cabe en «primer resultado visible en ≤30 días», que es lo que KeepSync declara.",
+      "C": "no",
+      "C_evidencia": "Sin acreditaciones detectadas en esta familia.",
+      "D": "no",
+      "D_evidencia": "insumo bloqueante sin-catalogo-de-costos-de-servicios",
+      "veredicto": "por-definir",
+      "ofertable": false,
+      "quien": "agente (pendiente de aprobación del usuario)",
+      "fecha": "2026-08-20"
+    },
+    {
+      "familia_id": "ti-licencias-software",
+      "A": "parcial",
+      "A_evidencia": "La reventa de licencias es una línea facturable confirmada, pero no es un servicio del catálogo público.",
+      "B": "si",
+      "B_evidencia": "Entrega digital.",
+      "C": "si",
+      "C_evidencia": "config/categorias.json declara `acreditaciones_conocidas_faltantes: [distribuidor_autorizado, canal_oficial]` tanto para `claude` como para `licencias-software`. Es el insumo bloqueante que CLAUDE.md documenta desde el día uno.",
+      "D": "no",
+      "D_evidencia": "Para Claude sí hay precio de lista público; para el resto de las marcas, no.",
+      "veredicto": "no-servible",
+      "ofertable": false,
+      "quien": "agente (pendiente de aprobación del usuario)",
+      "fecha": "2026-08-20",
+      "nota": "Es el nicho donde el proyecto ya juega, y el único que falla el criterio C. Coherente con el 79% de fracaso medido en output/informe-nicho-claude.md."
+    }
+  ],
+  "_umbral_propuesta": "Una familia fina se propone como criterio de búsqueda si su tamaño corregido en el universo abierto es >= 5 compras Y su veredicto es `servible` o `por-definir`. El umbral es bajo a propósito: este mercado es chico (el nicho Claude entero son ~50 casos históricos) y un umbral alto dejaría fuera todo.",
+  "umbral_estimado_minimo": 5
+}

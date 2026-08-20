@@ -96,6 +96,56 @@ la página, marcadas *sin re-verificar hoy*. `docs/index.html` se publica siempr
 consulta haya llegado a la API. La regla anterior era todo-o-nada, y su efecto real era una página
 congelada con oportunidades ya cerradas y sin ningún aviso.
 
+## Estudio de mercado del universo completo (`output/estudio-mercado.md`)
+
+`npm run mercado` (mide, gasta cuota) + `npm run estudio` (analiza, 0 requests) + `npm run criterios`
+(propone) responden con datos la objeción que el propio repo se hace en `PLAN-VOLUMEN.md:271-272`:
+*"elegir keywords a dedo es el método que produjo el nicho Claude (79% de fracaso)"*. En vez de
+agregar palabras por intuición, se mide el universo entero y el ranking sale de ahí.
+
+Lo medido el 2026-08-20, que hay que saber antes de tocar este código:
+
+- **`/v2/compra-agil` funciona sin `q`**: el universo abierto son ~8.900 compras. `tamano_pagina=50`
+  devuelve **HTTP 504** tres de cada cuatro veces; **25 es el punto dulce** (200 en ~17s). Y cada 504
+  gasta cuota igual, porque `contarRequest()` corre antes de cada intento.
+- **`total_resultados` de una `q` NO es el tamaño de la familia.** El `q` busca también en la
+  descripción, donde vive el machaque administrativo: `q=desarrollo` devuelve ~360 resultados y
+  ninguno de sus 10 nombres de muestra habla de desarrollo de nada; `q=datos` los encabeza con *"Caja
+  de Alimentos… complete todos los datos"*; `q=soporte` trae soportes de TV y de bicicleta. Es una
+  **cota superior contaminada**. `precisionEnNombre()` (`src/lib/mercado.ts`) mide la contaminación
+  con los nombres que ya vinieron, sin gastar un request más, y **el ranking válido es el corregido**.
+- **La API topea `total_resultados` en 10.000**: `cerrada`, `desierta` y `cancelada` devolvieron
+  exactamente ese número las tres. Son cotas inferiores, no conteos — no calcular tasas contra ellos.
+- **El endpoint responde 500 a términos válidos** (`q=aseo`, `q=documental` en distintas corridas),
+  sin la palabra suelta "de" ni ningún otro patrón conocido. Se registran como **no medidos**, nunca
+  como 0. Y las páginas profundas tardan minutos: el barrido de 25 páginas de muestra tomó ~2 horas.
+- **234 requests en un día con 0 códigos 429** — la cota inferior conocida de la cuota diaria pasó de
+  83 a 234. El 429 a las 9 requests del 19-08 queda confirmado como un episodio, no como el límite.
+
+Los archivos: `config/terminos-mercado.json` (qué se dimensiona), `config/familias-mercado.json`
+(familias derivadas de la medición; el cargador **falla** si una familia no declara `_derivada_de` y
+`_evidencia`), `config/stopwords-es.json`, `config/keepsync-oferta.json` (el catálogo público de
+keepsync.ai y el **juicio**, separado de lo medido) y `config/categorias-propuestas.json`, que es
+**inerte**: ningún script del radar lo carga. Promover una propuesta es copiarla a mano a
+`config/categorias.json` con `activa: false` — no se escribe ahí automáticamente porque
+`cargarCategorias()` compila todas (una regex mala tira abajo el radar entero) y
+`renderKeywordsCompraAgil` publica todas en `docs/index.html`, activas o no.
+
+**Qué dijo la medición** (625 compras muestreadas del universo abierto, 40 términos dimensionados,
+18 consultas de desenlace):
+
+1. La familia más grande que KeepSync toca es **capacitación** (≈5% del universo, ~445 compras
+   estimadas), y la que es el corazón de lo que vende —automatización de procesos y gestión
+   documental— **no aparece ni una vez en la muestra**.
+2. **La tasa de éxito es 7-10% en TODOS los rubros medidos**, incluidos los que nada tienen que ver
+   con tecnología. Eso no sostiene la hipótesis de `PLAN.md`/`CLAUDE.md` de que el ~79% de fracaso
+   del nicho Claude venga de un problema de *fulfillment*: el fracaso masivo es cómo se comporta el
+   instrumento entero. Coincide con la clasificación de motivos de `PLAN-VOLUMEN.md` (73% atribuible
+   al comprador). Y ninguna familia es *ofertable* hoy: no existe catálogo de costos
+de servicios de KeepSync (confirmado con el usuario el 2026-08-20), así que no se puede fijar precio
+bajo el tope. Mientras eso no se resuelva, esto es investigación de mercado, no un habilitador de
+ofertas.
+
 ## Plan de crecimiento (`PLAN-VOLUMEN.md`)
 
 Diseño para explotar al máximo la API **ya validada** y aumentar el volumen de venta: índice
