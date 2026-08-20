@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudio de mercado — Compras Ágiles | KeepSync</title>
+<style>
+  :root { color-scheme: light dark; --fg:#16181d; --bg:#fff; --muted:#5b6270; --linea:#e3e6ec; --acento:#1f5fd8; --code:#f3f5f9; }
+  @media (prefers-color-scheme: dark) {
+    :root { --fg:#e8eaf0; --bg:#12141a; --muted:#9aa2b4; --linea:#2a2f3a; --acento:#7aa5ff; --code:#1b1f28; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  main { max-width: 62rem; margin:0 auto; padding: 2.5rem 1.25rem 5rem; }
+  h1 { font-size:1.9rem; line-height:1.25; margin:0 0 .5rem; letter-spacing:-.01em; }
+  h2 { font-size:1.3rem; margin:2.5rem 0 .75rem; padding-top:1.25rem; border-top:1px solid var(--linea); letter-spacing:-.01em; }
+  h3 { font-size:1.05rem; margin:1.75rem 0 .5rem; }
+  p, li { color:var(--fg); }
+  blockquote { margin:1.25rem 0; padding:.85rem 1.1rem; border-left:3px solid var(--acento); background:var(--code); border-radius:0 6px 6px 0; }
+  code { background:var(--code); padding:.12em .35em; border-radius:4px; font-size:.88em; }
+  .tabla { overflow-x:auto; margin:1rem 0; }
+  table { border-collapse:collapse; width:100%; font-size:.92rem; }
+  th, td { text-align:left; padding:.5rem .7rem; border-bottom:1px solid var(--linea); white-space:nowrap; }
+  th { color:var(--muted); font-weight:600; font-size:.82rem; text-transform:uppercase; letter-spacing:.04em; }
+  th.num, td.num { text-align:right; font-variant-numeric: tabular-nums; }
+  td:first-child { white-space:normal; }
+  .volver { display:inline-block; margin-bottom:1.5rem; color:var(--acento); text-decoration:none; font-size:.92rem; }
+  .volver:hover { text-decoration:underline; }
+  footer { margin-top:3rem; padding-top:1.25rem; border-top:1px solid var(--linea); color:var(--muted); font-size:.85rem; }
+</style>
+</head>
+<body>
+<main>
+<a class="volver" href="index.html">← Compras Ágiles abiertas</a>
+<h1>Estudio de mercado — Compras Ágiles y qué puede vender KeepSync</h1>
+<p>Generado: 2026-08-20T16:51:53.417Z. Medición en vivo contra <code>api2.mercadopublico.cl</code>, regenerable con <code>npm run mercado</code> + <code>npm run estudio</code>.</p>
+<p>Este informe existe para responder con datos una objeción que el propio repo se hace en <code>PLAN-VOLUMEN.md</code>: <em>"elegir keywords a dedo es el método que produjo el nicho Claude (79% de fracaso). Repetirlo con más palabras repite el error de selección."</em> Acá los criterios candidatos salen de medir el mercado.</p>
+<h2>1. Qué se midió, y con qué exactitud</h2>
+<p>Tres estratos distintos, que <strong>no se pueden mezclar en una misma afirmación</strong>:</p>
+<div class="tabla"><table><thead><tr>
+<th>Estrato</th>
+<th>Qué da</th>
+<th>Exactitud</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Dimensionamiento</strong> (40 términos, 1 request c/u)</td>
+<td>cuántas compras abiertas devuelve cada término</td>
+<td>conteo <strong>exacto</strong> de la API, pero <strong>cota superior contaminada</strong> del tamaño real — se corrige por precisión en §3</td>
+</tr>
+<tr>
+<td><strong>Muestra sistemática</strong> (625 compras)</td>
+<td>composición del mercado, montos, organismos</td>
+<td><strong>estimación</strong> con error de muestreo declarado</td>
+</tr>
+<tr>
+<td><strong>Dirigido</strong> (272 compras de la lista corta)</td>
+<td>montos y organismos de las familias que importan</td>
+<td><strong>exacto</strong> dentro de esa consulta, no extrapolable</td>
+</tr>
+</tbody></table></div>
+<p>La muestra tomó las páginas 1, 15, 29, 44… hasta la 346 de 360.</p>
+<h2>2. El universo</h2>
+<div class="tabla"><table><thead><tr>
+<th>Estado</th>
+<th class="num">Compras</th>
+<th></th>
+</tr></thead><tbody>
+<tr>
+<td>publicada</td>
+<td class="num">8.980</td>
+<td></td>
+</tr>
+<tr>
+<td>cerrada</td>
+<td class="num">≥ 10.000</td>
+<td><strong>topeado por la API</strong></td>
+</tr>
+<tr>
+<td>desierta</td>
+<td class="num">≥ 10.000</td>
+<td><strong>topeado por la API</strong></td>
+</tr>
+<tr>
+<td>cancelada</td>
+<td class="num">≥ 10.000</td>
+<td><strong>topeado por la API</strong></td>
+</tr>
+<tr>
+<td>proveedor_seleccionado</td>
+<td class="num">0</td>
+<td></td>
+</tr>
+</tbody></table></div>
+<p><strong>El tope importa.</strong> La API no informa más de 10.000 resultados: <code>cerrada</code>, <code>desierta</code> y <code>cancelada</code> devolvieron exactamente ese número las tres. No son 10.000 compras cada una — son <em>al menos</em> 10.000, y el valor real es desconocido. Cualquier tasa calculada contra esos números sería inventada, y por eso este informe no la calcula.</p>
+<p>Aun así el orden de magnitud es claro: frente a <strong>8.980</strong> compras abiertas hay <strong>decenas de miles</strong> ya terminadas. Mirar solo lo abierto —que es lo que hace el radar hoy— es mirar una fracción pequeña y sesgada del mercado.</p>
+<h3>Sesgo de supervivencia (el límite más serio de este informe)</h3>
+<p>El universo abierto incluye publicaciones desde 2025-11 que <strong>siguen</strong> en estado <code>publicada</code>. Una Compra Ágil cierra en días, así que ese conjunto mezcla demanda viva con procesos que el organismo nunca actualizó. Toda cifra del estrato muestral hereda ese sesgo. La sección 7 (desenlaces) lo esquiva midiendo directamente sobre estados terminales.</p>
+<h2>3. Dimensionamiento por término</h2>
+<p>1 request por término. <code>total_resultados</code> es el conteo exacto de lo que la API devuelve — y <strong>no</strong> el tamaño de la familia. Los términos de <strong>control</strong> son rubros que KeepSync no vende: están para que los números del grupo <code>keepsync</code> tengan con qué compararse.</p>
+<h3>La corrección que cambia el ranking</h3>
+<p>El <code>q</code> de la API <strong>no busca solo en el nombre: también en la descripción</strong>, donde vive el machaque administrativo de cualquier ficha. El efecto es brutal y se ve en los 10 nombres de muestra que cada consulta trae gratis:</p>
+<ul>
+<li><code>q=desarrollo</code> devuelve cientos de resultados y <strong>ninguno</strong> de sus nombres de muestra habla</li>
+</ul>
+<p>  de desarrollo de nada: son galletas, mobiliario, guirnaldas decorativas, reactivos.</p>
+<ul>
+<li><code>q=datos</code> los encabeza con <em>"Caja de Alimentos… se solicita completar todos los datos"</em>.</li>
+<li><code>q=soporte</code> trae soportes de TV y de bicicletas.</li>
+</ul>
+<p>Así que el conteo crudo es una <strong>cota superior contaminada</strong>. La columna <code>precisión</code> mide la contaminación con los nombres que ya se trajeron —qué fracción de ellos contiene realmente el término—, sin gastar un request más, y <code>≈ real</code> es el tamaño corregido. <strong>El ranking válido es el de <code>≈ real</code></strong>: ordenar por el crudo manda a paginar puro ruido, que es exactamente lo que pasó en la primera corrida de este estudio.</p>
+<div class="tabla"><table><thead><tr>
+<th>Término</th>
+<th>Grupo</th>
+<th class="num">Crudo</th>
+<th class="num">Precisión</th>
+<th class="num">≈ real</th>
+</tr></thead><tbody>
+<tr>
+<td><code>materiales</code></td>
+<td>control</td>
+<td class="num">640</td>
+<td class="num">80.0%</td>
+<td class="num">512</td>
+</tr>
+<tr>
+<td><code>insumos</code></td>
+<td>control</td>
+<td class="num">1.142</td>
+<td class="num">40.0%</td>
+<td class="num">457</td>
+</tr>
+<tr>
+<td><code>aseo</code></td>
+<td>control</td>
+<td class="num">199</td>
+<td class="num">70.0%</td>
+<td class="num">139</td>
+</tr>
+<tr>
+<td><code>mantencion</code></td>
+<td>keepsync</td>
+<td class="num">147</td>
+<td class="num">90.0%</td>
+<td class="num">132</td>
+</tr>
+<tr>
+<td><code>arriendo</code></td>
+<td>control</td>
+<td class="num">122</td>
+<td class="num">100.0%</td>
+<td class="num">122</td>
+</tr>
+<tr>
+<td><code>taller</code></td>
+<td>keepsync</td>
+<td class="num">147</td>
+<td class="num">70.0%</td>
+<td class="num">103</td>
+</tr>
+<tr>
+<td><code>curso</code></td>
+<td>keepsync</td>
+<td class="num">126</td>
+<td class="num">80.0%</td>
+<td class="num">101</td>
+</tr>
+<tr>
+<td><code>reparacion</code></td>
+<td>control</td>
+<td class="num">102</td>
+<td class="num">90.0%</td>
+<td class="num">92</td>
+</tr>
+<tr>
+<td><code>equipamiento</code></td>
+<td>control</td>
+<td class="num">146</td>
+<td class="num">60.0%</td>
+<td class="num">88</td>
+</tr>
+<tr>
+<td><code>vestuario</code></td>
+<td>control</td>
+<td class="num">78</td>
+<td class="num">100.0%</td>
+<td class="num">78</td>
+</tr>
+<tr>
+<td><code>mobiliario</code></td>
+<td>control</td>
+<td class="num">81</td>
+<td class="num">90.0%</td>
+<td class="num">73</td>
+</tr>
+<tr>
+<td><code>transporte</code></td>
+<td>control</td>
+<td class="num">182</td>
+<td class="num">40.0%</td>
+<td class="num">73</td>
+</tr>
+<tr>
+<td><code>medicamentos</code></td>
+<td>control</td>
+<td class="num">189</td>
+<td class="num">30.0%</td>
+<td class="num">57</td>
+</tr>
+<tr>
+<td><code>datos</code></td>
+<td>keepsync</td>
+<td class="num">562</td>
+<td class="num">10.0%</td>
+<td class="num">56</td>
+</tr>
+<tr>
+<td><code>sistema</code></td>
+<td>keepsync</td>
+<td class="num">224</td>
+<td class="num">20.0%</td>
+<td class="num">45</td>
+</tr>
+<tr>
+<td><code>alimentacion</code></td>
+<td>control</td>
+<td class="num">50</td>
+<td class="num">90.0%</td>
+<td class="num">45</td>
+</tr>
+<tr>
+<td><code>seguridad</code></td>
+<td>control</td>
+<td class="num">225</td>
+<td class="num">20.0%</td>
+<td class="num">45</td>
+</tr>
+<tr>
+<td><code>capacitacion</code></td>
+<td>keepsync</td>
+<td class="num">53</td>
+<td class="num">80.0%</td>
+<td class="num">42</td>
+</tr>
+<tr>
+<td><code>desarrollo</code></td>
+<td>keepsync</td>
+<td class="num">356</td>
+<td class="num">10.0%</td>
+<td class="num">36</td>
+</tr>
+<tr>
+<td><code>ferreteria</code></td>
+<td>control</td>
+<td class="num">30</td>
+<td class="num">100.0%</td>
+<td class="num">30</td>
+</tr>
+<tr>
+<td><code>licencias</code></td>
+<td>keepsync</td>
+<td class="num">36</td>
+<td class="num">80.0%</td>
+<td class="num">29</td>
+</tr>
+<tr>
+<td><code>soporte</code></td>
+<td>keepsync</td>
+<td class="num">57</td>
+<td class="num">50.0%</td>
+<td class="num">29</td>
+</tr>
+<tr>
+<td><code>plataforma</code></td>
+<td>keepsync</td>
+<td class="num">64</td>
+<td class="num">40.0%</td>
+<td class="num">26</td>
+</tr>
+<tr>
+<td><code>software</code></td>
+<td>keepsync</td>
+<td class="num">29</td>
+<td class="num">80.0%</td>
+<td class="num">23</td>
+</tr>
+<tr>
+<td><code>construccion</code></td>
+<td>control</td>
+<td class="num">25</td>
+<td class="num">90.0%</td>
+<td class="num">23</td>
+</tr>
+<tr>
+<td><code>impresion</code></td>
+<td>control</td>
+<td class="num">27</td>
+<td class="num">60.0%</td>
+<td class="num">16</td>
+</tr>
+<tr>
+<td><code>combustible</code></td>
+<td>control</td>
+<td class="num">25</td>
+<td class="num">60.0%</td>
+<td class="num">15</td>
+</tr>
+<tr>
+<td><code>informatica</code></td>
+<td>keepsync</td>
+<td class="num">15</td>
+<td class="num">80.0%</td>
+<td class="num">12</td>
+</tr>
+<tr>
+<td><code>diplomado</code></td>
+<td>keepsync</td>
+<td class="num">10</td>
+<td class="num">90.0%</td>
+<td class="num">9</td>
+</tr>
+<tr>
+<td><code>asesoria</code></td>
+<td>keepsync</td>
+<td class="num">6</td>
+<td class="num">100.0%</td>
+<td class="num">6</td>
+</tr>
+<tr>
+<td><code>inteligencia</code></td>
+<td>keepsync</td>
+<td class="num">9</td>
+<td class="num">66.7%</td>
+<td class="num">6</td>
+</tr>
+<tr>
+<td><code>consultoria</code></td>
+<td>keepsync</td>
+<td class="num">2</td>
+<td class="num">100.0%</td>
+<td class="num">2</td>
+</tr>
+<tr>
+<td><code>relatoria</code></td>
+<td>keepsync</td>
+<td class="num">2</td>
+<td class="num">50.0%</td>
+<td class="num">1</td>
+</tr>
+<tr>
+<td><code>automatizacion</code></td>
+<td>keepsync</td>
+<td class="num">1</td>
+<td class="num">100.0%</td>
+<td class="num">1</td>
+</tr>
+<tr>
+<td><code>ciberseguridad</code></td>
+<td>keepsync</td>
+<td class="num">2</td>
+<td class="num">50.0%</td>
+<td class="num">1</td>
+</tr>
+<tr>
+<td><code>integracion</code></td>
+<td>keepsync</td>
+<td class="num">1</td>
+<td class="num">100.0%</td>
+<td class="num">1</td>
+</tr>
+<tr>
+<td><code>digitalizacion</code></td>
+<td>keepsync</td>
+<td class="num">1</td>
+<td class="num">0.0%</td>
+<td class="num">0</td>
+</tr>
+<tr>
+<td><code>analitica</code></td>
+<td>keepsync</td>
+<td class="num">1</td>
+<td class="num">0.0%</td>
+<td class="num">0</td>
+</tr>
+<tr>
+<td><code>documental</code></td>
+<td>keepsync</td>
+<td class="num"><strong>la API falló</strong></td>
+<td class="num">—</td>
+<td class="num">—</td>
+</tr>
+<tr>
+<td><code>chatbot</code></td>
+<td>keepsync</td>
+<td class="num">0</td>
+<td class="num">—</td>
+<td class="num">—</td>
+</tr>
+</tbody></table></div>
+<p>Lo que KeepSync toca, ordenado por tamaño corregido: <strong>mantencion</strong> (≈132), <strong>taller</strong> (≈103), <strong>curso</strong> (≈101), <strong>datos</strong> (≈56), <strong>sistema</strong> (≈45), <strong>capacitacion</strong> (≈42).</p>
+<blockquote>La precisión se estima sobre 10 nombres por término: es un orden de magnitud, no un decimal. Un término con precisión 0% no significa que no exista demanda — significa que <strong>esa palabra no sirve como criterio de búsqueda</strong>, que es justamente lo que este estudio tiene que decidir.</blockquote>
+<blockquote><strong>Quirk nuevo del endpoint.</strong> <code>documental</code> devolvió <code>500 ERROR_INTERNO</code> de forma reproducible, sin contener la palabra suelta "de" ni ningún otro patrón conocido. Se registra como <strong>no medido</strong>, nunca como 0 — un 0 se leería como "no hay demanda", que es lo contrario de lo que sabemos.</blockquote>
+<h2>4. Términos frecuentes, sin familias</h2>
+<p>Frecuencia no supervisada sobre los 625 nombres de la muestra: se cuenta en cuántas compras <strong>distintas</strong> aparece cada n-grama, y se ordena por <strong>monto</strong>, no por conteo. Va antes de las familias a propósito: la evidencia primero, la interpretación después.</p>
+<div class="tabla"><table><thead><tr>
+<th>Término</th>
+<th class="num">Compras</th>
+<th class="num">Monto total</th>
+<th class="num">Mediana</th>
+<th class="num">Organismos</th>
+</tr></thead><tbody>
+<tr>
+<td><code>insumos</code></td>
+<td class="num">43</td>
+<td class="num">$77.424.979</td>
+<td class="num">$1.031.000</td>
+<td class="num">37</td>
+</tr>
+<tr>
+<td><code>materiales</code></td>
+<td class="num">43</td>
+<td class="num">$52.511.946</td>
+<td class="num">$690.000</td>
+<td class="num">41</td>
+</tr>
+<tr>
+<td><code>escuela</code></td>
+<td class="num">29</td>
+<td class="num">$47.577.202</td>
+<td class="num">$1.000.000</td>
+<td class="num">25</td>
+</tr>
+<tr>
+<td><code>mantencion</code></td>
+<td class="num">29</td>
+<td class="num">$47.546.146</td>
+<td class="num">$1.000.000</td>
+<td class="num">27</td>
+</tr>
+<tr>
+<td><code>municipal</code></td>
+<td class="num">14</td>
+<td class="num">$46.743.852</td>
+<td class="num">$2.450.000</td>
+<td class="num">14</td>
+</tr>
+<tr>
+<td><code>salud</code></td>
+<td class="num">20</td>
+<td class="num">$39.863.600</td>
+<td class="num">$1.114.000</td>
+<td class="num">19</td>
+</tr>
+<tr>
+<td><code>mg</code></td>
+<td class="num">11</td>
+<td class="num">$39.708.252</td>
+<td class="num">$4.428.852</td>
+<td class="num">8</td>
+</tr>
+<tr>
+<td><code>kit</code></td>
+<td class="num">14</td>
+<td class="num">$37.128.000</td>
+<td class="num">$730.000</td>
+<td class="num">12</td>
+</tr>
+<tr>
+<td><code>instalacion</code></td>
+<td class="num">13</td>
+<td class="num">$35.160.000</td>
+<td class="num">$1.614.000</td>
+<td class="num">13</td>
+</tr>
+<tr>
+<td><code>desarrollo</code></td>
+<td class="num">9</td>
+<td class="num">$32.314.900</td>
+<td class="num">$2.000.000</td>
+<td class="num">9</td>
+</tr>
+<tr>
+<td><code>programa</code></td>
+<td class="num">27</td>
+<td class="num">$31.877.391</td>
+<td class="num">$500.000</td>
+<td class="num">23</td>
+</tr>
+<tr>
+<td><code>regional</code></td>
+<td class="num">11</td>
+<td class="num">$31.822.000</td>
+<td class="num">$1.600.000</td>
+<td class="num">9</td>
+</tr>
+<tr>
+<td><code>oficina</code></td>
+<td class="num">23</td>
+<td class="num">$31.785.541</td>
+<td class="num">$500.000</td>
+<td class="num">21</td>
+</tr>
+<tr>
+<td><code>produccion</code></td>
+<td class="num">10</td>
+<td class="num">$29.914.900</td>
+<td class="num">$2.000.000</td>
+<td class="num">10</td>
+</tr>
+<tr>
+<td><code>hospital</code></td>
+<td class="num">11</td>
+<td class="num">$29.493.238</td>
+<td class="num">$1.000.000</td>
+<td class="num">8</td>
+</tr>
+<tr>
+<td><code>equipo</code></td>
+<td class="num">12</td>
+<td class="num">$28.965.064</td>
+<td class="num">$1.430.000</td>
+<td class="num">10</td>
+</tr>
+<tr>
+<td><code>ml</code></td>
+<td class="num">6</td>
+<td class="num">$27.764.900</td>
+<td class="num">$6.000.000</td>
+<td class="num">5</td>
+</tr>
+<tr>
+<td><code>capacitacion</code></td>
+<td class="num">13</td>
+<td class="num">$27.118.040</td>
+<td class="num">$1.880.000</td>
+<td class="num">12</td>
+</tr>
+<tr>
+<td><code>proyecto</code></td>
+<td class="num">10</td>
+<td class="num">$25.329.340</td>
+<td class="num">$1.464.000</td>
+<td class="num">10</td>
+</tr>
+<tr>
+<td><code>carabineros</code></td>
+<td class="num">6</td>
+<td class="num">$24.449.049</td>
+<td class="num">$4.367.825</td>
+<td class="num">6</td>
+</tr>
+<tr>
+<td><code>reparacion</code></td>
+<td class="num">16</td>
+<td class="num">$23.902.664</td>
+<td class="num">$782.347</td>
+<td class="num">16</td>
+</tr>
+<tr>
+<td><code>gestion</code></td>
+<td class="num">7</td>
+<td class="num">$23.790.000</td>
+<td class="num">$2.600.000</td>
+<td class="num">7</td>
+</tr>
+<tr>
+<td><code>herramientas</code></td>
+<td class="num">8</td>
+<td class="num">$22.549.340</td>
+<td class="num">$1.650.000</td>
+<td class="num">8</td>
+</tr>
+<tr>
+<td><code>dos</code></td>
+<td class="num">4</td>
+<td class="num">$22.271.538</td>
+<td class="num">$6.385.769</td>
+<td class="num">4</td>
+</tr>
+<tr>
+<td><code>vehiculos</code></td>
+<td class="num">7</td>
+<td class="num">$22.015.694</td>
+<td class="num">$1.800.000</td>
+<td class="num">7</td>
+</tr>
+</tbody></table></div>
+<h3>Cuánto de este mercado es servicio y cuánto es bien físico</h3>
+<p>Los términos del <em>acto</em> de comprar se reportan aparte en vez de descartarse, porque el reparto entre ellos es la primera pregunta de KeepSync:</p>
+<div class="tabla"><table><thead><tr>
+<th>Término</th>
+<th class="num">Compras</th>
+<th class="num">Monto total</th>
+</tr></thead><tbody>
+<tr>
+<td><code>adquisicion</code></td>
+<td class="num">152</td>
+<td class="num">$270.915.618</td>
+</tr>
+<tr>
+<td><code>servicio</code></td>
+<td class="num">76</td>
+<td class="num">$198.249.770</td>
+</tr>
+<tr>
+<td><code>compra</code></td>
+<td class="num">44</td>
+<td class="num">$76.332.847</td>
+</tr>
+<tr>
+<td><code>adq</code></td>
+<td class="num">15</td>
+<td class="num">$28.321.763</td>
+</tr>
+<tr>
+<td><code>suministro</code></td>
+<td class="num">6</td>
+<td class="num">$28.164.900</td>
+</tr>
+<tr>
+<td><code>contratacion</code></td>
+<td class="num">6</td>
+<td class="num">$23.286.438</td>
+</tr>
+<tr>
+<td><code>contratacion servicio</code></td>
+<td class="num">5</td>
+<td class="num">$22.386.438</td>
+</tr>
+<tr>
+<td><code>servicio suministro</code></td>
+<td class="num">2</td>
+<td class="num">$13.800.000</td>
+</tr>
+<tr>
+<td><code>arriendo</code></td>
+<td class="num">5</td>
+<td class="num">$13.710.000</td>
+</tr>
+<tr>
+<td><code>servicios</code></td>
+<td class="num">6</td>
+<td class="num">$12.567.640</td>
+</tr>
+</tbody></table></div>
+<h2>5. Familias</h2>
+<p>Derivadas de la sección 4, no al revés — cada una declara en <code>config/familias-mercado.json</code> los términos medidos que la motivaron, y el cargador <strong>falla si esa evidencia falta</strong>.</p>
+<div class="tabla"><table><thead><tr>
+<th>Familia</th>
+<th>Capa</th>
+<th class="num">Compras en muestra</th>
+<th class="num">% del universo</th>
+<th class="num">Estimado</th>
+<th class="num">Monto en muestra</th>
+<th class="num">Mediana</th>
+</tr></thead><tbody>
+<tr>
+<td>Insumos y materiales</td>
+<td>gruesa</td>
+<td class="num">119</td>
+<td class="num">19.0% ±3.0</td>
+<td class="num">1710</td>
+<td class="num">$205.082.649</td>
+<td class="num">$1.001.861</td>
+</tr>
+<tr>
+<td>Mantención y reparación</td>
+<td>gruesa</td>
+<td class="num">50</td>
+<td class="num">8.0% ±2.1</td>
+<td class="num">718</td>
+<td class="num">$92.860.195</td>
+<td class="num">$1.000.000</td>
+</tr>
+<tr>
+<td>Vestuario, mobiliario y equipamiento</td>
+<td>gruesa</td>
+<td class="num">37</td>
+<td class="num">5.9% ±1.8</td>
+<td class="num">532</td>
+<td class="num">$47.200.130</td>
+<td class="num">$750.000</td>
+</tr>
+<tr>
+<td>Aseo, higiene y seguridad</td>
+<td>gruesa</td>
+<td class="num">32</td>
+<td class="num">5.1% ±1.7</td>
+<td class="num">460</td>
+<td class="num">$45.569.659</td>
+<td class="num">$897.500</td>
+</tr>
+<tr>
+<td>Insumos clínicos y medicamentos</td>
+<td>gruesa</td>
+<td class="num">30</td>
+<td class="num">4.8% ±1.6</td>
+<td class="num">431</td>
+<td class="num">$74.505.993</td>
+<td class="num">$1.400.000</td>
+</tr>
+<tr>
+<td>Alimentación y catering</td>
+<td>gruesa</td>
+<td class="num">25</td>
+<td class="num">4.0% ±1.5</td>
+<td class="num">359</td>
+<td class="num">$27.012.416</td>
+<td class="num">$505.750</td>
+</tr>
+<tr>
+<td>Capacitación y formación</td>
+<td>gruesa</td>
+<td class="num">24</td>
+<td class="num">3.8% ±1.5</td>
+<td class="num">345</td>
+<td class="num">$62.458.778</td>
+<td class="num">$2.222.520</td>
+</tr>
+<tr>
+<td>Obras, transporte y combustible</td>
+<td>gruesa</td>
+<td class="num">21</td>
+<td class="num">3.4% ±1.4</td>
+<td class="num">302</td>
+<td class="num">$38.924.567</td>
+<td class="num">$900.000</td>
+</tr>
+<tr>
+<td>Eventos, difusión e impresión</td>
+<td>gruesa</td>
+<td class="num">9</td>
+<td class="num">1.4% ±0.9</td>
+<td class="num">129</td>
+<td class="num">$27.220.000</td>
+<td class="num">$2.000.000</td>
+</tr>
+<tr>
+<td>Licencias y software</td>
+<td>gruesa</td>
+<td class="num">4</td>
+<td class="num">0.6% ±0.6</td>
+<td class="num">57</td>
+<td class="num">$14.159.000</td>
+<td class="num">$3.565.000</td>
+</tr>
+<tr>
+<td>Datos, analítica e inteligencia artificial</td>
+<td>fina</td>
+<td class="num">3</td>
+<td class="num">0.5% ±0.5</td>
+<td class="num">43</td>
+<td class="num">$14.669.000</td>
+<td class="num">$6.020.000</td>
+</tr>
+<tr>
+<td>Capacitación en TI, datos e IA</td>
+<td>fina</td>
+<td class="num">2</td>
+<td class="num">0.3% ±0.4</td>
+<td class="num">29</td>
+<td class="num">$7.820.000</td>
+<td class="num">$3.910.000</td>
+</tr>
+<tr>
+<td>Servicios TI: desarrollo, integración, soporte y plataformas</td>
+<td>gruesa</td>
+<td class="num">1</td>
+<td class="num">0.2% ±0.3</td>
+<td class="num">14</td>
+<td class="num">$100.000</td>
+<td class="num">$100.000</td>
+</tr>
+<tr>
+<td>Asesoría y consultoría profesional</td>
+<td>fina</td>
+<td class="num">0</td>
+<td class="num">0.0% ±0.0</td>
+<td class="num">0</td>
+<td class="num">$0</td>
+<td class="num">—</td>
+</tr>
+<tr>
+<td>Automatización de procesos y gestión documental</td>
+<td>fina</td>
+<td class="num">0</td>
+<td class="num">0.0% ±0.0</td>
+<td class="num">0</td>
+<td class="num">$0</td>
+<td class="num">—</td>
+</tr>
+</tbody></table></div>
+<p>Las columnas <code>% del universo</code> y <code>Estimado</code> son <strong>estimaciones muestrales</strong> con su intervalo al 95%. No son conteos: para eso está la sección 3.</p>
+<h3>Descartados por el filtro estricto</h3>
+<p>Compras que mencionaban la materia pero no pasaron <code>patron_requerido</code> o cayeron en <code>patron_excluyente</code>. Se publican por el mismo motivo que en el radar: un patrón demasiado ancho, si no se lista, se ve como demanda que desaparece sin explicación.</p>
+<ul>
+<li><code>capacitacion:excluida</code> — 8</li>
+<li><code>capacitacion-ti-datos:falta-requerido</code> — 6</li>
+<li><code>automatizacion-documental:excluida</code> — 1</li>
+<li><code>ti-licencias-software:excluida</code> — 1</li>
+</ul>
+<h3>Montos exactos de la lista corta</h3>
+<p>Paginado completo de los términos de mayor tamaño corregido. <strong>Exacto dentro de esa consulta, y no extrapolable al universo</strong>: es el estrato dirigido, no la muestra.</p>
+<div class="tabla"><table><thead><tr>
+<th>Consulta</th>
+<th class="num">Compras</th>
+<th class="num">Monto total</th>
+<th class="num">p25</th>
+<th class="num">Mediana</th>
+<th class="num">p75</th>
+<th class="num">Organismos</th>
+</tr></thead><tbody>
+<tr>
+<td><code>mantencion</code></td>
+<td class="num">93</td>
+<td class="num">$227.997.717</td>
+<td class="num">$600.000</td>
+<td class="num">$1.503.803</td>
+<td class="num">$3.736.600</td>
+<td class="num">65</td>
+</tr>
+<tr>
+<td><code>taller</code></td>
+<td class="num">89</td>
+<td class="num">$101.259.309</td>
+<td class="num">$380.000</td>
+<td class="num">$670.000</td>
+<td class="num">$1.251.166</td>
+<td class="num">72</td>
+</tr>
+<tr>
+<td><code>curso</code></td>
+<td class="num">90</td>
+<td class="num">$149.402.344</td>
+<td class="num">$600.000</td>
+<td class="num">$1.100.000</td>
+<td class="num">$2.075.000</td>
+<td class="num">69</td>
+</tr>
+</tbody></table></div>
+<h2>6. Cobertura y residual</h2>
+<ul>
+<li>Compras sin ninguna familia: <strong>325 de 625</strong> (52.0%)</li>
+<li>Monto sin ninguna familia: <strong>54.3%</strong> del total muestreado</li>
+</ul>
+<p>Los términos con más peso entre lo no clasificado — la agenda de la próxima iteración, y el contrapeso permanente a elegir familias a dedo:</p>
+<div class="tabla"><table><thead><tr>
+<th>Término</th>
+<th class="num">Compras</th>
+<th class="num">Monto total</th>
+</tr></thead><tbody>
+<tr>
+<td><code>kit</code></td>
+<td class="num">12</td>
+<td class="num">$36.018.000</td>
+</tr>
+<tr>
+<td><code>mg</code></td>
+<td class="num">10</td>
+<td class="num">$35.279.400</td>
+</tr>
+<tr>
+<td><code>escuela</code></td>
+<td class="num">20</td>
+<td class="num">$31.762.091</td>
+</tr>
+<tr>
+<td><code>instalacion</code></td>
+<td class="num">9</td>
+<td class="num">$29.310.000</td>
+</tr>
+<tr>
+<td><code>ml</code></td>
+<td class="num">6</td>
+<td class="num">$27.764.900</td>
+</tr>
+<tr>
+<td><code>respiratorio</code></td>
+<td class="num">3</td>
+<td class="num">$21.000.000</td>
+</tr>
+<tr>
+<td><code>panel</code></td>
+<td class="num">3</td>
+<td class="num">$21.000.000</td>
+</tr>
+<tr>
+<td><code>kit respiratorio</code></td>
+<td class="num">3</td>
+<td class="num">$21.000.000</td>
+</tr>
+<tr>
+<td><code>respiratorio panel</code></td>
+<td class="num">3</td>
+<td class="num">$21.000.000</td>
+</tr>
+<tr>
+<td><code>kit respiratorio panel</code></td>
+<td class="num">3</td>
+<td class="num">$21.000.000</td>
+</tr>
+<tr>
+<td><code>equipo</code></td>
+<td class="num">7</td>
+<td class="num">$20.960.000</td>
+</tr>
+<tr>
+<td><code>salud</code></td>
+<td class="num">11</td>
+<td class="num">$20.096.700</td>
+</tr>
+<tr>
+<td><code>desarrollo</code></td>
+<td class="num">4</td>
+<td class="num">$19.214.900</td>
+</tr>
+<tr>
+<td><code>municipal</code></td>
+<td class="num">6</td>
+<td class="num">$18.830.000</td>
+</tr>
+<tr>
+<td><code>implementacion</code></td>
+<td class="num">5</td>
+<td class="num">$17.914.900</td>
+</tr>
+</tbody></table></div>
+<h2>7. Desenlaces: qué se compra de verdad</h2>
+<p>Medido directamente sobre los estados terminales, así que <strong>no arrastra el sesgo de supervivencia</strong> de las secciones anteriores. Es la métrica que fundó todo el análisis del nicho Claude (79% de fracaso).</p>
+<div class="tabla"><table><thead><tr>
+<th>Término</th>
+<th class="num">Cerradas</th>
+<th class="num">Desiertas</th>
+<th class="num">Canceladas</th>
+<th class="num">Tasa de éxito</th>
+</tr></thead><tbody>
+<tr>
+<td><code>datos</code></td>
+<td class="num">3.840</td>
+<td class="num">≥10.000</td>
+<td class="num">≥10.000</td>
+<td class="num"><strong>no calculable</strong> (tope)</td>
+</tr>
+<tr>
+<td><code>desarrollo</code></td>
+<td class="num">1.542</td>
+<td class="num">8.186</td>
+<td class="num">9.036</td>
+<td class="num">8.2%</td>
+</tr>
+<tr>
+<td><code>sistema</code></td>
+<td class="num">1.039</td>
+<td class="num">4.284</td>
+<td class="num">4.775</td>
+<td class="num">10.3%</td>
+</tr>
+<tr>
+<td><code>taller</code></td>
+<td class="num">532</td>
+<td class="num">3.893</td>
+<td class="num">3.150</td>
+<td class="num">7.0%</td>
+</tr>
+<tr>
+<td><code>mantencion</code></td>
+<td class="num">672</td>
+<td class="num">2.697</td>
+<td class="num">3.442</td>
+<td class="num">9.9%</td>
+</tr>
+<tr>
+<td><code>curso</code></td>
+<td class="num">389</td>
+<td class="num">2.225</td>
+<td class="num">2.526</td>
+<td class="num">7.6%</td>
+</tr>
+<tr>
+<td><code>capacitacion</code></td>
+<td class="num">166</td>
+<td class="num">1.015</td>
+<td class="num">1.075</td>
+<td class="num">7.4%</td>
+</tr>
+</tbody></table></div>
+<p>Dos advertencias que esta tabla no puede resolver sola:</p>
+<ul>
+<li><strong>Arrastra la misma contaminación de la sección 3.</strong> Un término de baja precisión mide el</li>
+</ul>
+<p>  desenlace de un revoltijo de rubros, no el de su familia. Leer solo las filas cuyo término   tiene precisión alta.</p>
+<ul>
+<li><strong>Donde el conteo llega al tope, la tasa no se puede calcular</strong> y por eso no se publica: el</li>
+</ul>
+<p>  denominador es desconocido.</p>
+<h3>El hallazgo que corrige una hipótesis del repo</h3>
+<p>La tasa de éxito está entre <strong>7% y 10% en todos los rubros medidos</strong> — incluidos los que no tienen nada que ver con tecnología: mantención de autoclaves, talleres de cestería, reparaciones. <code>PLAN.md</code> y <code>CLAUDE.md</code> levantaron la hipótesis de que el ~79% de fracaso del nicho Claude venía de un problema de <strong>fulfillment</strong> —que los oferentes no podían entregar licencias legítimamente—. Esta medición no la sostiene: <strong>el fracaso masivo es cómo se comporta el instrumento entero</strong>, no una patología del nicho de licencias.</p>
+<p>Es coherente con lo que <code>PLAN-VOLUMEN.md</code> ya había encontrado clasificando los motivos declarados: el 73% de los fracasos es atribuible al comprador (error, cambio de decisión, vencimiento del plazo de selección) y solo el 16% a incumplimiento de la oferta. La consecuencia práctica es la que ese documento ya saca: la palanca no es ofertar más, sino elegir mejor y llegar primero a la republicación.</p>
+<h2>8. Competencia</h2>
+<p>De las 625 compras abiertas de la muestra, <strong>112</strong> (17.9%) ya tienen al menos una oferta recibida. Entre ellas la mediana es de <strong>2 ofertas</strong> (p25 1, p75 4).</p>
+<p><strong>La mediana sobre toda la muestra sería 0 y no significaría nada</strong>: una compra publicada hoy todavía no recibió ofertas, y el listado de la API no distingue "nadie ofertó" de "aún no". Por eso se informa el reparto y no un promedio suelto.</p>
+<h2>9. Cuánto sub-reporta clasificar solo por el nombre</h2>
+<p>El listado de la API <strong>no trae <code>descripcion</code> ni productos</strong>: clasificar cuesta 0 requests pero solo ve el título. Se bajó el detalle de <strong>20</strong> compras para medir la brecha en vez de solo advertirla:</p>
+<ul>
+<li>Clasificadas usando solo el <code>nombre</code>: <strong>17 de 20</strong></li>
+<li>Clasificadas usando el texto completo (nombre + descripción + productos): <strong>18 de 20</strong></li>
+<li><strong>Sub-reporte estimado: 5.6%</strong> — toda cifra de familia de este informe es un piso, no un techo.</li>
+</ul>
+<p>Códigos ONU/UNSPSC observados: 14111703, 14111704, 15111509, 23171603, 24101601, 27111508, 27111720, 27112802, 31162006, 31211501, 40141702, 40142317, 42251706, 42281508, 42281701, 42292603, 42294944, 43191501, 44103103, 44103116, 46191601, 47121701, 47121812, 47131502, 47131603, 47131803, 47131810, 47131816, 47131824, 49201503, 49221505, 49221508, 50192901, 52161512, 53101802, 53101804, 53121603, 53131608, 56112102, 60105704, 70121901, 72102305, 80141605. Es la taxonomía oficial de producto, hoy sin explotar en el repo; con volumen suficiente permitiría clasificar sin regex.</p>
+<h2>10. Qué de esto puede vender KeepSync</h2>
+<blockquote><strong>Todo lo anterior se midió contra la API. Esta sección es juicio.</strong> Los criterios y sus veredictos están en <code>config/keepsync-oferta.json</code>, con quién los emitió y cuándo. <strong>No aparece ninguna cifra nueva acá</strong>: todo número está localizable en las secciones 2 a 9.</blockquote>
+<p>KeepSync (leído de <code>keepsync.ai/services.json</code> el 2026-08-20) vende <strong>servicios gestionados de IA</strong> en cuatro frentes —comercial y ventas, atención a clientes, administración y finanzas, operaciones—: asistentes que operan dentro de las herramientas que la organización ya usa, con despliegue en ≤30 días y operación continua. Es <strong>más ancho</strong> que los cinco nichos que el radar busca hoy, que se limitan a licencias y cursos.</p>
+<p>Los cuatro criterios (<code>config/keepsync-oferta.json</code>): <strong>A</strong> ¿lo cubre el catálogo?, <strong>B</strong> ¿se entrega remoto en ≤30 días?, <strong>C</strong> ¿exige acreditación que no tiene?, <strong>D</strong> ¿hay costo conocido para poner precio bajo el tope? — <code>servible = A ∧ B ∧ ¬C</code>, <code>ofertable = servible ∧ D</code>.</p>
+<h3>Los dos insumos bloqueantes</h3>
+<p>1. <strong>No existe catálogo de costos de servicios de KeepSync</strong> (confirmado con el usuario el    2026-08-20): ni valor hora de asesoría o relatoría, ni costo por proyecto, ni costo mensual de    operación. Como <code>D = no</code> para todas las familias, <strong>ninguna es ofertable hoy</strong>, por grande que    sea. Es el mismo tipo de insumo que mantiene marcadas PRELIMINAR a las cotizaciones de Array. 2. <strong>No está confirmado si KeepSync es OTEC registrada en SENCE.</strong> Condiciona la familia de    capacitación entera — que es, según la sección 3, la de mayor volumen que KeepSync toca.</p>
+<p>Mientras esos dos no se resuelvan, esto es <strong>investigación de mercado</strong>: dice dónde jugar, no habilita ninguna oferta.</p>
+<h2>11. Metodología y límites</h2>
+<ul>
+<li><strong>Sesgo de supervivencia</strong>: el universo abierto sobre-representa procesos que nadie cerró (§2).</li>
+<li><strong>Clasificación por <code>nombre</code></strong>: cuantificada en §9, no solo advertida.</li>
+<li><strong>Error de muestreo</strong>: publicado junto a cada estimación (§5). Ninguna afirmación exacta se</li>
+</ul>
+<p>  apoya en la muestra.</p>
+<ul>
+<li><strong>Tope de 10.000</strong> en <code>total_resultados</code>: los estados terminales son cotas inferiores (§2).</li>
+<li><strong><code>q</code> hace OR de tokens y no busca la frase</strong>, y no entra en los adjuntos: una compra que solo</li>
+</ul>
+<p>  menciona la materia en un PDF no aparece en el dimensionamiento.</p>
+<ul>
+<li><strong>Techo de Compra Ágil</strong>: 100 UTM ≈ $6,9M. Nada de este mercado es más grande que eso.</li>
+<li><strong>n junto a cada cifra</strong>: muestra n=625, dirigidas n=272, detalles n=20.</li>
+</ul>
+<p><em>Generado por <code>npm run estudio</code> el 2026-08-20 — 0 requests: lee solo <code>historico/mercado.jsonl</code>.</em></p>
+<footer>Generado por <code>npm run estudio</code> desde <code>historico/mercado.jsonl</code>. Código y datos: <a href="https://github.com/keepsync-hub/ks-compra-agil">keepsync-hub/ks-compra-agil</a>.</footer>
+</main>
+</body>
+</html>

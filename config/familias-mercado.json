@@ -1,0 +1,221 @@
+{
+  "_que_es": "Familias de servicio del mercado de Compra Ágil, DERIVADAS de la medición de `npm run mercado` (etapas B y C). No son criterios de búsqueda: nunca se le piden a la API, se evalúan localmente sobre nombres ya descargados. Los criterios de búsqueda viven en config/categorias.json.",
+  "_como_se_derivaron": "Del dimensionamiento por término del 2026-08-20 (40 términos, 1 request c/u) corregido por precisión, y de la frecuencia no supervisada de n-gramas sobre la muestra sistemática del universo. Cada familia cita abajo los términos medidos que la motivaron: el cargador (src/lib/familias-mercado.ts) FALLA si `_derivada_de` o `_evidencia` faltan.",
+  "_dos_capas": "`gruesa` cubre el universo entero y sirve para el denominador (qué % del mercado es cada cosa). `fina` describe la porción que KeepSync podría tocar, y es la que alimenta las propuestas de criterios.",
+  "_se_solapan": "Una compra puede caer en varias familias; la suma de los n SUPERA el universo y el informe declara cuánto.",
+  "_ojo_con_el_nombre": "Estos patrones se evalúan solo sobre el `nombre` del listado: la API no entrega `descripcion` sin pagar un request de detalle por compra. La sección 9 del informe mide cuánto sub-reporta eso.",
+  "familias": [
+    {
+      "id": "capacitacion",
+      "nombre": "Capacitación y formación",
+      "nombre_corto": "Capacitación",
+      "capa": "gruesa",
+      "verificacion_regex": "\\b(cursos?|capacitaci[oó]n(?:es)?|capacitar|taller(?:es)?|diplomado|seminario|webinar|bootcamp|entrenamiento|formaci[oó]n|relator(?:es|[ií]a)?|instructor(?:es|a)?|docente|clases?|charlas?)\\b",
+      "verificacion_flags": "i",
+      "_patron_excluyente_nota": "El patrón más productivo de falsos positivos es \"comprar COSAS para un taller/capacitación\", que no es comprar formación. Cuatro casos reales, todos encontrados auditando con `npm run estudio -- --muestra=N` el 2026-08-20: 2328-966-COT26 \"ADQUISICION DE VESTIMENTA TALLER DE FOLCLORE\"; 1057461-50-COT26 \"Insumos de oficina para Unidad de Capacitación\"; 1126922-689-COT26 \"PARLANTES PORTATILES PARA SALAS CLASES\"; y 2332-698-COT26 \"SERVICIO DE COFFEE BREAK PARA CAPACITACIÓN\". Un quinto caso agrega los servicios de apoyo: 5338-227-COT26 \"ALOJAMIENTO Y ALIMENTACIÓN PARA VISITA QUIEN REALIZARA UN TALLER\". A eso se suma que el `taller` chileno es también el lugar físico (\"REPUESTO PARA METRO\", \"ESCUELA DE OFICIOS\").",
+      "patron_excluyente": "\\b(materiales?|insumos?|repuestos?|herramientas?|equipamiento|mobiliario|implementos?|vestimenta|vestuario|parlantes?|art[ií]culos?|utiles?|equipos?|alojamiento|alimentaci[oó]n|traslados?|pasajes?)\\b.{0,45}\\b(taller|capacitaci|clases?|cursos?)|\\b(coffee\\s*break|cofee\\s*break|colaci[oó]n(?:es)?|catering|almuerzos?|banquetes?|arriendo\\s+(?:de\\s+)?sal[oó]n)\\b|\\bsalas?\\s+(?:de\\s+)?clases?\\b",
+      "_derivada_de": [
+        "taller",
+        "curso",
+        "capacitacion",
+        "diplomado",
+        "relatoria"
+      ],
+      "_evidencia": "Medido el 2026-08-20 (estado=publicada): taller 147 crudo × 70% precisión ≈ 103; curso 126 × 80% ≈ 101; capacitacion 53 × 80% ≈ 42; diplomado 10 × 90% ≈ 9. Es la familia de mayor volumen corregido que KeepSync toca."
+    },
+    {
+      "id": "ti-licencias-software",
+      "nombre": "Licencias y software",
+      "nombre_corto": "Licencias / software",
+      "capa": "gruesa",
+      "verificacion_regex": "\\b(licencias?|software|suscripci[oó]n(?:es)?|office|microsoft|adobe|autocad|canva|zoom|antivirus|sistema\\s+operativo)\\b",
+      "verificacion_flags": "i",
+      "_derivada_de": [
+        "licencias",
+        "software"
+      ],
+      "_evidencia": "Medido el 2026-08-20: licencias 36 crudo × 80% ≈ 29; software 28 × 70% ≈ 20. Las muestras son reales (Adobe, AutoCAD, Office, Zoom): es el nicho que el radar ya cubre para Claude, con más marcas alrededor.",
+      "_patron_excluyente_nota": "En Chile \"licencia\" es antes que nada la de conducir y la médica. Caso real encontrado auditando el 2026-08-20: 2493-74-COT26 \"material de oficina para la seccion de licencias de conducir\", que la familia clasificaba como software.",
+      "patron_excluyente": "\\blicencias?\\s+(?:de\\s+)?conducir\\b|\\blicencias?\\s+m[eé]dicas?\\b|licencias?\\s+(?:de\\s+)?conduccion"
+    },
+    {
+      "id": "ti-servicios",
+      "nombre": "Servicios TI: desarrollo, integración, soporte y plataformas",
+      "nombre_corto": "Servicios TI",
+      "capa": "gruesa",
+      "verificacion_regex": "\\b(desarrollo\\s+(?:de\\s+)?(?:software|sistema|aplicaci[oó]n|plataforma|web|api)|sitio\\s+web|p[aá]gina\\s+web|aplicaci[oó]n\\s+m[oó]vil|plataforma\\s+(?:digital|web|inform[aá]tica)|sistema\\s+(?:inform[aá]tico|de\\s+gesti[oó]n|de\\s+informaci[oó]n)|soporte\\s+(?:t[eé]cnico|inform[aá]tico|ti)|servicios?\\s+inform[aá]ticos?|hosting|nube|cloud|ciberseguridad|integraci[oó]n\\s+de\\s+sistemas)\\b",
+      "verificacion_flags": "i",
+      "_patron_excluyente_nota": "`soporte` en Compra Ágil es casi siempre el objeto físico: la muestra de `q=soporte` trae SOPORTE PARA TV CON RUEDAS, soporte para bicicletas y soporte para proyector. Por eso el patrón exige `soporte técnico/informático/TI` y nunca la palabra sola.",
+      "patron_excluyente": "\\bsoportes?\\s+(?:para|de)\\s+(?:tv|televisor|bicicleta|pantalla|monitor|proyector|pared|muro|pie)\\b",
+      "_derivada_de": [
+        "desarrollo",
+        "sistema",
+        "plataforma",
+        "soporte",
+        "informatica",
+        "ciberseguridad",
+        "integracion"
+      ],
+      "_evidencia": "Medido el 2026-08-20, y es el caso que obligó a corregir el método: desarrollo 365 crudo × 0% precisión ≈ 0; sistema 232 × 20% ≈ 46; plataforma 64 × 30% ≈ 19; soporte 58 × 50% ≈ 29; informatica 15 × 80% ≈ 12. Las palabras genéricas no sirven como criterio; el patrón exige la frase completa."
+    },
+    {
+      "id": "datos-ia",
+      "nombre": "Datos, analítica e inteligencia artificial",
+      "nombre_corto": "Datos / IA",
+      "capa": "fina",
+      "verificacion_regex": "\\b(inteligencia\\s+artificial|artificial\\s+intelligence|ia\\s+generativa|machine\\s+learning|aprendizaje\\s+autom[aá]tico|modelos?\\s+de\\s+lenguaje|llm|chatgpt|claude|anthropic|copilot|gemini|power\\s?bi|tableau|qlik|looker|business\\s+intelligence|inteligencia\\s+de\\s+negocios|anal[ií]tica\\s+de\\s+datos|ciencia\\s+de\\s+datos|visualizaci[oó]n\\s+de\\s+datos|gobierno\\s+de\\s+datos|base\\s+de\\s+datos|tableros?\\s+de\\s+control|dashboards?)\\b",
+      "verificacion_flags": "i",
+      "_derivada_de": [
+        "datos",
+        "inteligencia",
+        "analitica",
+        "chatbot"
+      ],
+      "_evidencia": "Medido el 2026-08-20: datos 569 crudo × 10% precisión ≈ 57 (el término suelto es puro ruido administrativo — \"complete todos los datos\"); inteligencia 9 × 67% ≈ 6; analitica 1; chatbot 0. La muestra de `q=curso` trae dos casos reales: \"CURSO DE GOBIERNO DE DATOS EN EL SECTOR PÚBLICO\" y \"LIDERAZGO PÚBLICO CON DATOS E INTELIGENCIA ARTIFICIAL\"."
+    },
+    {
+      "id": "capacitacion-ti-datos",
+      "nombre": "Capacitación en TI, datos e IA",
+      "nombre_corto": "Cursos TI / datos / IA",
+      "capa": "fina",
+      "verificacion_regex": "\\b(inteligencia\\s+artificial|ia\\s+generativa|machine\\s+learning|chatgpt|claude|copilot|power\\s?bi|tableau|excel|business\\s+intelligence|anal[ií]tica\\s+de\\s+datos|gobierno\\s+de\\s+datos|ciencia\\s+de\\s+datos|programaci[oó]n|python|ofim[aá]tica|inform[aá]tic[ao]|digital(?:es)?|transformaci[oó]n\\s+digital|ciberseguridad|n8n|zapier|power\\s+automate|automatizaci[oó]n)\\b",
+      "verificacion_flags": "i",
+      "_patron_requerido_nota": "Sin esto la familia captura la compra de licencias Power BI o de equipos informáticos, que es otro negocio. Mismo criterio que `bi-capacitacion` en config/categorias.json.",
+      "patron_requerido": "\\b(cursos?|capacitaci[oó]n(?:es)?|capacitar|taller(?:es)?|diplomado|seminario|webinar|bootcamp|entrenamiento|formaci[oó]n|relator(?:es|[ií]a)?|instructor(?:es|a)?|docente|clases?|charlas?)\\b",
+      "_derivada_de": [
+        "curso",
+        "capacitacion",
+        "inteligencia",
+        "datos"
+      ],
+      "_evidencia": "Es la intersección de las dos familias más relevantes: capacitación (≈103+101+42 según términos) e IA/datos. Casos reales en las muestras del 2026-08-20: \"CURSO DE GOBIERNO DE DATOS EN EL SECTOR PÚBLICO\" y \"CONTRATACIÓN DEL CURSO LIDERAZGO PÚBLICO CON DATOS E INTELIGENCIA ARTIFICIAL\"."
+    },
+    {
+      "id": "asesoria-consultoria",
+      "nombre": "Asesoría y consultoría profesional",
+      "nombre_corto": "Asesoría",
+      "capa": "fina",
+      "verificacion_regex": "\\b(asesor[ií]as?|asesorar|consultor[ií]as?|acompa[nñ]amiento\\s+t[eé]cnico|servicios?\\s+profesionales?|diagn[oó]stico\\s+(?:organizacional|institucional|t[eé]cnico)|hoja\\s+de\\s+ruta|estudio\\s+t[eé]cnico|levantamiento\\s+de\\s+procesos?)\\b",
+      "verificacion_flags": "i",
+      "_derivada_de": [
+        "asesoria",
+        "consultoria"
+      ],
+      "_evidencia": "Medido el 2026-08-20: asesoria 7 crudo × 100% precisión ≈ 7; consultoria 2 × 100% ≈ 2. Volumen chico pero precisión perfecta — a diferencia de `desarrollo` o `datos`, acá la palabra sí identifica el rubro."
+    },
+    {
+      "id": "automatizacion-documental",
+      "nombre": "Automatización de procesos y gestión documental",
+      "nombre_corto": "Automatización / documental",
+      "capa": "fina",
+      "verificacion_regex": "\\b(automatizaci[oó]n\\s+(?:de\\s+)?(?:procesos?|flujos?|tareas)|rpa|robotic\\s+process\\s+automation|gesti[oó]n\\s+documental|gestor\\s+documental|digitalizaci[oó]n\\s+(?:de\\s+)?(?:procesos?|documentos?|archivos?|expedientes?)|oficina\\s+de\\s+partes|expediente\\s+electr[oó]nico|firma\\s+electr[oó]nica|n8n|zapier|power\\s+automate|make\\.com)\\b",
+      "verificacion_flags": "i",
+      "_patron_excluyente_nota": "En Chile RPA también es Remotely Piloted Aircraft (dron): caso real 3703-332-COT26 \"Implementos Dron RPA DOM\", ya documentado en config/array-servicios.json y config/categorias.json.",
+      "patron_excluyente": "\\bdron(?:es)?\\b|\\bdrone\\b|\\buav\\b|aeronave|piloto\\s+remoto|veh[ií]culo\\s+a[eé]reo",
+      "_derivada_de": [
+        "automatizacion",
+        "digitalizacion",
+        "documental"
+      ],
+      "_evidencia": "Medido el 2026-08-20: automatizacion 1, digitalizacion 1, documental 1 (estado=publicada). Es la familia MÁS CHICA de todas las medidas, y es justamente el corazón de lo que KeepSync vende — un resultado incómodo pero medido, no supuesto."
+    },
+    {
+      "id": "mantencion-reparacion",
+      "nombre": "Mantención y reparación",
+      "capa": "gruesa",
+      "verificacion_regex": "\\b(mantenci[oó]n(?:es)?|mantenimiento|reparaci[oó]n(?:es)?|reparar|revisi[oó]n\\s+t[eé]cnica|servicio\\s+t[eé]cnico)\\b",
+      "verificacion_flags": "i",
+      "_derivada_de": [
+        "mantencion",
+        "reparacion"
+      ],
+      "_evidencia": "Medido el 2026-08-20: mantencion 145 crudo × 90% precisión ≈ 130; reparacion 101 × 80% ≈ 81. Familia grande y de precisión alta — no es de KeepSync, y por eso sirve de referencia de qué se ve un nicho real."
+    },
+    {
+      "id": "insumos-materiales",
+      "nombre": "Insumos y materiales",
+      "capa": "gruesa",
+      "verificacion_regex": "\\b(insumos?|materiales?|art[ií]culos?|suministros?|repuestos?|herramientas?|ferreter[ií]a|resmas?|t[oó]ner|papeler[ií]a)\\b",
+      "verificacion_flags": "i",
+      "_derivada_de": [
+        "insumos",
+        "materiales",
+        "ferreteria"
+      ],
+      "_evidencia": "Medido el 2026-08-20: insumos 1139 crudo × 100% precisión ≈ 1139; materiales 622 × 90% ≈ 560; ferreteria 31 × 100%. Es, por lejos, la familia más grande del mercado."
+    },
+    {
+      "id": "salud-clinico",
+      "nombre": "Insumos clínicos y medicamentos",
+      "capa": "gruesa",
+      "verificacion_regex": "\\b(medicamentos?|f[aá]rmacos?|insumos?\\s+(?:cl[ií]nicos?|m[eé]dicos?|de\\s+laboratorio)|cat[eé]ter|sutura|jeringas?|gasas?|reactivos?|imagenolog[ií]a|dental|odontol[oó]gic[ao]|quir[uú]rgic[ao]|hospitalari[ao])\\b",
+      "verificacion_flags": "i",
+      "_derivada_de": [
+        "medicamentos",
+        "insumos"
+      ],
+      "_evidencia": "Medido el 2026-08-20: medicamentos 192 crudo × 30% precisión ≈ 58; y la muestra sistemática del universo está poblada de catéteres, suturas y reactivos."
+    },
+    {
+      "id": "alimentacion",
+      "nombre": "Alimentación y catering",
+      "capa": "gruesa",
+      "verificacion_regex": "\\b(alimentaci[oó]n|alimentos?|colaci[oó]n(?:es)?|catering|coffee\\s*break|men[uú]s?|raci[oó]n(?:es)?|abarrotes|frutas?|verduras?)\\b",
+      "verificacion_flags": "i",
+      "_derivada_de": [
+        "alimentacion"
+      ],
+      "_evidencia": "Medido el 2026-08-20: alimentacion 50 crudo × 90% precisión ≈ 45, más los casos de catering y colaciones visibles en la muestra sistemática."
+    },
+    {
+      "id": "vestuario-mobiliario",
+      "nombre": "Vestuario, mobiliario y equipamiento",
+      "capa": "gruesa",
+      "verificacion_regex": "\\b(vestuario|ropa|uniformes?|calzado|zapatos?|parkas?|mobiliario|muebles?|escritorios?|sillas?|estantes?|lockers?|equipamiento)\\b",
+      "verificacion_flags": "i",
+      "_derivada_de": [
+        "vestuario",
+        "mobiliario",
+        "equipamiento"
+      ],
+      "_evidencia": "Medido el 2026-08-20: vestuario 78 crudo × 100% precisión; mobiliario 79 × 100%; equipamiento 143 × 40% ≈ 57."
+    },
+    {
+      "id": "obras-transporte",
+      "nombre": "Obras, transporte y combustible",
+      "capa": "gruesa",
+      "verificacion_regex": "\\b(construcci[oó]n|obras?\\s+(?:civiles?|menores?)|traslados?|transportes?|fletes?|combustibles?|bencina|di[eé]sel|arriendo\\s+de\\s+(?:veh[ií]culo|bus|cami[oó]n|gr[uú]a|maquinaria))\\b",
+      "verificacion_flags": "i",
+      "_derivada_de": [
+        "construccion",
+        "transporte",
+        "combustible",
+        "arriendo"
+      ],
+      "_evidencia": "Medido el 2026-08-20: transporte 179 crudo × 50% precisión ≈ 90; arriendo 120 × 90% ≈ 108; construccion 26 × 90% ≈ 23; combustible 25 × 60% ≈ 15."
+    },
+    {
+      "id": "aseo-seguridad",
+      "nombre": "Aseo, higiene y seguridad",
+      "capa": "gruesa",
+      "verificacion_regex": "\\b(aseo|higiene|limpieza|sanitizaci[oó]n|desinfecci[oó]n|seguridad|vigilancia|guardias?|extintores?|se[nñ]al[eé]tica)\\b",
+      "verificacion_flags": "i",
+      "_derivada_de": [
+        "aseo",
+        "seguridad"
+      ],
+      "_evidencia": "Medido el 2026-08-20: aseo 194 crudo × 80% precisión ≈ 155; seguridad 224 × 40% ≈ 90."
+    },
+    {
+      "id": "eventos-difusion",
+      "nombre": "Eventos, difusión e impresión",
+      "capa": "gruesa",
+      "verificacion_regex": "\\b(impresi[oó]n|imprenta|pendones?|gigantograf[ií]as?|d[ií]pticos?|folleter[ií]a|publicidad|difusi[oó]n|amplificaci[oó]n|escenario|producci[oó]n\\s+de\\s+eventos?|animaci[oó]n)\\b",
+      "verificacion_flags": "i",
+      "_derivada_de": [
+        "impresion"
+      ],
+      "_evidencia": "Medido el 2026-08-20: impresion 26 crudo × 70% precisión ≈ 18, más los pendones, artículos publicitarios y guirnaldas visibles en la muestra sistemática del universo."
+    }
+  ]
+}

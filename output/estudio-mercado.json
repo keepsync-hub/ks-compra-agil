@@ -1,0 +1,293 @@
+{
+  "universoAbierto": 8980,
+  "metricas": [
+    {
+      "id": "insumos-materiales",
+      "nombre": "Insumos y materiales",
+      "capa": "gruesa",
+      "n_muestra": 119,
+      "pct_muestra": 19.040000000000003,
+      "error_pct": 2.969231271240162,
+      "estimado_universo": 1710,
+      "monto_total_muestra": 205082649,
+      "monto_p50": 1001861,
+      "evidencia": "Medido el 2026-08-20: insumos 1139 crudo × 100% precisión ≈ 1139; materiales 622 × 90% ≈ 560; ferreteria 31 × 100%. Es, por lejos, la familia más grande del mercado."
+    },
+    {
+      "id": "mantencion-reparacion",
+      "nombre": "Mantención y reparación",
+      "capa": "gruesa",
+      "n_muestra": 50,
+      "pct_muestra": 8,
+      "error_pct": 2.0517016663975367,
+      "estimado_universo": 718,
+      "monto_total_muestra": 92860195,
+      "monto_p50": 1000000,
+      "evidencia": "Medido el 2026-08-20: mantencion 145 crudo × 90% precisión ≈ 130; reparacion 101 × 80% ≈ 81. Familia grande y de precisión alta — no es de KeepSync, y por eso sirve de referencia de qué se ve un nicho real."
+    },
+    {
+      "id": "vestuario-mobiliario",
+      "nombre": "Vestuario, mobiliario y equipamiento",
+      "capa": "gruesa",
+      "n_muestra": 37,
+      "pct_muestra": 5.92,
+      "error_pct": 1.7847804976246118,
+      "estimado_universo": 532,
+      "monto_total_muestra": 47200130,
+      "monto_p50": 750000,
+      "evidencia": "Medido el 2026-08-20: vestuario 78 crudo × 100% precisión; mobiliario 79 × 100%; equipamiento 143 × 40% ≈ 57."
+    },
+    {
+      "id": "aseo-seguridad",
+      "nombre": "Aseo, higiene y seguridad",
+      "capa": "gruesa",
+      "n_muestra": 32,
+      "pct_muestra": 5.12,
+      "error_pct": 1.6668542339086374,
+      "estimado_universo": 460,
+      "monto_total_muestra": 45569659,
+      "monto_p50": 897500,
+      "evidencia": "Medido el 2026-08-20: aseo 194 crudo × 80% precisión ≈ 155; seguridad 224 × 40% ≈ 90."
+    },
+    {
+      "id": "salud-clinico",
+      "nombre": "Insumos clínicos y medicamentos",
+      "capa": "gruesa",
+      "n_muestra": 30,
+      "pct_muestra": 4.8,
+      "error_pct": 1.6166440079534268,
+      "estimado_universo": 431,
+      "monto_total_muestra": 74505993,
+      "monto_p50": 1400000,
+      "evidencia": "Medido el 2026-08-20: medicamentos 192 crudo × 30% precisión ≈ 58; y la muestra sistemática del universo está poblada de catéteres, suturas y reactivos."
+    },
+    {
+      "id": "alimentacion",
+      "nombre": "Alimentación y catering",
+      "capa": "gruesa",
+      "n_muestra": 25,
+      "pct_muestra": 4,
+      "error_pct": 1.48197513232057,
+      "estimado_universo": 359,
+      "monto_total_muestra": 27012416,
+      "monto_p50": 505750,
+      "evidencia": "Medido el 2026-08-20: alimentacion 50 crudo × 90% precisión ≈ 45, más los casos de catering y colaciones visibles en la muestra sistemática."
+    },
+    {
+      "id": "capacitacion",
+      "nombre": "Capacitación y formación",
+      "capa": "gruesa",
+      "n_muestra": 24,
+      "pct_muestra": 3.84,
+      "error_pct": 1.4532426781416845,
+      "estimado_universo": 345,
+      "monto_total_muestra": 62458778,
+      "monto_p50": 2222520,
+      "evidencia": "Medido el 2026-08-20 (estado=publicada): taller 147 crudo × 70% precisión ≈ 103; curso 126 × 80% ≈ 101; capacitacion 53 × 80% ≈ 42; diplomado 10 × 90% ≈ 9. Es la familia de mayor volumen corregido que KeepSync toca."
+    },
+    {
+      "id": "obras-transporte",
+      "nombre": "Obras, transporte y combustible",
+      "capa": "gruesa",
+      "n_muestra": 21,
+      "pct_muestra": 3.36,
+      "error_pct": 1.3627726323953286,
+      "estimado_universo": 302,
+      "monto_total_muestra": 38924567,
+      "monto_p50": 900000,
+      "evidencia": "Medido el 2026-08-20: transporte 179 crudo × 50% precisión ≈ 90; arriendo 120 × 90% ≈ 108; construccion 26 × 90% ≈ 23; combustible 25 × 60% ≈ 15."
+    },
+    {
+      "id": "eventos-difusion",
+      "nombre": "Eventos, difusión e impresión",
+      "capa": "gruesa",
+      "n_muestra": 9,
+      "pct_muestra": 1.44,
+      "error_pct": 0.9009628783834575,
+      "estimado_universo": 129,
+      "monto_total_muestra": 27220000,
+      "monto_p50": 2000000,
+      "evidencia": "Medido el 2026-08-20: impresion 26 crudo × 70% precisión ≈ 18, más los pendones, artículos publicitarios y guirnaldas visibles en la muestra sistemática del universo."
+    },
+    {
+      "id": "ti-licencias-software",
+      "nombre": "Licencias y software",
+      "capa": "gruesa",
+      "n_muestra": 4,
+      "pct_muestra": 0.64,
+      "error_pct": 0.6030746624510304,
+      "estimado_universo": 57,
+      "monto_total_muestra": 14159000,
+      "monto_p50": 3565000,
+      "evidencia": "Medido el 2026-08-20: licencias 36 crudo × 80% ≈ 29; software 28 × 70% ≈ 20. Las muestras son reales (Adobe, AutoCAD, Office, Zoom): es el nicho que el radar ya cubre para Claude, con más marcas alrededor."
+    },
+    {
+      "id": "datos-ia",
+      "nombre": "Datos, analítica e inteligencia artificial",
+      "capa": "fina",
+      "n_muestra": 3,
+      "pct_muestra": 0.48,
+      "error_pct": 0.5226983225785037,
+      "estimado_universo": 43,
+      "monto_total_muestra": 14669000,
+      "monto_p50": 6020000,
+      "evidencia": "Medido el 2026-08-20: datos 569 crudo × 10% precisión ≈ 57 (el término suelto es puro ruido administrativo — \"complete todos los datos\"); inteligencia 9 × 67% ≈ 6; analitica 1; chatbot 0. La muestra de `q=curso` trae dos casos reales: \"CURSO DE GOBIERNO DE DATOS EN EL SECTOR PÚBLICO\" y \"LIDERAZGO PÚBLICO CON DATOS E INTELIGENCIA ARTIFICIAL\"."
+    },
+    {
+      "id": "capacitacion-ti-datos",
+      "nombre": "Capacitación en TI, datos e IA",
+      "capa": "fina",
+      "n_muestra": 2,
+      "pct_muestra": 0.32,
+      "error_pct": 0.42712432732163974,
+      "estimado_universo": 29,
+      "monto_total_muestra": 7820000,
+      "monto_p50": 3910000,
+      "evidencia": "Es la intersección de las dos familias más relevantes: capacitación (≈103+101+42 según términos) e IA/datos. Casos reales en las muestras del 2026-08-20: \"CURSO DE GOBIERNO DE DATOS EN EL SECTOR PÚBLICO\" y \"CONTRATACIÓN DEL CURSO LIDERAZGO PÚBLICO CON DATOS E INTELIGENCIA ARTIFICIAL\"."
+    },
+    {
+      "id": "ti-servicios",
+      "nombre": "Servicios TI: desarrollo, integración, soporte y plataformas",
+      "capa": "gruesa",
+      "n_muestra": 1,
+      "pct_muestra": 0.16,
+      "error_pct": 0.30226480473447354,
+      "estimado_universo": 14,
+      "monto_total_muestra": 100000,
+      "monto_p50": 100000,
+      "evidencia": "Medido el 2026-08-20, y es el caso que obligó a corregir el método: desarrollo 365 crudo × 0% precisión ≈ 0; sistema 232 × 20% ≈ 46; plataforma 64 × 30% ≈ 19; soporte 58 × 50% ≈ 29; informatica 15 × 80% ≈ 12. Las palabras genéricas no sirven como criterio; el patrón exige la frase completa."
+    },
+    {
+      "id": "asesoria-consultoria",
+      "nombre": "Asesoría y consultoría profesional",
+      "capa": "fina",
+      "n_muestra": 0,
+      "pct_muestra": 0,
+      "error_pct": 0,
+      "estimado_universo": 0,
+      "monto_total_muestra": 0,
+      "monto_p50": null,
+      "evidencia": "Medido el 2026-08-20: asesoria 7 crudo × 100% precisión ≈ 7; consultoria 2 × 100% ≈ 2. Volumen chico pero precisión perfecta — a diferencia de `desarrollo` o `datos`, acá la palabra sí identifica el rubro."
+    },
+    {
+      "id": "automatizacion-documental",
+      "nombre": "Automatización de procesos y gestión documental",
+      "capa": "fina",
+      "n_muestra": 0,
+      "pct_muestra": 0,
+      "error_pct": 0,
+      "estimado_universo": 0,
+      "monto_total_muestra": 0,
+      "monto_p50": null,
+      "evidencia": "Medido el 2026-08-20: automatizacion 1, digitalizacion 1, documental 1 (estado=publicada). Es la familia MÁS CHICA de todas las medidas, y es justamente el corazón de lo que KeepSync vende — un resultado incómodo pero medido, no supuesto."
+    }
+  ],
+  "desenlaces": [
+    [
+      "datos",
+      {
+        "cerrada": 3840,
+        "desierta": 10000,
+        "cancelada": 10000
+      }
+    ],
+    [
+      "desarrollo",
+      {
+        "cerrada": 1542,
+        "desierta": 8186,
+        "cancelada": 9036
+      }
+    ],
+    [
+      "sistema",
+      {
+        "cerrada": 1039,
+        "desierta": 4284,
+        "cancelada": 4775
+      }
+    ],
+    [
+      "taller",
+      {
+        "cerrada": 532,
+        "desierta": 3893,
+        "cancelada": 3150
+      }
+    ],
+    [
+      "mantencion",
+      {
+        "cerrada": 672,
+        "desierta": 2697,
+        "cancelada": 3442
+      }
+    ],
+    [
+      "curso",
+      {
+        "cerrada": 389,
+        "desierta": 2225,
+        "cancelada": 2526
+      }
+    ],
+    [
+      "capacitacion",
+      {
+        "cerrada": 166,
+        "desierta": 1015,
+        "cancelada": 1075
+      }
+    ]
+  ],
+  "calibracion": {
+    "n": 20,
+    "soloNombre": 17,
+    "textoCompleto": 18,
+    "onu": [
+      14111703,
+      14111704,
+      15111509,
+      23171603,
+      24101601,
+      27111508,
+      27111720,
+      27112802,
+      31162006,
+      31211501,
+      40141702,
+      40142317,
+      42251706,
+      42281508,
+      42281701,
+      42292603,
+      42294944,
+      43191501,
+      44103103,
+      44103116,
+      46191601,
+      47121701,
+      47121812,
+      47131502,
+      47131603,
+      47131803,
+      47131810,
+      47131816,
+      47131824,
+      49201503,
+      49221505,
+      49221508,
+      50192901,
+      52161512,
+      53101802,
+      53101804,
+      53121603,
+      53131608,
+      56112102,
+      60105704,
+      70121901,
+      72102305,
+      80141605
+    ]
+  }
+}

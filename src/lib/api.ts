@@ -234,17 +234,26 @@ export interface PaginaCompraAgil {
  * de gastar la cuota de una corrida entera en ella.
  */
 export async function buscarCompraAgilPagina(params: {
-  q: string;
+  /**
+   * Opcional a propósito, y solo acá. Verificado contra producción (ver `output/diagnostico-api.md`):
+   * `/v2/compra-agil` sin `q` responde 200 y devuelve el universo completo — es lo que hace posible
+   * medir el mercado sin pre-filtrarlo por las keywords de los nichos que ya se buscan.
+   *
+   * `BuscarCompraAgilParams` (el helper multi-página) deja `q` OBLIGATORIO justamente por esto: un
+   * `q` que llegue `undefined` por un bug dispararía un barrido del universo entero (353 páginas)
+   * sin que nadie lo pidiera. Acá el radio de explosión es 1 request.
+   */
+  q?: string;
   estado?: EstadoCompraAgil;
   tamanoPagina?: number;
   numeroPagina?: number;
 }): Promise<PaginaCompraAgil> {
   const tamanoPagina = Math.min(Math.max(params.tamanoPagina ?? 50, PAGE_SIZE_MIN), PAGE_SIZE_MAX);
   const qs = new URLSearchParams({
-    q: params.q,
     tamano_pagina: String(tamanoPagina),
     numero_pagina: String(params.numeroPagina ?? 1),
   });
+  if (params.q) qs.set("q", params.q);
   if (params.estado) qs.set("estado", params.estado);
   const payload = await apiGet<{ items: CompraAgilListItem[]; paginacion?: Paginacion }>(`/v2/compra-agil?${qs.toString()}`);
   return { items: payload.items ?? [], paginacion: payload.paginacion };

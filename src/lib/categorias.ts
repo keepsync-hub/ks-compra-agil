@@ -88,7 +88,7 @@ export interface CategoriasExtraConfig {
  * Normalización de las frases agregadas a mano: sin tildes, sin mayúsculas y con los espacios
  * colapsados. Quien escribe "claude code" espera que encuentre "Claude Code" y "CLAUDE CODE".
  */
-function normalizar(texto: string): string {
+export function normalizarTexto(texto: string): string {
   return texto
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -105,15 +105,65 @@ function normalizar(texto: string): string {
  */
 const DE_SUELTO = /(^|\s)de(\s|$)/i;
 
-function compilarPatron(id: string, campo: string, patron: string | undefined, flags: string): RegExp | null {
+/** Rótulo del archivo en los mensajes de error de compilación (las familias de mercado pasan el suyo). */
+export const CATEGORIAS_PATH_REL = "config/categorias.json";
+
+function compilarPatron(
+  id: string,
+  campo: string,
+  patron: string | undefined,
+  flags: string,
+  archivo = CATEGORIAS_PATH_REL,
+): RegExp | null {
   if (patron == null || patron === "") return null;
   try {
     return new RegExp(patron, flags);
   } catch (err) {
+    throw new Error(`${archivo}: regex inválida en "${campo}" de "${id}": ${(err as Error).message}`);
+  }
+}
+
+/** Las tres regex del embudo, ya compiladas y validadas. */
+export interface PatronesCompilados {
+  regex: RegExp;
+  requerido: RegExp | null;
+  excluyente: RegExp | null;
+}
+
+/**
+ * Compila y valida las tres puertas del embudo. Extraída de `compilar()` para que
+ * `config/familias-mercado.json` reuse exactamente las mismas validaciones —la prohibición de los
+ * flags "g"/"y" sobre todo— sin heredar las de `q`, que a una familia no le aplican: una familia
+ * nunca se consulta contra la API, se evalúa localmente sobre nombres ya descargados.
+ */
+export function compilarPatrones(
+  id: string,
+  cfg: {
+    verificacion_regex: string;
+    verificacion_flags?: string;
+    patron_requerido?: string;
+    patron_excluyente?: string;
+  },
+  archivo = CATEGORIAS_PATH_REL,
+): PatronesCompilados {
+  const flags = cfg.verificacion_flags ?? "i";
+  // Con el flag "g" (o "y"), RegExp.test() conserva `lastIndex` entre llamadas: en un bucle que
+  // reusa la misma instancia alterna true/false de forma silenciosa e intermitente — un bug muy
+  // difícil de reproducir. Se prohíbe a propósito.
+  if (/[gy]/.test(flags)) {
     throw new Error(
-      `config/categorias.json: regex inválida en "${campo}" de la categoría "${id}": ${(err as Error).message}`,
+      `${archivo}: "${id}" tiene flags "${flags}" — "g"/"y" no están permitidos ` +
+        `(con "g", RegExp.test() arrastra estado entre llamadas y produce falsos negativos ` +
+        `intermitentes). Usar solo "i" o dejar vacío.`,
     );
   }
+  const regex = compilarPatron(id, "verificacion_regex", cfg.verificacion_regex, flags, archivo);
+  if (!regex) throw new Error(`${archivo}: "${id}" no tiene verificacion_regex.`);
+  return {
+    regex,
+    requerido: compilarPatron(id, "patron_requerido", cfg.patron_requerido, flags, archivo),
+    excluyente: compilarPatron(id, "patron_excluyente", cfg.patron_excluyente, flags, archivo),
+  };
 }
 
 function compilar(cat: CategoriaNegocio, extras: TerminoExtra[]): CategoriaCompilada {
@@ -133,21 +183,7 @@ function compilar(cat: CategoriaNegocio, extras: TerminoExtra[]): CategoriaCompi
       );
     }
   }
-  const flags = cat.verificacion_flags ?? "i";
-  // Con el flag "g" (o "y"), RegExp.test() conserva `lastIndex` entre llamadas: en un bucle que
-  // reusa la misma instancia (como itemMencionaCategoria sobre una lista), alterna true/false de
-  // forma silenciosa e intermitente — un bug muy difícil de reproducir. Se prohíbe a propósito.
-  if (/[gy]/.test(flags)) {
-    throw new Error(
-      `config/categorias.json: la categoría "${cat.id}" tiene flags "${flags}" — "g"/"y" no están permitidos ` +
-        `(con "g", RegExp.test() arrastra estado entre llamadas y produce falsos negativos intermitentes). ` +
-        `Usar solo "i" o dejar vacío.`,
-    );
-  }
-  const regex = compilarPatron(cat.id, "verificacion_regex", cat.verificacion_regex, flags);
-  if (!regex) {
-    throw new Error(`config/categorias.json: la categoría "${cat.id}" no tiene verificacion_regex.`);
-  }
+  const patrones = compilarPatrones(cat.id, cat);
   const {
     verificacion_regex: _vr,
     verificacion_flags: _vf,
@@ -160,9 +196,7 @@ function compilar(cat: CategoriaNegocio, extras: TerminoExtra[]): CategoriaCompi
   } = cat;
   return {
     ...resto,
-    regex,
-    requerido: compilarPatron(cat.id, "patron_requerido", cat.patron_requerido, flags),
-    excluyente: compilarPatron(cat.id, "patron_excluyente", cat.patron_excluyente, flags),
+    ...patrones,
     nombreCorto: cat.nombre_corto ?? cat.nombre,
     maxPaginasPorVariante: cat.max_paginas_por_variante ?? MAX_PAGINAS_POR_VARIANTE_DEFAULT,
     barrerAdjudicaciones: cat.barrer_adjudicaciones ?? true,
@@ -220,12 +254,23 @@ export function categoriasActivas(): CategoriaCompilada[] {
   return cargarCategorias().filter((c) => c.activa);
 }
 
-export function mencionaCategoria(cat: CategoriaCompilada, texto: string | null | undefined): boolean {
+/**
+ * Lo mínimo que necesitan `mencionaCategoria` y `confirmarCategoriaEnTexto` para funcionar: las tres
+ * regex ya compiladas y, opcionalmente, las frases literales agregadas a mano. Es un tipo
+ * estructural y no `CategoriaCompilada` para que `src/lib/familias-mercado.ts` reuse el embudo tal
+ * cual, sin arrastrar los campos que solo tienen sentido consultando la API (`variantes_q`,
+ * `pricing`, `presupuesto_requests_por_corrida`). `CategoriaCompilada` lo satisface, así que
+ * ningún caller actual cambia.
+ */
+export type PatronesConfirmables = PatronesCompilados & { extra?: string[] };
+
+export function mencionaCategoria(cat: PatronesConfirmables, texto: string | null | undefined): boolean {
   if (!texto) return false;
   if (cat.regex.test(texto)) return true;
-  if (cat.extra.length === 0) return false;
-  const normalizado = normalizar(texto);
-  return cat.extra.some((t) => normalizado.includes(normalizar(t)));
+  const extra = cat.extra ?? [];
+  if (extra.length === 0) return false;
+  const normalizado = normalizarTexto(texto);
+  return extra.some((t) => normalizado.includes(normalizarTexto(t)));
 }
 
 /** Lo que se le pide a la API como `q`: las variantes de la categoría más las agregadas a mano. */
@@ -277,7 +322,7 @@ export function textoCompletoDetalle(
 export type ResultadoConfirmacion = "confirmada" | "no-menciona" | "falta-requerido" | "excluida";
 
 /** Las tres puertas del filtro, en orden, sobre un texto ya concatenado. */
-export function confirmarCategoriaEnTexto(cat: CategoriaCompilada, texto: string): ResultadoConfirmacion {
+export function confirmarCategoriaEnTexto(cat: PatronesConfirmables, texto: string): ResultadoConfirmacion {
   if (!mencionaCategoria(cat, texto)) return "no-menciona";
   if (cat.requerido && !cat.requerido.test(texto)) return "falta-requerido";
   if (cat.excluyente && cat.excluyente.test(texto)) return "excluida";
