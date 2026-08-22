@@ -1,0 +1,19 @@
+{
+  "codigo": "1618-67-COT26",
+  "organismo": "DIRECCION DE PRESUPUESTOS MINISTERIO DE",
+  "fuente_catalogo": "capacitaciones.json",
+  "catalogo_provisional": false,
+  "total_clp": 1350000,
+  "tope_clp": 1500000,
+  "generado": "2026-08-22T21:34:10.497Z",
+  "apto_para_enviar": false,
+  "documentos": [
+    {
+      "prefijo": "03",
+      "documento": "Propuesta técnica de la actividad de capacitación",
+      "tipo": "generable",
+      "estado": "generado",
+      "archivo": "output/expedientes/1618-67-COT26/03 - Propuesta técnica de la actividad de capacitación.pdf"
+    }
+  ]
+}

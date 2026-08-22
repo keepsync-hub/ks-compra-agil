@@ -38,3 +38,7 @@ licitaciones/data/*
 
 *.log
 .DS_Store
+
+# Salida de n8n/construir.mjs: se regenera con `node n8n/construir.mjs <workflow>`.
+# La fuente versionada es n8n/workflows/ + n8n/chunks/.
+n8n/build/
