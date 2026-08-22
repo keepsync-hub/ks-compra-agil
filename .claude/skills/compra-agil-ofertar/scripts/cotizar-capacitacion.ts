@@ -20,6 +20,7 @@ import {
 } from "../../../../src/lib/capacitacion-cotizacion.js";
 import { nombreArchivoCotizacion } from "../../../../src/lib/nombre-archivo.js";
 import { cierreYaPaso } from "../../../../src/lib/tiempo.js";
+import { calcularScore } from "../../../../src/lib/scoring-capacitacion.js";
 
 /**
  * Descuento sobre el tope para el nicho de capacitación: el usuario lo fijó explícitamente el
@@ -96,6 +97,7 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
 
   const oferente = cargarIdentidadOferente();
   const descuentoPct = Math.round(DESCUENTO_SOBRE_TOPE * 100);
+  const score = calcularScore(requisitos.criterios_direccionadores);
 
   const data: CotizacionCapacitacionData = {
     codigo,
@@ -146,6 +148,11 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
         archivo_publicable: nombreArchivoPdf,
         fuente_documentos: requisitos.fuente_documentos,
         requisitos_por_confirmar: pendientesPorConfirmar,
+        score_apertura_pct: score.score,
+        score_criterios_sin_informacion: score.sinInformacion,
+        score_criterios_cubiertos: score.cubiertos,
+        _score_nota:
+          "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que falte revisar (config/capacitaciones.json → criterios_direccionadores).",
         pendientes: data.pendientes,
         apto_para_enviar: false,
         _apto_nota:
@@ -168,6 +175,8 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
     `  ${codigo} — ${requisitos.curso}\n` +
       `    Tope ${topeClp.toLocaleString("es-CL")} → ofertado ${totalClp.toLocaleString("es-CL")} CLP ` +
       `(${descuentoPct}% bajo el tope, ${requisitos.tributacion.regimen})\n` +
+      `    Score de apertura: ${score.score}% (${score.sinInformacion} criterio(s) sin información × −5%` +
+      `${score.cubiertos > 0 ? `, ${score.cubiertos} cubierto(s)` : ""})\n` +
       `    PDF: output/capacitaciones/${codigo}/${nombreArchivoPdf}` +
       ` · ${pendientesPorConfirmar} requisito(s) por confirmar · ${data.pendientes.length} pendiente(s) antes de presentar`,
   );
@@ -187,6 +196,8 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
     fuenteDocumentos: requisitos.fuente_documentos,
     requisitosPorConfirmar: pendientesPorConfirmar,
     pendientes: data.pendientes,
+    score,
+    criterios: requisitos.criterios_direccionadores,
     generado: fechaIsoDia(fecha),
   };
 }

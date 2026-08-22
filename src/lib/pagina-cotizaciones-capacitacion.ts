@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR } from "./config.js";
 import { reemplazarBloque } from "./pagina-compra-agil.js";
+import { GLOSA_TIPO, bandaScore, type CriterioDireccionador, type ScoreCapacitacion } from "./scoring-capacitacion.js";
 
 const MARCA_INICIO =
   "<!-- COTIZACIONES:INICIO (generado por `npm run cotizar-capacitacion` — no editar a mano) -->";
@@ -31,6 +32,10 @@ export interface CotizacionPublicada {
   fuenteDocumentos: string[];
   requisitosPorConfirmar: number;
   pendientes: string[];
+  /** Score de apertura (0–100%) y su desglose. Ver src/lib/scoring-capacitacion.ts. */
+  score: ScoreCapacitacion;
+  /** Los criterios que produjeron el score, para poder auditarlo desde la página. */
+  criterios: CriterioDireccionador[];
   generado: string;
 }
 
@@ -79,7 +84,24 @@ function tarjeta(c: CotizacionPublicada): string {
   // como porcentaje del tope, que es exactamente cómo se fijó este.
   const claseCriterio = c.criterioEvaluacion === "menor_precio" ? "warn" : "ok";
 
+  const banda = bandaScore(c.score.score);
+  const resumenTipos = c.score.porTipo
+    .map((t) => `${t.n} de ${GLOSA_TIPO[t.tipo].toLowerCase()}`)
+    .join(", ");
+
   return `      <article class="opp-card">
+        <div class="score-row">
+          <div class="score ${banda}">
+            <span class="score-n">${c.score.score}%</span>
+            <span class="score-l">apertura</span>
+          </div>
+          <div class="score-txt">
+            ${c.score.sinInformacion} criterio(s) por resolver × −5%${
+              c.score.cubiertos > 0 ? ` · ${c.score.cubiertos} ya cubierto(s)` : ""
+            }<br>
+            <span class="hint">${esc(resumenTipos)}</span>
+          </div>
+        </div>
         <div class="codigo">${esc(c.codigo)}</div>
         <div class="org">${esc(c.organismo)}</div>
         <div class="nombre">${esc(c.curso)}</div>
@@ -93,6 +115,19 @@ function tarjeta(c: CotizacionPublicada): string {
           <span class="badge ${claseRegimen}">${GLOSA_REGIMEN[c.regimenTributario]}</span>
           <span class="badge ${claseCriterio}">${GLOSA_CRITERIO[c.criterioEvaluacion]}</span>
         </div>
+        <details class="detalle-lista">
+          <summary>Qué baja el score: criterios que dirigen la compra (${c.criterios.length})</summary>
+          <ul>${c.criterios
+            .map(
+              (k) =>
+                `<li><span class="crit ${k.estado === "cubierto" ? "ok" : "pend"}">${
+                  k.estado === "cubierto" ? "cubierto" : "−5%"
+                }</span> <strong>${esc(GLOSA_TIPO[k.tipo])}</strong> — ${esc(k.exige)} <span class="hint">(${esc(k.cita)})</span>${
+                  k.resuelto_por ? ` <span class="hint">${esc(k.resuelto_por)}</span>` : ""
+                }</li>`,
+            )
+            .join("")}</ul>
+        </details>
         <details class="detalle-lista alerta">
           <summary>Observaciones antes de presentar (${c.pendientes.length})</summary>
           <ul>${c.pendientes.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>
@@ -116,7 +151,12 @@ function tarjeta(c: CotizacionPublicada): string {
  * un dato que solo puede aportar una persona.
  */
 export function renderCotizacionesCapacitacion(cotizaciones: Map<string, CotizacionPublicada>): string {
-  const lista = [...cotizaciones.values()].sort((a, b) => a.fechaCierre.localeCompare(b.fechaCierre));
+  // Ordenado por score y no por fecha de cierre, que es como se ordena la grilla de oportunidades:
+  // este bloque existe para decidir dónde poner el esfuerzo, y lo primero que hay que ver es la
+  // compra más abierta. El cierre desempata.
+  const lista = [...cotizaciones.values()].sort(
+    (a, b) => b.score.score - a.score.score || a.fechaCierre.localeCompare(b.fechaCierre),
+  );
 
   if (lista.length === 0) {
     return `  <section id="cotizaciones">
@@ -140,7 +180,17 @@ export function renderCotizacionesCapacitacion(cotizaciones: Map<string, Cotizac
       <strong>PRELIMINAR</strong>, y <strong>BORRADOR</strong> mientras la identidad del oferente no
       esté confirmada.
     </p>
-    <p class="meta-corrida">${lista.length} borrador(es) · generados el ${esc(generado)}</p>
+    <p class="meta-corrida">${lista.length} borrador(es) · generados el ${esc(generado)} · ordenados por score de apertura</p>
+    <div class="note" style="border-left-color: var(--accent); margin-bottom:1rem;">
+      <strong>Score de apertura (0–100%).</strong> Mide qué tan libre está la cancha:
+      <strong>100%</strong> sería una compra que no exige ninguna característica, capacidad o
+      certificación particular que dirija la adjudicación hacia un proveedor determinado. Se
+      descuenta <strong>5% por cada criterio que haya que revisar y del que hoy no se tenga
+      información</strong>. Un score alto no dice que se vaya a ganar: dice que lo que falta para
+      poder presentarse son pocas cosas y son averiguables. Uno bajo marca una compra escrita
+      alrededor de un proveedor que ya existe. Cada criterio va citado en la tarjeta, y el score
+      sube solo a medida que se confirman en <code>config/capacitaciones.json</code>.
+    </div>
     <div class="note" style="margin-bottom:1.25rem;">
       <strong>Ninguno está listo para presentar, y el bloqueo no es el precio.</strong>
       Los ${lista.length} organismos exigen un/a relator/a con título, currículum y certificados

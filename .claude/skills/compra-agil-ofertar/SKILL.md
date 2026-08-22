@@ -109,6 +109,33 @@ Tres cosas que este cotizador hace a propósito y conviene no "arreglar":
    mismo Chromium que imprime y devuelve las láminas desbordadas; el script trata eso como error y
    no da por buena la cotización. Al ajustar la plantilla, correr y mirar esa salida — no la vista.
 
+### Score de apertura (0–100%)
+
+Cada tarjeta encabeza con un porcentaje que ordena el foco. La regla, fijada por el usuario el
+2026-08-22: **100%** es una compra que no exige ninguna característica, capacidad o certificación
+particular que dirija la adjudicación hacia un proveedor determinado, y se descuenta **5% por cada
+criterio que haya que revisar y del que hoy no se tenga información**.
+
+Los criterios viven en `criterios_direccionadores` de `config/capacitaciones.json`, uno por
+exigencia, cada uno con su **cita** al documento del organismo. `src/lib/scoring-capacitacion.ts`
+solo cuenta: `score = 100 − 5 × (criterios en estado "sin_informacion")`, con piso en 0.
+
+Medido hoy: Dipres 75% las tres, Subtrans 65%, Concepción 60%, Hospital Padre Hurtado 45%. El
+orden no es casual — el Hospital exige las **últimas 12 órdenes de compra del mismo curso** en
+Mercado Público, que excluye a cualquiera que no lo haya vendido ya varias veces; Concepción da 35
+de 100 puntos por un magíster; Subtrans reserva 10% del puntaje a ser OTEC. Dipres, en cambio, solo
+pide credenciales del relator/a, que es un dato averiguable.
+
+Qué **no** es: una probabilidad de adjudicación. No pondera monto, competencia ni precio. Es cuánto
+de la admisibilidad está sin resolver hoy.
+
+El score **sube solo, sin tocar código**, cuando alguien confirma un criterio: se cambia su
+`estado` a `"cubierto"` y se escribe `resuelto_por` con la evidencia. El cargador valida esto en
+serio, porque el número se publica y se lee como dato duro: **corta la corrida** si un criterio no
+tiene cita, si un `"cubierto"` viene sin `resuelto_por`, si hay ids duplicados (contarían dos
+veces), si el tipo es desconocido o si la lista viene vacía (declarar cero criterios es afirmar
+score 100%). Los seis guardas están verificados en negativo.
+
 **Tensión registrada, no resuelta:** las tres compras de Dipres seleccionan por **menor precio
 total** entre las que cumplen todo. Cotizar al 90% del tope es por construcción una posición débil
 frente a quien cotice más abajo. La regla la fijó el usuario; el PDF y el resumen lo dicen en vez

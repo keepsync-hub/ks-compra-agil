@@ -23,6 +23,67 @@
       "Confirmar que KeepSync puede facturar exento por giro educacional (artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios). El organismo presupuestó el servicio como exento.",
       "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Este organismo selecciona por MENOR PRECIO TOTAL, así que el margen sobre el tope define directamente si se gana."
     ],
+    "score": {
+      "score": 75,
+      "sinInformacion": 5,
+      "cubiertos": 0,
+      "total": 5,
+      "porTipo": [
+        {
+          "tipo": "experiencia_relator",
+          "n": 2
+        },
+        {
+          "tipo": "identidad",
+          "n": 1
+        },
+        {
+          "tipo": "titulo_grado",
+          "n": 1
+        },
+        {
+          "tipo": "tributario",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "relator-titulo",
+        "exige": "Relator/a profesional o técnico de informática, ingeniería, matemáticas o estadística, con copia de título.",
+        "cita": "TDR 2.2.a",
+        "tipo": "titulo_grado",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-5-anios-datos",
+        "exige": "Al menos 5 años de experiencia del relator/a en análisis de datos, inteligencia de negocios o tecnologías Microsoft, con CV.",
+        "cita": "TDR 2.2.b",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-7-cursos-powerbi",
+        "exige": "Haber dictado al menos 7 cursos de Power BI en los últimos 3 años, acreditados con certificados, órdenes de compra o contratos.",
+        "cita": "TDR 2.2.c",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "giro-educacional-exento",
+        "exige": "Poder facturar exento por giro educacional (art. 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios), que es como Dipres presupuestó el servicio.",
+        "cita": "TDR apartado IV y su nota al pie",
+        "tipo": "tributario",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "identidad-oferente",
+        "exige": "Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados.",
+        "cita": "Anexos y formularios de la oferta",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      }
+    ],
     "generado": "2026-08-22"
   },
   "1618-68-COT26": {
@@ -48,6 +109,67 @@
       "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.",
       "Confirmar que KeepSync puede facturar exento por giro educacional (artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios). El organismo presupuestó el servicio como exento.",
       "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Este organismo selecciona por MENOR PRECIO TOTAL, así que el margen sobre el tope define directamente si se gana."
+    ],
+    "score": {
+      "score": 75,
+      "sinInformacion": 5,
+      "cubiertos": 0,
+      "total": 5,
+      "porTipo": [
+        {
+          "tipo": "experiencia_relator",
+          "n": 2
+        },
+        {
+          "tipo": "identidad",
+          "n": 1
+        },
+        {
+          "tipo": "titulo_grado",
+          "n": 1
+        },
+        {
+          "tipo": "tributario",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "relator-titulo",
+        "exige": "Relator/a profesional o técnico de informática, ingeniería, matemáticas o estadística, con copia de título.",
+        "cita": "TDR 2.2.a",
+        "tipo": "titulo_grado",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-5-anios-datos",
+        "exige": "Al menos 5 años de experiencia del relator/a en análisis de datos, inteligencia de negocios o tecnologías Microsoft, con CV.",
+        "cita": "TDR 2.2.b",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-7-cursos-powerbi",
+        "exige": "Haber dictado al menos 7 cursos de Power BI en los últimos 3 años, acreditados con certificados, órdenes de compra o contratos.",
+        "cita": "TDR 2.2.c",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "giro-educacional-exento",
+        "exige": "Poder facturar exento por giro educacional (art. 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios), que es como Dipres presupuestó el servicio.",
+        "cita": "TDR apartado IV y su nota al pie",
+        "tipo": "tributario",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "identidad-oferente",
+        "exige": "Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados.",
+        "cita": "Anexos y formularios de la oferta",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      }
     ],
     "generado": "2026-08-22"
   },
@@ -75,6 +197,67 @@
       "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
       "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Este organismo selecciona por MENOR PRECIO TOTAL, así que el margen sobre el tope define directamente si se gana."
     ],
+    "score": {
+      "score": 75,
+      "sinInformacion": 5,
+      "cubiertos": 0,
+      "total": 5,
+      "porTipo": [
+        {
+          "tipo": "experiencia_relator",
+          "n": 2
+        },
+        {
+          "tipo": "identidad",
+          "n": 1
+        },
+        {
+          "tipo": "titulo_grado",
+          "n": 1
+        },
+        {
+          "tipo": "tributario",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "relator-titulo-8-semestres",
+        "exige": "Relator/a titulado/a de una carrera de al menos 8 semestres en ingeniería, informática, ciencia de datos, estadística, administración pública o afines.",
+        "cita": "TDR 2.2.a",
+        "tipo": "titulo_grado",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-3-anios-ia",
+        "exige": "Al menos 3 años de experiencia profesional del relator/a en IA, IA generativa, ciencia de datos o automatización, con CV.",
+        "cita": "TDR 2.2.b",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-5-actividades-ia",
+        "exige": "Al menos 5 actividades de capacitación en IA, prompt engineering o aplicaciones prácticas de IA en los últimos 3 años, de mínimo 8 horas cada una, acreditadas.",
+        "cita": "TDR 2.2.c",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "giro-educacional-exento",
+        "exige": "Poder facturar exento por giro educacional (art. 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios), que es como Dipres presupuestó el servicio.",
+        "cita": "TDR apartado IV y su nota al pie",
+        "tipo": "tributario",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "identidad-oferente",
+        "exige": "Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados.",
+        "cita": "Anexos y formularios de la oferta",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      }
+    ],
     "generado": "2026-08-22"
   },
   "2672-18-COT26": {
@@ -101,6 +284,96 @@
       "Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal.",
       "Aclarar la contradicción de modalidad en las bases mediante consulta formal. Las bases se contradicen: el apartado 'Modalidad' (1.6–1.13) describe una plataforma e-learning con clases asincrónicas y sincrónicas, mientras que el apartado 'Duración' dice «20 horas cronológicas, presencial distribuidas en modulos de 4 horas». La propuesta cubre ambas lecturas (plataforma e-learning + sesiones sincrónicas, con sesiones presenciales en dependencias municipales si la Unidad Técnica lo confirma), y se deja la aclaración como consulta formal al organismo."
     ],
+    "score": {
+      "score": 60,
+      "sinInformacion": 8,
+      "cubiertos": 0,
+      "total": 8,
+      "porTipo": [
+        {
+          "tipo": "titulo_grado",
+          "n": 3
+        },
+        {
+          "tipo": "alcance",
+          "n": 1
+        },
+        {
+          "tipo": "historial_portal",
+          "n": 1
+        },
+        {
+          "tipo": "identidad",
+          "n": 1
+        },
+        {
+          "tipo": "infraestructura",
+          "n": 1
+        },
+        {
+          "tipo": "tributario",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "relator-1-magister",
+        "exige": "Magíster o Doctorado en Gestión Pública, Innovación, Transformación Digital o IA: vale 35 de 100 puntos. Sin posgrado el criterio cae a 10 puntos, una brecha de 25 puntos que difícilmente se recupera en los otros factores.",
+        "cita": "Bases técnicas, pauta de evaluación de ofertas",
+        "tipo": "titulo_grado",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-1-perfil",
+        "exige": "Relator de Innovación Pública: Administrador Público, Ingeniero Civil Industrial, Ingeniero Comercial o profesional afín.",
+        "cita": "Bases técnicas 1.14",
+        "tipo": "titulo_grado",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-2-perfil-ia",
+        "exige": "Segundo relator para IA: Ingeniero Civil Informático, en Informática o Computación, o Cientista de Datos, con experiencia demostrable en IA generativa.",
+        "cita": "Bases técnicas 1.14",
+        "tipo": "titulo_grado",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "plataforma-elearning",
+        "exige": "Plataforma e-learning operativa durante toda la ejecución, con accesos individuales, grabaciones disponibles, material descargable, tutorías y soporte técnico permanente, para 70 funcionarios.",
+        "cita": "Bases técnicas 1.6–1.13 y 4.2–4.6",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "nota-comportamiento-portal",
+        "exige": "Nota de comportamiento en mercadopublico.cl de los últimos 24 meses: descuenta hasta 4 puntos. Un proveedor sin historial suficiente no puede asegurar el 5/5 que no descuenta.",
+        "cita": "Bases técnicas, pauta de evaluación de ofertas",
+        "tipo": "historial_portal",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "regimen-tributario",
+        "exige": "Confirmar con la Unidad Técnica si el presupuesto de $6.020.000 es neto, con impuestos incluidos o exento: las bases no lo declaran y cambia el valor a ingresar en el portal.",
+        "cita": "Bases técnicas 1.3",
+        "tipo": "tributario",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "modalidad-contradictoria",
+        "exige": "Aclarar la contradicción entre el apartado de modalidad (plataforma e-learning, clases asincrónicas y sincrónicas) y el de duración (20 horas presenciales en módulos de 4 horas): definen infraestructuras distintas.",
+        "cita": "Bases técnicas 1.6–1.13 frente a 'Duración'",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "identidad-oferente",
+        "exige": "Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados.",
+        "cita": "Anexos y formularios de la oferta",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      }
+    ],
     "generado": "2026-08-22"
   },
   "577290-82-COT26": {
@@ -124,6 +397,89 @@
       "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.",
       "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
       "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo."
+    ],
+    "score": {
+      "score": 65,
+      "sinInformacion": 7,
+      "cubiertos": 0,
+      "total": 7,
+      "porTipo": [
+        {
+          "tipo": "experiencia_relator",
+          "n": 2
+        },
+        {
+          "tipo": "certificacion",
+          "n": 1
+        },
+        {
+          "tipo": "historial_portal",
+          "n": 1
+        },
+        {
+          "tipo": "identidad",
+          "n": 1
+        },
+        {
+          "tipo": "infraestructura",
+          "n": 1
+        },
+        {
+          "tipo": "titulo_grado",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "otec-sence",
+        "exige": "Ser Universidad, Instituto Profesional, CFT reconocido por el Estado u OTEC con certificado SENCE: vale el 10% del puntaje final (100 puntos contra 0).",
+        "cita": "Requerimiento, criterio Entidad Certificada (10%)",
+        "tipo": "certificacion",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "docente-data-science",
+        "exige": "Docente con título profesional y/o especialización académica relacionada con Data Science.",
+        "cita": "Requerimiento 2.3 y admisibilidad",
+        "tipo": "titulo_grado",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "docente-5-anios-procesos",
+        "exige": "Al menos 5 años de experiencia profesional del docente en gestión operacional de procesos.",
+        "cita": "Requerimiento 2.3",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "docente-7-anios-docencia",
+        "exige": "Más de 7 años de docencia para obtener los 70 puntos del criterio técnico; entre 3 y 7 años solo otorga 30 de 70, y el mínimo técnico para pasar a la evaluación económica es 60 puntos.",
+        "cita": "Requerimiento, criterios técnicos (70%)",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "proveedor-5-anios-cursos",
+        "exige": "Acreditar al menos 5 años del proveedor impartiendo cursos, verificable en su página web institucional o documentación adjunta.",
+        "cita": "Requerimiento, antecedentes de la oferta",
+        "tipo": "historial_portal",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "plataforma-asincronica",
+        "exige": "Plataforma para dictar 30 horas cronológicas en modalidad online asincrónica, con los certificados y diplomas de recepción conforme.",
+        "cita": "Requerimiento 2.2 y 2.4",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "identidad-oferente",
+        "exige": "Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados.",
+        "cita": "Anexos y formularios de la oferta",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      }
     ],
     "generado": "2026-08-22"
   },
@@ -149,6 +505,129 @@
       "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
       "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
       "Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal."
+    ],
+    "score": {
+      "score": 45,
+      "sinInformacion": 11,
+      "cubiertos": 1,
+      "total": 12,
+      "porTipo": [
+        {
+          "tipo": "infraestructura",
+          "n": 3
+        },
+        {
+          "tipo": "alcance",
+          "n": 2
+        },
+        {
+          "tipo": "certificacion",
+          "n": 2
+        },
+        {
+          "tipo": "experiencia_relator",
+          "n": 1
+        },
+        {
+          "tipo": "historial_portal",
+          "n": 1
+        },
+        {
+          "tipo": "identidad",
+          "n": 1
+        },
+        {
+          "tipo": "tributario",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "12-ordenes-compra",
+        "exige": "Acreditar experiencia en el curso al que se postula adjuntando las últimas 12 órdenes de compra aceptadas y/o recepciones conformes en Mercado Público. Es el filtro más direccionador de las seis compras: excluye a cualquiera que no haya vendido ya este mismo curso repetidas veces.",
+        "cita": "Memo N°96, requisitos para la postulación del oferente",
+        "tipo": "historial_portal",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "otec-perfil-publicador",
+        "exige": "Que todos los equipos «del OTEC» cuenten con perfil de publicador de Power BI con licencia de pago. La redacción da por supuesto que el oferente es un OTEC.",
+        "cita": "Memo N°96, requisitos para la postulación del oferente",
+        "tipo": "certificacion",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "equipamiento-presencial",
+        "exige": "Proveer el equipamiento de las sesiones presenciales: PC o notebooks, mesas y sillas para los 10 funcionarios de cada curso.",
+        "cita": "Memo N°96, metodología educativa",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "equipos-alta-capacidad",
+        "exige": "Equipos de alta capacidad (procesador y RAM) que carguen matrices de datos con eficiencia; el memo fija como referencia 5 minutos de carga promedio.",
+        "cita": "Memo N°96, requisitos para la postulación del oferente",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-certificacion-powerbi",
+        "exige": "Relator con formación profesional y certificación Power BI.",
+        "cita": "Memo N°96, perfil del docente",
+        "tipo": "certificacion",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-2-anios-mismo-curso",
+        "exige": "Acreditar al menos 2 años dictando el mismo curso o equivalentes.",
+        "cita": "Memo N°96, perfil del docente",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "plataforma-moodle",
+        "exige": "Acceso a plataforma Moodle o símil para el componente asincrónico, más un instructivo o manual de uso entregado a los estudiantes en formato físico.",
+        "cita": "Memo N°96, requisitos para la postulación del oferente",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "presencial-dependencias",
+        "exige": "Al menos 4 sesiones presenciales por curso en dependencias del establecimiento, con coffee break incluido. Exige presencia física y logística en terreno.",
+        "cita": "Memo N°96, metodología educativa",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "sin-pauta-evaluacion",
+        "exige": "El memo no publica pauta de evaluación con ponderaciones: adjudica «al proveedor más conveniente», sin criterio verificable de antemano.",
+        "cita": "Memo N°96, párrafo inicial",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "regimen-tributario",
+        "exige": "Confirmar si los $2.160.000 por curso son netos, con impuestos incluidos o exentos: el memo no lo declara.",
+        "cita": "Memo N°96, tabla de cursos",
+        "tipo": "tributario",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "certificado-habilidad",
+        "exige": "Certificado de habilidad en Mercado Público vigente.",
+        "cita": "Memo N°96, requisitos para la postulación del oferente",
+        "tipo": "historial_portal",
+        "estado": "cubierto",
+        "resuelto_por": "KeepSync está confirmada como proveedor hábil en el Sistema de Información (ver CLAUDE.md, «Datos ya confirmados»)."
+      },
+      {
+        "id": "identidad-oferente",
+        "exige": "Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados.",
+        "cita": "Anexos y formularios de la oferta",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      }
     ],
     "generado": "2026-08-22"
   }

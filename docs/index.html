@@ -161,6 +161,31 @@
   .opp-card .chips span { background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 999px; padding: 0.1rem 0.55rem; font-size: 0.76rem; color: var(--gray); }
   .kw-inactiva { color: var(--gray-dim); font-size: 0.72rem; border: 1px solid var(--border); border-radius: 999px; padding: 0.05rem 0.4rem; }
 
+  /* --- Score de apertura de los borradores de cotización ------------------------------------
+     100% = la compra no exige ninguna característica, capacidad o certificación particular que
+     dirija la adjudicación; −5% por cada criterio que falte revisar. Encabeza la tarjeta porque
+     es lo que decide dónde poner el esfuerzo. */
+  .opp-card .score-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.5rem; }
+  .opp-card .score {
+    flex: none; width: 74px; border-radius: 10px; padding: 0.35rem 0.2rem; text-align: center;
+    border: 1px solid var(--border);
+  }
+  .opp-card .score .score-n { display: block; font-size: 1.25rem; font-weight: 700; line-height: 1.1; }
+  .opp-card .score .score-l { display: block; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray-dim); }
+  .opp-card .score.ok { background: rgba(74,222,128,0.13); border-color: rgba(74,222,128,0.4); }
+  .opp-card .score.ok .score-n { color: var(--ok); }
+  .opp-card .score.warn { background: rgba(251,191,36,0.13); border-color: rgba(251,191,36,0.4); }
+  .opp-card .score.warn .score-n { color: var(--warn); }
+  .opp-card .score.bad { background: rgba(251,113,133,0.13); border-color: rgba(251,113,133,0.4); }
+  .opp-card .score.bad .score-n { color: var(--bad); }
+  .opp-card .score-txt { font-size: 0.8rem; color: var(--gray); line-height: 1.35; }
+  .opp-card .crit {
+    display: inline-block; min-width: 3.1rem; text-align: center; border-radius: 999px;
+    padding: 0.02rem 0.35rem; font-size: 0.7rem; font-weight: 700; margin-right: 0.15rem;
+  }
+  .opp-card .crit.pend { background: rgba(251,113,133,0.16); color: var(--bad); }
+  .opp-card .crit.ok { background: rgba(74,222,128,0.16); color: var(--ok); }
+
   code, .mono { font-family: ui-monospace, Menlo, monospace; }
   a { color: var(--accent-light); }
   a:hover { color: var(--white); }
@@ -474,7 +499,17 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
       <strong>PRELIMINAR</strong>, y <strong>BORRADOR</strong> mientras la identidad del oferente no
       esté confirmada.
     </p>
-    <p class="meta-corrida">6 borrador(es) · generados el 2026-08-22</p>
+    <p class="meta-corrida">6 borrador(es) · generados el 2026-08-22 · ordenados por score de apertura</p>
+    <div class="note" style="border-left-color: var(--accent); margin-bottom:1rem;">
+      <strong>Score de apertura (0–100%).</strong> Mide qué tan libre está la cancha:
+      <strong>100%</strong> sería una compra que no exige ninguna característica, capacidad o
+      certificación particular que dirija la adjudicación hacia un proveedor determinado. Se
+      descuenta <strong>5% por cada criterio que haya que revisar y del que hoy no se tenga
+      información</strong>. Un score alto no dice que se vaya a ganar: dice que lo que falta para
+      poder presentarse son pocas cosas y son averiguables. Uno bajo marca una compra escrita
+      alrededor de un proveedor que ya existe. Cada criterio va citado en la tarjeta, y el score
+      sube solo a medida que se confirman en <code>config/capacitaciones.json</code>.
+    </div>
     <div class="note" style="margin-bottom:1.25rem;">
       <strong>Ninguno está listo para presentar, y el bloqueo no es el precio.</strong>
       Los 6 organismos exigen un/a relator/a con título, currículum y certificados
@@ -492,6 +527,16 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
     </div>
     <div class="card-grid">
       <article class="opp-card">
+        <div class="score-row">
+          <div class="score ok">
+            <span class="score-n">75%</span>
+            <span class="score-l">apertura</span>
+          </div>
+          <div class="score-txt">
+            5 criterio(s) por resolver × −5%<br>
+            <span class="hint">2 de experiencia del relator, 1 de identidad del oferente, 1 de título o grado, 1 de régimen tributario</span>
+          </div>
+        </div>
         <div class="codigo">1618-67-COT26</div>
         <div class="org">DIRECCION DE PRESUPUESTOS MINISTERIO DE</div>
         <div class="nombre">Herramientas básicas de Power BI para el análisis de datos</div>
@@ -505,6 +550,10 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
           <span class="badge ok">Exento de impuesto</span>
           <span class="badge warn">Adjudica al menor precio</span>
         </div>
+        <details class="detalle-lista">
+          <summary>Qué baja el score: criterios que dirigen la compra (5)</summary>
+          <ul><li><span class="crit pend">−5%</span> <strong>Título o grado</strong> — Relator/a profesional o técnico de informática, ingeniería, matemáticas o estadística, con copia de título. <span class="hint">(TDR 2.2.a)</span></li><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Al menos 5 años de experiencia del relator/a en análisis de datos, inteligencia de negocios o tecnologías Microsoft, con CV. <span class="hint">(TDR 2.2.b)</span></li><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Haber dictado al menos 7 cursos de Power BI en los últimos 3 años, acreditados con certificados, órdenes de compra o contratos. <span class="hint">(TDR 2.2.c)</span></li><li><span class="crit pend">−5%</span> <strong>Régimen tributario</strong> — Poder facturar exento por giro educacional (art. 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios), que es como Dipres presupuestó el servicio. <span class="hint">(TDR apartado IV y su nota al pie)</span></li><li><span class="crit pend">−5%</span> <strong>Identidad del oferente</strong> — Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados. <span class="hint">(Anexos y formularios de la oferta)</span></li></ul>
+        </details>
         <details class="detalle-lista alerta">
           <summary>Observaciones antes de presentar (4)</summary>
           <ul><li>Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.</li><li>Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.</li><li>Confirmar que KeepSync puede facturar exento por giro educacional (artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios). El organismo presupuestó el servicio como exento.</li><li>Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Este organismo selecciona por MENOR PRECIO TOTAL, así que el margen sobre el tope define directamente si se gana.</li></ul>
@@ -520,90 +569,16 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
         </div>
       </article>
       <article class="opp-card">
-        <div class="codigo">577290-82-COT26</div>
-        <div class="org">Subsecretaria de Transportes</div>
-        <div class="nombre">Automatización de Procesos con Inteligencia Artificial</div>
-        <dl>
-          <dt>Presupuesto del organismo</dt><dd>$1.000.000</dd>
-          <dt>Valor ofertado</dt><dd><strong>$900.000</strong> · 10% bajo el tope</dd>
-          <dt>Cierre de ofertas</dt><dd>2026-08-25 11:00</dd>
-          <dt>Requisitos por confirmar</dt><dd>3</dd>
-        </dl>
-        <div class="chips">
-          <span class="badge ok">Impuestos incluidos</span>
-          <span class="badge ok">Adjudica por puntaje</span>
+        <div class="score-row">
+          <div class="score ok">
+            <span class="score-n">75%</span>
+            <span class="score-l">apertura</span>
+          </div>
+          <div class="score-txt">
+            5 criterio(s) por resolver × −5%<br>
+            <span class="hint">2 de experiencia del relator, 1 de identidad del oferente, 1 de título o grado, 1 de régimen tributario</span>
+          </div>
         </div>
-        <details class="detalle-lista alerta">
-          <summary>Observaciones antes de presentar (4)</summary>
-          <ul><li>Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.</li><li>Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.</li><li>Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.</li><li>Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.</li></ul>
-        </details>
-        <details class="detalle-lista">
-          <summary>De dónde salen los requisitos (1)</summary>
-          <ul><li>Requerimiento de Compra_2026.doc</li></ul>
-          <p>«la Subsecretaría cuenta con un presupuesto máximo disponible de $1.000.000, impuestos incluidos. Este monto incluye todos los costos asociados a la contratación» — numeral 3. Y: «La cotización que exceda el presupuesto máximo anteriormente indicado no será aceptada».</p>
-        </details>
-        <div class="cta">
-          <a class="btn" href="capacitaciones-cotizaciones/577290-82-COT26/Q-20260822-SubsecretariaDeTransportes.pdf">Ver borrador (PDF, 5 págs.)</a>
-          <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
-        </div>
-      </article>
-      <article class="opp-card">
-        <div class="codigo">2672-18-COT26</div>
-        <div class="org">I MUNICIPALIDAD DE CONCEPCION</div>
-        <div class="nombre">Formación y capacitación en Innovación Pública y Herramientas de Inteligencia Artificial para la Gestión Municipal</div>
-        <dl>
-          <dt>Presupuesto del organismo</dt><dd>$6.020.000</dd>
-          <dt>Valor ofertado</dt><dd><strong>$5.418.000</strong> · 10% bajo el tope</dd>
-          <dt>Cierre de ofertas</dt><dd>2026-08-25 12:00</dd>
-          <dt>Requisitos por confirmar</dt><dd>4</dd>
-        </dl>
-        <div class="chips">
-          <span class="badge bad">Régimen sin declarar</span>
-          <span class="badge ok">Adjudica por puntaje</span>
-        </div>
-        <details class="detalle-lista alerta">
-          <summary>Observaciones antes de presentar (6)</summary>
-          <ul><li>Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.</li><li>Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.</li><li>Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.</li><li>Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.</li><li>Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal.</li><li>Aclarar la contradicción de modalidad en las bases mediante consulta formal. Las bases se contradicen: el apartado 'Modalidad' (1.6–1.13) describe una plataforma e-learning con clases asincrónicas y sincrónicas, mientras que el apartado 'Duración' dice «20 horas cronológicas, presencial distribuidas en modulos de 4 horas». La propuesta cubre ambas lecturas (plataforma e-learning + sesiones sincrónicas, con sesiones presenciales en dependencias municipales si la Unidad Técnica lo confirma), y se deja la aclaración como consulta formal al organismo.</li></ul>
-        </details>
-        <details class="detalle-lista">
-          <summary>De dónde salen los requisitos (1)</summary>
-          <ul><li>Bases_Tecnicas_Innovacion_Publica.V2.pdf</li></ul>
-          <p>Las bases técnicas informan «Presupuesto disponible: $6.020.000 (monto referencial conforme al presupuesto aprobado para el Plan Anual de Capacitación 2026)» sin declarar si es neto, con impuestos incluidos o exento. Se cotiza el valor como TOTAL y el tratamiento tributario queda por confirmar con la Unidad Técnica.</p>
-        </details>
-        <div class="cta">
-          <a class="btn" href="capacitaciones-cotizaciones/2672-18-COT26/Q-20260822-IMunicipalidadDeConcepcion.pdf">Ver borrador (PDF, 5 págs.)</a>
-          <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
-        </div>
-      </article>
-      <article class="opp-card">
-        <div class="codigo">1057503-2156-COT26</div>
-        <div class="org">HOSPITAL PADRE ALBERTO HURTADO</div>
-        <div class="nombre">Herramientas de Power BI en Análisis de Datos (2 cursos cerrados: octubre y noviembre 2026)</div>
-        <dl>
-          <dt>Presupuesto del organismo</dt><dd>$4.320.000</dd>
-          <dt>Valor ofertado</dt><dd><strong>$3.888.000</strong> · 10% bajo el tope</dd>
-          <dt>Cierre de ofertas</dt><dd>2026-08-25 12:00</dd>
-          <dt>Requisitos por confirmar</dt><dd>4</dd>
-        </dl>
-        <div class="chips">
-          <span class="badge bad">Régimen sin declarar</span>
-          <span class="badge ok">Sin pauta publicada</span>
-        </div>
-        <details class="detalle-lista alerta">
-          <summary>Observaciones antes de presentar (5)</summary>
-          <ul><li>Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.</li><li>Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.</li><li>Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.</li><li>Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.</li><li>Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal.</li></ul>
-        </details>
-        <details class="detalle-lista">
-          <summary>De dónde salen los requisitos (1)</summary>
-          <ul><li>Memo Nº96(03.08.26)HerramientaPB.pdf</li></ul>
-          <p>El memorándum informa un presupuesto de $2.160.000 por curso (códigos PAC 7019 y 7020), $4.320.000 en total, sin declarar el tratamiento tributario. Se cotiza el valor como TOTAL y el tratamiento queda por confirmar con el Departamento de Desarrollo de Personas.</p>
-        </details>
-        <div class="cta">
-          <a class="btn" href="capacitaciones-cotizaciones/1057503-2156-COT26/Q-20260822-HospitalPadreAlbertoHurtado.pdf">Ver borrador (PDF, 5 págs.)</a>
-          <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
-        </div>
-      </article>
-      <article class="opp-card">
         <div class="codigo">1618-68-COT26</div>
         <div class="org">DIRECCION DE PRESUPUESTOS MINISTERIO DE</div>
         <div class="nombre">Herramientas intermedias de Power BI para el análisis de datos (Nivel II)</div>
@@ -617,6 +592,10 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
           <span class="badge ok">Exento de impuesto</span>
           <span class="badge warn">Adjudica al menor precio</span>
         </div>
+        <details class="detalle-lista">
+          <summary>Qué baja el score: criterios que dirigen la compra (5)</summary>
+          <ul><li><span class="crit pend">−5%</span> <strong>Título o grado</strong> — Relator/a profesional o técnico de informática, ingeniería, matemáticas o estadística, con copia de título. <span class="hint">(TDR 2.2.a)</span></li><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Al menos 5 años de experiencia del relator/a en análisis de datos, inteligencia de negocios o tecnologías Microsoft, con CV. <span class="hint">(TDR 2.2.b)</span></li><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Haber dictado al menos 7 cursos de Power BI en los últimos 3 años, acreditados con certificados, órdenes de compra o contratos. <span class="hint">(TDR 2.2.c)</span></li><li><span class="crit pend">−5%</span> <strong>Régimen tributario</strong> — Poder facturar exento por giro educacional (art. 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios), que es como Dipres presupuestó el servicio. <span class="hint">(TDR apartado IV y su nota al pie)</span></li><li><span class="crit pend">−5%</span> <strong>Identidad del oferente</strong> — Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados. <span class="hint">(Anexos y formularios de la oferta)</span></li></ul>
+        </details>
         <details class="detalle-lista alerta">
           <summary>Observaciones antes de presentar (4)</summary>
           <ul><li>Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.</li><li>Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.</li><li>Confirmar que KeepSync puede facturar exento por giro educacional (artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios). El organismo presupuestó el servicio como exento.</li><li>Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Este organismo selecciona por MENOR PRECIO TOTAL, así que el margen sobre el tope define directamente si se gana.</li></ul>
@@ -632,6 +611,16 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
         </div>
       </article>
       <article class="opp-card">
+        <div class="score-row">
+          <div class="score ok">
+            <span class="score-n">75%</span>
+            <span class="score-l">apertura</span>
+          </div>
+          <div class="score-txt">
+            5 criterio(s) por resolver × −5%<br>
+            <span class="hint">2 de experiencia del relator, 1 de identidad del oferente, 1 de título o grado, 1 de régimen tributario</span>
+          </div>
+        </div>
         <div class="codigo">1618-69-COT26</div>
         <div class="org">DIRECCION DE PRESUPUESTOS MINISTERIO DE</div>
         <div class="nombre">IA Generativa para el Trabajo Diario en el Sector Público</div>
@@ -645,6 +634,10 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
           <span class="badge ok">Exento de impuesto</span>
           <span class="badge warn">Adjudica al menor precio</span>
         </div>
+        <details class="detalle-lista">
+          <summary>Qué baja el score: criterios que dirigen la compra (5)</summary>
+          <ul><li><span class="crit pend">−5%</span> <strong>Título o grado</strong> — Relator/a titulado/a de una carrera de al menos 8 semestres en ingeniería, informática, ciencia de datos, estadística, administración pública o afines. <span class="hint">(TDR 2.2.a)</span></li><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Al menos 3 años de experiencia profesional del relator/a en IA, IA generativa, ciencia de datos o automatización, con CV. <span class="hint">(TDR 2.2.b)</span></li><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Al menos 5 actividades de capacitación en IA, prompt engineering o aplicaciones prácticas de IA en los últimos 3 años, de mínimo 8 horas cada una, acreditadas. <span class="hint">(TDR 2.2.c)</span></li><li><span class="crit pend">−5%</span> <strong>Régimen tributario</strong> — Poder facturar exento por giro educacional (art. 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios), que es como Dipres presupuestó el servicio. <span class="hint">(TDR apartado IV y su nota al pie)</span></li><li><span class="crit pend">−5%</span> <strong>Identidad del oferente</strong> — Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados. <span class="hint">(Anexos y formularios de la oferta)</span></li></ul>
+        </details>
         <details class="detalle-lista alerta">
           <summary>Observaciones antes de presentar (4)</summary>
           <ul><li>Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.</li><li>Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.</li><li>Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.</li><li>Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Este organismo selecciona por MENOR PRECIO TOTAL, así que el margen sobre el tope define directamente si se gana.</li></ul>
@@ -656,6 +649,132 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
         </details>
         <div class="cta">
           <a class="btn" href="capacitaciones-cotizaciones/1618-69-COT26/Q-20260822-DireccionDePresupuestosMinisterioDe.pdf">Ver borrador (PDF, 5 págs.)</a>
+          <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
+        </div>
+      </article>
+      <article class="opp-card">
+        <div class="score-row">
+          <div class="score warn">
+            <span class="score-n">65%</span>
+            <span class="score-l">apertura</span>
+          </div>
+          <div class="score-txt">
+            7 criterio(s) por resolver × −5%<br>
+            <span class="hint">2 de experiencia del relator, 1 de certificación, 1 de historial en el portal, 1 de identidad del oferente, 1 de infraestructura, 1 de título o grado</span>
+          </div>
+        </div>
+        <div class="codigo">577290-82-COT26</div>
+        <div class="org">Subsecretaria de Transportes</div>
+        <div class="nombre">Automatización de Procesos con Inteligencia Artificial</div>
+        <dl>
+          <dt>Presupuesto del organismo</dt><dd>$1.000.000</dd>
+          <dt>Valor ofertado</dt><dd><strong>$900.000</strong> · 10% bajo el tope</dd>
+          <dt>Cierre de ofertas</dt><dd>2026-08-25 11:00</dd>
+          <dt>Requisitos por confirmar</dt><dd>3</dd>
+        </dl>
+        <div class="chips">
+          <span class="badge ok">Impuestos incluidos</span>
+          <span class="badge ok">Adjudica por puntaje</span>
+        </div>
+        <details class="detalle-lista">
+          <summary>Qué baja el score: criterios que dirigen la compra (7)</summary>
+          <ul><li><span class="crit pend">−5%</span> <strong>Certificación</strong> — Ser Universidad, Instituto Profesional, CFT reconocido por el Estado u OTEC con certificado SENCE: vale el 10% del puntaje final (100 puntos contra 0). <span class="hint">(Requerimiento, criterio Entidad Certificada (10%))</span></li><li><span class="crit pend">−5%</span> <strong>Título o grado</strong> — Docente con título profesional y/o especialización académica relacionada con Data Science. <span class="hint">(Requerimiento 2.3 y admisibilidad)</span></li><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Al menos 5 años de experiencia profesional del docente en gestión operacional de procesos. <span class="hint">(Requerimiento 2.3)</span></li><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Más de 7 años de docencia para obtener los 70 puntos del criterio técnico; entre 3 y 7 años solo otorga 30 de 70, y el mínimo técnico para pasar a la evaluación económica es 60 puntos. <span class="hint">(Requerimiento, criterios técnicos (70%))</span></li><li><span class="crit pend">−5%</span> <strong>Historial en el portal</strong> — Acreditar al menos 5 años del proveedor impartiendo cursos, verificable en su página web institucional o documentación adjunta. <span class="hint">(Requerimiento, antecedentes de la oferta)</span></li><li><span class="crit pend">−5%</span> <strong>Infraestructura</strong> — Plataforma para dictar 30 horas cronológicas en modalidad online asincrónica, con los certificados y diplomas de recepción conforme. <span class="hint">(Requerimiento 2.2 y 2.4)</span></li><li><span class="crit pend">−5%</span> <strong>Identidad del oferente</strong> — Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados. <span class="hint">(Anexos y formularios de la oferta)</span></li></ul>
+        </details>
+        <details class="detalle-lista alerta">
+          <summary>Observaciones antes de presentar (4)</summary>
+          <ul><li>Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.</li><li>Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.</li><li>Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.</li><li>Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.</li></ul>
+        </details>
+        <details class="detalle-lista">
+          <summary>De dónde salen los requisitos (1)</summary>
+          <ul><li>Requerimiento de Compra_2026.doc</li></ul>
+          <p>«la Subsecretaría cuenta con un presupuesto máximo disponible de $1.000.000, impuestos incluidos. Este monto incluye todos los costos asociados a la contratación» — numeral 3. Y: «La cotización que exceda el presupuesto máximo anteriormente indicado no será aceptada».</p>
+        </details>
+        <div class="cta">
+          <a class="btn" href="capacitaciones-cotizaciones/577290-82-COT26/Q-20260822-SubsecretariaDeTransportes.pdf">Ver borrador (PDF, 5 págs.)</a>
+          <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
+        </div>
+      </article>
+      <article class="opp-card">
+        <div class="score-row">
+          <div class="score warn">
+            <span class="score-n">60%</span>
+            <span class="score-l">apertura</span>
+          </div>
+          <div class="score-txt">
+            8 criterio(s) por resolver × −5%<br>
+            <span class="hint">3 de título o grado, 1 de alcance por definir, 1 de historial en el portal, 1 de identidad del oferente, 1 de infraestructura, 1 de régimen tributario</span>
+          </div>
+        </div>
+        <div class="codigo">2672-18-COT26</div>
+        <div class="org">I MUNICIPALIDAD DE CONCEPCION</div>
+        <div class="nombre">Formación y capacitación en Innovación Pública y Herramientas de Inteligencia Artificial para la Gestión Municipal</div>
+        <dl>
+          <dt>Presupuesto del organismo</dt><dd>$6.020.000</dd>
+          <dt>Valor ofertado</dt><dd><strong>$5.418.000</strong> · 10% bajo el tope</dd>
+          <dt>Cierre de ofertas</dt><dd>2026-08-25 12:00</dd>
+          <dt>Requisitos por confirmar</dt><dd>4</dd>
+        </dl>
+        <div class="chips">
+          <span class="badge bad">Régimen sin declarar</span>
+          <span class="badge ok">Adjudica por puntaje</span>
+        </div>
+        <details class="detalle-lista">
+          <summary>Qué baja el score: criterios que dirigen la compra (8)</summary>
+          <ul><li><span class="crit pend">−5%</span> <strong>Título o grado</strong> — Magíster o Doctorado en Gestión Pública, Innovación, Transformación Digital o IA: vale 35 de 100 puntos. Sin posgrado el criterio cae a 10 puntos, una brecha de 25 puntos que difícilmente se recupera en los otros factores. <span class="hint">(Bases técnicas, pauta de evaluación de ofertas)</span></li><li><span class="crit pend">−5%</span> <strong>Título o grado</strong> — Relator de Innovación Pública: Administrador Público, Ingeniero Civil Industrial, Ingeniero Comercial o profesional afín. <span class="hint">(Bases técnicas 1.14)</span></li><li><span class="crit pend">−5%</span> <strong>Título o grado</strong> — Segundo relator para IA: Ingeniero Civil Informático, en Informática o Computación, o Cientista de Datos, con experiencia demostrable en IA generativa. <span class="hint">(Bases técnicas 1.14)</span></li><li><span class="crit pend">−5%</span> <strong>Infraestructura</strong> — Plataforma e-learning operativa durante toda la ejecución, con accesos individuales, grabaciones disponibles, material descargable, tutorías y soporte técnico permanente, para 70 funcionarios. <span class="hint">(Bases técnicas 1.6–1.13 y 4.2–4.6)</span></li><li><span class="crit pend">−5%</span> <strong>Historial en el portal</strong> — Nota de comportamiento en mercadopublico.cl de los últimos 24 meses: descuenta hasta 4 puntos. Un proveedor sin historial suficiente no puede asegurar el 5/5 que no descuenta. <span class="hint">(Bases técnicas, pauta de evaluación de ofertas)</span></li><li><span class="crit pend">−5%</span> <strong>Régimen tributario</strong> — Confirmar con la Unidad Técnica si el presupuesto de $6.020.000 es neto, con impuestos incluidos o exento: las bases no lo declaran y cambia el valor a ingresar en el portal. <span class="hint">(Bases técnicas 1.3)</span></li><li><span class="crit pend">−5%</span> <strong>Alcance por definir</strong> — Aclarar la contradicción entre el apartado de modalidad (plataforma e-learning, clases asincrónicas y sincrónicas) y el de duración (20 horas presenciales en módulos de 4 horas): definen infraestructuras distintas. <span class="hint">(Bases técnicas 1.6–1.13 frente a 'Duración')</span></li><li><span class="crit pend">−5%</span> <strong>Identidad del oferente</strong> — Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados. <span class="hint">(Anexos y formularios de la oferta)</span></li></ul>
+        </details>
+        <details class="detalle-lista alerta">
+          <summary>Observaciones antes de presentar (6)</summary>
+          <ul><li>Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.</li><li>Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.</li><li>Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.</li><li>Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.</li><li>Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal.</li><li>Aclarar la contradicción de modalidad en las bases mediante consulta formal. Las bases se contradicen: el apartado 'Modalidad' (1.6–1.13) describe una plataforma e-learning con clases asincrónicas y sincrónicas, mientras que el apartado 'Duración' dice «20 horas cronológicas, presencial distribuidas en modulos de 4 horas». La propuesta cubre ambas lecturas (plataforma e-learning + sesiones sincrónicas, con sesiones presenciales en dependencias municipales si la Unidad Técnica lo confirma), y se deja la aclaración como consulta formal al organismo.</li></ul>
+        </details>
+        <details class="detalle-lista">
+          <summary>De dónde salen los requisitos (1)</summary>
+          <ul><li>Bases_Tecnicas_Innovacion_Publica.V2.pdf</li></ul>
+          <p>Las bases técnicas informan «Presupuesto disponible: $6.020.000 (monto referencial conforme al presupuesto aprobado para el Plan Anual de Capacitación 2026)» sin declarar si es neto, con impuestos incluidos o exento. Se cotiza el valor como TOTAL y el tratamiento tributario queda por confirmar con la Unidad Técnica.</p>
+        </details>
+        <div class="cta">
+          <a class="btn" href="capacitaciones-cotizaciones/2672-18-COT26/Q-20260822-IMunicipalidadDeConcepcion.pdf">Ver borrador (PDF, 5 págs.)</a>
+          <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
+        </div>
+      </article>
+      <article class="opp-card">
+        <div class="score-row">
+          <div class="score bad">
+            <span class="score-n">45%</span>
+            <span class="score-l">apertura</span>
+          </div>
+          <div class="score-txt">
+            11 criterio(s) por resolver × −5% · 1 ya cubierto(s)<br>
+            <span class="hint">3 de infraestructura, 2 de alcance por definir, 2 de certificación, 1 de experiencia del relator, 1 de historial en el portal, 1 de identidad del oferente, 1 de régimen tributario</span>
+          </div>
+        </div>
+        <div class="codigo">1057503-2156-COT26</div>
+        <div class="org">HOSPITAL PADRE ALBERTO HURTADO</div>
+        <div class="nombre">Herramientas de Power BI en Análisis de Datos (2 cursos cerrados: octubre y noviembre 2026)</div>
+        <dl>
+          <dt>Presupuesto del organismo</dt><dd>$4.320.000</dd>
+          <dt>Valor ofertado</dt><dd><strong>$3.888.000</strong> · 10% bajo el tope</dd>
+          <dt>Cierre de ofertas</dt><dd>2026-08-25 12:00</dd>
+          <dt>Requisitos por confirmar</dt><dd>4</dd>
+        </dl>
+        <div class="chips">
+          <span class="badge bad">Régimen sin declarar</span>
+          <span class="badge ok">Sin pauta publicada</span>
+        </div>
+        <details class="detalle-lista">
+          <summary>Qué baja el score: criterios que dirigen la compra (12)</summary>
+          <ul><li><span class="crit pend">−5%</span> <strong>Historial en el portal</strong> — Acreditar experiencia en el curso al que se postula adjuntando las últimas 12 órdenes de compra aceptadas y/o recepciones conformes en Mercado Público. Es el filtro más direccionador de las seis compras: excluye a cualquiera que no haya vendido ya este mismo curso repetidas veces. <span class="hint">(Memo N°96, requisitos para la postulación del oferente)</span></li><li><span class="crit pend">−5%</span> <strong>Certificación</strong> — Que todos los equipos «del OTEC» cuenten con perfil de publicador de Power BI con licencia de pago. La redacción da por supuesto que el oferente es un OTEC. <span class="hint">(Memo N°96, requisitos para la postulación del oferente)</span></li><li><span class="crit pend">−5%</span> <strong>Infraestructura</strong> — Proveer el equipamiento de las sesiones presenciales: PC o notebooks, mesas y sillas para los 10 funcionarios de cada curso. <span class="hint">(Memo N°96, metodología educativa)</span></li><li><span class="crit pend">−5%</span> <strong>Infraestructura</strong> — Equipos de alta capacidad (procesador y RAM) que carguen matrices de datos con eficiencia; el memo fija como referencia 5 minutos de carga promedio. <span class="hint">(Memo N°96, requisitos para la postulación del oferente)</span></li><li><span class="crit pend">−5%</span> <strong>Certificación</strong> — Relator con formación profesional y certificación Power BI. <span class="hint">(Memo N°96, perfil del docente)</span></li><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Acreditar al menos 2 años dictando el mismo curso o equivalentes. <span class="hint">(Memo N°96, perfil del docente)</span></li><li><span class="crit pend">−5%</span> <strong>Infraestructura</strong> — Acceso a plataforma Moodle o símil para el componente asincrónico, más un instructivo o manual de uso entregado a los estudiantes en formato físico. <span class="hint">(Memo N°96, requisitos para la postulación del oferente)</span></li><li><span class="crit pend">−5%</span> <strong>Alcance por definir</strong> — Al menos 4 sesiones presenciales por curso en dependencias del establecimiento, con coffee break incluido. Exige presencia física y logística en terreno. <span class="hint">(Memo N°96, metodología educativa)</span></li><li><span class="crit pend">−5%</span> <strong>Alcance por definir</strong> — El memo no publica pauta de evaluación con ponderaciones: adjudica «al proveedor más conveniente», sin criterio verificable de antemano. <span class="hint">(Memo N°96, párrafo inicial)</span></li><li><span class="crit pend">−5%</span> <strong>Régimen tributario</strong> — Confirmar si los $2.160.000 por curso son netos, con impuestos incluidos o exentos: el memo no lo declara. <span class="hint">(Memo N°96, tabla de cursos)</span></li><li><span class="crit ok">cubierto</span> <strong>Historial en el portal</strong> — Certificado de habilidad en Mercado Público vigente. <span class="hint">(Memo N°96, requisitos para la postulación del oferente)</span> <span class="hint">KeepSync está confirmada como proveedor hábil en el Sistema de Información (ver CLAUDE.md, «Datos ya confirmados»).</span></li><li><span class="crit pend">−5%</span> <strong>Identidad del oferente</strong> — Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados. <span class="hint">(Anexos y formularios de la oferta)</span></li></ul>
+        </details>
+        <details class="detalle-lista alerta">
+          <summary>Observaciones antes de presentar (5)</summary>
+          <ul><li>Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.</li><li>Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.</li><li>Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.</li><li>Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.</li><li>Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal.</li></ul>
+        </details>
+        <details class="detalle-lista">
+          <summary>De dónde salen los requisitos (1)</summary>
+          <ul><li>Memo Nº96(03.08.26)HerramientaPB.pdf</li></ul>
+          <p>El memorándum informa un presupuesto de $2.160.000 por curso (códigos PAC 7019 y 7020), $4.320.000 en total, sin declarar el tratamiento tributario. Se cotiza el valor como TOTAL y el tratamiento queda por confirmar con el Departamento de Desarrollo de Personas.</p>
+        </details>
+        <div class="cta">
+          <a class="btn" href="capacitaciones-cotizaciones/1057503-2156-COT26/Q-20260822-HospitalPadreAlbertoHurtado.pdf">Ver borrador (PDF, 5 págs.)</a>
           <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
         </div>
       </article>
