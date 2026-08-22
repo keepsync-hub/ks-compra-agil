@@ -48,6 +48,20 @@ diferidos a una sesión con **Claude Cowork en una máquina local** — ver `doc
 el flujo completo (con foco en dónde entra la persona) y la sección "Estado y pendientes" de
 `README.md` para el detalle componente por componente.
 
+## Cotizar capacitaciones: otra regla de precio, mismo gate humano
+
+`npm run cotizar-capacitacion` cubre el nicho de **cursos** (los cuatro de servicios), que no puede
+usar la fórmula de licencias Claude porque no hay precio de lista ni catálogo de costos. Regla fijada
+por el usuario el 2026-08-22: **precio = tope × 0,9**. Genera un PDF de exactamente 5 láminas por
+oportunidad en `output/capacitaciones/<codigo>/`, respondiendo punto por punto lo que exigen los
+adjuntos del organismo (extraídos a `config/capacitaciones.json`, con cita del régimen tributario).
+
+Dos cosas que condicionan todo el nicho y no las resuelve el cotizador: **ninguna oferta nombra
+relator/a** (los seis TDR exigen título, CV y certificados verificables, y sin eso la oferta se
+descarta en admisibilidad), y **sigue sin confirmarse si KeepSync es OTEC registrada en SENCE** —
+de eso dependen tanto puntaje directo en algunas bases como la exención de IVA del art. 13 N°4 con
+que Dipres presupuesta. Ver el detalle en `.claude/skills/compra-agil-ofertar/SKILL.md`.
+
 ## Insumo bloqueante (sigue condicionando el envío real de una oferta)
 
 **¿KeepSync tiene una vía real para proveer y facturar licencias Claude/Anthropic, y a qué

@@ -1,0 +1,24 @@
+{
+  "codigo": "577290-82-COT26",
+  "curso": "Automatización de Procesos con Inteligencia Artificial",
+  "organismo": "Subsecretaria de Transportes",
+  "tope_clp": 1000000,
+  "total_clp": 900000,
+  "descuento_pct": 10,
+  "regimen_tributario": "impuestos_incluidos",
+  "formula": "90% del presupuesto disponible — regla del usuario, no derivada de costos reales",
+  "criterio_evaluacion_organismo": "puntaje",
+  "archivo_publicable": "Q-20260822-SubsecretariaDeTransportes.pdf",
+  "fuente_documentos": [
+    "Requerimiento de Compra_2026.doc"
+  ],
+  "requisitos_por_confirmar": 3,
+  "pendientes": [
+    "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+    "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.",
+    "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
+    "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo."
+  ],
+  "apto_para_enviar": false,
+  "_apto_nota": "Siempre false: falta designar relator/a con credenciales verificables, y el precio no sale de un costo real. El envío lo hace un humano, nunca este script."
+}

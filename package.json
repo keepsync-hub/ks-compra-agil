@@ -18,6 +18,7 @@
     "informe": "tsx .claude/skills/compra-agil-radar-claude/scripts/informe-nicho.ts",
     "digest": "tsx src/scripts/digest.ts",
     "cotizar": "tsx .claude/skills/compra-agil-ofertar/scripts/cotizar.ts",
+    "cotizar-capacitacion": "tsx .claude/skills/compra-agil-ofertar/scripts/cotizar-capacitacion.ts",
     "login": "tsx .claude/skills/compra-agil-ofertar/scripts/login.ts",
     "form-fill": "tsx .claude/skills/compra-agil-ofertar/scripts/form-fill.ts",
     "radar-licitaciones": "tsx .claude/skills/radar_licitaciones/scripts/radar.ts",

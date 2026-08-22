@@ -53,6 +53,53 @@ Qué hace (`scripts/cotizar.ts`):
      sano, se podría volver a esa vía, pero la de Chromium es robusta y no depende de eso.
    También guarda `cotizacion-resumen.json` con los números para el paso de formulario.
 
+## Paso 1-bis — Cotización de capacitaciones (otro nicho, otra regla de precio)
+
+```bash
+npm run cotizar-capacitacion                 # todas las de config/capacitaciones.json
+npm run cotizar-capacitacion -- 1618-69-COT26  # solo esa
+```
+
+Las Compras Ágiles de **cursos** (Power BI, IA, automatización) no se cotizan con la fórmula de
+licencias Claude: no hay precio de lista del que partir ni catálogo de costos de servicios de
+KeepSync (ver `config/keepsync-oferta.json`, insumo bloqueante `sin-catalogo-de-costos-de-servicios`).
+El usuario fijó el 2026-08-22 la regla: **precio = tope × 0,9** (10% bajo el presupuesto publicado).
+Es la misma clase de heurística de exploración que el 80% del cotizador de Array, así que cada PDF
+sale marcado **PRELIMINAR**, y **BORRADOR** mientras `config/company.json` no tenga la identidad real.
+
+Qué genera (`scripts/cotizar-capacitacion.ts` + `src/lib/capacitacion-cotizacion.ts`): un PDF de
+**exactamente 5 láminas** por oportunidad en `output/capacitaciones/<codigo>/`, más
+`cotizacion-resumen.json`. Las láminas son portada, programa modular, metodología/relatoría/
+entregables, cuadro de cumplimiento, y oferta económica con los pendientes.
+
+Lo que el documento responde sale de `config/capacitaciones.json`, que guarda **lo que pide cada
+organismo en sus adjuntos** (TDR, bases técnicas, memos, anexos), con `fuente_documentos` y la cita
+textual del régimen tributario. Ese archivo se llena leyendo los adjuntos que ya bajó el radar a
+`data/<codigo>/attachments/`; el cotizador **no inventa el contenido de un curso**: si falta el
+código en la config, se detiene y lo dice.
+
+Tres cosas que este cotizador hace a propósito y conviene no "arreglar":
+
+1. **No nombra relator/a ni inventa credenciales.** Los seis TDR exigen título, CV y certificados
+   verificables (Dipres pide 7 cursos de Power BI en 3 años; Subtrans premia >7 años de docencia),
+   y una oferta sin eso se descarta en admisibilidad. Esas filas del cuadro salen marcadas
+   *Por confirmar* y encabezan los pendientes. Es el gate humano del nicho, igual que el de
+   fulfillment en licencias.
+2. **Respeta el régimen tributario que declara cada organismo.** Los tres TDR de Dipres presupuestan
+   **exento** citando el art. 13 N°4 de la Ley de IVA (exención por giro educacional), Subtrans dice
+   "impuestos incluidos", y Concepción y el Hospital no lo declaran — ahí el valor se presenta como
+   TOTAL y el pendiente es consultarlo. No se agrega un 19% donde el organismo presupuestó exento.
+3. **Verifica que nada se recorte.** Las láminas tienen alto fijo y `overflow:hidden` (es lo que
+   garantiza las 5 páginas), así que el modo de falla natural es que un requisito largo se corte
+   *en silencio*. `generarCotizacionCapacitacionPdf` mide `scrollHeight` vs `clientHeight` en el
+   mismo Chromium que imprime y devuelve las láminas desbordadas; el script trata eso como error y
+   no da por buena la cotización. Al ajustar la plantilla, correr y mirar esa salida — no la vista.
+
+**Tensión registrada, no resuelta:** las tres compras de Dipres seleccionan por **menor precio
+total** entre las que cumplen todo. Cotizar al 90% del tope es por construcción una posición débil
+frente a quien cotice más abajo. La regla la fijó el usuario; el PDF y el resumen lo dicen en vez
+de corregirlo en silencio.
+
 ## Paso 2 — Login y formulario (diferido a sesión local)
 
 `scripts/login.ts` (login a mercadopublico.cl vía ClaveÚnica + 2FA, el código se lee de Gmail
