@@ -60,6 +60,14 @@ adjuntos del organismo (extraídos a `config/capacitaciones.json`, con cita del 
 y lo **publica en `docs/index.html`** con sus observaciones: un tercer bloque entre marcadores
 (`COTIZACIONES:INICIO/FIN`) que convive con los dos que refresca el radar sin pisarse.
 
+Cada tarjeta encabeza con un **score de apertura (0–100%)** que ordena el foco: 100% es una compra
+que no exige ninguna característica, capacidad o certificación particular que dirija la
+adjudicación, y baja 5% por cada criterio que falte revisar (`criterios_direccionadores` en
+`config/capacitaciones.json`, cada uno con su cita; el cálculo, en `src/lib/scoring-capacitacion.ts`).
+Hoy: Dipres 75% las tres, Subtrans 65%, Concepción 60%, Hospital Padre Hurtado 45% — este último
+exige las últimas 12 órdenes de compra del mismo curso, que es el filtro más direccionador de las
+seis. **No es una probabilidad de adjudicación**: es cuánto de la admisibilidad está sin resolver.
+
 Dos cosas que condicionan todo el nicho y no las resuelve el cotizador: **ninguna oferta nombra
 relator/a** (los seis TDR exigen título, CV y certificados verificables, y sin eso la oferta se
 descarta en admisibilidad), y **sigue sin confirmarse si KeepSync es OTEC registrada en SENCE** —

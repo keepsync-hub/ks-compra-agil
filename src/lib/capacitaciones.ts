@@ -2,6 +2,7 @@ import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR } from "./config.js";
 import type { FilaCumplimiento } from "./capacitacion-cotizacion.js";
+import { GLOSA_TIPO, type CriterioDireccionador } from "./scoring-capacitacion.js";
 
 const CONFIG_PATH = path.join(ROOT_DIR, "config", "capacitaciones.json");
 const COMPANY_CONFIG_PATH = path.join(ROOT_DIR, "config", "company.json");
@@ -46,6 +47,12 @@ export interface RequisitosCapacitacion {
   evaluacion: { tipo: "menor_precio" | "puntaje" | "no_declarado"; detalle: string[] };
   multas: string;
   pago: string;
+  /**
+   * Filtros de las bases que dirigen la adjudicación hacia un perfil de proveedor concreto, más
+   * lo que hay que revisar y hoy no se sabe. Alimenta el score de apertura (ver
+   * `src/lib/scoring-capacitacion.ts`). Cada uno lleva su cita: no se penaliza sin evidencia.
+   */
+  criterios_direccionadores: CriterioDireccionador[];
 }
 
 interface CapacitacionesConfig {
@@ -65,6 +72,40 @@ export function loadCapacitacionesConfig(): CapacitacionesConfig {
           `declara ${r.duracion.horas_cronologicas} horas cronológicas. Corregir antes de cotizar: el ` +
           `organismo descarta las ofertas que no cumplen la duración exigida.`,
       );
+    }
+
+    // El score se publica como un porcentaje y la gente lo va a leer como un dato duro, así que
+    // los criterios que lo producen se validan al cargar: sin cita no hay penalización defendible,
+    // y un "cubierto" sin evidencia sube el score sin que nadie pueda auditar por qué.
+    const criterios = r.criterios_direccionadores ?? [];
+    if (criterios.length === 0) {
+      throw new Error(
+        `config/capacitaciones.json — ${codigo}: no declara 'criterios_direccionadores'. Si de verdad ` +
+          `no tiene ninguno, declarar la lista vacía es una afirmación fuerte (score 100%): revisar los ` +
+          `adjuntos antes de dejarlo así.`,
+      );
+    }
+    const vistos = new Set<string>();
+    for (const c of criterios) {
+      if (vistos.has(c.id)) {
+        throw new Error(`config/capacitaciones.json — ${codigo}: criterio duplicado "${c.id}"; contaría dos veces en el score.`);
+      }
+      vistos.add(c.id);
+      if (!c.cita?.trim()) {
+        throw new Error(`config/capacitaciones.json — ${codigo}/${c.id}: falta 'cita'. No se penaliza sin evidencia en los adjuntos.`);
+      }
+      if (!(c.tipo in GLOSA_TIPO)) {
+        throw new Error(`config/capacitaciones.json — ${codigo}/${c.id}: tipo desconocido "${c.tipo}".`);
+      }
+      if (c.estado !== "sin_informacion" && c.estado !== "cubierto") {
+        throw new Error(`config/capacitaciones.json — ${codigo}/${c.id}: estado inválido "${c.estado}".`);
+      }
+      if (c.estado === "cubierto" && !c.resuelto_por?.trim()) {
+        throw new Error(
+          `config/capacitaciones.json — ${codigo}/${c.id}: está marcado "cubierto" sin 'resuelto_por'. ` +
+            `Dar por resuelto un criterio sube el score: tiene que decir con qué evidencia.`,
+        );
+      }
     }
   }
   return raw;

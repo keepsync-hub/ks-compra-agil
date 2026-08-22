@@ -15,6 +15,10 @@
     "ANEXO N2.docx"
   ],
   "requisitos_por_confirmar": 3,
+  "score_apertura_pct": 75,
+  "score_criterios_sin_informacion": 5,
+  "score_criterios_cubiertos": 0,
+  "_score_nota": "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que falte revisar (config/capacitaciones.json → criterios_direccionadores).",
   "pendientes": [
     "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
     "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.",

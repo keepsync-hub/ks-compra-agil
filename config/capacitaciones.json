@@ -3,7 +3,6 @@
   "_como_se_llenó": "Extraído del texto de los adjuntos ya descargados por el radar en data/<codigo>/attachments/ (pypdfium2 para PDF, python-docx para DOCX, catdoc para el .doc legado). No se infirió nada que no esté escrito en esos documentos; lo que el organismo no declara queda como null o 'no_declarado', nunca completado por analogía con otra compra.",
   "_regla_precio": "total = tope × 0.9 (10% bajo el tope), regla fijada explícitamente por el usuario el 2026-08-22 para el nicho de capacitación. NO se deriva de un costo real de KeepSync: no existe catálogo de costos de servicios (ver config/keepsync-oferta.json, insumo bloqueante `sin-catalogo-de-costos-de-servicios`). Por eso cada PDF sale marcado PRELIMINAR, igual que las cotizaciones de Array.",
   "_advertencia_evaluacion": "En las tres compras de Dipres el criterio de selección es EL MENOR PRECIO TOTAL entre las ofertas que cumplen todas las especificaciones. Cotizar al 90% del tope es, por construcción, una posición débil frente a un competidor que cotice más abajo. La regla la fijó el usuario; queda registrada acá la tensión, no corregida en silencio.",
-
   "cotizaciones": {
     "1618-67-COT26": {
       "curso": "Herramientas básicas de Power BI para el análisis de datos",
@@ -18,19 +17,96 @@
         "cita": "«asciende a la suma de $1.500.000 (un millón quinientos mil pesos) exento de impuesto» — TDR, apartado IV. La nota al pie invoca el artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios (exención de IVA para instituciones que imparten enseñanza o capacitación)."
       },
       "objetivo": "Utilizar las herramientas básicas de Power BI en la administración de datos, generación de informes, resúmenes gráficos y visualizaciones.",
-      "participantes": { "maximo": 20, "glosa": "Máximo veinte (20) funcionarios/as de la Dirección de Presupuestos." },
-      "duracion": { "horas_cronologicas": 24, "sesiones": 8, "horas_por_sesion": 3, "glosa": "24 horas cronológicas, idealmente en 8 sesiones de 3 horas. El TDR permite proponer otra distribución." },
-      "modalidad": { "tipo": "Curso cerrado, online sincrónico", "plataforma": "Microsoft Teams o plataforma equivalente", "horario": "Horario laboral: lunes a jueves 09:30–17:00, viernes 09:30–16:00. La distribución final se acuerda entre las partes." },
+      "participantes": {
+        "maximo": 20,
+        "glosa": "Máximo veinte (20) funcionarios/as de la Dirección de Presupuestos."
+      },
+      "duracion": {
+        "horas_cronologicas": 24,
+        "sesiones": 8,
+        "horas_por_sesion": 3,
+        "glosa": "24 horas cronológicas, idealmente en 8 sesiones de 3 horas. El TDR permite proponer otra distribución."
+      },
+      "modalidad": {
+        "tipo": "Curso cerrado, online sincrónico",
+        "plataforma": "Microsoft Teams o plataforma equivalente",
+        "horario": "Horario laboral: lunes a jueves 09:30–17:00, viernes 09:30–16:00. La distribución final se acuerda entre las partes."
+      },
       "fechas_ejecucion": "Entre junio y noviembre de 2026 (TDR 2.1.g). Se oferta dentro de esa ventana: el TDR faculta a Dipres a NO seleccionar la oferta más económica si propone una fecha fuera de ella.",
       "modulos": [
-        { "titulo": "Introducción a Power BI", "horas": 3, "temas": ["Características generales y entorno de trabajo", "Componentes: Desktop, Service, Mobile", "Flujo de trabajo de un proyecto de BI"] },
-        { "titulo": "Conexión e importación de datos", "horas": 3, "temas": ["Fuentes disponibles y métodos de importación", "Limpieza y transformación con Power Query", "Tipos de datos y perfilado de columnas"] },
-        { "titulo": "Modelamiento de datos", "horas": 3, "temas": ["Relaciones y cardinalidad", "Tablas calculadas y jerarquías", "Concepto de modelo de datos"] },
-        { "titulo": "Medidas y funciones básicas DAX", "horas": 3, "temas": ["Columnas calculadas vs. medidas", "Funciones de agregación", "SUM, AVERAGE, COUNTROWS, DIVIDE"] },
-        { "titulo": "Visualizaciones e informes", "horas": 3, "temas": ["Gráficos, tablas dinámicas", "Segmentaciones y filtros", "Buenas prácticas de lectura visual"] },
-        { "titulo": "Diseño de tableros interactivos", "horas": 3, "temas": ["Integración de múltiples visualizaciones", "Configuración de navegación", "Diseño y jerarquía visual"] },
-        { "titulo": "Publicación y uso compartido", "horas": 3, "temas": ["Power BI Service y áreas de trabajo", "Actualización de datos", "Colaboración y permisos"] },
-        { "titulo": "Fundamento del diseño de modelos de datos", "horas": 3, "temas": ["Elementos de un modelo de datos", "Formas normales; relaciones 1:1, 1:N, N:N", "Claves primarias y foráneas; esquemas", "Normalización y desnormalización"] }
+        {
+          "titulo": "Introducción a Power BI",
+          "horas": 3,
+          "temas": [
+            "Características generales y entorno de trabajo",
+            "Componentes: Desktop, Service, Mobile",
+            "Flujo de trabajo de un proyecto de BI"
+          ]
+        },
+        {
+          "titulo": "Conexión e importación de datos",
+          "horas": 3,
+          "temas": [
+            "Fuentes disponibles y métodos de importación",
+            "Limpieza y transformación con Power Query",
+            "Tipos de datos y perfilado de columnas"
+          ]
+        },
+        {
+          "titulo": "Modelamiento de datos",
+          "horas": 3,
+          "temas": [
+            "Relaciones y cardinalidad",
+            "Tablas calculadas y jerarquías",
+            "Concepto de modelo de datos"
+          ]
+        },
+        {
+          "titulo": "Medidas y funciones básicas DAX",
+          "horas": 3,
+          "temas": [
+            "Columnas calculadas vs. medidas",
+            "Funciones de agregación",
+            "SUM, AVERAGE, COUNTROWS, DIVIDE"
+          ]
+        },
+        {
+          "titulo": "Visualizaciones e informes",
+          "horas": 3,
+          "temas": [
+            "Gráficos, tablas dinámicas",
+            "Segmentaciones y filtros",
+            "Buenas prácticas de lectura visual"
+          ]
+        },
+        {
+          "titulo": "Diseño de tableros interactivos",
+          "horas": 3,
+          "temas": [
+            "Integración de múltiples visualizaciones",
+            "Configuración de navegación",
+            "Diseño y jerarquía visual"
+          ]
+        },
+        {
+          "titulo": "Publicación y uso compartido",
+          "horas": 3,
+          "temas": [
+            "Power BI Service y áreas de trabajo",
+            "Actualización de datos",
+            "Colaboración y permisos"
+          ]
+        },
+        {
+          "titulo": "Fundamento del diseño de modelos de datos",
+          "horas": 3,
+          "temas": [
+            "Elementos de un modelo de datos",
+            "Formas normales; relaciones 1:1, 1:N, N:N",
+            "Claves primarias y foráneas; esquemas",
+            "Normalización y desnormalización"
+          ]
+        }
       ],
       "modulos_nota": "Los ocho módulos cubren uno a uno los ocho contenidos sugeridos del TDR (apartado II.2.1.b), en el mismo orden y sumando las 24 horas cronológicas exigidas.",
       "relator_exigido": {
@@ -62,31 +138,151 @@
         ]
       },
       "multas": "10% del valor total neto por evento, si el proveedor suspende una sesión o cambia su fecha sin autorización previa, y lo mismo si cambia al relator/a. Tope de multas: 30% del precio neto (art. 136 Reglamento Ley de Compras); excedido, Dipres termina la contratación.",
-      "pago": "Orden de compra por el portal, con 2 días hábiles para aceptarla. Se factura solo tras la realización de la actividad y la recepción conforme de todos los entregables. Pago a 30 días corridos desde la emisión de la factura, por transferencia desde Tesorería General de la República. El ID de la orden de compra va en el campo 801 del documento de cobro, y la factura se envía a dipresrecepcion@custodium.com."
+      "pago": "Orden de compra por el portal, con 2 días hábiles para aceptarla. Se factura solo tras la realización de la actividad y la recepción conforme de todos los entregables. Pago a 30 días corridos desde la emisión de la factura, por transferencia desde Tesorería General de la República. El ID de la orden de compra va en el campo 801 del documento de cobro, y la factura se envía a dipresrecepcion@custodium.com.",
+      "criterios_direccionadores": [
+        {
+          "id": "relator-titulo",
+          "exige": "Relator/a profesional o técnico de informática, ingeniería, matemáticas o estadística, con copia de título.",
+          "cita": "TDR 2.2.a",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-5-anios-datos",
+          "exige": "Al menos 5 años de experiencia del relator/a en análisis de datos, inteligencia de negocios o tecnologías Microsoft, con CV.",
+          "cita": "TDR 2.2.b",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-7-cursos-powerbi",
+          "exige": "Haber dictado al menos 7 cursos de Power BI en los últimos 3 años, acreditados con certificados, órdenes de compra o contratos.",
+          "cita": "TDR 2.2.c",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "giro-educacional-exento",
+          "exige": "Poder facturar exento por giro educacional (art. 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios), que es como Dipres presupuestó el servicio.",
+          "cita": "TDR apartado IV y su nota al pie",
+          "tipo": "tributario",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "identidad-oferente",
+          "exige": "Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados.",
+          "cita": "Anexos y formularios de la oferta",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        }
+      ]
     },
-
     "1618-68-COT26": {
       "curso": "Herramientas intermedias de Power BI para el análisis de datos (Nivel II)",
       "organismo_corto": "Dipres",
-      "fuente_documentos": ["TDR PowerBI Nivel II .pdf", "ANEXO N1.docx", "ANEXO N2.docx"],
+      "fuente_documentos": [
+        "TDR PowerBI Nivel II .pdf",
+        "ANEXO N1.docx",
+        "ANEXO N2.docx"
+      ],
       "tributacion": {
         "regimen": "exento",
         "cita": "«asciende a la suma de $1.500.000 (un millón quinientos mil pesos) exento de impuesto» — TDR, apartado IV, con la misma nota al pie del artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios."
       },
       "objetivo": "Aplicar herramientas intermedias de Power BI para el modelamiento, análisis y visualización de datos, utilizando funciones DAX, optimización de modelos y diseño de tableros interactivos orientados a la toma de decisiones y el análisis institucional.",
-      "participantes": { "maximo": 20, "glosa": "Máximo veinte (20) funcionarios/as de la Dirección de Presupuestos." },
-      "duracion": { "horas_cronologicas": 24, "sesiones": 8, "horas_por_sesion": 3, "glosa": "24 horas cronológicas, idealmente en 8 sesiones de 3 horas. El TDR permite proponer otra distribución." },
-      "modalidad": { "tipo": "Curso cerrado, online sincrónico", "plataforma": "Microsoft Teams o plataforma equivalente", "horario": "Horario laboral: lunes a jueves 09:30–17:00, viernes 09:30–16:00. La distribución final se acuerda entre las partes." },
+      "participantes": {
+        "maximo": 20,
+        "glosa": "Máximo veinte (20) funcionarios/as de la Dirección de Presupuestos."
+      },
+      "duracion": {
+        "horas_cronologicas": 24,
+        "sesiones": 8,
+        "horas_por_sesion": 3,
+        "glosa": "24 horas cronológicas, idealmente en 8 sesiones de 3 horas. El TDR permite proponer otra distribución."
+      },
+      "modalidad": {
+        "tipo": "Curso cerrado, online sincrónico",
+        "plataforma": "Microsoft Teams o plataforma equivalente",
+        "horario": "Horario laboral: lunes a jueves 09:30–17:00, viernes 09:30–16:00. La distribución final se acuerda entre las partes."
+      },
       "fechas_ejecucion": "Entre junio y noviembre de 2026 (TDR 2.1.g). Se oferta dentro de esa ventana: el TDR faculta a Dipres a NO seleccionar la oferta más económica si propone una fecha fuera de ella.",
       "modulos": [
-        { "titulo": "Repaso y reforzamiento de nivel básico", "horas": 3, "temas": ["Entorno de trabajo, conexión e importación", "Transformación básica con Power Query", "Relaciones, medidas y visualizaciones base"] },
-        { "titulo": "Modelamiento de datos intermedio", "horas": 3, "temas": ["Buenas prácticas de modelamiento", "Modelo estrella: dimensiones y hechos", "Optimización de relaciones; cardinalidad y dirección de filtros"] },
-        { "titulo": "Transformación avanzada con Power Query", "horas": 3, "temas": ["Transformaciones avanzadas", "Combinación y anexado de consultas", "Parámetros y consultas dinámicas", "Introducción al lenguaje M"] },
-        { "titulo": "DAX intermedio y avanzado", "horas": 4, "temas": ["Contexto de fila y contexto de filtro", "Variables y medidas avanzadas", "CALCULATE, FILTER, ALL, RELATED, RELATEDTABLE", "Inteligencia de tiempo: acumulados, variaciones, comparaciones", "Construcción de KPI"] },
-        { "titulo": "Visualizaciones y dashboards avanzados", "horas": 4, "temas": ["Diseño de dashboards ejecutivos", "Navegación entre páginas, drill-through y drill-down", "Tooltips personalizados, marcadores y botones", "Diseño orientado a experiencia usuaria"] },
-        { "titulo": "Publicación y colaboración en Power BI Service", "horas": 3, "temas": ["Publicación de reportes y dashboards", "Configuración de áreas de trabajo y compartición", "Actualización de datasets; administración básica"] },
-        { "titulo": "Seguridad y buenas prácticas", "horas": 2, "temas": ["Row Level Security (RLS)", "Seguridad y acceso a la información institucional", "Optimización de rendimiento de modelos y reportes"] },
-        { "titulo": "Taller práctico aplicado", "horas": 2, "temas": ["Construcción de un dashboard integrado", "Desarrollo de indicadores y visualizaciones", "Resolución de casos de análisis institucional"] }
+        {
+          "titulo": "Repaso y reforzamiento de nivel básico",
+          "horas": 3,
+          "temas": [
+            "Entorno de trabajo, conexión e importación",
+            "Transformación básica con Power Query",
+            "Relaciones, medidas y visualizaciones base"
+          ]
+        },
+        {
+          "titulo": "Modelamiento de datos intermedio",
+          "horas": 3,
+          "temas": [
+            "Buenas prácticas de modelamiento",
+            "Modelo estrella: dimensiones y hechos",
+            "Optimización de relaciones; cardinalidad y dirección de filtros"
+          ]
+        },
+        {
+          "titulo": "Transformación avanzada con Power Query",
+          "horas": 3,
+          "temas": [
+            "Transformaciones avanzadas",
+            "Combinación y anexado de consultas",
+            "Parámetros y consultas dinámicas",
+            "Introducción al lenguaje M"
+          ]
+        },
+        {
+          "titulo": "DAX intermedio y avanzado",
+          "horas": 4,
+          "temas": [
+            "Contexto de fila y contexto de filtro",
+            "Variables y medidas avanzadas",
+            "CALCULATE, FILTER, ALL, RELATED, RELATEDTABLE",
+            "Inteligencia de tiempo: acumulados, variaciones, comparaciones",
+            "Construcción de KPI"
+          ]
+        },
+        {
+          "titulo": "Visualizaciones y dashboards avanzados",
+          "horas": 4,
+          "temas": [
+            "Diseño de dashboards ejecutivos",
+            "Navegación entre páginas, drill-through y drill-down",
+            "Tooltips personalizados, marcadores y botones",
+            "Diseño orientado a experiencia usuaria"
+          ]
+        },
+        {
+          "titulo": "Publicación y colaboración en Power BI Service",
+          "horas": 3,
+          "temas": [
+            "Publicación de reportes y dashboards",
+            "Configuración de áreas de trabajo y compartición",
+            "Actualización de datasets; administración básica"
+          ]
+        },
+        {
+          "titulo": "Seguridad y buenas prácticas",
+          "horas": 2,
+          "temas": [
+            "Row Level Security (RLS)",
+            "Seguridad y acceso a la información institucional",
+            "Optimización de rendimiento de modelos y reportes"
+          ]
+        },
+        {
+          "titulo": "Taller práctico aplicado",
+          "horas": 2,
+          "temas": [
+            "Construcción de un dashboard integrado",
+            "Desarrollo de indicadores y visualizaciones",
+            "Resolución de casos de análisis institucional"
+          ]
+        }
       ],
       "modulos_nota": "Los ocho módulos cubren uno a uno los ocho contenidos sugeridos del TDR (apartado II.2.1.b), en el mismo orden y sumando las 24 horas cronológicas exigidas. Las horas se concentran en DAX y dashboards avanzados, que es donde el TDR pone el énfasis del nivel intermedio.",
       "relator_exigido": {
@@ -118,28 +314,131 @@
         ]
       },
       "multas": "10% del valor total neto por evento, si el proveedor suspende una sesión o cambia su fecha sin autorización previa, y lo mismo si cambia al relator/a. Tope de multas: 30% del precio neto (art. 136 Reglamento Ley de Compras); excedido, Dipres termina la contratación.",
-      "pago": "Orden de compra por el portal, con 2 días hábiles para aceptarla. Se factura solo tras la realización de la actividad y la recepción conforme de todos los entregables. Pago a 30 días corridos desde la emisión de la factura, por transferencia desde Tesorería General de la República. El ID de la orden de compra va en el campo 801 del documento de cobro, y la factura se envía a dipresrecepcion@custodium.com."
+      "pago": "Orden de compra por el portal, con 2 días hábiles para aceptarla. Se factura solo tras la realización de la actividad y la recepción conforme de todos los entregables. Pago a 30 días corridos desde la emisión de la factura, por transferencia desde Tesorería General de la República. El ID de la orden de compra va en el campo 801 del documento de cobro, y la factura se envía a dipresrecepcion@custodium.com.",
+      "criterios_direccionadores": [
+        {
+          "id": "relator-titulo",
+          "exige": "Relator/a profesional o técnico de informática, ingeniería, matemáticas o estadística, con copia de título.",
+          "cita": "TDR 2.2.a",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-5-anios-datos",
+          "exige": "Al menos 5 años de experiencia del relator/a en análisis de datos, inteligencia de negocios o tecnologías Microsoft, con CV.",
+          "cita": "TDR 2.2.b",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-7-cursos-powerbi",
+          "exige": "Haber dictado al menos 7 cursos de Power BI en los últimos 3 años, acreditados con certificados, órdenes de compra o contratos.",
+          "cita": "TDR 2.2.c",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "giro-educacional-exento",
+          "exige": "Poder facturar exento por giro educacional (art. 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios), que es como Dipres presupuestó el servicio.",
+          "cita": "TDR apartado IV y su nota al pie",
+          "tipo": "tributario",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "identidad-oferente",
+          "exige": "Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados.",
+          "cita": "Anexos y formularios de la oferta",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        }
+      ]
     },
-
     "1618-69-COT26": {
       "curso": "IA Generativa para el Trabajo Diario en el Sector Público",
       "organismo_corto": "Dipres",
-      "fuente_documentos": ["TDR IA para el trabajo diario.pdf", "ANEXO N1.docx", "ANEXO N2.docx"],
+      "fuente_documentos": [
+        "TDR IA para el trabajo diario.pdf",
+        "ANEXO N1.docx",
+        "ANEXO N2.docx"
+      ],
       "tributacion": {
         "regimen": "exento",
         "cita": "«asciende a la suma de $3.000.000 (tres millones de pesos) exento de impuesto» — TDR, apartado IV, con la nota al pie del artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios."
       },
       "objetivo": "Que los/as participantes apliquen herramientas de inteligencia artificial generativa en sus tareas habituales, mejorando la productividad, la eficiencia en el desarrollo de sus funciones y el análisis de información para su trabajo.",
-      "participantes": { "maximo": 20, "glosa": "Máximo veinte (20) funcionarios/as de la Dipres." },
-      "duracion": { "horas_cronologicas": 15, "sesiones": 5, "horas_por_sesion": 3, "glosa": "15 horas cronológicas, idealmente en 5 sesiones de 3 horas. El TDR permite proponer otra distribución." },
-      "modalidad": { "tipo": "Curso cerrado, online sincrónico", "plataforma": "Microsoft Teams o plataforma equivalente", "horario": "Rango: lunes a jueves 09:30–17:00, viernes 09:30–16:00. La distribución final se acuerda entre las partes." },
+      "participantes": {
+        "maximo": 20,
+        "glosa": "Máximo veinte (20) funcionarios/as de la Dipres."
+      },
+      "duracion": {
+        "horas_cronologicas": 15,
+        "sesiones": 5,
+        "horas_por_sesion": 3,
+        "glosa": "15 horas cronológicas, idealmente en 5 sesiones de 3 horas. El TDR permite proponer otra distribución."
+      },
+      "modalidad": {
+        "tipo": "Curso cerrado, online sincrónico",
+        "plataforma": "Microsoft Teams o plataforma equivalente",
+        "horario": "Rango: lunes a jueves 09:30–17:00, viernes 09:30–16:00. La distribución final se acuerda entre las partes."
+      },
       "fechas_ejecucion": "Entre septiembre y noviembre de 2026 (TDR 2.1.g). Se oferta dentro de esa ventana.",
       "modulos": [
-        { "titulo": "IA generativa y uso responsable en el sector público", "horas": 3, "temas": ["Conceptos fundamentales de IA e IA generativa", "Capacidades, oportunidades y limitaciones", "Uso de IA en el sector público", "Principios para la Administración del Estado: IA centrada en las personas, privacidad y protección de datos, supervisión humana y responsabilidad, riesgos asociados"] },
-        { "titulo": "Herramientas de IA para el trabajo diario", "horas": 3, "temas": ["Panorama de plataformas: características, ventajas y limitaciones", "Generación de texto y asistencia conversacional (ChatGPT, Gemini, Claude o equivalentes)", "Investigación y búsqueda (Perplexity, Gemini, ChatGPT Search o equivalentes)", "Análisis documental y gestión del conocimiento (NotebookLM o equivalentes)", "Presentaciones y contenidos (Gamma, Canva IA o equivalentes)", "Criterios para seleccionar la herramienta según el objetivo"] },
-        { "titulo": "Prompt engineering aplicado al sector público", "horas": 3, "temas": ["Estructura de un prompt efectivo: contexto, rol, objetivo y formato esperado", "Restricciones e instrucciones específicas", "Iteración y refinamiento de resultados", "Técnicas avanzadas de prompting", "Prompts reutilizables y construcción de bibliotecas de prompts"] },
-        { "titulo": "Investigación, análisis y productividad con IA", "horas": 3, "temas": ["Metodologías de investigación asistida por IA", "Búsqueda, síntesis y validación cruzada de información", "Análisis de documentos extensos y de archivos estructurados (Excel, CSV)", "Resúmenes ejecutivos, informes y matrices comparativas", "Apoyo a la planificación y gestión del trabajo", "Casos de uso aplicados a funciones del sector público"] },
-        { "titulo": "Taller práctico integrador", "horas": 3, "temas": ["Ejercicios aplicados a situaciones reales de trabajo", "Aplicación a problemáticas institucionales", "Diseño y prueba de prompts para funciones específicas", "Construcción de asistentes funcionales mediante prompts reutilizables", "Evaluación y mejora de resultados generados por IA"] }
+        {
+          "titulo": "IA generativa y uso responsable en el sector público",
+          "horas": 3,
+          "temas": [
+            "Conceptos fundamentales de IA e IA generativa",
+            "Capacidades, oportunidades y limitaciones",
+            "Uso de IA en el sector público",
+            "Principios para la Administración del Estado: IA centrada en las personas, privacidad y protección de datos, supervisión humana y responsabilidad, riesgos asociados"
+          ]
+        },
+        {
+          "titulo": "Herramientas de IA para el trabajo diario",
+          "horas": 3,
+          "temas": [
+            "Panorama de plataformas: características, ventajas y limitaciones",
+            "Generación de texto y asistencia conversacional (ChatGPT, Gemini, Claude o equivalentes)",
+            "Investigación y búsqueda (Perplexity, Gemini, ChatGPT Search o equivalentes)",
+            "Análisis documental y gestión del conocimiento (NotebookLM o equivalentes)",
+            "Presentaciones y contenidos (Gamma, Canva IA o equivalentes)",
+            "Criterios para seleccionar la herramienta según el objetivo"
+          ]
+        },
+        {
+          "titulo": "Prompt engineering aplicado al sector público",
+          "horas": 3,
+          "temas": [
+            "Estructura de un prompt efectivo: contexto, rol, objetivo y formato esperado",
+            "Restricciones e instrucciones específicas",
+            "Iteración y refinamiento de resultados",
+            "Técnicas avanzadas de prompting",
+            "Prompts reutilizables y construcción de bibliotecas de prompts"
+          ]
+        },
+        {
+          "titulo": "Investigación, análisis y productividad con IA",
+          "horas": 3,
+          "temas": [
+            "Metodologías de investigación asistida por IA",
+            "Búsqueda, síntesis y validación cruzada de información",
+            "Análisis de documentos extensos y de archivos estructurados (Excel, CSV)",
+            "Resúmenes ejecutivos, informes y matrices comparativas",
+            "Apoyo a la planificación y gestión del trabajo",
+            "Casos de uso aplicados a funciones del sector público"
+          ]
+        },
+        {
+          "titulo": "Taller práctico integrador",
+          "horas": 3,
+          "temas": [
+            "Ejercicios aplicados a situaciones reales de trabajo",
+            "Aplicación a problemáticas institucionales",
+            "Diseño y prueba de prompts para funciones específicas",
+            "Construcción de asistentes funcionales mediante prompts reutilizables",
+            "Evaluación y mejora de resultados generados por IA"
+          ]
+        }
       ],
       "modulos_nota": "Los cinco módulos cubren uno a uno los cinco contenidos sugeridos del TDR (apartado II.2.1.b), en el mismo orden y sumando las 15 horas cronológicas exigidas.",
       "requisitos_metodologicos": [
@@ -176,26 +475,99 @@
         ]
       },
       "multas": "Según el mismo régimen de los TDR de Dipres: 10% del valor total neto por evento ante suspensión o cambio de fecha sin autorización, o cambio de relator/a; tope de 30% del precio neto (art. 136 del Reglamento de la Ley de Compras).",
-      "pago": "Orden de compra por el portal, con 2 días hábiles para aceptarla. Se factura solo tras la realización de la actividad y la recepción conforme de todos los entregables. Pago a 30 días corridos desde la emisión de la factura. El ID de la orden de compra va en el campo 801 y la factura se envía a dipresrecepcion@custodium.com."
+      "pago": "Orden de compra por el portal, con 2 días hábiles para aceptarla. Se factura solo tras la realización de la actividad y la recepción conforme de todos los entregables. Pago a 30 días corridos desde la emisión de la factura. El ID de la orden de compra va en el campo 801 y la factura se envía a dipresrecepcion@custodium.com.",
+      "criterios_direccionadores": [
+        {
+          "id": "relator-titulo-8-semestres",
+          "exige": "Relator/a titulado/a de una carrera de al menos 8 semestres en ingeniería, informática, ciencia de datos, estadística, administración pública o afines.",
+          "cita": "TDR 2.2.a",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-3-anios-ia",
+          "exige": "Al menos 3 años de experiencia profesional del relator/a en IA, IA generativa, ciencia de datos o automatización, con CV.",
+          "cita": "TDR 2.2.b",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-5-actividades-ia",
+          "exige": "Al menos 5 actividades de capacitación en IA, prompt engineering o aplicaciones prácticas de IA en los últimos 3 años, de mínimo 8 horas cada una, acreditadas.",
+          "cita": "TDR 2.2.c",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "giro-educacional-exento",
+          "exige": "Poder facturar exento por giro educacional (art. 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios), que es como Dipres presupuestó el servicio.",
+          "cita": "TDR apartado IV y su nota al pie",
+          "tipo": "tributario",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "identidad-oferente",
+          "exige": "Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados.",
+          "cita": "Anexos y formularios de la oferta",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        }
+      ]
     },
-
     "2672-18-COT26": {
       "curso": "Formación y capacitación en Innovación Pública y Herramientas de Inteligencia Artificial para la Gestión Municipal",
       "organismo_corto": "Municipalidad de Concepción",
-      "fuente_documentos": ["Bases_Tecnicas_Innovacion_Publica.V2.pdf"],
+      "fuente_documentos": [
+        "Bases_Tecnicas_Innovacion_Publica.V2.pdf"
+      ],
       "tributacion": {
         "regimen": "no_declarado",
         "cita": "Las bases técnicas informan «Presupuesto disponible: $6.020.000 (monto referencial conforme al presupuesto aprobado para el Plan Anual de Capacitación 2026)» sin declarar si es neto, con impuestos incluidos o exento. Se cotiza el valor como TOTAL y el tratamiento tributario queda por confirmar con la Unidad Técnica."
       },
       "objetivo": "Fortalecer las competencias de innovación pública y el uso estratégico de herramientas de Inteligencia Artificial en los funcionarios municipales, promoviendo procesos más eficientes, mejor toma de decisiones y una gestión pública moderna orientada a resultados.",
-      "participantes": { "maximo": 70, "glosa": "70 funcionarios y funcionarias municipales de distintas Direcciones, en convocatoria transversal." },
-      "duracion": { "horas_cronologicas": 20, "sesiones": 5, "horas_por_sesion": 4, "glosa": "20 horas cronológicas en módulos de 4 horas, de lunes a viernes. El cronograma definitivo se define entre el proveedor adjudicado y la Unidad Técnica." },
-      "modalidad": { "tipo": "Mixta — ver observación", "plataforma": "Plataforma e-learning disponible durante toda la ejecución, con clases asincrónicas, clases sincrónicas en vivo, grabación de todas las sesiones, material descargable, tutorías y soporte técnico, y acceso desde computador y dispositivos móviles.", "horario": "Módulos de 4 horas, de lunes a viernes, según cronograma acordado con la Unidad Técnica." },
+      "participantes": {
+        "maximo": 70,
+        "glosa": "70 funcionarios y funcionarias municipales de distintas Direcciones, en convocatoria transversal."
+      },
+      "duracion": {
+        "horas_cronologicas": 20,
+        "sesiones": 5,
+        "horas_por_sesion": 4,
+        "glosa": "20 horas cronológicas en módulos de 4 horas, de lunes a viernes. El cronograma definitivo se define entre el proveedor adjudicado y la Unidad Técnica."
+      },
+      "modalidad": {
+        "tipo": "Mixta — ver observación",
+        "plataforma": "Plataforma e-learning disponible durante toda la ejecución, con clases asincrónicas, clases sincrónicas en vivo, grabación de todas las sesiones, material descargable, tutorías y soporte técnico, y acceso desde computador y dispositivos móviles.",
+        "horario": "Módulos de 4 horas, de lunes a viernes, según cronograma acordado con la Unidad Técnica."
+      },
       "modalidad_observacion": "Las bases se contradicen: el apartado 'Modalidad' (1.6–1.13) describe una plataforma e-learning con clases asincrónicas y sincrónicas, mientras que el apartado 'Duración' dice «20 horas cronológicas, presencial distribuidas en modulos de 4 horas». La propuesta cubre ambas lecturas (plataforma e-learning + sesiones sincrónicas, con sesiones presenciales en dependencias municipales si la Unidad Técnica lo confirma), y se deja la aclaración como consulta formal al organismo.",
       "fechas_ejecucion": "No se declara ventana de fechas en las bases; el cronograma se define entre el proveedor adjudicado y la Unidad Técnica.",
       "modulos": [
-        { "titulo": "Módulo I — Innovación Pública y Transformación Digital", "horas": 10, "temas": ["Principios de Innovación Pública", "Modernización del Estado", "Transformación Digital en instituciones públicas", "Metodologías ágiles para la mejora continua", "Innovación en procesos municipales", "Casos exitosos nacionales e internacionales"] },
-        { "titulo": "Módulo II — Inteligencia Artificial aplicada a la Gestión Municipal", "horas": 10, "temas": ["Fundamentos de Inteligencia Artificial Generativa", "ChatGPT, Microsoft Copilot y otras herramientas equivalentes", "Elaboración de prompts efectivos", "Automatización de tareas administrativas", "Generación de informes técnicos", "Elaboración de minutas, oficios y bases técnicas mediante IA", "Uso responsable de la IA; protección de datos y aspectos éticos"] }
+        {
+          "titulo": "Módulo I — Innovación Pública y Transformación Digital",
+          "horas": 10,
+          "temas": [
+            "Principios de Innovación Pública",
+            "Modernización del Estado",
+            "Transformación Digital en instituciones públicas",
+            "Metodologías ágiles para la mejora continua",
+            "Innovación en procesos municipales",
+            "Casos exitosos nacionales e internacionales"
+          ]
+        },
+        {
+          "titulo": "Módulo II — Inteligencia Artificial aplicada a la Gestión Municipal",
+          "horas": 10,
+          "temas": [
+            "Fundamentos de Inteligencia Artificial Generativa",
+            "ChatGPT, Microsoft Copilot y otras herramientas equivalentes",
+            "Elaboración de prompts efectivos",
+            "Automatización de tareas administrativas",
+            "Generación de informes técnicos",
+            "Elaboración de minutas, oficios y bases técnicas mediante IA",
+            "Uso responsable de la IA; protección de datos y aspectos éticos"
+          ]
+        }
       ],
       "modulos_nota": "Los dos módulos y su carga horaria (10 + 10 horas) son los que fijan las bases técnicas en los apartados 2.1 y 3. Las bases piden además que el proveedor proponga metodología, cronograma y distribución horaria con actividades teóricas y prácticas de aplicación inmediata al contexto municipal.",
       "relator_exigido": {
@@ -229,28 +601,142 @@
         ]
       },
       "multas": "Entre 1 y 5 UTM por incumplimiento de cualquiera de las obligaciones del proveedor, según la gravedad.",
-      "pago": "Las bases técnicas no detallan el procedimiento de pago; se rige por la orden de compra emitida a través de mercadopublico.cl."
+      "pago": "Las bases técnicas no detallan el procedimiento de pago; se rige por la orden de compra emitida a través de mercadopublico.cl.",
+      "criterios_direccionadores": [
+        {
+          "id": "relator-1-magister",
+          "exige": "Magíster o Doctorado en Gestión Pública, Innovación, Transformación Digital o IA: vale 35 de 100 puntos. Sin posgrado el criterio cae a 10 puntos, una brecha de 25 puntos que difícilmente se recupera en los otros factores.",
+          "cita": "Bases técnicas, pauta de evaluación de ofertas",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-1-perfil",
+          "exige": "Relator de Innovación Pública: Administrador Público, Ingeniero Civil Industrial, Ingeniero Comercial o profesional afín.",
+          "cita": "Bases técnicas 1.14",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-2-perfil-ia",
+          "exige": "Segundo relator para IA: Ingeniero Civil Informático, en Informática o Computación, o Cientista de Datos, con experiencia demostrable en IA generativa.",
+          "cita": "Bases técnicas 1.14",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "plataforma-elearning",
+          "exige": "Plataforma e-learning operativa durante toda la ejecución, con accesos individuales, grabaciones disponibles, material descargable, tutorías y soporte técnico permanente, para 70 funcionarios.",
+          "cita": "Bases técnicas 1.6–1.13 y 4.2–4.6",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "nota-comportamiento-portal",
+          "exige": "Nota de comportamiento en mercadopublico.cl de los últimos 24 meses: descuenta hasta 4 puntos. Un proveedor sin historial suficiente no puede asegurar el 5/5 que no descuenta.",
+          "cita": "Bases técnicas, pauta de evaluación de ofertas",
+          "tipo": "historial_portal",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "regimen-tributario",
+          "exige": "Confirmar con la Unidad Técnica si el presupuesto de $6.020.000 es neto, con impuestos incluidos o exento: las bases no lo declaran y cambia el valor a ingresar en el portal.",
+          "cita": "Bases técnicas 1.3",
+          "tipo": "tributario",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "modalidad-contradictoria",
+          "exige": "Aclarar la contradicción entre el apartado de modalidad (plataforma e-learning, clases asincrónicas y sincrónicas) y el de duración (20 horas presenciales en módulos de 4 horas): definen infraestructuras distintas.",
+          "cita": "Bases técnicas 1.6–1.13 frente a 'Duración'",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "identidad-oferente",
+          "exige": "Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados.",
+          "cita": "Anexos y formularios de la oferta",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        }
+      ]
     },
-
     "577290-82-COT26": {
       "curso": "Automatización de Procesos con Inteligencia Artificial",
       "organismo_corto": "Subsecretaría de Transportes",
-      "fuente_documentos": ["Requerimiento de Compra_2026.doc"],
+      "fuente_documentos": [
+        "Requerimiento de Compra_2026.doc"
+      ],
       "tributacion": {
         "regimen": "impuestos_incluidos",
         "cita": "«la Subsecretaría cuenta con un presupuesto máximo disponible de $1.000.000, impuestos incluidos. Este monto incluye todos los costos asociados a la contratación» — numeral 3. Y: «La cotización que exceda el presupuesto máximo anteriormente indicado no será aceptada»."
       },
       "objetivo": "Fortalecer las competencias para el diseño, implementación y gestión de soluciones basadas en Inteligencia Artificial orientadas a la automatización y optimización de procesos, incorporando herramientas que mejoren la eficiencia institucional y permitan gestionar de manera responsable la información y los datos.",
-      "participantes": { "maximo": 2, "glosa": "2 servidores públicos de la División de Transporte Público Regional." },
-      "duracion": { "horas_cronologicas": 30, "sesiones": null, "horas_por_sesion": null, "glosa": "Al menos 30 horas cronológicas, en modalidad online asincrónica." },
-      "modalidad": { "tipo": "Online asincrónico", "plataforma": "Plataforma de e-learning del proveedor, con acceso durante toda la ejecución del curso.", "horario": "Asincrónico: el participante avanza a su ritmo dentro del período habilitado." },
+      "participantes": {
+        "maximo": 2,
+        "glosa": "2 servidores públicos de la División de Transporte Público Regional."
+      },
+      "duracion": {
+        "horas_cronologicas": 30,
+        "sesiones": null,
+        "horas_por_sesion": null,
+        "glosa": "Al menos 30 horas cronológicas, en modalidad online asincrónica."
+      },
+      "modalidad": {
+        "tipo": "Online asincrónico",
+        "plataforma": "Plataforma de e-learning del proveedor, con acceso durante toda la ejecución del curso.",
+        "horario": "Asincrónico: el participante avanza a su ritmo dentro del período habilitado."
+      },
       "fechas_ejecucion": "Durante 2026, con el curso realizado íntegramente a más tardar el 15 de diciembre de 2026.",
       "modulos": [
-        { "titulo": "Fundamentos de IA aplicada a la automatización", "horas": 6, "temas": ["Conceptos de Inteligencia Artificial aplicada a la automatización y optimización de procesos", "Identificación de procesos automatizables", "Criterios de priorización por impacto y esfuerzo"] },
-        { "titulo": "Automatización con RPA, low-code y no-code", "horas": 7, "temas": ["Automatización de procesos con IA mediante RPA", "Plataformas low-code y no-code", "Diseño de flujos de trabajo automatizados", "Casos aplicados a procesos administrativos del sector público"] },
-        { "titulo": "Chatbots, asistentes virtuales y copilotos", "horas": 6, "temas": ["Diseño y utilización de chatbots y asistentes virtuales", "Copilotos para apoyar procesos organizacionales", "Gestión de tareas y de información con asistentes"] },
-        { "titulo": "Integración de fuentes de información con modelos de IA", "horas": 6, "temas": ["RAG (Retrieval-Augmented Generation)", "Embeddings y técnicas de personalización de modelos", "Integración de bases de conocimiento institucionales", "Seguridad y uso responsable de datos"] },
-        { "titulo": "Gestión del cambio, gobernanza y adopción", "horas": 5, "temas": ["Principios de gestión del cambio en la implementación de IA", "Gobernanza de soluciones de automatización", "Adaptación organizacional orientada a la eficiencia institucional", "Medición de resultados"] }
+        {
+          "titulo": "Fundamentos de IA aplicada a la automatización",
+          "horas": 6,
+          "temas": [
+            "Conceptos de Inteligencia Artificial aplicada a la automatización y optimización de procesos",
+            "Identificación de procesos automatizables",
+            "Criterios de priorización por impacto y esfuerzo"
+          ]
+        },
+        {
+          "titulo": "Automatización con RPA, low-code y no-code",
+          "horas": 7,
+          "temas": [
+            "Automatización de procesos con IA mediante RPA",
+            "Plataformas low-code y no-code",
+            "Diseño de flujos de trabajo automatizados",
+            "Casos aplicados a procesos administrativos del sector público"
+          ]
+        },
+        {
+          "titulo": "Chatbots, asistentes virtuales y copilotos",
+          "horas": 6,
+          "temas": [
+            "Diseño y utilización de chatbots y asistentes virtuales",
+            "Copilotos para apoyar procesos organizacionales",
+            "Gestión de tareas y de información con asistentes"
+          ]
+        },
+        {
+          "titulo": "Integración de fuentes de información con modelos de IA",
+          "horas": 6,
+          "temas": [
+            "RAG (Retrieval-Augmented Generation)",
+            "Embeddings y técnicas de personalización de modelos",
+            "Integración de bases de conocimiento institucionales",
+            "Seguridad y uso responsable de datos"
+          ]
+        },
+        {
+          "titulo": "Gestión del cambio, gobernanza y adopción",
+          "horas": 5,
+          "temas": [
+            "Principios de gestión del cambio en la implementación de IA",
+            "Gobernanza de soluciones de automatización",
+            "Adaptación organizacional orientada a la eficiencia institucional",
+            "Medición de resultados"
+          ]
+        }
       ],
       "modulos_nota": "Los cinco módulos cubren uno a uno los cinco contenidos mínimos del numeral 2.1 del requerimiento, sumando 30 horas cronológicas. El requerimiento premia explícitamente incorporar contenidos adicionales que se ajusten a los objetivos (30 pts en la pauta técnica frente a 15 por solo desarrollar los mínimos).",
       "relator_exigido": {
@@ -284,29 +770,137 @@
         ]
       },
       "multas": "El requerimiento no establece un régimen de multas.",
-      "pago": "Orden de compra por el precio total. El contratista factura dentro de los 8 días corridos siguientes al término del curso, una vez que la contraparte técnica certifique la conformidad. Pago dentro de 30 días corridos desde la recepción de la factura, por transferencia electrónica. Facturar a: Subsidio Nacional al Transporte Público, RUT 61.979.750-7, Amunátegui N° 139, Santiago, giro Administración Pública. Factura electrónica a 61979750-7@febos.cl."
+      "pago": "Orden de compra por el precio total. El contratista factura dentro de los 8 días corridos siguientes al término del curso, una vez que la contraparte técnica certifique la conformidad. Pago dentro de 30 días corridos desde la recepción de la factura, por transferencia electrónica. Facturar a: Subsidio Nacional al Transporte Público, RUT 61.979.750-7, Amunátegui N° 139, Santiago, giro Administración Pública. Factura electrónica a 61979750-7@febos.cl.",
+      "criterios_direccionadores": [
+        {
+          "id": "otec-sence",
+          "exige": "Ser Universidad, Instituto Profesional, CFT reconocido por el Estado u OTEC con certificado SENCE: vale el 10% del puntaje final (100 puntos contra 0).",
+          "cita": "Requerimiento, criterio Entidad Certificada (10%)",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "docente-data-science",
+          "exige": "Docente con título profesional y/o especialización académica relacionada con Data Science.",
+          "cita": "Requerimiento 2.3 y admisibilidad",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "docente-5-anios-procesos",
+          "exige": "Al menos 5 años de experiencia profesional del docente en gestión operacional de procesos.",
+          "cita": "Requerimiento 2.3",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "docente-7-anios-docencia",
+          "exige": "Más de 7 años de docencia para obtener los 70 puntos del criterio técnico; entre 3 y 7 años solo otorga 30 de 70, y el mínimo técnico para pasar a la evaluación económica es 60 puntos.",
+          "cita": "Requerimiento, criterios técnicos (70%)",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "proveedor-5-anios-cursos",
+          "exige": "Acreditar al menos 5 años del proveedor impartiendo cursos, verificable en su página web institucional o documentación adjunta.",
+          "cita": "Requerimiento, antecedentes de la oferta",
+          "tipo": "historial_portal",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "plataforma-asincronica",
+          "exige": "Plataforma para dictar 30 horas cronológicas en modalidad online asincrónica, con los certificados y diplomas de recepción conforme.",
+          "cita": "Requerimiento 2.2 y 2.4",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "identidad-oferente",
+          "exige": "Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados.",
+          "cita": "Anexos y formularios de la oferta",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        }
+      ]
     },
-
     "1057503-2156-COT26": {
       "curso": "Herramientas de Power BI en Análisis de Datos (2 cursos cerrados: octubre y noviembre 2026)",
       "organismo_corto": "Hospital Padre Alberto Hurtado",
-      "fuente_documentos": ["Memo Nº96(03.08.26)HerramientaPB.pdf"],
+      "fuente_documentos": [
+        "Memo Nº96(03.08.26)HerramientaPB.pdf"
+      ],
       "tributacion": {
         "regimen": "no_declarado",
         "cita": "El memorándum informa un presupuesto de $2.160.000 por curso (códigos PAC 7019 y 7020), $4.320.000 en total, sin declarar el tratamiento tributario. Se cotiza el valor como TOTAL y el tratamiento queda por confirmar con el Departamento de Desarrollo de Personas."
       },
       "objetivo": "Adquirir las habilidades necesarias para transformar datos en información útil mediante la creación de informes interactivos, paneles visuales y análisis avanzados que apoyen la toma de decisiones en la organización.",
-      "participantes": { "maximo": 20, "glosa": "10 cupos por curso, en dos cursos cerrados (20 en total). Perfil: profesional no médico." },
-      "duracion": { "horas_cronologicas": 40, "sesiones": null, "horas_por_sesion": null, "glosa": "40 horas cronológicas (53 horas pedagógicas) por curso, en dos ediciones: octubre y noviembre de 2026." },
-      "modalidad": { "tipo": "Mixta: online asincrónico + al menos 4 sesiones presenciales por curso", "plataforma": "Plataforma Moodle o similar para el componente asincrónico; las sesiones presenciales se realizan en dependencias del establecimiento.", "horario": "A coordinar con el Departamento de Desarrollo de Personas: 1° curso en octubre 2026, 2° curso en noviembre 2026." },
+      "participantes": {
+        "maximo": 20,
+        "glosa": "10 cupos por curso, en dos cursos cerrados (20 en total). Perfil: profesional no médico."
+      },
+      "duracion": {
+        "horas_cronologicas": 40,
+        "sesiones": null,
+        "horas_por_sesion": null,
+        "glosa": "40 horas cronológicas (53 horas pedagógicas) por curso, en dos ediciones: octubre y noviembre de 2026."
+      },
+      "modalidad": {
+        "tipo": "Mixta: online asincrónico + al menos 4 sesiones presenciales por curso",
+        "plataforma": "Plataforma Moodle o similar para el componente asincrónico; las sesiones presenciales se realizan en dependencias del establecimiento.",
+        "horario": "A coordinar con el Departamento de Desarrollo de Personas: 1° curso en octubre 2026, 2° curso en noviembre 2026."
+      },
       "fechas_ejecucion": "1° curso (PAC 7019) en octubre de 2026; 2° curso (PAC 7020) en noviembre de 2026.",
       "modulos": [
-        { "titulo": "Entorno de Power BI", "horas": 5, "temas": ["Componentes principales: Power BI Desktop", "Flujo de trabajo y primeros informes"] },
-        { "titulo": "Importar y transformar datos", "horas": 8, "temas": ["Conexión a Excel, bases de datos, web y otras fuentes", "Limpieza, modelado y estructuración con Power Query"] },
-        { "titulo": "Modelos de datos eficientes", "horas": 9, "temas": ["Relaciones entre tablas", "Columnas calculadas y medidas con DAX", "Diseño de modelos de datos"] },
-        { "titulo": "Visualizaciones efectivas", "horas": 8, "temas": ["Gráficos, tablas dinámicas y segmentadores", "Diseño orientado a la comprensión de los datos"] },
-        { "titulo": "Publicar y compartir informes", "horas": 6, "temas": ["Publicación al servicio de Power BI", "Compartir con usuarios y equipos", "Configuración de actualizaciones automáticas"] },
-        { "titulo": "Decisiones basadas en datos", "horas": 4, "temas": ["Cultura del análisis de datos", "Autoservicio de inteligencia empresarial en la organización"] }
+        {
+          "titulo": "Entorno de Power BI",
+          "horas": 5,
+          "temas": [
+            "Componentes principales: Power BI Desktop",
+            "Flujo de trabajo y primeros informes"
+          ]
+        },
+        {
+          "titulo": "Importar y transformar datos",
+          "horas": 8,
+          "temas": [
+            "Conexión a Excel, bases de datos, web y otras fuentes",
+            "Limpieza, modelado y estructuración con Power Query"
+          ]
+        },
+        {
+          "titulo": "Modelos de datos eficientes",
+          "horas": 9,
+          "temas": [
+            "Relaciones entre tablas",
+            "Columnas calculadas y medidas con DAX",
+            "Diseño de modelos de datos"
+          ]
+        },
+        {
+          "titulo": "Visualizaciones efectivas",
+          "horas": 8,
+          "temas": [
+            "Gráficos, tablas dinámicas y segmentadores",
+            "Diseño orientado a la comprensión de los datos"
+          ]
+        },
+        {
+          "titulo": "Publicar y compartir informes",
+          "horas": 6,
+          "temas": [
+            "Publicación al servicio de Power BI",
+            "Compartir con usuarios y equipos",
+            "Configuración de actualizaciones automáticas"
+          ]
+        },
+        {
+          "titulo": "Decisiones basadas en datos",
+          "horas": 4,
+          "temas": [
+            "Cultura del análisis de datos",
+            "Autoservicio de inteligencia empresarial en la organización"
+          ]
+        }
       ],
       "modulos_nota": "Los seis módulos cubren uno a uno los seis contenidos mínimos del programa adjunto al memorándum, sumando las 40 horas cronológicas por curso. Ambas ediciones (octubre y noviembre) usan el mismo programa.",
       "relator_exigido": {
@@ -344,7 +938,95 @@
         ]
       },
       "multas": "El memorándum no establece un régimen de multas.",
-      "pago": "El memorándum no detalla el procedimiento de pago; se rige por la orden de compra emitida a través de mercadopublico.cl."
+      "pago": "El memorándum no detalla el procedimiento de pago; se rige por la orden de compra emitida a través de mercadopublico.cl.",
+      "criterios_direccionadores": [
+        {
+          "id": "12-ordenes-compra",
+          "exige": "Acreditar experiencia en el curso al que se postula adjuntando las últimas 12 órdenes de compra aceptadas y/o recepciones conformes en Mercado Público. Es el filtro más direccionador de las seis compras: excluye a cualquiera que no haya vendido ya este mismo curso repetidas veces.",
+          "cita": "Memo N°96, requisitos para la postulación del oferente",
+          "tipo": "historial_portal",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "otec-perfil-publicador",
+          "exige": "Que todos los equipos «del OTEC» cuenten con perfil de publicador de Power BI con licencia de pago. La redacción da por supuesto que el oferente es un OTEC.",
+          "cita": "Memo N°96, requisitos para la postulación del oferente",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "equipamiento-presencial",
+          "exige": "Proveer el equipamiento de las sesiones presenciales: PC o notebooks, mesas y sillas para los 10 funcionarios de cada curso.",
+          "cita": "Memo N°96, metodología educativa",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "equipos-alta-capacidad",
+          "exige": "Equipos de alta capacidad (procesador y RAM) que carguen matrices de datos con eficiencia; el memo fija como referencia 5 minutos de carga promedio.",
+          "cita": "Memo N°96, requisitos para la postulación del oferente",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-certificacion-powerbi",
+          "exige": "Relator con formación profesional y certificación Power BI.",
+          "cita": "Memo N°96, perfil del docente",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-2-anios-mismo-curso",
+          "exige": "Acreditar al menos 2 años dictando el mismo curso o equivalentes.",
+          "cita": "Memo N°96, perfil del docente",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "plataforma-moodle",
+          "exige": "Acceso a plataforma Moodle o símil para el componente asincrónico, más un instructivo o manual de uso entregado a los estudiantes en formato físico.",
+          "cita": "Memo N°96, requisitos para la postulación del oferente",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "presencial-dependencias",
+          "exige": "Al menos 4 sesiones presenciales por curso en dependencias del establecimiento, con coffee break incluido. Exige presencia física y logística en terreno.",
+          "cita": "Memo N°96, metodología educativa",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "sin-pauta-evaluacion",
+          "exige": "El memo no publica pauta de evaluación con ponderaciones: adjudica «al proveedor más conveniente», sin criterio verificable de antemano.",
+          "cita": "Memo N°96, párrafo inicial",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "regimen-tributario",
+          "exige": "Confirmar si los $2.160.000 por curso son netos, con impuestos incluidos o exentos: el memo no lo declara.",
+          "cita": "Memo N°96, tabla de cursos",
+          "tipo": "tributario",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "certificado-habilidad",
+          "exige": "Certificado de habilidad en Mercado Público vigente.",
+          "cita": "Memo N°96, requisitos para la postulación del oferente",
+          "tipo": "historial_portal",
+          "estado": "cubierto",
+          "resuelto_por": "KeepSync está confirmada como proveedor hábil en el Sistema de Información (ver CLAUDE.md, «Datos ya confirmados»)."
+        },
+        {
+          "id": "identidad-oferente",
+          "exige": "Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados.",
+          "cita": "Anexos y formularios de la oferta",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        }
+      ]
     }
-  }
+  },
+  "_regla_score": "score = 100 − 5 × (criterios con estado \"sin_informacion\"). 100% = la compra no presenta ningún filtro que dirija la adjudicación hacia un proveedor con una característica, capacidad o certificación muy particular. Regla fijada por el usuario el 2026-08-22. Cada criterio declara su cita: nada se penaliza sin evidencia en los adjuntos. Al confirmar uno se cambia su estado a \"cubierto\" con `resuelto_por`, y el score sube sin tocar código."
 }
