@@ -72,6 +72,20 @@ Qué genera (`scripts/cotizar-capacitacion.ts` + `src/lib/capacitacion-cotizacio
 `cotizacion-resumen.json`. Las láminas son portada, programa modular, metodología/relatoría/
 entregables, cuadro de cumplimiento, y oferta económica con los pendientes.
 
+**Y lo publica.** Copia cada PDF a `docs/capacitaciones-cotizaciones/<codigo>/` y reescribe el
+bloque `COTIZACIONES:INICIO/FIN` de `docs/index.html` con una tarjeta por borrador: monto ofertado
+contra el tope, régimen tributario, cómo adjudica el organismo, y las **observaciones** desplegables
+—lo que impide presentar esa oferta— más de qué documentos salieron los requisitos. Arriba del
+grid va la nota con lo que bloquea al nicho entero (relator, OTEC/SENCE, menor precio).
+
+Ese bloque es un **tercer par de marcadores** en la misma página que refresca el radar, y por eso
+`reemplazarBloque` se exporta desde `src/lib/pagina-compra-agil.ts`: `npm run radar` reescribe
+oportunidades y palabras clave sin tocar las cotizaciones, y este script reescribe las cotizaciones
+sin tocar lo del radar (verificado). El índice versionado
+`docs/capacitaciones-cotizaciones/index.json` es lo que permite además correr
+`npm run cotizar-capacitacion -- <codigo>` para una sola compra sin borrar de la página las otras
+cinco.
+
 Lo que el documento responde sale de `config/capacitaciones.json`, que guarda **lo que pide cada
 organismo en sus adjuntos** (TDR, bases técnicas, memos, anexos), con `fuente_documentos` y la cita
 textual del régimen tributario. Ese archivo se llena leyendo los adjuntos que ya bajó el radar a
