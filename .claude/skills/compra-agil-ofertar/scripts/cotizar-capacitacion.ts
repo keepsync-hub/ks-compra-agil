@@ -18,6 +18,7 @@ import {
   generarCotizacionCapacitacionPdf,
   type CotizacionCapacitacionData,
 } from "../../../../src/lib/capacitacion-cotizacion.js";
+import { generarCartaPresentacionPdf } from "../../../../src/lib/carta-presentacion.js";
 import { nombreArchivoCotizacion } from "../../../../src/lib/nombre-archivo.js";
 import { cierreYaPaso } from "../../../../src/lib/tiempo.js";
 import { calcularScore } from "../../../../src/lib/scoring-capacitacion.js";
@@ -36,7 +37,7 @@ interface Detalle {
   estado: { codigo: string; glosa: string };
   fechas: { fecha_cierre: string };
   presupuesto: { monto_disponible_clp: number };
-  institucion: { organismo_comprador: string };
+  institucion: { organismo_comprador: string; unidad_compra: string };
 }
 
 function leerDetalle(codigo: string): Detalle | null {
@@ -102,7 +103,9 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
   const data: CotizacionCapacitacionData = {
     codigo,
     nombreCompra: detalle.nombre,
-    organismoComprador: detalle.institucion.organismo_comprador.trim(),
+    // El nombre de la config manda sobre el de la ficha: la API lo trunca (ver `organismo_nombre`).
+    organismoComprador: requisitos.organismo_nombre?.trim() || detalle.institucion.organismo_comprador.trim(),
+    unidadCompra: detalle.institucion.unidad_compra?.trim() || null,
     requisitos,
     totalClp,
     topeClp,
@@ -130,6 +133,26 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
     return null;
   }
 
+  // La carta va junto a la propuesta y no en docs/: lleva el teléfono y el correo personales del
+  // relator, y docs/ se publica en GitHub Pages. Vive en antecedentes/, la misma carpeta donde
+  // están el currículum y el certificado, que es lo que se presenta como un solo cuerpo.
+  let rutaCarta: string | null = null;
+  if (requisitos.carta && requisitos.relator) {
+    const dirAntecedentes = path.join(dirSalida, "antecedentes");
+    mkdirSync(dirAntecedentes, { recursive: true });
+    rutaCarta = path.join(dirAntecedentes, `Carta-presentacion-${codigo}.pdf`);
+    await generarCartaPresentacionPdf(
+      {
+        carta: requisitos.carta,
+        relator: requisitos.relator,
+        oferente,
+        fecha,
+        ciudad: requisitos.carta.ciudad,
+      },
+      rutaCarta,
+    );
+  }
+
   const pendientesPorConfirmar = data.cumplimiento.filter((f) => f.estado === "por-confirmar").length;
 
   writeFileSync(
@@ -148,6 +171,15 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
         archivo_publicable: nombreArchivoPdf,
         fuente_documentos: requisitos.fuente_documentos,
         requisitos_por_confirmar: pendientesPorConfirmar,
+        relator: requisitos.relator
+          ? {
+              nombre: requisitos.relator.nombre,
+              titulo: requisitos.relator.titulo,
+              documentos: requisitos.relator.documentos,
+              documentos_faltantes: requisitos.relator.documentos_faltantes,
+              fuente: requisitos.relator.fuente,
+            }
+          : null,
         score_apertura_pct: score.score,
         score_criterios_sin_informacion: score.sinInformacion,
         score_criterios_cubiertos: score.cubiertos,
@@ -155,8 +187,9 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
           "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que falte revisar (config/capacitaciones.json → criterios_direccionadores).",
         pendientes: data.pendientes,
         apto_para_enviar: false,
-        _apto_nota:
-          "Siempre false: falta designar relator/a con credenciales verificables, y el precio no sale de un costo real. El envío lo hace un humano, nunca este script.",
+        _apto_nota: requisitos.relator
+          ? "Siempre false: el precio no sale de un costo real y la identidad del oferente sigue por confirmar. El envío lo hace un humano, nunca este script."
+          : "Siempre false: falta designar relator/a con credenciales verificables, y el precio no sale de un costo real. El envío lo hace un humano, nunca este script.",
       },
       null,
       2,
@@ -178,6 +211,7 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
       `    Score de apertura: ${score.score}% (${score.sinInformacion} criterio(s) sin información × −5%` +
       `${score.cubiertos > 0 ? `, ${score.cubiertos} cubierto(s)` : ""})\n` +
       `    PDF: output/capacitaciones/${codigo}/${nombreArchivoPdf}` +
+      (rutaCarta ? `\n    Carta: output/capacitaciones/${codigo}/antecedentes/${path.basename(rutaCarta)}` : "") +
       ` · ${pendientesPorConfirmar} requisito(s) por confirmar · ${data.pendientes.length} pendiente(s) antes de presentar`,
   );
 
@@ -195,6 +229,13 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
     archivoPdfRelativo: `capacitaciones-cotizaciones/${codigo}/${nombreArchivoPdf}`,
     fuenteDocumentos: requisitos.fuente_documentos,
     requisitosPorConfirmar: pendientesPorConfirmar,
+    relator: requisitos.relator
+      ? {
+          nombre: requisitos.relator.nombre,
+          titulo: requisitos.relator.titulo,
+          documentosFaltantes: requisitos.relator.documentos_faltantes,
+        }
+      : undefined,
     pendientes: data.pendientes,
     score,
     criterios: requisitos.criterios_direccionadores,
@@ -239,8 +280,8 @@ async function main() {
 
   console.log(`\n${ok}/${codigos.length} cotización(es) generada(s) en output/capacitaciones/.`);
   console.log(
-    "Esto NO envía nada y ninguna de estas ofertas está lista para presentar: falta designar relator/a " +
-      "con credenciales verificables en todas, y el precio se derivó del tope publicado, no de un costo real.",
+    "Esto NO envía nada y ninguna de estas ofertas está lista para presentar: el precio se derivó del tope " +
+      "publicado y no de un costo real, y las que no designan relator/a se descartarían en admisibilidad.",
   );
 }
 

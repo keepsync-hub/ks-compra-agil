@@ -1,12 +1,14 @@
 {
   "_que_es": "Requisitos técnicos de cada Compra Ágil de capacitación, extraídos de los adjuntos que publicó el organismo comprador (TDR, bases técnicas, memos, anexos). Es el insumo con el que `npm run cotizar-capacitacion` arma la propuesta: todo lo que el PDF afirma sobre lo que pide el organismo sale de acá, y cada bloque declara de qué documento salió (`fuente_documentos`).",
-  "_como_se_llenó": "Extraído del texto de los adjuntos ya descargados por el radar en data/<codigo>/attachments/ (pypdfium2 para PDF, python-docx para DOCX, catdoc para el .doc legado). No se infirió nada que no esté escrito en esos documentos; lo que el organismo no declara queda como null o 'no_declarado', nunca completado por analogía con otra compra.",
+  "_como_se_llenó": "Extraído del texto de los adjuntos ya descargados por el radar en data/<codigo>/attachments/ (pypdfium2 para PDF, python-docx para DOCX, catdoc para el .doc legado). No se infirió nada que no esté escrito en esos documentos; lo que el organismo no declara queda como null o 'no_declarado', nunca completado por analogía con otra compra. Una sola excepción: el bloque `relator` no sale de los adjuntos del organismo sino de los antecedentes del propio oferente (carpeta del relator/a designado/a), y declara su origen en el campo `fuente`. Todo lo demás sigue saliendo de los documentos de la compra.",
   "_regla_precio": "total = tope × 0.9 (10% bajo el tope), regla fijada explícitamente por el usuario el 2026-08-22 para el nicho de capacitación. NO se deriva de un costo real de KeepSync: no existe catálogo de costos de servicios (ver config/keepsync-oferta.json, insumo bloqueante `sin-catalogo-de-costos-de-servicios`). Por eso cada PDF sale marcado PRELIMINAR, igual que las cotizaciones de Array.",
   "_advertencia_evaluacion": "En las tres compras de Dipres el criterio de selección es EL MENOR PRECIO TOTAL entre las ofertas que cumplen todas las especificaciones. Cotizar al 90% del tope es, por construcción, una posición débil frente a un competidor que cotice más abajo. La regla la fijó el usuario; queda registrada acá la tensión, no corregida en silencio.",
   "cotizaciones": {
     "1618-67-COT26": {
       "curso": "Herramientas básicas de Power BI para el análisis de datos",
       "organismo_corto": "Dipres",
+      "organismo_nombre": "Dirección de Presupuestos (Dipres) — Ministerio de Hacienda",
+      "_organismo_nombre_nota": "La API entrega institucion.organismo_comprador truncado: «DIRECCION DE PRESUPUESTOS MINISTERIO DE», cortado justo antes del ministerio. El organismo completo consta en la propia ficha, en institucion.unidad_compra = «Ministerio de Hacienda - Dipres». La Dirección de Presupuestos es un servicio dependiente del Ministerio de Hacienda.",
       "fuente_documentos": [
         "TDR Herramientas Básicas de PowerBI para análisis de datos.pdf",
         "ANEXO N1.docx",
@@ -200,6 +202,8 @@
     "1618-68-COT26": {
       "curso": "Herramientas intermedias de Power BI para el análisis de datos (Nivel II)",
       "organismo_corto": "Dipres",
+      "organismo_nombre": "Dirección de Presupuestos (Dipres) — Ministerio de Hacienda",
+      "_organismo_nombre_nota": "La API entrega institucion.organismo_comprador truncado: «DIRECCION DE PRESUPUESTOS MINISTERIO DE», cortado justo antes del ministerio. El organismo completo consta en la propia ficha, en institucion.unidad_compra = «Ministerio de Hacienda - Dipres». La Dirección de Presupuestos es un servicio dependiente del Ministerio de Hacienda.",
       "fuente_documentos": [
         "TDR PowerBI Nivel II .pdf",
         "ANEXO N1.docx",
@@ -396,6 +400,8 @@
     "1618-69-COT26": {
       "curso": "IA Generativa para el Trabajo Diario en el Sector Público",
       "organismo_corto": "Dipres",
+      "organismo_nombre": "Dirección de Presupuestos (Dipres) — Ministerio de Hacienda",
+      "_organismo_nombre_nota": "La API entrega institucion.organismo_comprador truncado: «DIRECCION DE PRESUPUESTOS MINISTERIO DE», cortado justo antes del ministerio. El organismo completo consta en la propia ficha, en institucion.unidad_compra = «Ministerio de Hacienda - Dipres». La Dirección de Presupuestos es un servicio dependiente del Ministerio de Hacienda.",
       "fuente_documentos": [
         "TDR IA para el trabajo diario.pdf",
         "ANEXO N1.docx",
@@ -491,6 +497,56 @@
         "experiencia_laboral": "Al menos 3 años de experiencia profesional en IA, IA generativa, ciencia de datos, analítica de datos, automatización de procesos con herramientas digitales y/o aplicación de IA en organizaciones. Adjuntar CV actualizado.",
         "experiencia_relatoria": "Al menos 5 actividades de capacitación, cursos o talleres sobre IA, IA generativa, prompt engineering o aplicaciones prácticas de IA, ejecutados en los últimos 3 años, cada uno de mínimo 8 horas cronológicas. Adjuntar certificados de ejecución, órdenes de compra, contratos o diplomas."
       },
+      "relator": {
+        "nombre": "Cristian Molina Espinoza",
+        "titulo": "Ingeniero Civil Industrial, Universidad de Chile",
+        "cargo": "Fundador y Head of AI, KeepSync",
+        "contacto": "cristian.molina@keepsync.ai · +56 9 3674 8442",
+        "acredita": {
+          "formacion": "Ingeniero Civil Industrial, Universidad de Chile. Carrera de 12 semestres del área de ingeniería, sobre los 8 que exige el TDR 2.2.a. Título otorgado el 30 de diciembre de 2014, aprobado con distinción; el certificado de título se acompaña en los antecedentes.",
+          "experiencia_laboral": "Más de 14 años continuos (2012 a la fecha) en IA, analítica de datos y automatización de procesos, en KR Consulting, Rayen Salud, Ricoh Chile, Ricoh LATAM y KeepSync, sobre los 3 años que exige el TDR 2.2.b. Se acompaña currículum actualizado.",
+          "experiencia_relatoria": "Más de 18 actividades de capacitación en IA dictadas: 6 cursos semestrales de la cátedra de Big Data e Inteligencia Artificial en DuocUC (2022–2024) y 14 programas regionales de IA, IA generativa y automatización en Ricoh LATAM para 12 países (2019–2026), sobre las 5 que exige el TDR 2.2.c."
+        },
+        "acredita_breve": {
+          "formacion": "Ingeniero Civil Industrial, Universidad de Chile (12 semestres). Se adjunta certificado de título.",
+          "experiencia_laboral": "Más de 14 años en IA, analítica de datos y automatización (2012 a la fecha). Se adjunta currículum actualizado.",
+          "experiencia_relatoria": "Más de 18 actividades de capacitación en IA dictadas en DuocUC (2022–2024) y Ricoh LATAM (2019–2026)."
+        },
+        "documentos": [
+          "Currículum vitae actualizado (CV-Cristian-Molina-Espinoza-Dipres.pdf)",
+          "Certificado de título profesional, Universidad de Chile (dentro de Carta-Presentacion-y-Certificado-Titulo-Dipres.pdf)",
+          "Carta de presentación dirigida a Dipres, con la postulación como relator (Carta-Presentacion-y-Certificado-Titulo-Dipres.pdf)"
+        ],
+        "documentos_faltantes": [
+          "Certificados de ejecución, órdenes de compra, contratos o diplomas de al menos 5 de las actividades de capacitación dictadas en los últimos 3 años (TDR 2.2.c los exige adjuntos: el currículum las enumera pero no las acredita)",
+          "Duración en horas cronológicas de cada actividad acreditada — el propio currículum la deja por completar («[__] h c/u») y el TDR exige un mínimo de 8 horas por actividad"
+        ],
+        "fuente": "Carpeta RUT_DIPRES en el Google Drive del usuario (cristian.molina@keepsync.ai), consultada el 2026-08-22: CV-Cristian-Molina-Espinoza-Dipres.pdf y Carta-Presentacion-y-Certificado-Titulo-Dipres.pdf."
+      },
+      "carta": {
+        "_que_es": "Prosa de la carta de presentación que encabeza la oferta. La identidad NO va acá: el membrete, la fecha y el bloque del oferente los arma src/lib/carta-presentacion.ts desde 'relator' y config/company.json, para que la carta y la propuesta no puedan contradecirse.",
+        "destinatario": [
+          "Dirección de Presupuestos (Dipres)",
+          "Ministerio de Hacienda",
+          "Sección de Desarrollo Organizacional y Género"
+        ],
+        "_destinatario_nota": "La versión anterior de la carta decía solo «Dirección de Presupuestos — Dipres». Dipres es un servicio dependiente del Ministerio de Hacienda, y así consta en la ficha de la compra (institucion.unidad_compra = «Ministerio de Hacienda - Dipres»).",
+        "referencia": "Carta de presentación — Compra Ágil 1618-69-COT26, «Contratación de servicios de capacitación: Curso IA Generativa para el Trabajo Diario en el Sector Público».",
+        "saludo": "Estimados señores:",
+        "parrafos": [
+          "Por medio de la presente manifiesto el interés de nuestra organización en participar en el proceso de contratación del curso “IA Generativa para el Trabajo Diario en el Sector Público”, y presento formalmente mi postulación como relator de la actividad. A lo largo de los últimos catorce años he liderado procesos de transformación digital y adopción de Inteligencia Artificial en doce países de Latinoamérica, ejerciendo en paralelo la docencia universitaria en Big Data e Inteligencia Artificial. Esa combinación es precisamente la que exige este encargo: capacidad técnica real y capacidad demostrada para enseñarla a equipos no especializados.",
+          "Como docente titular de la cátedra de Big Data e Inteligencia Artificial en DuocUC durante tres años académicos consecutivos, diseñé íntegramente los contenidos, los talleres prácticos y los instrumentos de evaluación de la asignatura, traduciendo conceptos técnicos complejos en aplicaciones concretas y verificables. Ese trabajo se extendió con la fundación de KeepSync, desde donde acompaño a organizaciones y profesionales en la adopción de IA generativa de manera ética, segura y efectiva, reduciendo la complejidad técnica para que sean las personas —y no las herramientas— las que permanezcan en el centro del proceso.",
+          "En Ricoh LATAM ejercí la conducción estratégica de un Centro de Excelencia regional, articulando las áreas técnicas, comerciales y formativas para alinear la infraestructura tecnológica y la innovación con los objetivos institucionales, siempre con atención a la protección de datos, la seguridad de la información y la escalabilidad. En ese rol dicté catorce programas de capacitación en Inteligencia Artificial y automatización para los equipos de doce países de la región. El elemento diferenciador de esa experiencia es que, además de ser el relator, fui el responsable técnico de implementar las mismas soluciones enseñadas en proyectos productivos reales. Se trata, por tanto, de una experiencia docente respaldada por ejecución efectiva en una compañía global, lo que permitió retroalimentar cada nueva edición del programa con aprendizajes de terreno.",
+          "En conjunto, acredito más de dieciocho actividades de capacitación en Inteligencia Artificial dictadas —seis cursos semestrales en DuocUC y catorce programas regionales en Ricoh LATAM—, lo que satisface con holgura la experiencia en relatoría exigida en el numeral 2.2 de los Términos de Referencia. Asimismo, mi título de Ingeniero Civil Industrial de la Universidad de Chile corresponde a una carrera de doce semestres del área de ingeniería, por sobre los ocho semestres requeridos, y mi trayectoria profesional en analítica de datos, IA y automatización supera ampliamente los tres años solicitados.",
+          "La propuesta que se acompaña recoge íntegramente los objetivos de aprendizaje y los contenidos sugeridos por Dipres: fundamentos y límites de la IA generativa, panorama y criterios de selección de herramientas, prompt engineering aplicado al trabajo público, investigación y análisis asistidos por IA, y un taller práctico integrador. El diseño metodológico privilegia herramientas en versiones gratuitas o freemium, de modo que los participantes puedan replicar los aprendizajes sin requerir licencias especiales, y utiliza ejercicios construidos sobre situaciones propias del sector público: análisis de documentos, elaboración de informes, síntesis de información, construcción de presentaciones y apoyo a la planificación del trabajo.",
+          "Me motiva de manera particular la dimensión de responsabilidad que este curso conlleva. La formación contempla explícitamente los principios de uso responsable de la IA en los órganos de la Administración del Estado —inteligencia artificial centrada en las personas, privacidad y protección de datos, supervisión humana y rendición de cuentas—, junto con el desarrollo de criterios para evaluar críticamente los resultados, identificar sesgos y limitaciones, y validar la información antes de incorporarla a un producto de trabajo institucional.",
+          "Declaro asimismo la disponibilidad para ejecutar la actividad en modalidad online sincrónica a través de Microsoft Teams, dentro del período comprendido entre septiembre y noviembre de 2026, conforme a la distribución horaria definida en los Términos de Referencia, y el compromiso de entregar el informe técnico de la capacitación y los certificados de aprobación de los participantes en los términos exigidos.",
+          "Se adjuntan a la presente los antecedentes obligatorios: Anexo N°1 con el detalle de cumplimiento de las especificaciones técnicas, Anexo N°2 con la propuesta económica, la propuesta técnica de la actividad, la copia del certificado de título profesional, el currículum vitae actualizado y los documentos que acreditan las actividades de capacitación realizadas.",
+          "Agradezco de antemano la consideración de esta propuesta y quedo a disposición para ampliar cualquier antecedente que la Dirección de Presupuestos estime necesario."
+        ],
+        "despedida": "Atentamente,",
+        "ciudad": "Santiago"
+      },
       "entregables": [
         "Informe técnico de la capacitación: actividades desarrolladas, resultados y objetivos logrados, asistencias y evaluaciones obtenidas. Es requisito previo para poder facturar.",
         "Certificados de aprobación para los/as participantes que cumplan los requisitos de participación y evaluación."
@@ -542,14 +598,16 @@
           "exige": "Relator/a titulado/a de una carrera de al menos 8 semestres en ingeniería, informática, ciencia de datos, estadística, administración pública o afines.",
           "cita": "TDR 2.2.a",
           "tipo": "titulo_grado",
-          "estado": "sin_informacion"
+          "estado": "cubierto",
+          "resuelto_por": "Relator/a designado/a: Cristian Molina Espinoza. Antecedentes en la carpeta RUT_DIPRES del Drive del usuario (2026-08-22). Ingeniero Civil Industrial, Universidad de Chile — carrera de 12 semestres del área de ingeniería, sobre los 8 exigidos. El certificado de título va dentro de Carta-Presentacion-y-Certificado-Titulo-Dipres.pdf."
         },
         {
           "id": "relator-3-anios-ia",
           "exige": "Al menos 3 años de experiencia profesional del relator/a en IA, IA generativa, ciencia de datos o automatización, con CV.",
           "cita": "TDR 2.2.b",
           "tipo": "experiencia_relator",
-          "estado": "sin_informacion"
+          "estado": "cubierto",
+          "resuelto_por": "Relator/a designado/a: Cristian Molina Espinoza. Antecedentes en la carpeta RUT_DIPRES del Drive del usuario (2026-08-22). Más de 14 años continuos (2012 a la fecha) en IA, analítica y automatización, sobre los 3 exigidos, detallados en CV-Cristian-Molina-Espinoza-Dipres.pdf."
         },
         {
           "id": "relator-5-actividades-ia",

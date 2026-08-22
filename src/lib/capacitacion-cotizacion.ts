@@ -58,6 +58,8 @@ export interface CotizacionCapacitacionData {
   codigo: string;
   nombreCompra: string;
   organismoComprador: string;
+  /** Unidad de compra tal como la publica la ficha del portal. Es la fuente auditable del organismo. */
+  unidadCompra: string | null;
   requisitos: RequisitosCapacitacion;
   /** Valor total ofertado = tope × 0.9 (regla del usuario). */
   totalClp: number;
@@ -72,10 +74,50 @@ export interface CotizacionCapacitacionData {
 
 function badges(oferente: IdentidadOferente): string {
   const prelim = `<div class="badge prelim">PRELIMINAR — precio derivado del tope, no de costos reales</div>`;
-  const borrador = oferente.identidad_confirmada
-    ? ""
-    : `<div class="badge borrador">BORRADOR — identidad del oferente sin confirmar</div>`;
-  return prelim + borrador;
+  if (oferente.identidad_confirmada) return prelim;
+  // El sello dice QUÉ falta. "Identidad sin confirmar" sobre una carátula que muestra la razón
+  // social y el RUT reales se lee como una contradicción, y manda a revisar lo que ya está listo.
+  const falta =
+    oferente.campos_por_confirmar_corto.length > 0
+      ? `falta ${oferente.campos_por_confirmar_corto.join(" y ")}`
+      : "identidad del oferente sin revisar";
+  return prelim + `<div class="badge borrador">BORRADOR — ${esc(falta)}</div>`;
+}
+
+/** Ficha del oferente para la carátula: lo que el organismo transcribe a su carátula y anexos. */
+function bloqueOferente(o: IdentidadOferente): string {
+  const linea = (lbl: string, valor: string | null, pendiente?: string) =>
+    `<div class="info-row"><span class="lbl">${lbl}</span><span>${
+      valor ? esc(valor) : `<span class="pend">${esc(pendiente ?? "por confirmar")}</span>`
+    }</span></div>`;
+
+  const sellos = [
+    o.es_emt ? `<span class="sello ok">Empresa de Menor Tamaño (EMT)</span>` : "",
+    o.estado_habilidad ? `<span class="sello ok">${esc(o.estado_habilidad)}</span>` : "",
+    o.acreditado_hasta ? `<span class="sello ok">Acreditado hasta ${esc(o.acreditado_hasta)}</span>` : "",
+  ]
+    .filter(Boolean)
+    .join("");
+
+  return `<div class="card ofe" style="margin-top:8pt;">
+    <h3 style="margin-bottom:4pt;">Oferente</h3>
+    <div style="display:flex;gap:16pt;">
+      <div style="flex:1;">
+        ${linea("RAZÓN SOCIAL", o.nombre_fantasia ? `${o.razon_social} (${o.nombre_fantasia})` : o.razon_social)}
+        ${linea("RUT", o.rut)}
+        ${linea("DOMICILIO", o.direccion)}
+      </div>
+      <div style="flex:1;">
+        ${linea("REPRESENTANTE LEGAL", o.representante_legal, "por confirmar antes de firmar los anexos")}
+        ${linea("GIRO (SII)", o.giro, "por confirmar — define si se factura exento")}
+        ${linea(
+          "CONTACTO",
+          [o.contacto_nombre, o.contacto_email, o.contacto_telefono].filter(Boolean).join(" · ") || null,
+        )}
+      </div>
+    </div>
+    ${sellos ? `<div style="margin-top:6pt;">${sellos}</div>` : ""}
+  </div>`;
 }
 
 function bloqueModulos(r: RequisitosCapacitacion): string {
@@ -89,11 +131,75 @@ function bloqueModulos(r: RequisitosCapacitacion): string {
     .join("");
 }
 
+/**
+ * Tarjeta de relatoría de la lámina 3. Tiene dos formas y la diferencia es sustantiva, no
+ * cosmética: sin relator/a designado/a el documento declara abiertamente que la oferta se
+ * descartaría en admisibilidad; con relator/a designado/a pasa a responder, exigencia por
+ * exigencia del numeral que las bases dedican al perfil, con qué antecedente se acredita cada
+ * una — y sigue mostrando en rojo lo que falta adjuntar, si falta algo.
+ */
+function bloqueRelator(r: RequisitosCapacitacion): string {
+  const rel = r.relator;
+  if (!rel) {
+    return `<div class="card">
+        <h3>Perfil de relatoría exigido</h3>
+        <div class="info-row"><span class="lbl">FORMACIÓN</span><span style="font-size:9pt;">${esc(r.relator_exigido.formacion)}</span></div>
+        <div class="info-row"><span class="lbl">EXP. LABORAL</span><span style="font-size:9pt;">${esc(r.relator_exigido.experiencia_laboral)}</span></div>
+        <div class="info-row"><span class="lbl">EXP. RELATORÍA</span><span style="font-size:9pt;">${esc(r.relator_exigido.experiencia_relatoria)}</span></div>
+        <div class="aviso" style="margin-top:8pt;">
+          <div class="pend" style="font-size:9pt;">Relator/a por designar</div>
+          <div style="font-size:8.5pt;color:${COLOR.gray};line-height:1.4;margin-top:3pt;">
+            Esta propuesta no nombra relator/a ni adjunta sus credenciales. El organismo exige título, CV y
+            certificados verificables, y toda oferta que no los acompañe se descarta en admisibilidad.
+            Debe completarlo una persona antes de presentar.
+          </div>
+        </div>
+      </div>`;
+  }
+
+  const filas: { lbl: string; txt: string }[] = [
+    { lbl: "FORMACIÓN", txt: rel.acredita.formacion },
+    { lbl: "EXP. LABORAL", txt: rel.acredita.experiencia_laboral },
+    { lbl: "EXP. RELATORÍA", txt: rel.acredita.experiencia_relatoria },
+  ];
+
+  return `<div class="card rel">
+        <h3 style="margin-bottom:4pt;">Relator/a propuesto/a</h3>
+        <div style="font-size:11pt;font-weight:bold;line-height:1.15;">${esc(rel.nombre)}</div>
+        <div class="accent" style="font-size:8.5pt;margin-top:1pt;">${esc(rel.titulo)}</div>
+        <div class="gray" style="font-size:7.5pt;margin-top:1pt;">${esc(rel.cargo)} · ${esc(rel.contacto)}</div>
+        <div style="border-top:1px solid ${COLOR.border};margin:6pt 0 3pt;"></div>
+        ${filas
+          .map(
+            (f) =>
+              `<div class="info-row"><span class="lbl">${f.lbl}</span><span>${esc(f.txt)}</span></div>`,
+          )
+          .join("")}
+        <div class="info-row"><span class="lbl">SE ADJUNTA</span><span>${rel.documentos
+          .map((d) => esc(d))
+          .join(" · ")}</span></div>
+        ${
+          rel.documentos_faltantes.length > 0
+            ? `<div class="aviso" style="margin-top:6pt;padding:5pt 8pt;">
+          <div class="pend" style="font-size:8pt;">Antecedentes por completar antes de presentar</div>
+          <ul class="tight" style="margin-top:2pt;font-size:7.5pt;">${rel.documentos_faltantes
+            .map((d) => `<li>${esc(d)}</li>`)
+            .join("")}</ul>
+        </div>`
+            : `<div style="margin-top:6pt;font-size:8.5pt;" class="ok">Carpeta de antecedentes del relator/a completa.</div>`
+        }
+      </div>`;
+}
+
 export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionData): string {
   const logoBase64 = readFileSync(LOGO_PATH).toString("base64");
   const r = data.requisitos;
   const mesAno = `${MESES_ES[data.fecha.getMonth()]} de ${data.fecha.getFullYear()}`;
   const totalHoras = r.modulos.reduce((s, m) => s + m.horas, 0);
+  // El nombre del curso lo pone el organismo y va de 30 a 120 caracteres. A 28pt, uno largo se
+  // come tres líneas de la portada y empuja el resto fuera de la lámina; el guardrail de recorte
+  // lo detecta pero no lo arregla. Se escala acá, que es la única variable que la plantilla controla.
+  const tituloPt = r.curso.length > 95 ? 20 : r.curso.length > 65 ? 23 : 28;
 
   const glosaTributaria =
     r.tributacion.regimen === "exento"
@@ -131,6 +237,19 @@ export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionDa
   td.r, th.r { text-align: right; }
   .info-row { display: flex; gap: 10pt; font-size: 10.5pt; padding: 3pt 0; }
   .info-row .lbl { width: 120pt; color: ${COLOR.gray}; font-weight: bold; font-size: 8.5pt; flex: none; padding-top: 1pt; }
+  .portada { display: flex; flex-direction: column; }
+  .portada .marca { display: flex; align-items: center; gap: 10pt; flex: none; }
+  /* Espaciador elástico: aire cuando el contenido es corto, 0 cuando no cabe. Reemplaza al
+     margen fijo, que era la causa de que un título de tres líneas desbordara la lámina. */
+  .portada .respiro { flex: 1 1 auto; min-height: 0; max-height: 0.9in; }
+  .portada > div { flex: none; }
+  .portada .info-row { font-size: 9.5pt; }
+  .ofe .info-row { padding: 2pt 0; font-size: 8.5pt; gap: 8pt; }
+  .ofe .info-row .lbl { width: 92pt; font-size: 7pt; }
+  .sello { display: inline-block; font-size: 7.5pt; font-weight: bold; padding: 2.5pt 8pt; border-radius: 20px;
+    margin-right: 5pt; border: 1px solid ${COLOR.ok}; color: ${COLOR.ok}; }
+  .rel .info-row { padding: 2pt 0; font-size: 7.8pt; line-height: 1.32; gap: 7pt; }
+  .rel .info-row .lbl { width: 62pt; font-size: 7pt; padding-top: 0.5pt; }
   .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9pt; }
   .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9pt; }
   .mod { background: ${COLOR.card}; border: 1px solid ${COLOR.border}; border-radius: 8px; padding: 7pt 9pt; }
@@ -158,28 +277,38 @@ export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionDa
 <body>
 
 <!-- 1. PORTADA -->
-<div class="slide">
+<div class="slide portada">
   ${badges(data.oferente)}
-  <img src="data:image/png;base64,${logoBase64}" style="width:46pt;height:46pt;position:absolute;top:0.5in;left:0.7in;">
-  <div style="position:absolute;top:0.62in;left:1.42in;font-size:15pt;font-weight:bold;">KeepSync</div>
-  <div style="margin-top:1.45in;">
-    <div class="eyebrow">Propuesta técnica y económica — Compra Ágil ${esc(data.codigo)}</div>
-    <h1 style="margin-top:8pt;">${esc(r.curso)}</h1>
-    <div class="accent" style="font-size:14pt;">para ${esc(data.organismoComprador)}</div>
+  <div class="marca">
+    <img src="data:image/png;base64,${logoBase64}" style="width:42pt;height:42pt;">
+    <span style="font-size:15pt;font-weight:bold;">KeepSync</span>
   </div>
-  <div class="grid3" style="margin-top:22pt;">
+  <div class="respiro"></div>
+  <div>
+    <div class="eyebrow">Propuesta técnica y económica — Compra Ágil ${esc(data.codigo)}</div>
+    <h1 style="margin-top:8pt;font-size:${tituloPt}pt;">${esc(r.curso)}</h1>
+    <div class="accent" style="font-size:13pt;">para ${esc(data.organismoComprador)}</div>
+  </div>
+  <div class="grid3" style="margin-top:16pt;">
     <div class="kpi"><div class="v">${formatoClp(data.totalClp)}</div><div class="l">Valor total ofertado</div></div>
     <div class="kpi"><div class="v">${r.duracion.horas_cronologicas} h</div><div class="l">Horas cronológicas</div></div>
     <div class="kpi"><div class="v">${r.participantes.maximo}</div><div class="l">Participantes</div></div>
   </div>
-  <div class="card" style="margin-top:14pt;">
+  <div class="card" style="margin-top:11pt;">
     <div class="info-row"><span class="lbl">ORGANISMO</span><span>${esc(data.organismoComprador)}</span></div>
+    ${
+      data.unidadCompra
+        ? `<div class="info-row"><span class="lbl">UNIDAD DE COMPRA</span><span>${esc(data.unidadCompra)}</span></div>`
+        : ""
+    }
     <div class="info-row"><span class="lbl">REQUERIMIENTO</span><span>${esc(data.nombreCompra)}</span></div>
     <div class="info-row"><span class="lbl">MODALIDAD</span><span>${esc(r.modalidad.tipo)} — ${esc(r.modalidad.plataforma)}</span></div>
     <div class="info-row"><span class="lbl">EJECUCIÓN</span><span>${esc(r.fechas_ejecucion)}</span></div>
     <div class="info-row"><span class="lbl">CIERRE OFERTAS</span><span>${esc(data.fechaCierre)} (hora de Chile)</span></div>
   </div>
-  <div class="footer">Presentado por KeepSync — ${mesAno} · Documento elaborado a partir de: ${esc(r.fuente_documentos.join(", "))}</div>
+  ${bloqueOferente(data.oferente)}
+  <div style="height:0.22in;flex:none;"></div>
+  <div class="footer">Presentado por ${esc(data.oferente.razon_social)} — ${mesAno} · Documento elaborado a partir de: ${esc(r.fuente_documentos.join(", "))}</div>
 </div>
 
 <!-- 2. PROGRAMA -->
@@ -228,20 +357,7 @@ export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionDa
       </div>
     </div>
     <div>
-      <div class="card">
-        <h3>Perfil de relatoría exigido</h3>
-        <div class="info-row"><span class="lbl">FORMACIÓN</span><span style="font-size:9pt;">${esc(r.relator_exigido.formacion)}</span></div>
-        <div class="info-row"><span class="lbl">EXP. LABORAL</span><span style="font-size:9pt;">${esc(r.relator_exigido.experiencia_laboral)}</span></div>
-        <div class="info-row"><span class="lbl">EXP. RELATORÍA</span><span style="font-size:9pt;">${esc(r.relator_exigido.experiencia_relatoria)}</span></div>
-        <div class="aviso" style="margin-top:8pt;">
-          <div class="pend" style="font-size:9pt;">Relator/a por designar</div>
-          <div style="font-size:8.5pt;color:${COLOR.gray};line-height:1.4;margin-top:3pt;">
-            Esta propuesta no nombra relator/a ni adjunta sus credenciales. El organismo exige título, CV y
-            certificados verificables, y toda oferta que no los acompañe se descarta en admisibilidad.
-            Debe completarlo una persona antes de presentar.
-          </div>
-        </div>
-      </div>
+      ${bloqueRelator(r)}
       <div class="card" style="margin-top:9pt;">
         <h3>Entregables comprometidos</h3>
         <ul class="tight">${r.entregables.map((e) => `<li>${esc(e)}</li>`).join("")}</ul>
@@ -321,8 +437,8 @@ export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionDa
       </ul>
     </div>
     <div class="aviso">
-      <div class="pend" style="font-size:9.5pt;">Pendientes antes de presentar</div>
-      <ul class="tight" style="margin-top:4pt;font-size:7.5pt;">${data.pendientes.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>
+      <div class="pend" style="font-size:9pt;">Pendientes antes de presentar</div>
+      <ul class="tight" style="margin-top:3pt;font-size:7pt;line-height:1.3;">${data.pendientes.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>
     </div>
   </div>
   <div class="footer" style="color:${COLOR.warn};font-weight:bold;">

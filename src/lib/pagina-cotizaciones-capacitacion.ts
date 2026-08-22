@@ -31,6 +31,11 @@ export interface CotizacionPublicada {
   archivoPdfRelativo: string;
   fuenteDocumentos: string[];
   requisitosPorConfirmar: number;
+  /**
+   * Relator/a designado/a, si la config ya lo declara. Es lo primero que mira el organismo en
+   * admisibilidad, así que la tarjeta lo muestra antes que el precio.
+   */
+  relator?: { nombre: string; titulo: string; documentosFaltantes: string[] };
   pendientes: string[];
   /** Score de apertura (0–100%) y su desglose. Ver src/lib/scoring-capacitacion.ts. */
   score: ScoreCapacitacion;
@@ -109,6 +114,15 @@ function tarjeta(c: CotizacionPublicada): string {
           <dt>Presupuesto del organismo</dt><dd>${clp(c.topeClp)}</dd>
           <dt>Valor ofertado</dt><dd><strong>${clp(c.totalClp)}</strong> · ${c.descuentoPct}% bajo el tope</dd>
           <dt>Cierre de ofertas</dt><dd>${esc(c.fechaCierre)}</dd>
+          <dt>Relator/a</dt><dd>${
+            c.relator
+              ? `<strong>${esc(c.relator.nombre)}</strong> · ${esc(c.relator.titulo)}${
+                  c.relator.documentosFaltantes.length > 0
+                    ? `<br><span class="hint">Faltan ${c.relator.documentosFaltantes.length} antecedente(s) por adjuntar</span>`
+                    : `<br><span class="hint">Antecedentes completos</span>`
+                }`
+              : "<span class=\"hint\">Por designar — sin relator/a la oferta se descarta en admisibilidad</span>"
+          }</dd>
           <dt>Requisitos por confirmar</dt><dd>${c.requisitosPorConfirmar}</dd>
         </dl>
         <div class="chips">
@@ -166,6 +180,27 @@ export function renderCotizacionesCapacitacion(cotizaciones: Map<string, Cotizac
   }
 
   const totalPendientes = new Set(lista.flatMap((c) => c.pendientes)).size;
+  const conRelator = lista.filter((c) => c.relator);
+  const sinRelator = lista.length - conRelator.length;
+  // Con relator/a designado/a el bloqueo cambia de naturaleza: deja de ser "no hay a quién
+  // presentar" y pasa a ser "falta este papel". La página tiene que decir cuál de las dos cosas
+  // es, porque son decisiones distintas para quien la lee.
+  const relatoresFaltantes = conRelator.reduce((n, c) => n + (c.relator!.documentosFaltantes.length > 0 ? 1 : 0), 0);
+  const glosaRelator =
+    conRelator.length === 0
+      ? `Ninguna de estas propuestas nombra relator/a: el agente no inventa credenciales.`
+      : `${conRelator.length} de estas ${lista.length} propuestas ya nombra relator/a con sus antecedentes` +
+        ` (${[...new Set(conRelator.map((c) => c.relator!.nombre))].map(esc).join(", ")})` +
+        `${
+          relatoresFaltantes > 0
+            ? `, aunque en ${relatoresFaltantes} todavía falta adjuntar parte del respaldo documental que las bases exigen`
+            : ""
+        }.` +
+        `${
+          sinRelator > 0
+            ? ` Las otras ${sinRelator} siguen sin nombrar a nadie: el agente no inventa credenciales.`
+            : ""
+        }`;
   const menorPrecio = lista.filter((c) => c.criterioEvaluacion === "menor_precio").length;
   const sinRegimen = lista.filter((c) => c.regimenTributario === "no_declarado").length;
   const generado = lista.map((c) => c.generado).sort().at(-1) ?? "";
@@ -195,8 +230,7 @@ export function renderCotizacionesCapacitacion(cotizaciones: Map<string, Cotizac
       <strong>Ninguno está listo para presentar, y el bloqueo no es el precio.</strong>
       Los ${lista.length} organismos exigen un/a relator/a con título, currículum y certificados
       verificables, y una oferta sin esos antecedentes se descarta en admisibilidad antes de que
-      nadie mire el monto. Ninguna de estas propuestas nombra relator/a: el agente no inventa
-      credenciales. Sigue además sin confirmarse si KeepSync es <strong>OTEC registrada en
+      nadie mire el monto. ${glosaRelator} Sigue además sin confirmarse si KeepSync es <strong>OTEC registrada en
       SENCE</strong>, de lo que dependen tanto puntaje directo en algunas bases como la exención de
       IVA del artículo 13 N°4 con que varios presupuestaron el servicio.
       ${
