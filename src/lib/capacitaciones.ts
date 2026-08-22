@@ -3,6 +3,7 @@ import path from "node:path";
 import { ROOT_DIR } from "./config.js";
 import type { FilaCumplimiento } from "./capacitacion-cotizacion.js";
 import { GLOSA_TIPO, type CriterioDireccionador } from "./scoring-capacitacion.js";
+import type { CartaPresentacion } from "./carta-presentacion.js";
 
 const CONFIG_PATH = path.join(ROOT_DIR, "config", "capacitaciones.json");
 const COMPANY_CONFIG_PATH = path.join(ROOT_DIR, "config", "company.json");
@@ -90,6 +91,13 @@ export interface RequisitosCapacitacion {
   };
   /** Relator/a designado/a, si ya lo hay. Ausente = la propuesta sale sin nombrar a nadie. */
   relator?: RelatorPropuesto;
+  /**
+   * Prosa de la carta de presentación. Solo el texto: la identidad del oferente y del relator la
+   * arma `src/lib/carta-presentacion.ts` desde `relator` y `config/company.json`, para que la
+   * carta no pueda quedar desactualizada respecto de la propuesta. Requiere `relator`: una carta
+   * de presentación la firma una persona.
+   */
+  carta?: CartaPresentacion & { ciudad: string };
   entregables: string[];
   logistica: string;
   documentos_obligatorios_oferta: string[];
@@ -194,6 +202,13 @@ export function loadCapacitacionesConfig(): CapacitacionesConfig {
             `antecedentes está completa.`,
         );
       }
+    }
+
+    if (r.carta && !r.relator) {
+      throw new Error(
+        `config/capacitaciones.json — ${codigo}: declara 'carta' sin 'relator'. La carta de presentación ` +
+          `la firma una persona: sin relator/a designado/a no hay membrete ni firma que poner.`,
+      );
     }
   }
   return raw;

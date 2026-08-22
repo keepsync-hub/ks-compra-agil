@@ -18,6 +18,7 @@ import {
   generarCotizacionCapacitacionPdf,
   type CotizacionCapacitacionData,
 } from "../../../../src/lib/capacitacion-cotizacion.js";
+import { generarCartaPresentacionPdf } from "../../../../src/lib/carta-presentacion.js";
 import { nombreArchivoCotizacion } from "../../../../src/lib/nombre-archivo.js";
 import { cierreYaPaso } from "../../../../src/lib/tiempo.js";
 import { calcularScore } from "../../../../src/lib/scoring-capacitacion.js";
@@ -132,6 +133,26 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
     return null;
   }
 
+  // La carta va junto a la propuesta y no en docs/: lleva el teléfono y el correo personales del
+  // relator, y docs/ se publica en GitHub Pages. Vive en antecedentes/, la misma carpeta donde
+  // están el currículum y el certificado, que es lo que se presenta como un solo cuerpo.
+  let rutaCarta: string | null = null;
+  if (requisitos.carta && requisitos.relator) {
+    const dirAntecedentes = path.join(dirSalida, "antecedentes");
+    mkdirSync(dirAntecedentes, { recursive: true });
+    rutaCarta = path.join(dirAntecedentes, `Carta-presentacion-${codigo}.pdf`);
+    await generarCartaPresentacionPdf(
+      {
+        carta: requisitos.carta,
+        relator: requisitos.relator,
+        oferente,
+        fecha,
+        ciudad: requisitos.carta.ciudad,
+      },
+      rutaCarta,
+    );
+  }
+
   const pendientesPorConfirmar = data.cumplimiento.filter((f) => f.estado === "por-confirmar").length;
 
   writeFileSync(
@@ -190,6 +211,7 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
       `    Score de apertura: ${score.score}% (${score.sinInformacion} criterio(s) sin información × −5%` +
       `${score.cubiertos > 0 ? `, ${score.cubiertos} cubierto(s)` : ""})\n` +
       `    PDF: output/capacitaciones/${codigo}/${nombreArchivoPdf}` +
+      (rutaCarta ? `\n    Carta: output/capacitaciones/${codigo}/antecedentes/${path.basename(rutaCarta)}` : "") +
       ` · ${pendientesPorConfirmar} requisito(s) por confirmar · ${data.pendientes.length} pendiente(s) antes de presentar`,
   );
 
