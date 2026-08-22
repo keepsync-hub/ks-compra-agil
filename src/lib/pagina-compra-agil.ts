@@ -413,7 +413,13 @@ export function actualizarPaginaCompraAgil(fragmento: string): boolean {
   return reemplazarBloque(MARCA_INICIO, MARCA_FIN, fragmento);
 }
 
-function reemplazarBloque(marcaInicio: string, marcaFin: string, fragmento: string): boolean {
+/**
+ * Reemplaza el contenido entre dos marcadores de `docs/index.html`, dejando el resto intacto.
+ * Se exporta porque el bloque de cotizaciones de capacitación lo escribe otro script
+ * (`npm run cotizar-capacitacion`) sobre la misma página: es justamente el mecanismo que permite
+ * que una corrida del radar refresque las oportunidades sin borrar las cotizaciones, y viceversa.
+ */
+export function reemplazarBloque(marcaInicio: string, marcaFin: string, fragmento: string): boolean {
   if (!existsSync(PAGINA_PATH)) return false;
   const html = readFileSync(PAGINA_PATH, "utf-8");
   const inicio = html.indexOf(marcaInicio);

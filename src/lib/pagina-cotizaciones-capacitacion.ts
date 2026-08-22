@@ -1,0 +1,176 @@
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import path from "node:path";
+import { ROOT_DIR } from "./config.js";
+import { reemplazarBloque } from "./pagina-compra-agil.js";
+
+const MARCA_INICIO =
+  "<!-- COTIZACIONES:INICIO (generado por `npm run cotizar-capacitacion` — no editar a mano) -->";
+const MARCA_FIN = "<!-- COTIZACIONES:FIN -->";
+
+/**
+ * Índice versionado de las cotizaciones publicadas. Cumple el mismo papel que
+ * `docs/array-cotizaciones/index.json`: el bloque de la página se re-renderiza entero en cada
+ * corrida, así que sin este índice una corrida parcial (`npm run cotizar-capacitacion -- <codigo>`)
+ * borraría de la página las cotizaciones que no volvió a generar.
+ */
+const INDICE_PATH = path.join(ROOT_DIR, "docs", "capacitaciones-cotizaciones", "index.json");
+
+export interface CotizacionPublicada {
+  codigo: string;
+  curso: string;
+  organismo: string;
+  topeClp: number;
+  totalClp: number;
+  descuentoPct: number;
+  regimenTributario: "exento" | "impuestos_incluidos" | "no_declarado";
+  citaTributaria: string;
+  criterioEvaluacion: "menor_precio" | "puntaje" | "no_declarado";
+  fechaCierre: string;
+  /** Ruta relativa a docs/, que es la raíz que publica GitHub Pages. */
+  archivoPdfRelativo: string;
+  fuenteDocumentos: string[];
+  requisitosPorConfirmar: number;
+  pendientes: string[];
+  generado: string;
+}
+
+export function leerIndiceCotizaciones(): Map<string, CotizacionPublicada> {
+  if (!existsSync(INDICE_PATH)) return new Map();
+  try {
+    const raw = JSON.parse(readFileSync(INDICE_PATH, "utf-8")) as Record<string, CotizacionPublicada>;
+    return new Map(Object.entries(raw));
+  } catch {
+    return new Map();
+  }
+}
+
+export function guardarIndiceCotizaciones(nuevas: Map<string, CotizacionPublicada>): void {
+  const combinado = leerIndiceCotizaciones();
+  for (const [codigo, c] of nuevas) combinado.set(codigo, c);
+  mkdirSync(path.dirname(INDICE_PATH), { recursive: true });
+  writeFileSync(INDICE_PATH, JSON.stringify(Object.fromEntries(combinado), null, 2) + "\n", "utf-8");
+}
+
+function esc(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function clp(n: number): string {
+  return "$" + Math.round(n).toLocaleString("es-CL");
+}
+
+const GLOSA_REGIMEN: Record<CotizacionPublicada["regimenTributario"], string> = {
+  exento: "Exento de impuesto",
+  impuestos_incluidos: "Impuestos incluidos",
+  no_declarado: "Régimen sin declarar",
+};
+
+const GLOSA_CRITERIO: Record<CotizacionPublicada["criterioEvaluacion"], string> = {
+  menor_precio: "Adjudica al menor precio",
+  puntaje: "Adjudica por puntaje",
+  no_declarado: "Sin pauta publicada",
+};
+
+function tarjeta(c: CotizacionPublicada): string {
+  // El chip del régimen es `bad` cuando el organismo no lo declaró: no es un detalle contable
+  // menor, decide qué número se ingresa en el portal y hay que preguntarlo antes de ofertar.
+  const claseRegimen = c.regimenTributario === "no_declarado" ? "bad" : "ok";
+  // "Menor precio" en amarillo a propósito: es la condición que vuelve frágil un precio fijado
+  // como porcentaje del tope, que es exactamente cómo se fijó este.
+  const claseCriterio = c.criterioEvaluacion === "menor_precio" ? "warn" : "ok";
+
+  return `      <article class="opp-card">
+        <div class="codigo">${esc(c.codigo)}</div>
+        <div class="org">${esc(c.organismo)}</div>
+        <div class="nombre">${esc(c.curso)}</div>
+        <dl>
+          <dt>Presupuesto del organismo</dt><dd>${clp(c.topeClp)}</dd>
+          <dt>Valor ofertado</dt><dd><strong>${clp(c.totalClp)}</strong> · ${c.descuentoPct}% bajo el tope</dd>
+          <dt>Cierre de ofertas</dt><dd>${esc(c.fechaCierre)}</dd>
+          <dt>Requisitos por confirmar</dt><dd>${c.requisitosPorConfirmar}</dd>
+        </dl>
+        <div class="chips">
+          <span class="badge ${claseRegimen}">${GLOSA_REGIMEN[c.regimenTributario]}</span>
+          <span class="badge ${claseCriterio}">${GLOSA_CRITERIO[c.criterioEvaluacion]}</span>
+        </div>
+        <details class="detalle-lista alerta">
+          <summary>Observaciones antes de presentar (${c.pendientes.length})</summary>
+          <ul>${c.pendientes.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>
+        </details>
+        <details class="detalle-lista">
+          <summary>De dónde salen los requisitos (${c.fuenteDocumentos.length})</summary>
+          <ul>${c.fuenteDocumentos.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
+          <p>${esc(c.citaTributaria)}</p>
+        </details>
+        <div class="cta">
+          <a class="btn" href="${esc(c.archivoPdfRelativo)}">Ver borrador (PDF, 5 págs.)</a>
+          <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
+        </div>
+      </article>`;
+}
+
+/**
+ * Bloque "Borradores de cotización" para `docs/index.html`. Publica el PDF de cada oportunidad
+ * junto a lo que impide presentarla, que es lo que de verdad decide si conviene seguir: los
+ * documentos ya están completos en todo lo que se puede derivar de las bases, y lo que falta es
+ * un dato que solo puede aportar una persona.
+ */
+export function renderCotizacionesCapacitacion(cotizaciones: Map<string, CotizacionPublicada>): string {
+  const lista = [...cotizaciones.values()].sort((a, b) => a.fechaCierre.localeCompare(b.fechaCierre));
+
+  if (lista.length === 0) {
+    return `  <section id="cotizaciones">
+    <h2>Borradores de cotización</h2>
+    <p class="section-sub">Todavía no hay borradores generados. Se crean con <code>npm run cotizar-capacitacion</code>.</p>
+  </section>`;
+  }
+
+  const totalPendientes = new Set(lista.flatMap((c) => c.pendientes)).size;
+  const menorPrecio = lista.filter((c) => c.criterioEvaluacion === "menor_precio").length;
+  const sinRegimen = lista.filter((c) => c.regimenTributario === "no_declarado").length;
+  const generado = lista.map((c) => c.generado).sort().at(-1) ?? "";
+
+  return `  <section id="cotizaciones">
+    <h2>Borradores de cotización</h2>
+    <p class="section-sub">
+      Una propuesta de 5 páginas por cada Compra Ágil de capacitación abierta, con el programa
+      completo, el cuadro de cumplimiento y la oferta económica. El precio de todas es un
+      <strong>10% bajo el tope publicado</strong> por el organismo — una regla de exploración, no un
+      cálculo desde costos reales de KeepSync, que hoy no existen. Por eso cada PDF sale marcado
+      <strong>PRELIMINAR</strong>, y <strong>BORRADOR</strong> mientras la identidad del oferente no
+      esté confirmada.
+    </p>
+    <p class="meta-corrida">${lista.length} borrador(es) · generados el ${esc(generado)}</p>
+    <div class="note" style="margin-bottom:1.25rem;">
+      <strong>Ninguno está listo para presentar, y el bloqueo no es el precio.</strong>
+      Los ${lista.length} organismos exigen un/a relator/a con título, currículum y certificados
+      verificables, y una oferta sin esos antecedentes se descarta en admisibilidad antes de que
+      nadie mire el monto. Ninguna de estas propuestas nombra relator/a: el agente no inventa
+      credenciales. Sigue además sin confirmarse si KeepSync es <strong>OTEC registrada en
+      SENCE</strong>, de lo que dependen tanto puntaje directo en algunas bases como la exención de
+      IVA del artículo 13 N°4 con que varios presupuestaron el servicio.
+      ${
+        menorPrecio > 0
+          ? `Y en ${menorPrecio} de estas compras el organismo <strong>adjudica al menor precio</strong>, así que
+      fijar el valor como un porcentaje del tope es por construcción una posición débil frente a
+      quien cotice más abajo.`
+          : ""
+      }
+      ${
+        sinRegimen > 0
+          ? `En ${sinRegimen} el organismo <strong>no declara</strong> si el presupuesto es neto, con impuestos o
+      exento — hay que preguntarlo antes de ingresar el valor en el portal.`
+          : ""
+      }
+      En total, ${totalPendientes} observación(es) distintas repartidas en las tarjetas.
+    </div>
+    <div class="card-grid">
+${lista.map(tarjeta).join("\n")}
+    </div>
+  </section>`;
+}
+
+/** Reemplaza el bloque de cotizaciones. Devuelve false si la página no tiene los marcadores. */
+export function actualizarBloqueCotizacionesCapacitacion(fragmento: string): boolean {
+  return reemplazarBloque(MARCA_INICIO, MARCA_FIN, fragmento);
+}

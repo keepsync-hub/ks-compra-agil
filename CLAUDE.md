@@ -23,7 +23,9 @@ decisiones de diseño.
 cursos de IA, de Power BI/Tableau y de automatización) y `docs/licitaciones.html` (licitaciones de
 los servicios de Array) son **páginas de resultados, no de estado del proyecto**: cada corrida del
 radar respectivo refresca sus dos bloques entre marcadores (oportunidades y palabras clave) y todo
-lo demás se eliminó a pedido del usuario — el estado del agente se lee en este archivo, `PLAN.md`,
+lo demás se eliminó a pedido del usuario. En `docs/index.html` hay además un **tercer bloque**
+entre marcadores, "Borradores de cotización" (`COTIZACIONES:INICIO/FIN`), que escribe
+`npm run cotizar-capacitacion` — no el radar; cada script reescribe solo los suyos — el estado del agente se lee en este archivo, `PLAN.md`,
 `PLAN-VOLUMEN.md` y `README.md`. Al tocar esas páginas, mantener el criterio: si un párrafo no ayuda
 a decidir si participar en una compra concreta, no va ahí.
 
@@ -54,7 +56,9 @@ el flujo completo (con foco en dónde entra la persona) y la sección "Estado y 
 usar la fórmula de licencias Claude porque no hay precio de lista ni catálogo de costos. Regla fijada
 por el usuario el 2026-08-22: **precio = tope × 0,9**. Genera un PDF de exactamente 5 láminas por
 oportunidad en `output/capacitaciones/<codigo>/`, respondiendo punto por punto lo que exigen los
-adjuntos del organismo (extraídos a `config/capacitaciones.json`, con cita del régimen tributario).
+adjuntos del organismo (extraídos a `config/capacitaciones.json`, con cita del régimen tributario),
+y lo **publica en `docs/index.html`** con sus observaciones: un tercer bloque entre marcadores
+(`COTIZACIONES:INICIO/FIN`) que convive con los dos que refresca el radar sin pisarse.
 
 Dos cosas que condicionan todo el nicho y no las resuelve el cotizador: **ninguna oferta nombra
 relator/a** (los seis TDR exigen título, CV y certificados verificables, y sin eso la oferta se

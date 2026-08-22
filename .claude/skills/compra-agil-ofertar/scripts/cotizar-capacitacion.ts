@@ -1,6 +1,13 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR } from "../../../../src/lib/config.js";
+import {
+  actualizarBloqueCotizacionesCapacitacion,
+  guardarIndiceCotizaciones,
+  leerIndiceCotizaciones,
+  renderCotizacionesCapacitacion,
+  type CotizacionPublicada,
+} from "../../../../src/lib/pagina-cotizaciones-capacitacion.js";
 import {
   loadCapacitacionesConfig,
   cargarIdentidadOferente,
@@ -37,7 +44,12 @@ function leerDetalle(codigo: string): Detalle | null {
   return JSON.parse(readFileSync(p, "utf-8")) as Detalle;
 }
 
-async function cotizar(codigo: string, fecha: Date): Promise<boolean> {
+/** AAAA-MM-DD en hora local, consistente con `nombreArchivoCotizacion`. */
+function fechaIsoDia(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada | null> {
   const config = loadCapacitacionesConfig();
   const requisitos = config.cotizaciones[codigo];
   if (!requisitos) {
@@ -45,28 +57,28 @@ async function cotizar(codigo: string, fecha: Date): Promise<boolean> {
       `  ${codigo}: no hay requisitos en config/capacitaciones.json. Extraer primero lo que piden sus ` +
         `adjuntos (data/${codigo}/attachments/) y agregarlos ahí — este cotizador no inventa el contenido del curso.`,
     );
-    return false;
+    return null;
   }
 
   const detalle = leerDetalle(codigo);
   if (!detalle) {
     console.error(`  ${codigo}: falta data/${codigo}/detalle.json. Correr \`npm run radar\` primero.`);
-    return false;
+    return null;
   }
 
   if (detalle.estado.codigo !== "publicada") {
     console.warn(`  ${codigo}: ya no está publicada (${detalle.estado.glosa}) — se omite.`);
-    return false;
+    return null;
   }
   if (cierreYaPaso(detalle.fechas.fecha_cierre)) {
     console.warn(`  ${codigo}: ya cerró (${detalle.fechas.fecha_cierre}, hora de Chile) — se omite.`);
-    return false;
+    return null;
   }
 
   const topeClp = detalle.presupuesto.monto_disponible_clp;
   if (!(topeClp > 0)) {
     console.error(`  ${codigo}: la ficha no informa presupuesto disponible (tope=${topeClp}) — no hay de dónde derivar el precio.`);
-    return false;
+    return null;
   }
 
   const totalClp = Math.round(topeClp * (1 - DESCUENTO_SOBRE_TOPE));
@@ -79,7 +91,7 @@ async function cotizar(codigo: string, fecha: Date): Promise<boolean> {
       `  ${codigo}: INADMISIBLE — la cotización (${totalClp.toLocaleString("es-CL")}) supera el tope ` +
         `(${topeClp.toLocaleString("es-CL")}). No se genera PDF.`,
     );
-    return false;
+    return null;
   }
 
   const oferente = cargarIdentidadOferente();
@@ -113,7 +125,7 @@ async function cotizar(codigo: string, fecha: Date): Promise<boolean> {
   if (laminasDesbordadas.length > 0) {
     const detalle = laminasDesbordadas.map((l) => `lámina ${l.indice} (+${l.excesoPx}px)`).join(", ");
     console.error(`  ${codigo}: CONTENIDO RECORTADO en ${detalle}. Ajustar la plantilla antes de usar este PDF.`);
-    return false;
+    return null;
   }
 
   const pendientesPorConfirmar = data.cumplimiento.filter((f) => f.estado === "por-confirmar").length;
@@ -145,6 +157,13 @@ async function cotizar(codigo: string, fecha: Date): Promise<boolean> {
     "utf-8",
   );
 
+  // docs/ es la raíz que publica GitHub Pages: se copia ahí el PDF para poder enlazarlo desde la
+  // página. Los adjuntos del organismo comprador NO se copian — no son un entregable nuestro y se
+  // vuelven a bajar del portal cuando se necesiten (mismo criterio que el cotizador de Array).
+  const dirDocs = path.join(ROOT_DIR, "docs", "capacitaciones-cotizaciones", codigo);
+  mkdirSync(dirDocs, { recursive: true });
+  copyFileSync(rutaPdf, path.join(dirDocs, nombreArchivoPdf));
+
   console.log(
     `  ${codigo} — ${requisitos.curso}\n` +
       `    Tope ${topeClp.toLocaleString("es-CL")} → ofertado ${totalClp.toLocaleString("es-CL")} CLP ` +
@@ -152,7 +171,24 @@ async function cotizar(codigo: string, fecha: Date): Promise<boolean> {
       `    PDF: output/capacitaciones/${codigo}/${nombreArchivoPdf}` +
       ` · ${pendientesPorConfirmar} requisito(s) por confirmar · ${data.pendientes.length} pendiente(s) antes de presentar`,
   );
-  return true;
+
+  return {
+    codigo,
+    curso: requisitos.curso,
+    organismo: data.organismoComprador,
+    topeClp,
+    totalClp,
+    descuentoPct,
+    regimenTributario: requisitos.tributacion.regimen,
+    citaTributaria: requisitos.tributacion.cita,
+    criterioEvaluacion: requisitos.evaluacion.tipo,
+    fechaCierre: detalle.fechas.fecha_cierre,
+    archivoPdfRelativo: `capacitaciones-cotizaciones/${codigo}/${nombreArchivoPdf}`,
+    fuenteDocumentos: requisitos.fuente_documentos,
+    requisitosPorConfirmar: pendientesPorConfirmar,
+    pendientes: data.pendientes,
+    generado: fechaIsoDia(fecha),
+  };
 }
 
 async function main() {
@@ -166,14 +202,29 @@ async function main() {
       `${codigos.length} oportunidad(es).\n`,
   );
 
-  let ok = 0;
+  const nuevas = new Map<string, CotizacionPublicada>();
   for (const codigo of codigos) {
     try {
-      if (await cotizar(codigo, new Date())) ok++;
+      const publicada = await cotizar(codigo, new Date());
+      if (publicada) nuevas.set(codigo, publicada);
     } catch (err) {
       console.error(`  ${codigo}: falló — ${(err as Error).message}`);
     }
   }
+  const ok = nuevas.size;
+
+  // Índice versionado primero: es lo que permite que una corrida de un solo código no borre de la
+  // página las cotizaciones que no volvió a generar, y que `npm run radar` refresque las
+  // oportunidades sin tocar este bloque.
+  guardarIndiceCotizaciones(nuevas);
+  const publicado = actualizarBloqueCotizacionesCapacitacion(
+    renderCotizacionesCapacitacion(leerIndiceCotizaciones()),
+  );
+  console.log(
+    publicado
+      ? `\nPágina actualizada: docs/index.html (bloque "Borradores de cotización").`
+      : `\nNo se pudo actualizar docs/index.html: faltan los marcadores COTIZACIONES:INICIO/FIN.`,
+  );
 
   console.log(`\n${ok}/${codigos.length} cotización(es) generada(s) en output/capacitaciones/.`);
   console.log(
