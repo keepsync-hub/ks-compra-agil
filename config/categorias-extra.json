@@ -5,5 +5,14 @@
   "_no_salta_el_filtro_estricto": "Varias categorías exigen además un `patron_requerido` (que el texto hable del servicio: curso, capacitación, asesoría) y descartan por `patron_excluyente`. Una frase agregada acá amplía el DESCUBRIMIENTO y la MENCIÓN, pero no exime de esos dos filtros: agregar \"Looker\" hace que el radar la busque, no que acepte una compra que no es un curso.",
   "_sin_de_suelto": "La frase no puede contener la palabra suelta \"de\": se convierte en un `q` contra /v2/compra-agil, y ese endpoint responde 500 ERROR_INTERNO a cualquier consulta que la incluya (quirk verificado). El buscador es laxo —de hecho hace OR de los tokens, medido el 2026-08-20—, así que sin ella encuentra lo mismo. Tanto `npm run keywords` como el formulario de docs/index.html la rechazan.",
   "_ojo_con_la_cuota": "Cada frase agregada a una categoría ACTIVA suma al menos un request `q` por corrida del radar (varios si esa categoría declara `max_paginas_por_variante` > 1). Ver `presupuesto_requests_por_corrida` de esa categoría en categorias.json.",
-  "terminos": []
+  "terminos": [{
+      "categoria": "claude",
+      "termino": "gpt",
+      "agregado": "2026-08-22"
+    },
+    {
+      "categoria": "ia-capacitacion",
+      "termino": "artificial",
+      "agregado": "2026-08-22"
+    }]
 }
