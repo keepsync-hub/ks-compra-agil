@@ -1,4 +1,4 @@
-import { readFileSync, mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { readFileSync, mkdtempSync, writeFileSync, rmSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -7,7 +7,12 @@ import type { CompanyConfig } from "./config.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LOGO_PATH = path.join(__dirname, "..", "assets", "logo-keepsync-blanco.png");
-const CHROMIUM_PATH = "/opt/pw-browsers/chromium";
+// Chromium: el entorno manda. En esta máquina vive en /opt/pw-browsers; en un runner de CI no
+// existe esa ruta y hay que dejar que Playwright use el que instaló. Misma convención que
+// licitaciones/src/scripts/login-portal.ts.
+const CHROMIUM_PATH =
+  process.env.CHROMIUM_EXECUTABLE_PATH ||
+  (existsSync("/opt/pw-browsers/chromium") ? "/opt/pw-browsers/chromium" : undefined);
 
 const COLOR = {
   bg: "#0E0E17",

@@ -1,0 +1,158 @@
+name: Mercado Público — radar, cotizar y generar
+
+# El plano de cómputo del panel operativo: n8n dispara este workflow y él corre los scripts reales
+# del repo. Un solo workflow para las tres acciones, a propósito:
+#
+#   1. `concurrency` serializa las corridas. Con dos workflows empujando a la misma rama, tres
+#      clics seguidos de "Cotizar" hacían fallar los dos últimos push con non-fast-forward.
+#   2. `data/` es efímero y gitignored. Si el radar corre en este mismo job, el cotizador encuentra
+#      `data/<codigo>/detalle.json` y el generador encuentra los anexos en blanco de
+#      `data/<codigo>/attachments/`, sin un script de rehidratación ni requests extra a la API.
+
+on:
+  workflow_dispatch:
+    inputs:
+      accion:
+        description: "Qué correr"
+        required: true
+        default: radar
+        type: choice
+        options: [radar, cotizar, generar, ambos]
+      codigos:
+        description: "Códigos separados por coma (cotizar/generar)"
+        required: false
+        default: ""
+      documentos:
+        description: "Prefijos NN a generar, separados por coma. Vacío = todos los que pueda"
+        required: false
+        default: ""
+      solo:
+        description: "Categorías a barrer en el radar, separadas por coma. Vacío = todas"
+        required: false
+        default: ""
+      corrida_id:
+        description: "Id de la corrida, para trazar desde n8n"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mp-repo
+  cancel-in-progress: false
+
+jobs:
+  correr:
+    runs-on: ubuntu-latest
+    env:
+      COMPRA_AGIL_TICKET: ${{ secrets.COMPRA_AGIL_TICKET }}
+      N8N_BASE_URL: ${{ secrets.N8N_BASE_URL }}
+      N8N_CLAVE: ${{ secrets.N8N_CLAVE }}
+      CORRIDA_ID: ${{ inputs.corrida_id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # El push de vuelta necesita el historial, no un checkout superficial.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+
+      # Chromium pesa y tarda: solo se instala cuando de verdad se va a renderizar un PDF.
+      - name: Instalar Chromium
+        if: inputs.accion != 'radar'
+        run: npx playwright install --with-deps chromium
+
+      - name: Radar
+        if: inputs.accion == 'radar' || inputs.accion == 'ambos'
+        run: |
+          if [ -n "${{ inputs.solo }}" ]; then
+            npm run radar -- --solo="${{ inputs.solo }}"
+          else
+            npm run radar
+          fi
+
+      - name: Cotizar
+        if: inputs.accion == 'cotizar' || inputs.accion == 'ambos'
+        run: |
+          if [ -z "${{ inputs.codigos }}" ]; then
+            echo "::error::La acción '${{ inputs.accion }}' necesita al menos un código."
+            exit 1
+          fi
+          for codigo in $(echo "${{ inputs.codigos }}" | tr ',' ' '); do
+            echo "::group::Cotizar $codigo"
+            npm run cotizar-capacitacion -- "$codigo" || echo "::warning::Cotización de $codigo sin resultado"
+            echo "::endgroup::"
+          done
+
+      - name: Generar documentos
+        if: inputs.accion == 'generar'
+        run: |
+          if [ -z "${{ inputs.codigos }}" ]; then
+            echo "::error::La acción 'generar' necesita al menos un código."
+            exit 1
+          fi
+          for codigo in $(echo "${{ inputs.codigos }}" | tr ',' ' '); do
+            echo "::group::Generar $codigo"
+            npm run generar-documento -- "$codigo" $(echo "${{ inputs.documentos }}" | tr ',' ' ')
+            echo "::endgroup::"
+          done
+
+      - name: Publicar cambios
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A docs historico output || true
+          if git diff --cached --quiet; then
+            echo "Sin cambios que publicar."
+            exit 0
+          fi
+          git commit -m "Panel MP: ${{ inputs.accion }} ${{ inputs.codigos }}"
+          # Otra corrida pudo haber empujado mientras esta trabajaba. `concurrency` las serializa,
+          # pero el rebase cubre el caso de un push hecho a mano entremedio.
+          for intento in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            echo "Reintento $intento de push…"
+            sleep $((intento * 4))
+          done
+          echo "::error::No se pudo empujar después de 3 intentos."
+          exit 1
+
+      - name: Avisar a n8n
+        run: |
+          case "${{ inputs.accion }}" in
+            radar) npm run postear-n8n -- radar ;;
+            cotizar|ambos)
+              # Ojo con `[ test ] && cmd` acá: los pasos corren con `bash -e`, así que un test
+              # falso devuelve 1 y tumba el paso entero. Va con if/fi.
+              if [ "${{ inputs.accion }}" = "ambos" ]; then
+                npm run postear-n8n -- radar
+              fi
+              for codigo in $(echo "${{ inputs.codigos }}" | tr ',' ' '); do
+                npm run postear-n8n -- cotizacion "$codigo"
+              done ;;
+            generar)
+              for codigo in $(echo "${{ inputs.codigos }}" | tr ',' ' '); do
+                npm run postear-n8n -- expediente "$codigo"
+              done ;;
+          esac
+
+      # Sin esto, una corrida caída deja la fila en "cotizando" o "generando" para siempre, y el
+      # panel muestra un trabajo en curso que ya nadie está haciendo.
+      - name: Avisar el fallo a n8n
+        if: failure()
+        run: |
+          CODIGOS=$(echo "${{ inputs.codigos }}" | tr ',' ' ')
+          if [ -z "$CODIGOS" ]; then CODIGOS="-"; fi
+          npm run postear-n8n -- error $CODIGOS \
+            --motivo "Falló la acción '${{ inputs.accion }}' en GitHub Actions" \
+            --run "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+          || echo "::warning::Tampoco se pudo avisar el fallo a n8n."

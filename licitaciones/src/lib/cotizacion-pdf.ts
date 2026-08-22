@@ -1,11 +1,16 @@
-import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { mkdtempSync, writeFileSync, rmSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { chromium } from "playwright";
 import { generarCotizacionHtml } from "./cotizacion-html.js";
 import type { CotizacionLicitacionData } from "./cotizacion-pptx.js";
 
-const CHROMIUM_PATH = "/opt/pw-browsers/chromium";
+// Chromium: el entorno manda. En esta máquina vive en /opt/pw-browsers; en un runner de CI no
+// existe esa ruta y hay que dejar que Playwright use el que instaló. Misma convención que
+// licitaciones/src/scripts/login-portal.ts.
+const CHROMIUM_PATH =
+  process.env.CHROMIUM_EXECUTABLE_PATH ||
+  (existsSync("/opt/pw-browsers/chromium") ? "/opt/pw-browsers/chromium" : undefined);
 
 /**
  * Genera el PDF final renderizando HTML con Chromium (Playwright) — mismo enfoque que Compra

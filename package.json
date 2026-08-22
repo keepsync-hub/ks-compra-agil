@@ -28,11 +28,15 @@
     "antecedentes-licitacion": "tsx licitaciones/src/scripts/antecedentes.ts",
     "adjuntos-licitacion": "tsx licitaciones/src/scripts/adjuntos-navegador.ts",
     "leer-adjuntos": "tsx licitaciones/src/scripts/leer-adjuntos.ts",
-    "login-portal": "tsx licitaciones/src/scripts/login-portal.ts"
+    "login-portal": "tsx licitaciones/src/scripts/login-portal.ts",
+    "postear-n8n": "tsx src/scripts/postear-n8n.ts",
+    "generar-documento": "tsx src/scripts/generar-documento.ts"
   },
   "dependencies": {
+    "docxtemplater": "^3.69.3",
     "dotenv": "^16.4.5",
     "pdfjs-dist": "^4.10.38",
+    "pizzip": "^3.2.0",
     "playwright": "^1.47.0",
     "pptxgenjs": "^4.0.1"
   },

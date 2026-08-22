@@ -55,6 +55,9 @@ cotizar, pero cada PDF/PPTX generado queda marcado BORRADOR hasta que se confirm
 | `npm run cuota` | Muestra el consumo de cuota de hoy y la convergencia pasiva del límite diario medido (`historico/cuota.jsonl`). Cero requests. |
 | `npm run array-radar` | Busca Compras Ágiles publicadas relacionadas con los servicios de [Array](http://www.array.cl/) (oficina de partes, gestión documental/firma electrónica, RPA, BI, gestión de proyectos) y regenera `docs/array-compras-agiles.html`. Exploración de mercado independiente del nicho Claude — solo lectura. |
 | `npm run array-cotizar` | Igual búsqueda que `array-radar`, más descarga de adjuntos y una cotización PDF preliminar por oportunidad (oferente KeepSync, precio = 80% del presupuesto disponible — no un costo real de Array, ver `.claude/skills/array-compras-agiles-cotizar/SKILL.md`). Regenera `docs/array-compras-agiles.html` con precio y PDF enlazado por tarjeta, y deja `docs/array-cotizaciones/index.json` para que `array-radar` no borre las cotizaciones al refrescar. |
+| `npm run generar-documento -- <codigo> [NN…]` | Genera los documentos de una oferta: rellena los anexos `.docx` del organismo desde su plantilla marcada (`config/anexos/`) y arma la propuesta técnica / oferta económica en PDF desde `config/capacitaciones.json`. **No genera los documentos `acopio`** —título del relator/a, CV, certificados, órdenes de compra— porque los emite un tercero y producirlos sería falsificarlos: esos se suben desde la página de expediente. Sin plantilla no improvisa un documento propio: deja el documento en `bloqueado` y dice qué falta. Escribe `output/expedientes/<codigo>/`. |
+| `npm run postear-n8n -- radar \| cotizacion <codigo> \| expediente <codigo> [--dry-run]` | Arma y postea a n8n el estado del repo. Para `radar` reutiliza `ultimaPorCodigo()` sobre `historico/observaciones.jsonl` — no hace falta un artefacto nuevo. `--dry-run` imprime el payload sin enviarlo, que es como se prueba sin `N8N_BASE_URL` / `N8N_CLAVE`. Lo llama `.github/workflows/mp.yml`. |
+| `node n8n/construir.mjs <workflow>` | Arma el código SDK final de un workflow de n8n reemplazando los marcadores `__CHUNK:archivo__` por el contenido de `n8n/chunks/`, ya escapado. Necesario porque el builder del SDK no admite `import`, `require` ni `.join()`. Deja el resultado en `n8n/build/`. |
 | `npm run typecheck` | `tsc --noEmit`. |
 
 ## Agentes de GitHub Copilot (cloud agent)
@@ -177,6 +180,30 @@ va en **25** (con 50 la API da 504 tres de cada cuatro veces); `total_resultados
 **cota superior contaminada** porque el buscador entra en la descripción, y hay que corregirla por la
 precisión medida sobre los 10 nombres de muestra; y la API **topea** ese total en 10.000, así que los
 estados terminales son cotas inferiores. Todo está anotado en `CLAUDE.md`.
+
+## Panel operativo (n8n)
+
+`docs/index.html` publica **resultados**; decidir y preparar una oferta se hace en el **panel
+operativo**, que sirve n8n detrás de su login (esta página es pública y no puede guardar un secreto
+ni el estado del trabajo). El botón «Abrir el panel operativo» está arriba de la grilla.
+
+El panel lista las solicitudes con su estado y, por tarjeta: **Cotizar**, **Avanzar**, **Rechazar** y
+—cuando avanza— **Expediente**. Avanzar crea en Drive
+`KeepSync - Mercado Público - Panchito / <codigo> — <organismo> /` con `_ENTREGABLES` y una carpeta
+por documento exigido. La página de expediente es donde se **cargan los antecedentes** de cada
+documento y donde un botón **Generar** produce los que KeepSync puede producir; muestra además, por
+documento, `sin insumos` / `con insumos (N)` / `listo`.
+
+El reparto: n8n orquesta, guarda estado y habla con Drive; `.github/workflows/mp.yml` corre el radar,
+el cotizador y el generador **reales del repo**. Los tres workflows están versionados en
+`n8n/workflows/`. **Nada de esto envía una oferta**: el envío al portal lo hace siempre una persona,
+y `_ENTREGABLES` es bandeja de revisión, no de salida.
+
+Para que funcione hacen falta tres cosas que no puede hacer el agente: los secretos del repo
+(`COMPRA_AGIL_TICKET`, `N8N_BASE_URL`, `N8N_CLAVE`), una credencial `httpHeaderAuth` en n8n con la
+cabecera `X-KS-Clave` apuntada al webhook de ingesta, y habilitar esta rama en
+Settings → Environments → github-pages (si no, `docs/panel/*.css|js` no se sirve y el panel se ve sin
+estilo).
 
 ## Estado y pendientes
 
