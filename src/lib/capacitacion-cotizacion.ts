@@ -83,6 +83,66 @@ function bloqueModulos(r: RequisitosCapacitacion): string {
     .join("");
 }
 
+/**
+ * Tarjeta de relatoría de la lámina 3. Tiene dos formas y la diferencia es sustantiva, no
+ * cosmética: sin relator/a designado/a el documento declara abiertamente que la oferta se
+ * descartaría en admisibilidad; con relator/a designado/a pasa a responder, exigencia por
+ * exigencia del numeral que las bases dedican al perfil, con qué antecedente se acredita cada
+ * una — y sigue mostrando en rojo lo que falta adjuntar, si falta algo.
+ */
+function bloqueRelator(r: RequisitosCapacitacion): string {
+  const rel = r.relator;
+  if (!rel) {
+    return `<div class="card">
+        <h3>Perfil de relatoría exigido</h3>
+        <div class="info-row"><span class="lbl">FORMACIÓN</span><span style="font-size:9pt;">${esc(r.relator_exigido.formacion)}</span></div>
+        <div class="info-row"><span class="lbl">EXP. LABORAL</span><span style="font-size:9pt;">${esc(r.relator_exigido.experiencia_laboral)}</span></div>
+        <div class="info-row"><span class="lbl">EXP. RELATORÍA</span><span style="font-size:9pt;">${esc(r.relator_exigido.experiencia_relatoria)}</span></div>
+        <div class="aviso" style="margin-top:8pt;">
+          <div class="pend" style="font-size:9pt;">Relator/a por designar</div>
+          <div style="font-size:8.5pt;color:${COLOR.gray};line-height:1.4;margin-top:3pt;">
+            Esta propuesta no nombra relator/a ni adjunta sus credenciales. El organismo exige título, CV y
+            certificados verificables, y toda oferta que no los acompañe se descarta en admisibilidad.
+            Debe completarlo una persona antes de presentar.
+          </div>
+        </div>
+      </div>`;
+  }
+
+  const filas: { lbl: string; txt: string }[] = [
+    { lbl: "FORMACIÓN", txt: rel.acredita.formacion },
+    { lbl: "EXP. LABORAL", txt: rel.acredita.experiencia_laboral },
+    { lbl: "EXP. RELATORÍA", txt: rel.acredita.experiencia_relatoria },
+  ];
+
+  return `<div class="card rel">
+        <h3 style="margin-bottom:4pt;">Relator/a propuesto/a</h3>
+        <div style="font-size:11pt;font-weight:bold;line-height:1.15;">${esc(rel.nombre)}</div>
+        <div class="accent" style="font-size:8.5pt;margin-top:1pt;">${esc(rel.titulo)}</div>
+        <div class="gray" style="font-size:7.5pt;margin-top:1pt;">${esc(rel.cargo)} · ${esc(rel.contacto)}</div>
+        <div style="border-top:1px solid ${COLOR.border};margin:6pt 0 3pt;"></div>
+        ${filas
+          .map(
+            (f) =>
+              `<div class="info-row"><span class="lbl">${f.lbl}</span><span>${esc(f.txt)}</span></div>`,
+          )
+          .join("")}
+        <div class="info-row"><span class="lbl">SE ADJUNTA</span><span>${rel.documentos
+          .map((d) => esc(d))
+          .join(" · ")}</span></div>
+        ${
+          rel.documentos_faltantes.length > 0
+            ? `<div class="aviso" style="margin-top:6pt;padding:5pt 8pt;">
+          <div class="pend" style="font-size:8pt;">Antecedentes por completar antes de presentar</div>
+          <ul class="tight" style="margin-top:2pt;font-size:7.5pt;">${rel.documentos_faltantes
+            .map((d) => `<li>${esc(d)}</li>`)
+            .join("")}</ul>
+        </div>`
+            : `<div style="margin-top:6pt;font-size:8.5pt;" class="ok">Carpeta de antecedentes del relator/a completa.</div>`
+        }
+      </div>`;
+}
+
 export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionData): string {
   const logoBase64 = readFileSync(LOGO_PATH).toString("base64");
   const r = data.requisitos;
@@ -125,6 +185,8 @@ export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionDa
   td.r, th.r { text-align: right; }
   .info-row { display: flex; gap: 10pt; font-size: 10.5pt; padding: 3pt 0; }
   .info-row .lbl { width: 120pt; color: ${COLOR.gray}; font-weight: bold; font-size: 8.5pt; flex: none; padding-top: 1pt; }
+  .rel .info-row { padding: 2pt 0; font-size: 7.8pt; line-height: 1.32; gap: 7pt; }
+  .rel .info-row .lbl { width: 62pt; font-size: 7pt; padding-top: 0.5pt; }
   .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9pt; }
   .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9pt; }
   .mod { background: ${COLOR.card}; border: 1px solid ${COLOR.border}; border-radius: 8px; padding: 7pt 9pt; }
@@ -222,20 +284,7 @@ export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionDa
       </div>
     </div>
     <div>
-      <div class="card">
-        <h3>Perfil de relatoría exigido</h3>
-        <div class="info-row"><span class="lbl">FORMACIÓN</span><span style="font-size:9pt;">${esc(r.relator_exigido.formacion)}</span></div>
-        <div class="info-row"><span class="lbl">EXP. LABORAL</span><span style="font-size:9pt;">${esc(r.relator_exigido.experiencia_laboral)}</span></div>
-        <div class="info-row"><span class="lbl">EXP. RELATORÍA</span><span style="font-size:9pt;">${esc(r.relator_exigido.experiencia_relatoria)}</span></div>
-        <div class="aviso" style="margin-top:8pt;">
-          <div class="pend" style="font-size:9pt;">Relator/a por designar</div>
-          <div style="font-size:8.5pt;color:${COLOR.gray};line-height:1.4;margin-top:3pt;">
-            Esta propuesta no nombra relator/a ni adjunta sus credenciales. El organismo exige título, CV y
-            certificados verificables, y toda oferta que no los acompañe se descarta en admisibilidad.
-            Debe completarlo una persona antes de presentar.
-          </div>
-        </div>
-      </div>
+      ${bloqueRelator(r)}
       <div class="card" style="margin-top:9pt;">
         <h3>Entregables comprometidos</h3>
         <ul class="tight">${r.entregables.map((e) => `<li>${esc(e)}</li>`).join("")}</ul>

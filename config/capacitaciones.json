@@ -1,6 +1,6 @@
 {
   "_que_es": "Requisitos técnicos de cada Compra Ágil de capacitación, extraídos de los adjuntos que publicó el organismo comprador (TDR, bases técnicas, memos, anexos). Es el insumo con el que `npm run cotizar-capacitacion` arma la propuesta: todo lo que el PDF afirma sobre lo que pide el organismo sale de acá, y cada bloque declara de qué documento salió (`fuente_documentos`).",
-  "_como_se_llenó": "Extraído del texto de los adjuntos ya descargados por el radar en data/<codigo>/attachments/ (pypdfium2 para PDF, python-docx para DOCX, catdoc para el .doc legado). No se infirió nada que no esté escrito en esos documentos; lo que el organismo no declara queda como null o 'no_declarado', nunca completado por analogía con otra compra.",
+  "_como_se_llenó": "Extraído del texto de los adjuntos ya descargados por el radar en data/<codigo>/attachments/ (pypdfium2 para PDF, python-docx para DOCX, catdoc para el .doc legado). No se infirió nada que no esté escrito en esos documentos; lo que el organismo no declara queda como null o 'no_declarado', nunca completado por analogía con otra compra. Una sola excepción: el bloque `relator` no sale de los adjuntos del organismo sino de los antecedentes del propio oferente (carpeta del relator/a designado/a), y declara su origen en el campo `fuente`. Todo lo demás sigue saliendo de los documentos de la compra.",
   "_regla_precio": "total = tope × 0.9 (10% bajo el tope), regla fijada explícitamente por el usuario el 2026-08-22 para el nicho de capacitación. NO se deriva de un costo real de KeepSync: no existe catálogo de costos de servicios (ver config/keepsync-oferta.json, insumo bloqueante `sin-catalogo-de-costos-de-servicios`). Por eso cada PDF sale marcado PRELIMINAR, igual que las cotizaciones de Array.",
   "_advertencia_evaluacion": "En las tres compras de Dipres el criterio de selección es EL MENOR PRECIO TOTAL entre las ofertas que cumplen todas las especificaciones. Cotizar al 90% del tope es, por construcción, una posición débil frente a un competidor que cotice más abajo. La regla la fijó el usuario; queda registrada acá la tensión, no corregida en silencio.",
   "cotizaciones": {
@@ -451,6 +451,32 @@
         "experiencia_laboral": "Al menos 3 años de experiencia profesional en IA, IA generativa, ciencia de datos, analítica de datos, automatización de procesos con herramientas digitales y/o aplicación de IA en organizaciones. Adjuntar CV actualizado.",
         "experiencia_relatoria": "Al menos 5 actividades de capacitación, cursos o talleres sobre IA, IA generativa, prompt engineering o aplicaciones prácticas de IA, ejecutados en los últimos 3 años, cada uno de mínimo 8 horas cronológicas. Adjuntar certificados de ejecución, órdenes de compra, contratos o diplomas."
       },
+      "relator": {
+        "nombre": "Cristian Molina Espinoza",
+        "titulo": "Ingeniero Civil Industrial, Universidad de Chile",
+        "cargo": "Fundador y Head of AI, KeepSync",
+        "contacto": "cristian.molina@keepsync.ai · +56 9 3674 8442",
+        "acredita": {
+          "formacion": "Ingeniero Civil Industrial, Universidad de Chile. Carrera de 12 semestres del área de ingeniería, sobre los 8 que exige el TDR 2.2.a. Título otorgado el 30 de diciembre de 2014, aprobado con distinción; el certificado de título se acompaña en los antecedentes.",
+          "experiencia_laboral": "Más de 14 años continuos (2012 a la fecha) en IA, analítica de datos y automatización de procesos, en KR Consulting, Rayen Salud, Ricoh Chile, Ricoh LATAM y KeepSync, sobre los 3 años que exige el TDR 2.2.b. Se acompaña currículum actualizado.",
+          "experiencia_relatoria": "Más de 18 actividades de capacitación en IA dictadas: 6 cursos semestrales de la cátedra de Big Data e Inteligencia Artificial en DuocUC (2022–2024) y 14 programas regionales de IA, IA generativa y automatización en Ricoh LATAM para 12 países (2019–2026), sobre las 5 que exige el TDR 2.2.c."
+        },
+        "acredita_breve": {
+          "formacion": "Ingeniero Civil Industrial, Universidad de Chile (12 semestres). Se adjunta certificado de título.",
+          "experiencia_laboral": "Más de 14 años en IA, analítica de datos y automatización (2012 a la fecha). Se adjunta currículum actualizado.",
+          "experiencia_relatoria": "Más de 18 actividades de capacitación en IA dictadas en DuocUC (2022–2024) y Ricoh LATAM (2019–2026)."
+        },
+        "documentos": [
+          "Currículum vitae actualizado (CV-Cristian-Molina-Espinoza-Dipres.pdf)",
+          "Certificado de título profesional, Universidad de Chile (dentro de Carta-Presentacion-y-Certificado-Titulo-Dipres.pdf)",
+          "Carta de presentación dirigida a Dipres, con la postulación como relator (Carta-Presentacion-y-Certificado-Titulo-Dipres.pdf)"
+        ],
+        "documentos_faltantes": [
+          "Certificados de ejecución, órdenes de compra, contratos o diplomas de al menos 5 de las actividades de capacitación dictadas en los últimos 3 años (TDR 2.2.c los exige adjuntos: el currículum las enumera pero no las acredita)",
+          "Duración en horas cronológicas de cada actividad acreditada — el propio currículum la deja por completar («[__] h c/u») y el TDR exige un mínimo de 8 horas por actividad"
+        ],
+        "fuente": "Carpeta RUT_DIPRES en el Google Drive del usuario (cristian.molina@keepsync.ai), consultada el 2026-08-22: CV-Cristian-Molina-Espinoza-Dipres.pdf y Carta-Presentacion-y-Certificado-Titulo-Dipres.pdf."
+      },
       "entregables": [
         "Informe técnico de la capacitación: actividades desarrolladas, resultados y objetivos logrados, asistencias y evaluaciones obtenidas. Es requisito previo para poder facturar.",
         "Certificados de aprobación para los/as participantes que cumplan los requisitos de participación y evaluación."
@@ -482,14 +508,16 @@
           "exige": "Relator/a titulado/a de una carrera de al menos 8 semestres en ingeniería, informática, ciencia de datos, estadística, administración pública o afines.",
           "cita": "TDR 2.2.a",
           "tipo": "titulo_grado",
-          "estado": "sin_informacion"
+          "estado": "cubierto",
+          "resuelto_por": "Relator/a designado/a: Cristian Molina Espinoza. Antecedentes en la carpeta RUT_DIPRES del Drive del usuario (2026-08-22). Ingeniero Civil Industrial, Universidad de Chile — carrera de 12 semestres del área de ingeniería, sobre los 8 exigidos. El certificado de título va dentro de Carta-Presentacion-y-Certificado-Titulo-Dipres.pdf."
         },
         {
           "id": "relator-3-anios-ia",
           "exige": "Al menos 3 años de experiencia profesional del relator/a en IA, IA generativa, ciencia de datos o automatización, con CV.",
           "cita": "TDR 2.2.b",
           "tipo": "experiencia_relator",
-          "estado": "sin_informacion"
+          "estado": "cubierto",
+          "resuelto_por": "Relator/a designado/a: Cristian Molina Espinoza. Antecedentes en la carpeta RUT_DIPRES del Drive del usuario (2026-08-22). Más de 14 años continuos (2012 a la fecha) en IA, analítica y automatización, sobre los 3 exigidos, detallados en CV-Cristian-Molina-Espinoza-Dipres.pdf."
         },
         {
           "id": "relator-5-actividades-ia",

@@ -38,3 +38,10 @@ licitaciones/data/*
 
 *.log
 .DS_Store
+
+# Antecedentes personales del relator/a (currículum, certificado de título) y el paquete de oferta
+# que los incorpora. Son datos personales de un tercero y este repo publica docs/ en GitHub Pages:
+# se bajan del Drive del usuario cuando se necesitan (carpeta RUT_DIPRES) y no se versionan. Lo que
+# sí se versiona es la cotización que genera el agente, igual que el resto de output/.
+output/capacitaciones/*/antecedentes/
+output/capacitaciones/*/Oferta-*-completa.pdf

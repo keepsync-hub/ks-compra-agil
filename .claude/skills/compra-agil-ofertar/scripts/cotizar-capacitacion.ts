@@ -148,6 +148,15 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
         archivo_publicable: nombreArchivoPdf,
         fuente_documentos: requisitos.fuente_documentos,
         requisitos_por_confirmar: pendientesPorConfirmar,
+        relator: requisitos.relator
+          ? {
+              nombre: requisitos.relator.nombre,
+              titulo: requisitos.relator.titulo,
+              documentos: requisitos.relator.documentos,
+              documentos_faltantes: requisitos.relator.documentos_faltantes,
+              fuente: requisitos.relator.fuente,
+            }
+          : null,
         score_apertura_pct: score.score,
         score_criterios_sin_informacion: score.sinInformacion,
         score_criterios_cubiertos: score.cubiertos,
@@ -155,8 +164,9 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
           "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que falte revisar (config/capacitaciones.json → criterios_direccionadores).",
         pendientes: data.pendientes,
         apto_para_enviar: false,
-        _apto_nota:
-          "Siempre false: falta designar relator/a con credenciales verificables, y el precio no sale de un costo real. El envío lo hace un humano, nunca este script.",
+        _apto_nota: requisitos.relator
+          ? "Siempre false: el precio no sale de un costo real y la identidad del oferente sigue por confirmar. El envío lo hace un humano, nunca este script."
+          : "Siempre false: falta designar relator/a con credenciales verificables, y el precio no sale de un costo real. El envío lo hace un humano, nunca este script.",
       },
       null,
       2,
@@ -195,6 +205,13 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
     archivoPdfRelativo: `capacitaciones-cotizaciones/${codigo}/${nombreArchivoPdf}`,
     fuenteDocumentos: requisitos.fuente_documentos,
     requisitosPorConfirmar: pendientesPorConfirmar,
+    relator: requisitos.relator
+      ? {
+          nombre: requisitos.relator.nombre,
+          titulo: requisitos.relator.titulo,
+          documentosFaltantes: requisitos.relator.documentos_faltantes,
+        }
+      : undefined,
     pendientes: data.pendientes,
     score,
     criterios: requisitos.criterios_direccionadores,
@@ -239,8 +256,8 @@ async function main() {
 
   console.log(`\n${ok}/${codigos.length} cotización(es) generada(s) en output/capacitaciones/.`);
   console.log(
-    "Esto NO envía nada y ninguna de estas ofertas está lista para presentar: falta designar relator/a " +
-      "con credenciales verificables en todas, y el precio se derivó del tope publicado, no de un costo real.",
+    "Esto NO envía nada y ninguna de estas ofertas está lista para presentar: el precio se derivó del tope " +
+      "publicado y no de un costo real, y las que no designan relator/a se descartarían en admisibilidad.",
   );
 }
 

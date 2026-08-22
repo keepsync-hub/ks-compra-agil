@@ -190,29 +190,33 @@
       "ANEXO N1.docx",
       "ANEXO N2.docx"
     ],
-    "requisitosPorConfirmar": 3,
+    "requisitosPorConfirmar": 1,
+    "relator": {
+      "nombre": "Cristian Molina Espinoza",
+      "titulo": "Ingeniero Civil Industrial, Universidad de Chile",
+      "documentosFaltantes": [
+        "Certificados de ejecución, órdenes de compra, contratos o diplomas de al menos 5 de las actividades de capacitación dictadas en los últimos 3 años (TDR 2.2.c los exige adjuntos: el currículum las enumera pero no las acredita)",
+        "Duración en horas cronológicas de cada actividad acreditada — el propio currículum la deja por completar («[__] h c/u») y el TDR exige un mínimo de 8 horas por actividad"
+      ]
+    },
     "pendientes": [
-      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la carpeta de antecedentes de Cristian Molina Espinoza: Certificados de ejecución, órdenes de compra, contratos o diplomas de al menos 5 de las actividades de capacitación dictadas en los últimos 3 años (TDR 2.2.c los exige adjuntos: el currículum las enumera pero no las acredita); Duración en horas cronológicas de cada actividad acreditada — el propio currículum la deja por completar («[__] h c/u») y el TDR exige un mínimo de 8 horas por actividad. El organismo exige el respaldo documental de cada actividad, no su enumeración en el currículum.",
       "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.",
       "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
       "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Este organismo selecciona por MENOR PRECIO TOTAL, así que el margen sobre el tope define directamente si se gana."
     ],
     "score": {
-      "score": 75,
-      "sinInformacion": 5,
-      "cubiertos": 0,
+      "score": 85,
+      "sinInformacion": 3,
+      "cubiertos": 2,
       "total": 5,
       "porTipo": [
         {
           "tipo": "experiencia_relator",
-          "n": 2
-        },
-        {
-          "tipo": "identidad",
           "n": 1
         },
         {
-          "tipo": "titulo_grado",
+          "tipo": "identidad",
           "n": 1
         },
         {
@@ -227,14 +231,16 @@
         "exige": "Relator/a titulado/a de una carrera de al menos 8 semestres en ingeniería, informática, ciencia de datos, estadística, administración pública o afines.",
         "cita": "TDR 2.2.a",
         "tipo": "titulo_grado",
-        "estado": "sin_informacion"
+        "estado": "cubierto",
+        "resuelto_por": "Relator/a designado/a: Cristian Molina Espinoza. Antecedentes en la carpeta RUT_DIPRES del Drive del usuario (2026-08-22). Ingeniero Civil Industrial, Universidad de Chile — carrera de 12 semestres del área de ingeniería, sobre los 8 exigidos. El certificado de título va dentro de Carta-Presentacion-y-Certificado-Titulo-Dipres.pdf."
       },
       {
         "id": "relator-3-anios-ia",
         "exige": "Al menos 3 años de experiencia profesional del relator/a en IA, IA generativa, ciencia de datos o automatización, con CV.",
         "cita": "TDR 2.2.b",
         "tipo": "experiencia_relator",
-        "estado": "sin_informacion"
+        "estado": "cubierto",
+        "resuelto_por": "Relator/a designado/a: Cristian Molina Espinoza. Antecedentes en la carpeta RUT_DIPRES del Drive del usuario (2026-08-22). Más de 14 años continuos (2012 a la fecha) en IA, analítica y automatización, sobre los 3 exigidos, detallados en CV-Cristian-Molina-Espinoza-Dipres.pdf."
       },
       {
         "id": "relator-5-actividades-ia",

@@ -13,6 +13,44 @@ export interface ModuloCapacitacion {
   temas: string[];
 }
 
+/**
+ * Relator/a designado/a para la actividad, con la evidencia documental que acredita cada
+ * requisito que el organismo exige. Es opcional a propósito: mientras una oportunidad no lo
+ * declare, la propuesta sale diciendo "relator/a por designar" —el agente no inventa una persona
+ * ni sus credenciales— y los criterios de relatoría siguen descontando score.
+ *
+ * `acredita` responde uno a uno a `relator_exigido`; `documentos` es lo que ya existe y se puede
+ * adjuntar hoy, y `documentos_faltantes` lo que el organismo exige y todavía no está. Esa última
+ * lista es la que impide dar por cerrada la admisibilidad: un antecedente declarado en el CV pero
+ * sin su certificado adjunto no es un antecedente acreditado.
+ */
+export interface RelatorPropuesto {
+  nombre: string;
+  titulo: string;
+  cargo: string;
+  contacto: string;
+  acredita: {
+    formacion: string;
+    experiencia_laboral: string;
+    experiencia_relatoria: string;
+  };
+  /**
+   * La misma acreditación en una línea por requisito. No es duplicación ociosa: el cuadro de
+   * admisibilidad (el Anexo N°1) es una declaración de cumplimiento en una celda de tabla, no el
+   * lugar del argumento — los párrafos de `acredita` puestos ahí desbordan la lámina y se recortan
+   * en silencio, y un requisito recortado es un requisito no declarado.
+   */
+  acredita_breve: {
+    formacion: string;
+    experiencia_laboral: string;
+    experiencia_relatoria: string;
+  };
+  documentos: string[];
+  documentos_faltantes: string[];
+  /** De dónde salieron los antecedentes. Mismo criterio que `fuente_documentos`: nada sin origen. */
+  fuente: string;
+}
+
 export interface RequisitosCapacitacion {
   curso: string;
   organismo_corto: string;
@@ -41,6 +79,8 @@ export interface RequisitosCapacitacion {
     experiencia_laboral: string;
     experiencia_relatoria: string;
   };
+  /** Relator/a designado/a, si ya lo hay. Ausente = la propuesta sale sin nombrar a nadie. */
+  relator?: RelatorPropuesto;
   entregables: string[];
   logistica: string;
   documentos_obligatorios_oferta: string[];
@@ -107,6 +147,45 @@ export function loadCapacitacionesConfig(): CapacitacionesConfig {
         );
       }
     }
+
+    // El relator es el dato que el organismo revisa primero y el único del documento que nombra a
+    // una persona real. Se valida al cargar por la misma razón que los criterios: nombrar a
+    // alguien sin decir de qué documento salió su acreditación convierte la propuesta en una
+    // afirmación no auditable.
+    if (r.relator) {
+      const faltantes = (["nombre", "titulo", "cargo", "contacto", "fuente"] as const).filter(
+        (k) => !r.relator![k]?.trim(),
+      );
+      if (faltantes.length > 0) {
+        throw new Error(
+          `config/capacitaciones.json — ${codigo}/relator: falta ${faltantes.join(", ")}. ` +
+            `Un relator/a designado/a va con nombre, título, cargo, contacto y el origen de sus antecedentes.`,
+        );
+      }
+      for (const k of ["formacion", "experiencia_laboral", "experiencia_relatoria"] as const) {
+        for (const campo of ["acredita", "acredita_breve"] as const) {
+          if (!r.relator[campo]?.[k]?.trim()) {
+            throw new Error(
+              `config/capacitaciones.json — ${codigo}/relator: '${campo}.${k}' vacío. Cada exigencia de ` +
+                `'relator_exigido' necesita su respuesta: el organismo las revisa una a una en admisibilidad.`,
+            );
+          }
+        }
+      }
+      if (!Array.isArray(r.relator.documentos) || r.relator.documentos.length === 0) {
+        throw new Error(
+          `config/capacitaciones.json — ${codigo}/relator: 'documentos' vacío. Designar relator/a sin ` +
+            `ningún antecedente adjuntable no cambia nada en admisibilidad.`,
+        );
+      }
+      if (!Array.isArray(r.relator.documentos_faltantes)) {
+        throw new Error(
+          `config/capacitaciones.json — ${codigo}/relator: falta 'documentos_faltantes' (lista, vacía si ` +
+            `no falta ninguno). Que esté vacía es una afirmación fuerte: dice que la carpeta de ` +
+            `antecedentes está completa.`,
+        );
+      }
+    }
   }
   return raw;
 }
@@ -163,9 +242,15 @@ export function cargarIdentidadOferente(): IdentidadOferente {
  * —programa, horas, cupos, modalidad, fechas, entregables, coordinación— se declara `cumple`;
  * todo lo que depende de una persona real con credenciales verificables se declara
  * `por-confirmar`. El agente no inventa un relator ni sus certificados.
+ *
+ * Cuando la config sí designa relator/a (`r.relator`), las tres filas de relatoría pasan a
+ * `cumple` **con el antecedente que las respalda escrito en la respuesta** — salvo la que quede
+ * cubierta por un documento que todavía no existe: un CV que declara veinte cursos dictados no
+ * reemplaza los certificados que el organismo exige adjuntar, y esa fila sigue `por-confirmar`.
  */
 export function derivarCumplimiento(r: RequisitosCapacitacion): FilaCumplimiento[] {
   const totalHoras = r.modulos.reduce((s, m) => s + m.horas, 0);
+  const rel = r.relator;
   // Las respuestas son deliberadamente breves: el detalle completo ya está en las láminas de
   // programa y metodología, y esta tabla existe para la declaración cumple / no cumple que el
   // organismo revisa en admisibilidad. Repetir ahí los párrafos largos desbordaba la lámina.
@@ -204,18 +289,30 @@ export function derivarCumplimiento(r: RequisitosCapacitacion): FilaCumplimiento
     },
     {
       requisito: "Formación profesional/técnica del relator/a",
-      estado: "por-confirmar",
-      respuesta: "Requiere designar a la persona y adjuntar su título o certificado de título.",
+      estado: rel ? "cumple" : "por-confirmar",
+      respuesta: rel
+        ? `${rel.nombre} — ${rel.acredita_breve.formacion}`
+        : "Requiere designar a la persona y adjuntar su título o certificado de título.",
     },
     {
       requisito: "Experiencia laboral del relator/a",
-      estado: "por-confirmar",
-      respuesta: "Requiere adjuntar el currículum de la persona designada.",
+      estado: rel ? "cumple" : "por-confirmar",
+      respuesta: rel
+        ? rel.acredita_breve.experiencia_laboral
+        : "Requiere adjuntar el currículum de la persona designada.",
     },
     {
+      // La única de las tres que no se cierra con designar a la persona: el organismo pide el
+      // respaldo documental de cada actividad, no su enumeración en el CV.
       requisito: "Experiencia en relatoría en el tema a capacitar",
-      estado: "por-confirmar",
-      respuesta: "Requiere adjuntar los certificados, órdenes de compra o diplomas que la acrediten.",
+      estado: rel && rel.documentos_faltantes.length === 0 ? "cumple" : "por-confirmar",
+      respuesta: rel
+        ? `${rel.acredita_breve.experiencia_relatoria}${
+            rel.documentos_faltantes.length > 0
+              ? ` Falta el respaldo documental que las acredita (${rel.documentos_faltantes.length} antecedente(s), detallados en la lámina 3).`
+              : ""
+          }`
+        : "Requiere adjuntar los certificados, órdenes de compra o diplomas que la acrediten.",
     },
     {
       requisito: "Reuniones de coordinación previas al desarrollo",
@@ -252,10 +349,20 @@ export function derivarPendientes(
 ): string[] {
   const p: string[] = [];
 
-  p.push(
-    "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. " +
-      "Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
-  );
+  if (!r.relator) {
+    p.push(
+      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. " +
+        "Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+    );
+  } else if (r.relator.documentos_faltantes.length > 0) {
+    // Designar al relator/a resuelve la mayor parte del bloqueo, pero no todo: lo que decide la
+    // admisibilidad es lo que se adjunta, no lo que se declara. El pendiente pasa a nombrar
+    // exactamente qué documento falta, que es accionable, en vez de repetir que falta "un relator".
+    p.push(
+      `Completar la carpeta de antecedentes de ${r.relator.nombre}: ${r.relator.documentos_faltantes.join("; ")}. ` +
+        "El organismo exige el respaldo documental de cada actividad, no su enumeración en el currículum.",
+    );
+  }
 
   if (!oferente.identidad_confirmada) {
     p.push(

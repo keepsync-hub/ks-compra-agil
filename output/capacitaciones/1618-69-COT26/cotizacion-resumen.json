@@ -14,17 +14,31 @@
     "ANEXO N1.docx",
     "ANEXO N2.docx"
   ],
-  "requisitos_por_confirmar": 3,
-  "score_apertura_pct": 75,
-  "score_criterios_sin_informacion": 5,
-  "score_criterios_cubiertos": 0,
+  "requisitos_por_confirmar": 1,
+  "relator": {
+    "nombre": "Cristian Molina Espinoza",
+    "titulo": "Ingeniero Civil Industrial, Universidad de Chile",
+    "documentos": [
+      "Currículum vitae actualizado (CV-Cristian-Molina-Espinoza-Dipres.pdf)",
+      "Certificado de título profesional, Universidad de Chile (dentro de Carta-Presentacion-y-Certificado-Titulo-Dipres.pdf)",
+      "Carta de presentación dirigida a Dipres, con la postulación como relator (Carta-Presentacion-y-Certificado-Titulo-Dipres.pdf)"
+    ],
+    "documentos_faltantes": [
+      "Certificados de ejecución, órdenes de compra, contratos o diplomas de al menos 5 de las actividades de capacitación dictadas en los últimos 3 años (TDR 2.2.c los exige adjuntos: el currículum las enumera pero no las acredita)",
+      "Duración en horas cronológicas de cada actividad acreditada — el propio currículum la deja por completar («[__] h c/u») y el TDR exige un mínimo de 8 horas por actividad"
+    ],
+    "fuente": "Carpeta RUT_DIPRES en el Google Drive del usuario (cristian.molina@keepsync.ai), consultada el 2026-08-22: CV-Cristian-Molina-Espinoza-Dipres.pdf y Carta-Presentacion-y-Certificado-Titulo-Dipres.pdf."
+  },
+  "score_apertura_pct": 85,
+  "score_criterios_sin_informacion": 3,
+  "score_criterios_cubiertos": 2,
   "_score_nota": "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que falte revisar (config/capacitaciones.json → criterios_direccionadores).",
   "pendientes": [
-    "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+    "Completar la carpeta de antecedentes de Cristian Molina Espinoza: Certificados de ejecución, órdenes de compra, contratos o diplomas de al menos 5 de las actividades de capacitación dictadas en los últimos 3 años (TDR 2.2.c los exige adjuntos: el currículum las enumera pero no las acredita); Duración en horas cronológicas de cada actividad acreditada — el propio currículum la deja por completar («[__] h c/u») y el TDR exige un mínimo de 8 horas por actividad. El organismo exige el respaldo documental de cada actividad, no su enumeración en el currículum.",
     "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.",
     "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
     "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Este organismo selecciona por MENOR PRECIO TOTAL, así que el margen sobre el tope define directamente si se gana."
   ],
   "apto_para_enviar": false,
-  "_apto_nota": "Siempre false: falta designar relator/a con credenciales verificables, y el precio no sale de un costo real. El envío lo hace un humano, nunca este script."
+  "_apto_nota": "Siempre false: el precio no sale de un costo real y la identidad del oferente sigue por confirmar. El envío lo hace un humano, nunca este script."
 }
