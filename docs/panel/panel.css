@@ -1,0 +1,77 @@
+/* Hoja de estilo del panel operativo de Compra Ágil.
+   Vive acá y no dentro del workflow de n8n a propósito: así queda versionada y revisable en el
+   diff, y el workflow solo inyecta los datos. La sirve GitHub Pages; la página que la usa la
+   sirve n8n, detrás de su login. Mismos tokens de color que docs/index.html. */
+  :root {
+    --bg:#0E0E17; --card:#161527; --card2:#1D1B33; --border:#2A2844;
+    --accent:#786CF0; --accent2:#B4AAFA; --white:#fff; --gray:#9A9FB0; --dim:#6B7080;
+    --ok:#34D399; --warn:#FBBF24; --bad:#FB7185;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--white);
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:15px;line-height:1.55}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 1.5rem}
+  header{border-bottom:1px solid var(--border);padding:2rem 0 1.5rem;margin-bottom:1.5rem}
+  h1{font-size:1.6rem;margin:0 0 .4rem}
+  .sub{color:var(--gray);font-size:.92rem;margin:0}
+  .barra{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin-top:1rem}
+  .btn{display:inline-block;background:var(--accent);color:#fff;border:0;border-radius:7px;
+    padding:.5rem .95rem;font-size:.87rem;font-weight:600;cursor:pointer;text-decoration:none}
+  .btn:hover{background:var(--accent2);color:#16151F}
+  .btn.sec{background:transparent;border:1px solid var(--border);color:var(--gray)}
+  .btn.sec:hover{border-color:var(--accent2);color:var(--white);background:transparent}
+  .btn.ok{background:#177A54}.btn.bad{background:#8C2D3E}
+  .btn[disabled]{opacity:.45;cursor:not-allowed}
+  .aviso{background:#2A1B1F;border-left:3px solid var(--bad);padding:.8rem 1rem;border-radius:6px;
+    margin:1rem 0;font-size:.88rem;color:#F4C7CE}
+  .aviso b{color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:1rem;margin:1.2rem 0 3rem}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:1.1rem;
+    display:flex;flex-direction:column;gap:.35rem}
+  .codigo{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem;color:var(--accent2)}
+  .org{font-size:.78rem;color:var(--dim);text-transform:uppercase;letter-spacing:.4px}
+  .nombre{font-weight:600;font-size:.97rem;margin:.15rem 0 .3rem}
+  dl{display:grid;grid-template-columns:auto 1fr;gap:.15rem .7rem;margin:.4rem 0;font-size:.84rem}
+  dt{color:var(--dim)}dd{margin:0;text-align:right}
+  .chips{display:flex;flex-wrap:wrap;gap:.35rem;margin:.3rem 0}
+  .badge{font-size:.72rem;padding:.16rem .5rem;border-radius:20px;background:var(--card2);color:var(--gray)}
+  .badge.ok{background:#12362B;color:var(--ok)}
+  .badge.warn{background:#3A2E12;color:var(--warn)}
+  .badge.bad{background:#3A1B22;color:var(--bad)}
+  .score{font-size:1.5rem;font-weight:700;line-height:1}
+  .score.ok{color:var(--ok)}.score.warn{color:var(--warn)}.score.bad{color:var(--bad)}
+  .score-row{display:flex;gap:.7rem;align-items:center;padding:.5rem .7rem;background:var(--card2);
+    border-radius:7px;margin-bottom:.4rem}
+  .score-l{font-size:.68rem;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;display:block}
+  details{margin:.35rem 0;font-size:.83rem}
+  summary{cursor:pointer;color:var(--accent2)}
+  details ul{margin:.4rem 0;padding-left:1.1rem;color:var(--gray)}
+  .cta{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:auto;padding-top:.7rem}
+  .vacio{color:var(--gray);text-align:center;padding:3rem 1rem}
+  footer{border-top:1px solid var(--border);padding:1.5rem 0 3rem;color:var(--dim);font-size:.8rem}
+  #msg{position:fixed;left:50%;bottom:1.5rem;transform:translateX(-50%);background:var(--card2);
+    border:1px solid var(--border);padding:.6rem 1.1rem;border-radius:8px;font-size:.87rem;display:none;z-index:9}
+
+  /* ── Solo la página de expediente ── */
+  .kpis{display:flex;flex-wrap:wrap;gap:1.6rem;margin-top:1rem}
+  .kpi .v{font-size:1.35rem;font-weight:700;color:var(--accent2);display:block;line-height:1.2}
+  .kpi .l{font-size:.7rem;color:var(--dim);text-transform:uppercase;letter-spacing:.5px}
+  .back{color:var(--gray);font-size:.85rem;text-decoration:none}
+  .back:hover{color:var(--accent2)}
+  .btn.grande{padding:.75rem 1.6rem;font-size:1rem}
+  .nota{background:var(--card2);border-left:3px solid var(--accent);padding:.8rem 1rem;
+    border-radius:6px;margin:1.2rem 0;font-size:.86rem;color:var(--gray)}
+  .doc{background:var(--card);border:1px solid var(--border);border-radius:10px;
+    padding:1rem 1.1rem;margin-bottom:.8rem}
+  .doc-cab{display:flex;gap:.7rem;align-items:flex-start;justify-content:space-between}
+  .doc-n{font-family:ui-monospace,Menlo,monospace;color:var(--accent2);font-size:.9rem;font-weight:700}
+  .doc-t{font-weight:600;font-size:.95rem;margin:0 0 .15rem}
+  .tipo{font-size:.78rem;color:var(--dim);margin:.2rem 0 .5rem}
+  .archivos{list-style:none;margin:.5rem 0;padding:0;font-size:.83rem}
+  .archivos li{padding:.2rem 0;color:var(--gray)}
+  .archivos a{color:var(--accent2);text-decoration:none}
+  .zona{border:1px dashed var(--border);border-radius:8px;padding:.7rem;margin-top:.5rem;
+    font-size:.83rem;color:var(--dim);display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+  .zona.sobre{border-color:var(--accent2);background:var(--card2)}
+  .zona input[type=file]{font-size:.8rem;color:var(--gray);max-width:100%}
+  .pie-acciones{border-top:1px solid var(--border);margin-top:1.5rem;padding:1.5rem 0 3rem}

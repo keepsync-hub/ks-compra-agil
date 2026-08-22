@@ -1,0 +1,22 @@
+{
+  "descripcion": "Anexo N°1 — Detalle de cumplimiento de especificaciones técnicas (Dipres)",
+  "fuente": "ANEXO N1.docx, adjunto de las Compras Ágiles 1618-67/68/69-COT26",
+  "campos": {
+    "oferente": "oferente.razon_social",
+    "rut": "oferente.rut",
+    "contacto": "oferente.contacto_email",
+    "fecha": "fecha",
+    "curso": "curso",
+    "objetivo": "objetivo",
+    "horas": "duracion.horas_cronologicas",
+    "sesiones": "duracion.sesiones",
+    "participantes": "participantes.maximo",
+    "modalidad": "modalidad.tipo",
+    "plataforma": "modalidad.plataforma",
+    "fechas_ejecucion": "fechas_ejecucion",
+    "relator": "relator"
+  },
+  "opcionales": [
+    "contacto"
+  ]
+}

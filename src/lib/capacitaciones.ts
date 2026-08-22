@@ -4,6 +4,7 @@ import { ROOT_DIR } from "./config.js";
 import type { FilaCumplimiento } from "./capacitacion-cotizacion.js";
 import { GLOSA_TIPO, type CriterioDireccionador } from "./scoring-capacitacion.js";
 import type { CartaPresentacion } from "./carta-presentacion.js";
+import { TIPOS_DOCUMENTO, type EntradaDocumento, type TipoDocumento } from "./documentos-oferta.js";
 
 const CONFIG_PATH = path.join(ROOT_DIR, "config", "capacitaciones.json");
 const COMPANY_CONFIG_PATH = path.join(ROOT_DIR, "config", "company.json");
@@ -100,7 +101,12 @@ export interface RequisitosCapacitacion {
   carta?: CartaPresentacion & { ciudad: string };
   entregables: string[];
   logistica: string;
-  documentos_obligatorios_oferta: string[];
+  /**
+   * Los documentos que exige el organismo, cada uno con su `tipo` (ver `documentos-oferta.ts`):
+   * qué se rellena desde una plantilla, qué genera KeepSync y qué solo puede subirse porque lo
+   * emite un tercero. Se acepta el `string` suelto histórico, que entra como `acopio`.
+   */
+  documentos_obligatorios_oferta: EntradaDocumento[];
   evaluacion: { tipo: "menor_precio" | "puntaje" | "no_declarado"; detalle: string[] };
   multas: string;
   pago: string;
@@ -209,6 +215,27 @@ export function loadCapacitacionesConfig(): CapacitacionesConfig {
         `config/capacitaciones.json — ${codigo}: declara 'carta' sin 'relator'. La carta de presentación ` +
           `la firma una persona: sin relator/a designado/a no hay membrete ni firma que poner.`,
       );
+    }
+    // El `tipo` de cada documento decide si el expediente puede generarlo o solo acopiarlo. Un tipo
+    // mal escrito caería silenciosamente en `acopio` y el documento nunca se generaría, así que se
+    // valida acá; y una plantilla declarada en algo que no es `formulario` no se usaría jamás.
+    for (const doc of r.documentos_obligatorios_oferta ?? []) {
+      if (typeof doc === "string") continue;
+      if (!doc.documento?.trim()) {
+        throw new Error(`config/capacitaciones.json — ${codigo}: un documento obligatorio no tiene nombre.`);
+      }
+      if (doc.tipo && !TIPOS_DOCUMENTO.includes(doc.tipo as TipoDocumento)) {
+        throw new Error(
+          `config/capacitaciones.json — ${codigo}: tipo de documento desconocido "${doc.tipo}" en ` +
+            `"${doc.documento}". Válidos: ${TIPOS_DOCUMENTO.join(", ")}.`,
+        );
+      }
+      if (doc.plantilla && doc.tipo !== "formulario") {
+        throw new Error(
+          `config/capacitaciones.json — ${codigo}: "${doc.documento}" declara plantilla pero su tipo es ` +
+            `"${doc.tipo ?? "acopio"}". Solo los 'formulario' se rellenan desde una plantilla.`,
+        );
+      }
     }
   }
   return raw;

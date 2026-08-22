@@ -1,0 +1,33 @@
+{
+  "codigo": "2672-18-COT26",
+  "organismo": "I MUNICIPALIDAD DE CONCEPCION",
+  "fuente_catalogo": "capacitaciones.json",
+  "catalogo_provisional": false,
+  "total_clp": 5418000,
+  "tope_clp": 6020000,
+  "generado": "2026-08-22T21:34:32.779Z",
+  "apto_para_enviar": false,
+  "documentos": [
+    {
+      "prefijo": "01",
+      "documento": "Oferta técnica: metodología, contenidos, plataforma e-learning, recursos pedagógicos, actividades prácticas y mecanismos de evaluación",
+      "tipo": "generable",
+      "estado": "generado",
+      "archivo": "output/expedientes/2672-18-COT26/01 - Oferta técnica: metodología, contenidos, plataforma e-learning, recursos pedagógicos, actividades….pdf"
+    },
+    {
+      "prefijo": "02",
+      "documento": "Antecedentes de los relatores que acrediten el perfil profesional y los grados académicos exigidos",
+      "tipo": "acopio",
+      "estado": "omitido",
+      "motivo": "Lo emite un tercero (título, certificado, orden de compra). Se sube al expediente; generarlo sería falsificarlo."
+    },
+    {
+      "prefijo": "03",
+      "documento": "Oferta económica",
+      "tipo": "generable",
+      "estado": "generado",
+      "archivo": "output/expedientes/2672-18-COT26/03 - Oferta económica.pdf"
+    }
+  ]
+}

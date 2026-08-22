@@ -122,12 +122,32 @@
       ],
       "logistica": "Reunión de inicio presencial con la contraparte de Dipres una vez enviada y aceptada la orden de compra, para acordar ajustes programáticos y logísticos.",
       "documentos_obligatorios_oferta": [
-        "Anexo N°1 — Detalle de cumplimiento de especificaciones técnicas",
-        "Anexo N°2 — Detalle de propuesta económica",
-        "Propuesta técnica de la actividad de capacitación",
-        "Copia de título o certificado de título del relator/a",
-        "Currículum vitae actualizado del relator/a",
-        "Documentos que acrediten la realización de cursos en la materia"
+        {
+          "documento": "Anexo N°1 — Detalle de cumplimiento de especificaciones técnicas",
+          "tipo": "formulario",
+          "plantilla": "dipres-anexo-1"
+        },
+        {
+          "documento": "Anexo N°2 — Detalle de propuesta económica",
+          "tipo": "formulario",
+          "plantilla": "dipres-anexo-2"
+        },
+        {
+          "documento": "Propuesta técnica de la actividad de capacitación",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Copia de título o certificado de título del relator/a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Currículum vitae actualizado del relator/a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Documentos que acrediten la realización de cursos en la materia",
+          "tipo": "acopio"
+        }
       ],
       "evaluacion": {
         "tipo": "menor_precio",
@@ -300,12 +320,32 @@
       ],
       "logistica": "Reunión de inicio presencial con la contraparte de Dipres una vez enviada y aceptada la orden de compra, para acordar ajustes programáticos y logísticos.",
       "documentos_obligatorios_oferta": [
-        "Anexo N°1 — Detalle de cumplimiento de especificaciones técnicas",
-        "Anexo N°2 — Detalle de propuesta económica",
-        "Propuesta técnica de la actividad de capacitación",
-        "Copia de título o certificado de título del relator/a",
-        "Currículum vitae actualizado del relator/a",
-        "Documentos que acrediten la realización de cursos en la materia"
+        {
+          "documento": "Anexo N°1 — Detalle de cumplimiento de especificaciones técnicas",
+          "tipo": "formulario",
+          "plantilla": "dipres-anexo-1"
+        },
+        {
+          "documento": "Anexo N°2 — Detalle de propuesta económica",
+          "tipo": "formulario",
+          "plantilla": "dipres-anexo-2"
+        },
+        {
+          "documento": "Propuesta técnica de la actividad de capacitación",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Copia de título o certificado de título del relator/a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Currículum vitae actualizado del relator/a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Documentos que acrediten la realización de cursos en la materia",
+          "tipo": "acopio"
+        }
       ],
       "evaluacion": {
         "tipo": "menor_precio",
@@ -513,12 +553,32 @@
       ],
       "logistica": "Reunión de inicio presencial con la contraparte de Dipres una vez enviada y aceptada la orden de compra, para acordar ajustes programáticos y logísticos.",
       "documentos_obligatorios_oferta": [
-        "Anexo N°1 — Detalle de cumplimiento de especificaciones técnicas",
-        "Anexo N°2 — Detalle de propuesta económica",
-        "Propuesta técnica de la actividad de capacitación",
-        "Copia de título o certificado de título del relator/a",
-        "Currículum vitae actualizado del relator/a",
-        "Documentos que acrediten la realización de cursos en la materia"
+        {
+          "documento": "Anexo N°1 — Detalle de cumplimiento de especificaciones técnicas",
+          "tipo": "formulario",
+          "plantilla": "dipres-anexo-1"
+        },
+        {
+          "documento": "Anexo N°2 — Detalle de propuesta económica",
+          "tipo": "formulario",
+          "plantilla": "dipres-anexo-2"
+        },
+        {
+          "documento": "Propuesta técnica de la actividad de capacitación",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Copia de título o certificado de título del relator/a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Currículum vitae actualizado del relator/a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Documentos que acrediten la realización de cursos en la materia",
+          "tipo": "acopio"
+        }
       ],
       "evaluacion": {
         "tipo": "menor_precio",
@@ -644,9 +704,18 @@
       ],
       "logistica": "La Unidad Técnica coordina con el proveedor la programación definitiva del curso. La supervisión del contrato queda a cargo de profesionales de la Dirección de Gestión y Desarrollo de las Personas (titular y subrogante).",
       "documentos_obligatorios_oferta": [
-        "Oferta técnica: metodología, contenidos, plataforma e-learning, recursos pedagógicos, actividades prácticas y mecanismos de evaluación",
-        "Antecedentes de los relatores que acrediten el perfil profesional y los grados académicos exigidos",
-        "Oferta económica"
+        {
+          "documento": "Oferta técnica: metodología, contenidos, plataforma e-learning, recursos pedagógicos, actividades prácticas y mecanismos de evaluación",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Antecedentes de los relatores que acrediten el perfil profesional y los grados académicos exigidos",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Oferta económica",
+          "tipo": "generable"
+        }
       ],
       "evaluacion": {
         "tipo": "puntaje",
@@ -809,12 +878,30 @@
       ],
       "logistica": "Una vez adjudicado, reunión de coordinación previa al inicio del curso, y reuniones de retroalimentación si se necesitan mejoras durante su desarrollo. Si por caso fortuito o fuerza mayor no se completan las 30 horas, deben agendarse sesiones adicionales hasta cubrir la totalidad de los contenidos.",
       "documentos_obligatorios_oferta": [
-        "Propuesta técnica que contemple los numerales 2 (objetivos), 2.1 (especificaciones), 2.2 (modalidad) y 2.3 (antecedentes del docente)",
-        "Contenidos adicionales acordes a los objetivos del curso",
-        "Currículum vitae, carta de recomendación y/o página web oficial que acredite al menos 3 años de experiencia en docencia en la temática",
-        "Página web institucional y/o documentación que acredite al menos 5 años del proveedor impartiendo cursos",
-        "Oferta económica",
-        "Certificado SENCE, si el proveedor es OTEC (10% del puntaje final)"
+        {
+          "documento": "Propuesta técnica que contemple los numerales 2 (objetivos), 2.1 (especificaciones), 2.2 (modalidad) y 2.3 (antecedentes del docente)",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Contenidos adicionales acordes a los objetivos del curso",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Currículum vitae, carta de recomendación y/o página web oficial que acredite al menos 3 años de experiencia en docencia en la temática",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Página web institucional y/o documentación que acredite al menos 5 años del proveedor impartiendo cursos",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Oferta económica",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Certificado SENCE, si el proveedor es OTEC (10% del puntaje final)",
+          "tipo": "acopio"
+        }
       ],
       "evaluacion": {
         "tipo": "puntaje",
@@ -984,9 +1071,18 @@
       ],
       "logistica": "Ambos cursos son cerrados y presenciales en dependencias del establecimiento para al menos 4 sesiones, con el resto asincrónico en plataforma Moodle o similar.",
       "documentos_obligatorios_oferta": [
-        "Propuesta de curso en formato PDF: objetivo principal, objetivos específicos, módulos, metodología, acceso a plataforma Moodle o símil, oferta económica, certificado de habilidad en Mercado Público, datos de transferencia, experiencia del relator, cupos y becas",
-        "Acreditación de experiencia en el curso al que se postula, adjuntando las últimas 12 órdenes de compra aceptadas y/o recepciones conformes en Mercado Público",
-        "Certificado de habilidad en Mercado Público"
+        {
+          "documento": "Propuesta de curso en formato PDF: objetivo principal, objetivos específicos, módulos, metodología, acceso a plataforma Moodle o símil, oferta económica, certificado de habilidad en Mercado Público, datos de transferencia, experiencia del relator, cupos y becas",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Acreditación de experiencia en el curso al que se postula, adjuntando las últimas 12 órdenes de compra aceptadas y/o recepciones conformes en Mercado Público",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificado de habilidad en Mercado Público",
+          "tipo": "acopio"
+        }
       ],
       "evaluacion": {
         "tipo": "no_declarado",
@@ -1086,5 +1182,6 @@
       ]
     }
   },
-  "_regla_score": "score = 100 − 5 × (criterios con estado \"sin_informacion\"). 100% = la compra no presenta ningún filtro que dirija la adjudicación hacia un proveedor con una característica, capacidad o certificación muy particular. Regla fijada por el usuario el 2026-08-22. Cada criterio declara su cita: nada se penaliza sin evidencia en los adjuntos. Al confirmar uno se cambia su estado a \"cubierto\" con `resuelto_por`, y el score sube sin tocar código."
+  "_regla_score": "score = 100 − 5 × (criterios con estado \"sin_informacion\"). 100% = la compra no presenta ningún filtro que dirija la adjudicación hacia un proveedor con una característica, capacidad o certificación muy particular. Regla fijada por el usuario el 2026-08-22. Cada criterio declara su cita: nada se penaliza sin evidencia en los adjuntos. Al confirmar uno se cambia su estado a \"cubierto\" con `resuelto_por`, y el score sube sin tocar código.",
+  "_taxonomia_documentos": "Cada documento de documentos_obligatorios_oferta declara su `tipo`, que decide qué puede hacer el botón Generar del expediente: `formulario` = anexo .docx del organismo, se rellena su plantilla oficial (config/anexos/<plantilla>.docx + .json); `generable` = lo arma KeepSync desde esta misma config y config/company.json; `acopio` = lo emite un tercero (título, CV, certificado, orden de compra) y SOLO puede subirse — generarlo sería falsificarlo. Un documento sin `tipo` se trata como `acopio`, que es el que nunca produce nada."
 }

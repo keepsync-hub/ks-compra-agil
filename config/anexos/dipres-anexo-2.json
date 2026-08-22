@@ -1,0 +1,12 @@
+{
+  "descripcion": "Anexo N°2 — Detalle de propuesta económica (Dipres)",
+  "fuente": "ANEXO N2.docx, adjunto de las Compras Ágiles 1618-67/68/69-COT26",
+  "campos": {
+    "oferente": "oferente.razon_social",
+    "rut": "oferente.rut",
+    "fecha": "fecha",
+    "curso": "curso",
+    "total_clp": "total_clp",
+    "total_numero": "total_numero"
+  }
+}

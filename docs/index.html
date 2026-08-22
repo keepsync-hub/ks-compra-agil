@@ -47,6 +47,15 @@
   h2 { font-size: 1.4rem; margin: 0 0 0.3rem; }
   .section-sub { color: var(--gray); font-size: 0.95rem; margin: 0 0 1.25rem; max-width: 78ch; }
 
+  /* La entrada al panel operativo. Se separa del resto con un borde porque es lo único de esta
+     página que ejecuta algo; todo lo demás son resultados de solo lectura. */
+  .panel-cta {
+    border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.4rem;
+    margin-bottom: 2.5rem; background: var(--card);
+  }
+  .panel-cta .section-sub { margin-bottom: 1rem; }
+  .panel-cta .cta { margin: 0; }
+
   /* Chip de nicho: con cinco categorías activas, la primera pregunta de cada tarjeta pasó a ser
      "¿de qué es esta compra?". Antes eso vivía en una fila del <dl>, al fondo. */
   .opp-card .cat-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.15rem; }
@@ -216,6 +225,25 @@
 </header>
 
 <main class="wrap">
+
+<!-- Panel operativo. Va acá, FUERA de los tres pares de marcadores, para que ni `npm run radar` ni
+     `npm run cotizar-capacitacion` lo pisen al reescribir sus bloques (ver reemplazarBloque() en
+     src/lib/pagina-compra-agil.ts). El panel lo sirve n8n, detrás de su login: esta página es
+     pública y no puede guardar un secreto ni el estado del trabajo. -->
+<section class="panel-cta">
+  <h2>Trabajar estas compras</h2>
+  <p class="section-sub">
+    Esta página muestra <strong>lo que está abierto</strong>. Para decidir y preparar una oferta —
+    correr el radar, cotizar, avanzar o descartar, y armar el expediente de documentos en Drive —
+    está el panel operativo, que pide tu cuenta de n8n porque gasta cuota de la API y escribe en
+    tu Drive. Nada de eso envía una oferta: el envío al portal lo hace siempre una persona.
+  </p>
+  <p class="cta">
+    <a class="btn" href="https://keepsync-hub.app.n8n.cloud/webhook/mp/panel">
+      Abrir el panel operativo →
+    </a>
+  </p>
+</section>
 
 <!-- OPORTUNIDADES:INICIO (generado por `npm run radar` — no editar a mano) -->
   <section>

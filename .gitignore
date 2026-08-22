@@ -45,3 +45,7 @@ licitaciones/data/*
 # sí se versiona es la cotización que genera el agente, igual que el resto de output/.
 output/capacitaciones/*/antecedentes/
 output/capacitaciones/*/Oferta-*-completa.pdf
+
+# Salida de n8n/construir.mjs: se regenera con `node n8n/construir.mjs <workflow>`.
+# La fuente versionada es n8n/workflows/ + n8n/chunks/.
+n8n/build/

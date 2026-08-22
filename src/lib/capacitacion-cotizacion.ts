@@ -1,14 +1,20 @@
-import { readFileSync, mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { readFileSync, mkdtempSync, writeFileSync, rmSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 import type { IdentidadOferente } from "./capacitaciones.js";
 import type { RequisitosCapacitacion } from "./capacitaciones.js";
+import { normalizarDocumentos } from "./documentos-oferta.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LOGO_PATH = path.join(__dirname, "..", "assets", "logo-keepsync-blanco.png");
-const CHROMIUM_PATH = "/opt/pw-browsers/chromium";
+// Chromium: el entorno manda. En esta máquina vive en /opt/pw-browsers; en un runner de CI no
+// existe esa ruta y hay que dejar que Playwright use el que instaló. Misma convención que
+// licitaciones/src/scripts/login-portal.ts.
+const CHROMIUM_PATH =
+  process.env.CHROMIUM_EXECUTABLE_PATH ||
+  (existsSync("/opt/pw-browsers/chromium") ? "/opt/pw-browsers/chromium" : undefined);
 
 /** Mismo sistema de color que la cotización de Array y la de licencias Claude. */
 const COLOR = {
@@ -381,7 +387,9 @@ export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionDa
   </table>
   <div class="card" style="margin-top:9pt;">
     <h3>Documentos obligatorios de la oferta</h3>
-    <ul class="tight" style="columns:2;column-gap:18pt;">${r.documentos_obligatorios_oferta.map((d) => `<li>${esc(d)}</li>`).join("")}</ul>
+    <ul class="tight" style="columns:2;column-gap:18pt;">${normalizarDocumentos(r.documentos_obligatorios_oferta, false)
+      .map((d) => `<li>${esc(d.documento)}${d.tipo === "acopio" ? ' <span class="gray">(se adjunta)</span>' : ""}</li>`)
+      .join("")}</ul>
   </div>
 </div>
 

@@ -74,6 +74,73 @@ descarta en admisibilidad), y **sigue sin confirmarse si KeepSync es OTEC regist
 de eso dependen tanto puntaje directo en algunas bases como la exención de IVA del art. 13 N°4 con
 que Dipres presupuesta. Ver el detalle en `.claude/skills/compra-agil-ofertar/SKILL.md`.
 
+## Panel operativo y expediente de oferta (n8n + GitHub Actions)
+
+Entre «esta compra me sirve» y «tengo la oferta lista» no había nada, y los seis TDR de capacitación
+exigen entre 3 y 12 documentos cada uno. Eso lo cubre ahora un **panel operativo servido por n8n**,
+al que se entra con un botón desde `docs/index.html` (fuera de los tres pares de marcadores, para que
+ni el radar ni el cotizador lo pisen).
+
+**El reparto de trabajo, que es lo que hay que entender antes de tocar esto:**
+
+- **n8n** sirve las páginas, autentica (su propio login: la página pública no puede guardar un
+  secreto), guarda el estado en la Data Table `mp_solicitudes`, y **es el único que habla con Drive**.
+- **GitHub Actions** (`.github/workflows/mp.yml`) corre el radar, el cotizador y el generador
+  **reales del repo**. n8n no reimplementa nada del negocio.
+- `radar.ts` y `cotizar-capacitacion.ts` **no se tocaron**: el puente
+  (`src/scripts/postear-n8n.ts`) lee `historico/observaciones.jsonl` con `ultimaPorCodigo()` y
+  `data/<codigo>/condiciones.json`, que esos scripts ya producen.
+
+**Un solo workflow de Actions, con `concurrency: mp-repo`**, porque dos workflows empujando a la
+misma rama hacían fallar el segundo y el tercer clic seguidos con non-fast-forward. Y correr radar +
+cotizador + generador en el mismo job resuelve gratis que `data/` sea efímero y gitignored: el
+cotizador encuentra su `detalle.json` y el generador encuentra los anexos en blanco de
+`data/<codigo>/attachments/`.
+
+Piezas en n8n: `MP · Panel` (`6TTvRQZrzmrW3Oa6`), `MP · Acciones` (`wJbA7Fq4pHtUAwjz`),
+`MP · Carpetas Drive` (`do3woax6AGPYxEAN`), tabla `mp_solicitudes` (`hZ7iJZTkt01XfRUc`). La fuente
+está versionada en `n8n/workflows/*.ts`; `n8n/construir.mjs` inyecta los chunks de `n8n/chunks/`
+ya escapados, porque el SDK del builder es un subconjunto muy acotado de TypeScript (sin `import`,
+sin `Object.assign`, sin `.join()`). El CSS y el JS de las páginas viven en **`docs/panel/`** y los
+sirve Pages: así quedan revisables en el diff en vez de enterrados en un literal del workflow.
+
+**Freno de cuota de 15 minutos** en `/mp/radar`: cada corrida barre todas las categorías activas y el
+repo tiene un 429 documentado a las 9 requests.
+
+## Generar documentos: tres naturalezas, no una
+
+`npm run generar-documento -- <codigo> [NN…]` produce los documentos de una oferta. La distinción que
+ordena todo —y que hace honesto el botón «Generar»— está en `src/lib/documentos-oferta.ts`:
+
+| tipo | Qué es | Qué hace «Generar» |
+|---|---|---|
+| `formulario` | El anexo .docx del propio organismo. | Rellena su plantilla oficial (`config/anexos/<slug>.docx` + `.json`), conservando el diseño. |
+| `generable` | Propuesta técnica, oferta económica. | La arma desde `config/capacitaciones.json` y `config/company.json` y la renderiza a PDF. |
+| `acopio` | Título del relator/a, CV, certificados, órdenes de compra. | **Nada: no se puede.** Lo emite un tercero; producirlo sería falsificar evidencia. Se sube al expediente. |
+
+De los 30 documentos exigidos por las seis compras fichadas, **15 son `acopio`** — la mitad. En
+Dipres, tres de seis. La página lo dice de frente en vez de dejar creer que «Generar» completa el
+expediente.
+
+**Rellenar un .docx no es automático** y conviene saberlo antes de tocar `src/lib/anexo-docx.ts`: el
+anexo en blanco no trae marcadores y Word parte el texto en `<w:r>` arbitrarios, así que un
+buscar-y-reemplazar sobre el XML falla **en silencio** dejando el anexo a medio llenar — causal de
+inadmisibilidad. Se marca el anexo con `{campo}` **una vez por anexo** (ver `config/anexos/README.md`)
+y de ahí el relleno es determinista y reutilizable: los tres códigos de Dipres comparten sus anexos.
+Sin plantilla, el generador **no improvisa un documento propio**: deja el documento en `bloqueado` y
+dice qué falta.
+
+En Drive queda `KeepSync - Mercado Público - Panchito / <codigo> — <organismo> /` con `_ENTREGABLES`
+y una carpeta numerada por documento. El entregable terminado se empareja con su carpeta **por el
+prefijo `NN`**, no por el nombre completo. Todo nivel se crea con find-or-create: Drive admite dos
+carpetas con el mismo nombre en el mismo padre, así que sin el diff cada clic en «Avanzar» duplicaría
+el árbol en silencio.
+
+**Guardrails que este flujo no relaja:** nada escribe en mercadopublico.cl, `_ENTREGABLES` es bandeja
+de **revisión** y no de salida, y los dos bloqueos de admisibilidad del nicho —ninguna oferta nombra
+relator/a, y sigue sin confirmarse si KeepSync es OTEC en SENCE— aparecen ahora en el panel, en el
+expediente y **dentro del PDF generado**. Hacerlos visibles no es resolverlos.
+
 ## Insumo bloqueante (sigue condicionando el envío real de una oferta)
 
 **¿KeepSync tiene una vía real para proveer y facturar licencias Claude/Anthropic, y a qué

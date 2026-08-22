@@ -12,6 +12,7 @@ on:
       - claude/mercadopublico-agente-compras-pgyedf
       - claude/revisar-contexto-plan-ttaumn
       - claude/array-agile-purchases-page-det2d4
+      - claude/n8n-radar-cotizaciones-08vr00
       - main
       - master
     paths:
