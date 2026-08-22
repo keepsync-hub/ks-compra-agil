@@ -7,6 +7,8 @@
     "1618-67-COT26": {
       "curso": "Herramientas básicas de Power BI para el análisis de datos",
       "organismo_corto": "Dipres",
+      "organismo_nombre": "Dirección de Presupuestos (Dipres) — Ministerio de Hacienda",
+      "_organismo_nombre_nota": "La API entrega institucion.organismo_comprador truncado: «DIRECCION DE PRESUPUESTOS MINISTERIO DE», cortado justo antes del ministerio. El organismo completo consta en la propia ficha, en institucion.unidad_compra = «Ministerio de Hacienda - Dipres». La Dirección de Presupuestos es un servicio dependiente del Ministerio de Hacienda.",
       "fuente_documentos": [
         "TDR Herramientas Básicas de PowerBI para análisis de datos.pdf",
         "ANEXO N1.docx",
@@ -180,6 +182,8 @@
     "1618-68-COT26": {
       "curso": "Herramientas intermedias de Power BI para el análisis de datos (Nivel II)",
       "organismo_corto": "Dipres",
+      "organismo_nombre": "Dirección de Presupuestos (Dipres) — Ministerio de Hacienda",
+      "_organismo_nombre_nota": "La API entrega institucion.organismo_comprador truncado: «DIRECCION DE PRESUPUESTOS MINISTERIO DE», cortado justo antes del ministerio. El organismo completo consta en la propia ficha, en institucion.unidad_compra = «Ministerio de Hacienda - Dipres». La Dirección de Presupuestos es un servicio dependiente del Ministerio de Hacienda.",
       "fuente_documentos": [
         "TDR PowerBI Nivel II .pdf",
         "ANEXO N1.docx",
@@ -356,6 +360,8 @@
     "1618-69-COT26": {
       "curso": "IA Generativa para el Trabajo Diario en el Sector Público",
       "organismo_corto": "Dipres",
+      "organismo_nombre": "Dirección de Presupuestos (Dipres) — Ministerio de Hacienda",
+      "_organismo_nombre_nota": "La API entrega institucion.organismo_comprador truncado: «DIRECCION DE PRESUPUESTOS MINISTERIO DE», cortado justo antes del ministerio. El organismo completo consta en la propia ficha, en institucion.unidad_compra = «Ministerio de Hacienda - Dipres». La Dirección de Presupuestos es un servicio dependiente del Ministerio de Hacienda.",
       "fuente_documentos": [
         "TDR IA para el trabajo diario.pdf",
         "ANEXO N1.docx",

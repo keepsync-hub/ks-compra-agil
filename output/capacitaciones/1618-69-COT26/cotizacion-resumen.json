@@ -1,14 +1,14 @@
 {
   "codigo": "1618-69-COT26",
   "curso": "IA Generativa para el Trabajo Diario en el Sector Público",
-  "organismo": "DIRECCION DE PRESUPUESTOS MINISTERIO DE",
+  "organismo": "Dirección de Presupuestos (Dipres) — Ministerio de Hacienda",
   "tope_clp": 3000000,
   "total_clp": 2700000,
   "descuento_pct": 10,
   "regimen_tributario": "exento",
   "formula": "90% del presupuesto disponible — regla del usuario, no derivada de costos reales",
   "criterio_evaluacion_organismo": "menor_precio",
-  "archivo_publicable": "Q-20260822-DireccionDePresupuestosMinisterioDe.pdf",
+  "archivo_publicable": "Q-20260822-DireccionDePresupuestosDipresMinisterioDeHacienda.pdf",
   "fuente_documentos": [
     "TDR IA para el trabajo diario.pdf",
     "ANEXO N1.docx",
@@ -35,7 +35,7 @@
   "_score_nota": "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que falte revisar (config/capacitaciones.json → criterios_direccionadores).",
   "pendientes": [
     "Completar la carpeta de antecedentes de Cristian Molina Espinoza: Certificados de ejecución, órdenes de compra, contratos o diplomas de al menos 5 de las actividades de capacitación dictadas en los últimos 3 años (TDR 2.2.c los exige adjuntos: el currículum las enumera pero no las acredita); Duración en horas cronológicas de cada actividad acreditada — el propio currículum la deja por completar («[__] h c/u») y el TDR exige un mínimo de 8 horas por actividad. El organismo exige el respaldo documental de cada actividad, no su enumeración en el currículum.",
-    "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.",
+    "Completar la identidad del oferente para la carátula y los anexos firmados: representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KEEPSYNC SPA, RUT 78.441.121-4.",
     "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
     "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Este organismo selecciona por MENOR PRECIO TOTAL, así que el margen sobre el tope define directamente si se gana."
   ],

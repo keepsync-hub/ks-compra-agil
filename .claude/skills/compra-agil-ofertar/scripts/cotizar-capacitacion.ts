@@ -36,7 +36,7 @@ interface Detalle {
   estado: { codigo: string; glosa: string };
   fechas: { fecha_cierre: string };
   presupuesto: { monto_disponible_clp: number };
-  institucion: { organismo_comprador: string };
+  institucion: { organismo_comprador: string; unidad_compra: string };
 }
 
 function leerDetalle(codigo: string): Detalle | null {
@@ -102,7 +102,9 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
   const data: CotizacionCapacitacionData = {
     codigo,
     nombreCompra: detalle.nombre,
-    organismoComprador: detalle.institucion.organismo_comprador.trim(),
+    // El nombre de la config manda sobre el de la ficha: la API lo trunca (ver `organismo_nombre`).
+    organismoComprador: requisitos.organismo_nombre?.trim() || detalle.institucion.organismo_comprador.trim(),
+    unidadCompra: detalle.institucion.unidad_compra?.trim() || null,
     requisitos,
     totalClp,
     topeClp,

@@ -54,6 +54,15 @@ export interface RelatorPropuesto {
 export interface RequisitosCapacitacion {
   curso: string;
   organismo_corto: string;
+  /**
+   * Nombre oficial completo del organismo, cuando el que entrega la API viene mal.
+   * `institucion.organismo_comprador` de la ficha llega **truncado** —el de esta compra es
+   * "DIRECCION DE PRESUPUESTOS MINISTERIO DE", cortado justo antes del ministerio— y ese string
+   * es el que encabeza la carátula y da nombre al archivo. Cuando está, manda este; si no,
+   * se usa el de la ficha. Declararlo obliga a mirar `institucion.unidad_compra`, que es donde
+   * el portal sí trae el organismo completo.
+   */
+  organismo_nombre?: string;
   fuente_documentos: string[];
   tributacion: {
     regimen: "exento" | "impuestos_incluidos" | "no_declarado";
@@ -193,47 +202,112 @@ export function loadCapacitacionesConfig(): CapacitacionesConfig {
 /**
  * Identidad del oferente que va en el PDF. `config/company.json` es un secreto gitignored y puede
  * no existir en el entorno donde corre esto (checkout limpio en la nube, por ejemplo). En vez de
- * abortar, se emite el documento con la identidad marcada como NO confirmada, que es lo que hace
- * que cada lámina salga estampada "BORRADOR": el precio y la propuesta técnica siguen siendo
- * útiles para revisar, y la identidad la completa una persona antes de presentar.
+ * abortar, se emite el documento con lo que haya y con la lista de lo que falta.
+ *
+ * La lectura es **campo por campo, no todo o nada**, y eso es lo que cambia el documento: antes
+ * un solo dato pendiente hacía que la carátula dijera "KeepSync (razón social por confirmar)" y
+ * escondiera el RUT real que sí estaba confirmado. Ahora el PDF publica lo confirmado —razón
+ * social, RUT, domicilio, condición EMT, estado en el Registro de Proveedores— y nombra aparte lo
+ * que sigue pendiente. `identidad_confirmada` se **deriva**: es cierto solo cuando no falta nada
+ * y el archivo además lo afirma. Un booleano puesto a mano no puede subir por su cuenta.
  */
 export interface IdentidadOferente {
   razon_social: string;
+  nombre_fantasia: string | null;
   rut: string;
+  direccion: string | null;
+  giro: string | null;
+  representante_legal: string | null;
+  es_emt: boolean;
+  estado_habilidad: string | null;
+  /** AAAA-MM-DD hasta cuando está acreditada en el Registro de Proveedores. */
+  acreditado_hasta: string | null;
+  contacto_nombre: string | null;
   contacto_email: string;
+  contacto_telefono: string | null;
+  /** Qué falta para poder firmar y presentar, en glosa larga. Vacía = identidad completa. */
+  campos_por_confirmar: string[];
+  /** Los mismos campos en dos palabras, para el sello de la lámina, donde no cabe la glosa larga. */
+  campos_por_confirmar_corto: string[];
   identidad_confirmada: boolean;
 }
 
+/** Los campos sin los cuales no se puede completar la carátula ni firmar los anexos. */
+const CAMPOS_IDENTIDAD_EXIGIDOS: { campo: keyof IdentidadOferente; glosa: string; corta: string }[] = [
+  { campo: "razon_social", glosa: "razón social", corta: "razón social" },
+  { campo: "rut", glosa: "RUT", corta: "RUT" },
+  { campo: "direccion", glosa: "domicilio legal", corta: "domicilio" },
+  { campo: "representante_legal", glosa: "representante legal (nombre completo y RUN)", corta: "representante legal" },
+  { campo: "giro", glosa: "giro declarado ante el SII", corta: "giro SII" },
+];
+
+const IDENTIDAD_DESCONOCIDA: IdentidadOferente = {
+  razon_social: "KeepSync (razón social por confirmar)",
+  nombre_fantasia: null,
+  rut: "por confirmar",
+  direccion: null,
+  giro: null,
+  representante_legal: null,
+  es_emt: false,
+  estado_habilidad: null,
+  acreditado_hasta: null,
+  contacto_nombre: null,
+  contacto_email: "por confirmar",
+  contacto_telefono: null,
+  campos_por_confirmar: CAMPOS_IDENTIDAD_EXIGIDOS.map((c) => c.glosa),
+  campos_por_confirmar_corto: CAMPOS_IDENTIDAD_EXIGIDOS.map((c) => c.corta),
+  identidad_confirmada: false,
+};
+
+/** Trata "", null, y los placeholders del archivo de ejemplo como ausencia de dato. */
+function valorODefault(v: unknown): string | null {
+  if (typeof v !== "string") return null;
+  const t = v.trim();
+  if (!t || /COMPLETAR/.test(t)) return null;
+  return t;
+}
+
 export function cargarIdentidadOferente(): IdentidadOferente {
-  if (!existsSync(COMPANY_CONFIG_PATH)) {
-    return {
-      razon_social: "KeepSync (razón social por confirmar)",
-      rut: "por confirmar",
-      contacto_email: "por confirmar",
-      identidad_confirmada: false,
-    };
+  if (!existsSync(COMPANY_CONFIG_PATH)) return IDENTIDAD_DESCONOCIDA;
+
+  let c: Record<string, unknown>;
+  try {
+    c = JSON.parse(readFileSync(COMPANY_CONFIG_PATH, "utf-8")) as Record<string, unknown>;
+  } catch {
+    return IDENTIDAD_DESCONOCIDA;
   }
-  const raw = readFileSync(COMPANY_CONFIG_PATH, "utf-8");
-  if (/COMPLETAR/.test(raw)) {
-    return {
-      razon_social: "KeepSync (razón social por confirmar)",
-      rut: "por confirmar",
-      contacto_email: "por confirmar",
-      identidad_confirmada: false,
-    };
-  }
-  const c = JSON.parse(raw) as {
-    razon_social: string;
-    rut: string;
-    identidad_confirmada: boolean;
-    contacto: { email: string };
+
+  const contacto = (c.contacto ?? {}) as Record<string, unknown>;
+  const parcial: IdentidadOferente = {
+    razon_social: valorODefault(c.razon_social) ?? IDENTIDAD_DESCONOCIDA.razon_social,
+    nombre_fantasia: valorODefault(c.nombre_fantasia),
+    rut: valorODefault(c.rut) ?? IDENTIDAD_DESCONOCIDA.rut,
+    direccion: valorODefault(c.direccion),
+    giro: valorODefault(c.giro),
+    representante_legal: valorODefault(c.representante_legal),
+    es_emt: c.es_emt === true,
+    estado_habilidad: valorODefault(c.estado_habilidad),
+    acreditado_hasta: valorODefault(c.acreditado_hasta),
+    contacto_nombre: valorODefault(contacto.nombre),
+    contacto_email: valorODefault(contacto.email) ?? IDENTIDAD_DESCONOCIDA.contacto_email,
+    contacto_telefono: valorODefault(contacto.telefono),
+    campos_por_confirmar: [],
+    campos_por_confirmar_corto: [],
+    identidad_confirmada: false,
   };
-  return {
-    razon_social: c.razon_social,
-    rut: c.rut,
-    contacto_email: c.contacto.email,
-    identidad_confirmada: c.identidad_confirmada === true,
-  };
+
+  const faltantes = CAMPOS_IDENTIDAD_EXIGIDOS.filter(({ campo }) => {
+    const v = parcial[campo];
+    return v === null || v === IDENTIDAD_DESCONOCIDA.razon_social || v === IDENTIDAD_DESCONOCIDA.rut;
+  });
+  parcial.campos_por_confirmar = faltantes.map((c2) => c2.glosa);
+  parcial.campos_por_confirmar_corto = faltantes.map((c2) => c2.corta);
+
+  // Doble llave: el archivo tiene que afirmarlo Y no puede faltar ningún campo. Que una persona
+  // marque `identidad_confirmada: true` no alcanza si el representante legal sigue vacío, y tener
+  // todos los campos tampoco alcanza si nadie los revisó contra el Registro de Proveedores.
+  parcial.identidad_confirmada = c.identidad_confirmada === true && parcial.campos_por_confirmar.length === 0;
+  return parcial;
 }
 
 /**
@@ -364,10 +438,14 @@ export function derivarPendientes(
     );
   }
 
-  if (!oferente.identidad_confirmada) {
+  if (oferente.campos_por_confirmar.length > 0) {
+    // Nombra los campos que faltan en vez de la categoría entera: con la razón social y el RUT ya
+    // confirmados contra el Registro de Proveedores, decir "confirmar la identidad del oferente"
+    // manda a buscar de nuevo datos que ya están.
     p.push(
-      "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para " +
-        "completar la carátula y los anexos firmados.",
+      `Completar la identidad del oferente para la carátula y los anexos firmados: ` +
+        `${oferente.campos_por_confirmar.join(", ")}. Ya confirmados contra el Registro de Proveedores: ` +
+        `${oferente.razon_social}, RUT ${oferente.rut}.`,
     );
   }
 

@@ -1,27 +1,28 @@
 {
   "codigo": "1618-67-COT26",
   "curso": "Herramientas básicas de Power BI para el análisis de datos",
-  "organismo": "DIRECCION DE PRESUPUESTOS MINISTERIO DE",
+  "organismo": "Dirección de Presupuestos (Dipres) — Ministerio de Hacienda",
   "tope_clp": 1500000,
   "total_clp": 1350000,
   "descuento_pct": 10,
   "regimen_tributario": "exento",
   "formula": "90% del presupuesto disponible — regla del usuario, no derivada de costos reales",
   "criterio_evaluacion_organismo": "menor_precio",
-  "archivo_publicable": "Q-20260822-DireccionDePresupuestosMinisterioDe.pdf",
+  "archivo_publicable": "Q-20260822-DireccionDePresupuestosDipresMinisterioDeHacienda.pdf",
   "fuente_documentos": [
     "TDR Herramientas Básicas de PowerBI para análisis de datos.pdf",
     "ANEXO N1.docx",
     "ANEXO N2.docx"
   ],
   "requisitos_por_confirmar": 3,
+  "relator": null,
   "score_apertura_pct": 75,
   "score_criterios_sin_informacion": 5,
   "score_criterios_cubiertos": 0,
   "_score_nota": "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que falte revisar (config/capacitaciones.json → criterios_direccionadores).",
   "pendientes": [
     "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
-    "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.",
+    "Completar la identidad del oferente para la carátula y los anexos firmados: representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KEEPSYNC SPA, RUT 78.441.121-4.",
     "Confirmar que KeepSync puede facturar exento por giro educacional (artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios). El organismo presupuestó el servicio como exento.",
     "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Este organismo selecciona por MENOR PRECIO TOTAL, así que el margen sobre el tope define directamente si se gana."
   ],

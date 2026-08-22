@@ -2,7 +2,7 @@
   "1618-67-COT26": {
     "codigo": "1618-67-COT26",
     "curso": "Herramientas básicas de Power BI para el análisis de datos",
-    "organismo": "DIRECCION DE PRESUPUESTOS MINISTERIO DE",
+    "organismo": "Dirección de Presupuestos (Dipres) — Ministerio de Hacienda",
     "topeClp": 1500000,
     "totalClp": 1350000,
     "descuentoPct": 10,
@@ -10,7 +10,7 @@
     "citaTributaria": "«asciende a la suma de $1.500.000 (un millón quinientos mil pesos) exento de impuesto» — TDR, apartado IV. La nota al pie invoca el artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios (exención de IVA para instituciones que imparten enseñanza o capacitación).",
     "criterioEvaluacion": "menor_precio",
     "fechaCierre": "2026-08-25 11:00",
-    "archivoPdfRelativo": "capacitaciones-cotizaciones/1618-67-COT26/Q-20260822-DireccionDePresupuestosMinisterioDe.pdf",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/1618-67-COT26/Q-20260822-DireccionDePresupuestosDipresMinisterioDeHacienda.pdf",
     "fuenteDocumentos": [
       "TDR Herramientas Básicas de PowerBI para análisis de datos.pdf",
       "ANEXO N1.docx",
@@ -19,7 +19,7 @@
     "requisitosPorConfirmar": 3,
     "pendientes": [
       "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
-      "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KEEPSYNC SPA, RUT 78.441.121-4.",
       "Confirmar que KeepSync puede facturar exento por giro educacional (artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios). El organismo presupuestó el servicio como exento.",
       "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Este organismo selecciona por MENOR PRECIO TOTAL, así que el margen sobre el tope define directamente si se gana."
     ],
@@ -89,7 +89,7 @@
   "1618-68-COT26": {
     "codigo": "1618-68-COT26",
     "curso": "Herramientas intermedias de Power BI para el análisis de datos (Nivel II)",
-    "organismo": "DIRECCION DE PRESUPUESTOS MINISTERIO DE",
+    "organismo": "Dirección de Presupuestos (Dipres) — Ministerio de Hacienda",
     "topeClp": 1500000,
     "totalClp": 1350000,
     "descuentoPct": 10,
@@ -97,7 +97,7 @@
     "citaTributaria": "«asciende a la suma de $1.500.000 (un millón quinientos mil pesos) exento de impuesto» — TDR, apartado IV, con la misma nota al pie del artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios.",
     "criterioEvaluacion": "menor_precio",
     "fechaCierre": "2026-08-25 15:00",
-    "archivoPdfRelativo": "capacitaciones-cotizaciones/1618-68-COT26/Q-20260822-DireccionDePresupuestosMinisterioDe.pdf",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/1618-68-COT26/Q-20260822-DireccionDePresupuestosDipresMinisterioDeHacienda.pdf",
     "fuenteDocumentos": [
       "TDR PowerBI Nivel II .pdf",
       "ANEXO N1.docx",
@@ -106,7 +106,7 @@
     "requisitosPorConfirmar": 3,
     "pendientes": [
       "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
-      "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KEEPSYNC SPA, RUT 78.441.121-4.",
       "Confirmar que KeepSync puede facturar exento por giro educacional (artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios). El organismo presupuestó el servicio como exento.",
       "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Este organismo selecciona por MENOR PRECIO TOTAL, así que el margen sobre el tope define directamente si se gana."
     ],
@@ -176,7 +176,7 @@
   "1618-69-COT26": {
     "codigo": "1618-69-COT26",
     "curso": "IA Generativa para el Trabajo Diario en el Sector Público",
-    "organismo": "DIRECCION DE PRESUPUESTOS MINISTERIO DE",
+    "organismo": "Dirección de Presupuestos (Dipres) — Ministerio de Hacienda",
     "topeClp": 3000000,
     "totalClp": 2700000,
     "descuentoPct": 10,
@@ -184,7 +184,7 @@
     "citaTributaria": "«asciende a la suma de $3.000.000 (tres millones de pesos) exento de impuesto» — TDR, apartado IV, con la nota al pie del artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios.",
     "criterioEvaluacion": "menor_precio",
     "fechaCierre": "2026-08-25 16:30",
-    "archivoPdfRelativo": "capacitaciones-cotizaciones/1618-69-COT26/Q-20260822-DireccionDePresupuestosMinisterioDe.pdf",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/1618-69-COT26/Q-20260822-DireccionDePresupuestosDipresMinisterioDeHacienda.pdf",
     "fuenteDocumentos": [
       "TDR IA para el trabajo diario.pdf",
       "ANEXO N1.docx",
@@ -201,7 +201,7 @@
     },
     "pendientes": [
       "Completar la carpeta de antecedentes de Cristian Molina Espinoza: Certificados de ejecución, órdenes de compra, contratos o diplomas de al menos 5 de las actividades de capacitación dictadas en los últimos 3 años (TDR 2.2.c los exige adjuntos: el currículum las enumera pero no las acredita); Duración en horas cronológicas de cada actividad acreditada — el propio currículum la deja por completar («[__] h c/u») y el TDR exige un mínimo de 8 horas por actividad. El organismo exige el respaldo documental de cada actividad, no su enumeración en el currículum.",
-      "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KEEPSYNC SPA, RUT 78.441.121-4.",
       "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
       "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Este organismo selecciona por MENOR PRECIO TOTAL, así que el margen sobre el tope define directamente si se gana."
     ],
@@ -284,7 +284,7 @@
     "requisitosPorConfirmar": 4,
     "pendientes": [
       "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
-      "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KEEPSYNC SPA, RUT 78.441.121-4.",
       "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
       "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
       "Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal.",
@@ -400,7 +400,7 @@
     "requisitosPorConfirmar": 3,
     "pendientes": [
       "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
-      "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KEEPSYNC SPA, RUT 78.441.121-4.",
       "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
       "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo."
     ],
@@ -507,7 +507,7 @@
     "requisitosPorConfirmar": 4,
     "pendientes": [
       "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
-      "Confirmar la identidad del oferente (razón social, RUT, representante legal y contacto) para completar la carátula y los anexos firmados.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KEEPSYNC SPA, RUT 78.441.121-4.",
       "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
       "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
       "Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal."
