@@ -10,6 +10,7 @@
     "indexar": "tsx .claude/skills/compra-agil-indice/scripts/indexar.ts",
     "radar": "tsx .claude/skills/compra-agil-radar-claude/scripts/radar.ts",
     "keywords": "tsx src/scripts/keywords.ts",
+    "leads": "tsx src/scripts/leads.ts",
     "mercado": "tsx src/scripts/mercado.ts",
     "estudio": "tsx src/scripts/estudio-mercado.ts",
     "criterios": "tsx src/scripts/proponer-criterios.ts",

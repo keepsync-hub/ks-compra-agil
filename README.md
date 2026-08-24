@@ -46,6 +46,7 @@ cotizar, pero cada PDF/PPTX generado queda marcado BORRADOR hasta que se confirm
 |---|---|
 | `npm run keywords [-- agregar <categoria> "<frase>" \| quitar "<frase>"]` | Muestra o edita las palabras que busca el radar de Compra Ágil. Las frases van a `config/categorias-extra.json` y la corrida siguiente las usa como variante `q` y como verificación local, sin tocar las regex de `categorias.json`. Equivalente por consola del formulario de `docs/index.html`. Cada frase en una categoría activa suma al menos un request por corrida. Rechaza frases con la palabra suelta "de" (la API responde 500 a cualquier `q` que la incluya). Una frase agregada amplía el descubrimiento y la mención, pero **no** exime del `patron_requerido` ni del `patron_excluyente` de su categoría. |
 | `npm run radar [-- --solo=<ids> \| --sondeo \| --q="<frase>"]` | Busca las Compras Ágiles abiertas de las **cinco categorías activas** (licencias Claude/Anthropic; asesoría y adopción de IA; cursos de IA; cursos de Power BI/Tableau; cursos de automatización n8n/Make/Zapier/Power Automate), extrae condiciones, detecta recompradores, baja los adjuntos y **publica `docs/index.html`** (oportunidades + palabras clave). Consulta la **unión** de las variantes de todas las categorías —no una vuelta por categoría— y pide **un solo detalle por código**, con el que clasifica la compra contra todas. Si la cuota se agota, sigue con la ficha reducida del listado, y lo que no alcanzó a barrer lo **arrastra del índice** marcado *sin re-verificar hoy* en vez de dejar la página congelada. `--solo` limita las categorías (las demás se arrastran igual); `--sondeo` es un dry-run de 1 request por consulta que imprime volumen y precisión sin pedir detalles ni escribir en `docs/`, y deja `output/sondeo-variantes.md`. Solo lectura. |
+| `npm run leads [-- --estados=<lista> --categorias=<ids> --max-paginas=N --presupuesto=N --max-compras=N --solo-indice --rerevisar --con-detalle]` | Barrido **histórico** de las mismas categorías del radar pero en los **cinco estados** (`publicada`, `proveedor_seleccionado`, `cerrada`, `desierta`, `cancelada`), para extraer los contactos —nombre, correo, cargo, institución— de quienes publicaron esas compras, y publicar `docs/leads.html`. **No toca `docs/index.html`.** El dato de contacto no está en la API (`/v2/compra-agil` no expone ninguno): sale del texto de los ADJUNTOS, que se bajan por el servicio público y **no gastan cuota** — la cuota la gastan solo los listados. Acumula en `historico/leads.jsonl` y `historico/leads-revisiones.jsonl` (versionados), así que cada corrida continúa la anterior sin volver a bajar lo ya leído; `--rerevisar` fuerza lo contrario. `--solo-indice` corre con **0 requests** sobre lo ya conocido. `--con-detalle` paga un request por compra para las que el `q` trajo pero ni el nombre ni los adjuntos confirman. Deja además `output/leads.md` y `output/leads.csv`. |
 | `npm run informe` | Regenera `output/informe-nicho-claude.md` con el barrido histórico completo (tasa de fracaso, motivos, recompradores). |
 | `npm run digest` | **Cero requests.** Prioriza las oportunidades del índice ya en caché (`data/<codigo>/detalle.json`, dejado por el radar): clasifica cada una en *Ofertar hoy* / *Revisar* / *Descartado*, calcula ventanas de republicación de los próximos 3 días, métricas de mercado por categoría (monto p25/mediana/p75, competencia, recompradores, motivos de fracaso) y **perfil por organismo comprador** (procesos, tasa de fracaso, monto mediano, último fracaso clasificado) para los que ya aparecen 2+ veces en el índice — el equivalente, con datos propios, a los "perfiles de comprador" que venden plataformas como Licify. Escribe `output/digest-ultimo.md` y anexa cada calificación a `historico/calificaciones.jsonl`. El score es un **orden de revisión sugerido**, nunca una probabilidad de ganar (cero ofertas enviadas todavía) — ver `src/lib/calificador.ts` y PLAN-VOLUMEN.md, Fase 4. |
 | `npm run cotizar -- <codigo>` | Genera la cotización (`.pptx` fuente + `.pdf` publicable) para una compra específica, validando el tope. No envía nada. |
@@ -204,6 +205,48 @@ Para que funcione hacen falta tres cosas que no puede hacer el agente: los secre
 cabecera `X-KS-Clave` apuntada al webhook de ingesta, y habilitar esta rama en
 Settings → Environments → github-pages (si no, `docs/panel/*.css|js` no se sirve y el panel se ve sin
 estilo).
+
+## Listado de leads: quién compra esto (`npm run leads` → `docs/leads.html`)
+
+El radar responde "¿conviene participar en esta compra?". Este barrido responde otra pregunta, y por
+eso es un script y una página aparte: **"¿a quién le escribo?"**. Mira las mismas cinco categorías,
+pero en los **cinco estados** —incluidas `cerrada`, `proveedor_seleccionado`, `desierta` y
+`cancelada`—, porque para vender un organismo que ya compró vale más que uno que todavía no.
+
+Tres cosas hay que saber antes de tocar este código:
+
+1. **La API no expone ningún dato de contacto.** Se verificó pidiendo el detalle completo de una
+   compra cerrada (`607-180-COT26`): el payload trae organismo, RUT y unidad de compra, y nada más
+   —ni comprador, ni requirente, ni correo—. El nombre y el correo viven en los **adjuntos** (EE.TT.,
+   "solicitud de cotización", formulario de requerimiento), en frases del tipo *"el proveedor deberá
+   tomar contacto con el encargado … al correo electrónico X"* o en el bloque de firma.
+2. **Los adjuntos no gastan cuota.** Se bajan por `adjunto.mercadopublico.cl` (el mismo servicio
+   público que ya usa el radar), así que el barrido puede leer cientos de documentos pagando cuota
+   solo por los listados. El tope de compras por corrida (`--max-compras`) se mide en **tiempo**, no
+   en cuota.
+3. **El rendimiento del método es bajo por diseño del instrumento, y la página lo publica.** Muchas
+   Compras Ágiles no traen ningún adjunto, y varias de las que traen son PDF escaneados sin capa de
+   texto. La tabla "Qué mide y qué no alcanza a ver esta corrida" dice cuántas compras se revisaron,
+   cuántas dejaron contacto y cuántas se perdieron por cada motivo, en vez de publicar solo los
+   aciertos.
+
+**Nada se afirma sin cita.** Cada contacto guarda el archivo del que salió y la ventana de texto que
+lo rodea, y la tarjeta las muestra: los nombres se leen de PDF maquetados por el propio organismo, y
+un PDF con tablas puede pegar dos campos distintos. Cuando el nombre no está en el documento y solo
+se pudo **deducir del correo** (`juan.perez@…`), se publica marcado como deducción con confianza
+baja. Cuando no hay nombre de ninguna forma, el lead se publica igual sin inventarlo: un
+`adquisiciones@` es un contacto perfectamente útil, y va rotulado como buzón de área.
+
+El índice se acumula en `historico/leads.jsonl` (los contactos) y `historico/leads-revisiones.jsonl`
+(qué compras ya se miraron, con contacto o sin él). Los dos van a `historico/` y no a `data/` por la
+misma razón que `observaciones.jsonl`: `data/` es efímero y gitignored, y sin persistencia versionada
+cada corrida volvería a bajar los mismos cientos de adjuntos. La página se regenera **entera** desde
+ese índice, así que se puede correr `--solo-indice` (0 requests) para republicarla sin tocar la API.
+
+Sobre los datos: son puntos de contacto **funcionales, publicados por el propio Estado** dentro de un
+procedimiento de compra —el correo está ahí justamente para que un proveedor escriba—. Aun así la
+página se publica con `noindex`, y dice de frente que un primer contacto en frío debería mencionar la
+compra concreta de la que salió el dato y ofrecer una salida clara.
 
 ## Estado y pendientes
 
