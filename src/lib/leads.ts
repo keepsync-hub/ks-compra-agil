@@ -48,6 +48,11 @@ export interface ContactoExtraido {
   tipo_dominio: "institucional" | "correo genérico";
   /** `true` cuando el buzón es funcional (adquisiciones@, compras@) y no una persona. */
   buzon_funcional: boolean;
+  /**
+   * `true` cuando es un buzón de cuentas por pagar (facturas@, un DTE de custodium/febos, un RUT
+   * como buzón). No es un lead de venta: la página los separa y no los cuenta.
+   */
+  es_facturacion: boolean;
   /** Archivo de donde salió, o "(descripción de la compra)". */
   fuente: string;
   /** Ventana de texto alrededor del correo, para verificación humana. */
@@ -123,8 +128,59 @@ const DOMINIOS_GENERICOS = new Set([
  * contactos que hay —quien compra licencias y capacitación en el Estado suele hacerlo desde
  * `adquisiciones@`—, pero se marcan para que nadie los salude por su nombre.
  */
+//
+// Se ancla solo al FINAL, no al principio: los organismos usan compuestos con prefijo
+// (`unidad_adquisiciones@`, `oficina_partes@`, `depto_compras@`) y anclarlo por los dos lados los
+// dejaba clasificados como si fueran personas.
 const LOCALES_FUNCIONALES =
-  /^(contacto|contactos|info|informacion|informaciones|soporte|ayuda|mesadeayuda|adquisicion|adquisiciones|compras|comprasypublicas|abastecimiento|oficinadepartes|partes|secretaria|recepcion|licitaciones|cotizaciones|proveedores|finanzas|administracion)$/;
+  /(contactos?|info|informacion(es)?|soporte|ayuda|mesadeayuda|adquisicion(es)?|compras|abastecimiento|oficinadepartes|partes|secretaria|recepcion|licitaciones|cotizaciones|finanzas|administracion|capacitacion(es)?)$/;
+
+/**
+ * Buzones de facturación electrónica, que en la primera corrida **coparon el top del listado**: la
+ * mayoría de estos documentos lleva pegada la cláusula administrativa de "enviar la factura a X", y
+ * ese X se repite en todas las compras del mismo organismo. Son contactos reales, pero de cuentas
+ * por pagar: escribirles para vender no llega a ninguna parte.
+ *
+ * Se detectan por tres señales, y basta una: el buzón (`facturas@`, `dterecepcion@`), el proveedor
+ * de facturación electrónica en el dominio (`custodium.com`, `febos.cl`), o un RUT como nombre de
+ * buzón (`60706000-2@febos.cl`), que es cómo direccionan los DTE varios de esos servicios.
+ *
+ * No se descartan —el índice guarda lo que se leyó—, se **clasifican**: la página los separa y no
+ * los cuenta como leads de venta.
+ */
+const LOCALES_FACTURACION =
+  /(facturas?|facturacion|dtes?|recepcion(dte)?|tesoreria|pagos?|cobranzas?|ordenes(compra)?|contabilidad|proveedor(es)?)$|^\d{7,8}-[0-9k]$/;
+
+const DOMINIOS_FACTURACION = new Set([
+  "custodium.com",
+  "febos.cl",
+  "febos.io",
+  "acepta.com",
+  "nubox.com",
+  "dtemax.cl",
+  "facturacion.cl",
+  "sii.cl",
+  "haulmer.com",
+  "bsale.cl",
+]);
+
+/**
+ * Palabras funcionales del castellano. Un "nombre" que contenga cualquiera de estas no es un
+ * nombre: son el resto de la frase que el extractor arrastró. Salieron de casos reales de la
+ * primera corrida — "Normativa Que Regula El" y "El Funcionario" se publicaron como personas.
+ */
+const PALABRAS_FUNCIONALES = new Set(
+  [
+    "el", "ella", "ellos", "ellas", "un", "una", "unos", "unas", "este", "esta", "estos", "estas",
+    "ese", "esa", "aquel", "que", "quien", "quienes", "cual", "cuales", "cuyo", "cuya", "como",
+    "cuando", "donde", "porque", "para", "por", "segun", "sobre", "entre", "hasta", "desde", "sin",
+    "con", "sera", "seran", "debe", "deben", "debera", "deberan", "puede", "pueden", "tiene",
+    "tienen", "es", "son", "al", "se", "su", "sus", "lo", "le", "les", "mi", "tu", "no", "si",
+    "funcionario", "funcionaria", "funcionarios", "normativa", "regula", "senor", "senora", "srta",
+    "estimado", "estimada", "presente", "referencia", "asunto", "materia", "detalle", "mediante",
+    "respecto", "conforme", "vigente", "vigentes", "misma", "mismo", "dicha", "dicho",
+  ].map(sinTildes),
+);
 
 /**
  * Palabras que aparecen en mayúscula junto a un correo y NO son el nombre de una persona. Sin esta
@@ -150,12 +206,19 @@ const NO_ES_NOMBRE = new Set(
     "proyecto", "proyectos", "programa", "programas", "atencion", "consultas", "consulta", "dudas",
     "enviar", "enviarse", "dirigir", "dirigirse", "favor", "mail", "email", "srta", "estimados",
     "estimadas", "saluda", "atentamente", "cordialmente", "adjunto", "adjuntos", "pagina", "www",
+    // Palabras de rol: encabezan la frase que el extractor arrastra ("Responsable de la Sol…"),
+    // y ninguna es un nombre de pila.
+    "responsable", "solicitud", "solicitante", "encargado", "encargada", "jefe", "jefa", "jefatura",
+    "director", "directora", "subdirector", "subdirectora", "coordinador", "coordinadora",
+    "profesional", "analista", "asesor", "asesora", "asesoria", "supervisor", "supervisora",
+    "inspector", "inspectora", "administrador", "administradora", "gerente", "alcalde", "alcaldesa",
+    "firma", "timbre", "visacion", "aprobacion",
   ].map(sinTildes),
 );
 
 /** Cargos que valen la pena publicar: dicen si el contacto decide, requiere o solo tramita. */
 const RE_CARGO =
-  /\b((?:jefe|jefa|jefatura|encargad[oa]|director[a]?|subdirector[a]?|coordinador[a]?|administrador[a]?|analista|profesional|asesor[a]?|supervisor[a]?|inspector[a]?\s+t[eé]cnic[oa]|secretari[oa]|gerente|subgerente|alcalde|alcaldesa)\b[^.,;:\n()]{0,55})/i;
+  /\b((?:jefe|jefa|jefatura|encargad[oa]|director[a]?|subdirector[a]?|coordinador[a]?|administrador[a]?|analista|profesional|supervisor[a]?|inspector[a]?\s+t[eé]cnic[oa]|secretari[oa]|gerente|subgerente|alcalde|alcaldesa)\b[^.,;:\n()]{0,55})/i;
 
 /**
  * Exige etiqueta ("fono:", "celular") o el prefijo país. Sin eso, cualquier monto de ocho dígitos
@@ -212,6 +275,7 @@ function pareceNombreDePersona(candidato: string): boolean {
     if (w.length < 2 || w.length > 20) return false;
     if (/\d/.test(w)) return false;
     if (NO_ES_NOMBRE.has(sinTildes(w))) return false;
+    if (PALABRAS_FUNCIONALES.has(sinTildes(w))) return false;
     // Debe empezar en mayúscula: en estos documentos los nombres siempre van capitalizados o en
     // versales, y exigirlo descarta de una los fragmentos de prosa ("tomar contacto con el").
     return /^[A-ZÁÉÍÓÚÑ]/.test(w);
@@ -228,7 +292,14 @@ function nombreAlComienzo(fragmento: string): string | null {
   const tomadas: string[] = [];
   for (const w of palabras) {
     const conector = new Set(["de", "del", "la", "las", "los", "y"]).has(sinTildes(w));
-    const valida = conector || (/^[A-ZÁÉÍÓÚÑ]/.test(w) && w.length >= 2 && w.length <= 20 && !/\d/.test(w) && !NO_ES_NOMBRE.has(sinTildes(w)));
+    const valida =
+      conector ||
+      (/^[A-ZÁÉÍÓÚÑ]/.test(w) &&
+        w.length >= 2 &&
+        w.length <= 20 &&
+        !/\d/.test(w) &&
+        !NO_ES_NOMBRE.has(sinTildes(w)) &&
+        !PALABRAS_FUNCIONALES.has(sinTildes(w)));
     if (!valida) break;
     tomadas.push(w);
     if (tomadas.filter((x) => !new Set(["de", "del", "la", "las", "los", "y"]).has(sinTildes(x))).length === 4) break;
@@ -300,7 +371,14 @@ function limpiarCargo(bruto: string | null): string | null {
   if (!bruto) return null;
   const cortado = normalizarEspacios(bruto)
     .replace(/\s+(?:al?|a\s+la|por|mediante|v[ií]a|escribiendo|enviando)\s+(?:el\s+|los\s+)?(?:correos?|e-?mails?|mails?|tel[eé]fonos?|fonos?)\b.*$/i, "")
-    .replace(/\s+(?:cuyo|quien|quienes|para|con|y)\s*$/i, "")
+    // Corta también la cola que empieza en otra etiqueta del formulario ("… - Teléfono",
+    // "… DIRNAC Srta / Sr"): son celdas contiguas, no parte del cargo.
+    .replace(/\s+[-–|/]\s+.*$/, "")
+    .replace(
+      /\s+(?:tel[eé]fonos?|fonos?|anexos?|correos?|e-?mails?|srta?\.?|sra?\.?|fecha|rut|firma|timbre|unidad|direcci[oó]n|cargo|nombre)\b.*$/i,
+      "",
+    )
+    .replace(/\s+(?:cuyo|quien|quienes|para|con|y|de|del|la|el|en)\s*$/i, "")
     .replace(/[\s,;:.-]+$/, "");
   // Un "cargo" de una sola palabra genérica ("encargado") no dice nada que la tarjeta no diga ya.
   return cortado.split(" ").length >= 2 && cortado.length >= 6 ? cortado : null;
@@ -342,6 +420,10 @@ export function extraerContactos(texto: string, fuente: string): ContactoExtraid
     const telM = (antes.slice(-160) + " " + despues).match(RE_TELEFONO);
     const telefono = telM ? (telM[1] ?? telM[2] ?? null) : null;
 
+    // El RUT-como-buzón (`60706000-2@febos.cl`) tiene que conservar su guion para reconocerse, así
+    // que se normaliza sin tildes y en minúsculas pero SIN quitar separadores.
+    const localNormalizado = sinTildes(local);
+    const localPlano = localNormalizado.replace(/[._-]/g, ""); // "oficina.de.partes" → "oficinadepartes"
     const contacto: ContactoExtraido = {
       email,
       nombre: hallado?.nombre ?? null,
@@ -351,7 +433,11 @@ export function extraerContactos(texto: string, fuente: string): ContactoExtraid
       telefono: telefono ? normalizarEspacios(telefono) : null,
       dominio,
       tipo_dominio: DOMINIOS_GENERICOS.has(dominio) ? "correo genérico" : "institucional",
-      buzon_funcional: LOCALES_FUNCIONALES.test(sinTildes(local).replace(/[._-]/g, "")),
+      buzon_funcional: LOCALES_FUNCIONALES.test(localPlano),
+      es_facturacion:
+        LOCALES_FACTURACION.test(localNormalizado) ||
+        LOCALES_FACTURACION.test(localPlano) ||
+        DOMINIOS_FACTURACION.has(dominio),
       fuente,
       cita: normalizarEspacios(`…${antes.slice(-150)}${crudo}${despues.slice(0, 90)}…`),
     };
@@ -476,6 +562,7 @@ export interface LeadConsolidado {
   dominio: string;
   tipo_dominio: "institucional" | "correo genérico";
   buzon_funcional: boolean;
+  es_facturacion: boolean;
   organismo: string;
   unidad_compra: string;
   nombre_region: string;
@@ -523,6 +610,7 @@ export function consolidar(leads: Lead[]): LeadConsolidado[] {
         dominio: l.dominio,
         tipo_dominio: l.tipo_dominio,
         buzon_funcional: l.buzon_funcional,
+        es_facturacion: l.es_facturacion,
         organismo: l.organismo,
         unidad_compra: l.unidad_compra,
         nombre_region: l.nombre_region,
@@ -586,6 +674,7 @@ export function aCsv(consolidados: LeadConsolidado[]): string {
       "region",
       "tipo_dominio",
       "buzon_funcional",
+      "es_facturacion",
       "compras",
       "codigos",
       "categorias",
@@ -605,6 +694,7 @@ export function aCsv(consolidados: LeadConsolidado[]): string {
         esc(c.nombre_region),
         esc(c.tipo_dominio),
         esc(c.buzon_funcional ? "sí" : "no"),
+        esc(c.es_facturacion ? "sí" : "no"),
         esc(c.compras.length),
         esc(c.compras.map((x) => x.codigo).join(" ")),
         esc(c.categorias.join(" ")),

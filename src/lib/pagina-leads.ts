@@ -15,7 +15,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR } from "./config.js";
-import { aCsv, type LeadConsolidado } from "./leads.js";
+import { aCsv, leerRevisiones, type LeadConsolidado } from "./leads.js";
 
 const PAGINA_PATH = path.join(ROOT_DIR, "docs", "leads.html");
 const INFORME_PATH = path.join(ROOT_DIR, "output", "leads.md");
@@ -42,6 +42,34 @@ export interface ResumenCorridaLeads {
   solo_indice: boolean;
   variantes_fallidas: { variante: string; estado: string; error: string }[];
   requests_api: number;
+}
+
+/**
+ * Acumulado de TODAS las corridas, no de la última. Es el denominador que importa: una corrida de
+ * re-extracción sobre lo ya bajado revisa 107 compras, y publicar solo ese número haría creer que
+ * el barrido histórico nunca miró las otras 150. Sale de `historico/leads-revisiones.jsonl`, que
+ * guarda una línea por compra revisada aunque no haya dejado ningún contacto.
+ */
+interface AcumuladoRevisiones {
+  compras: number;
+  con_contacto: number;
+  sin_adjuntos: number;
+  con_adjunto_ilegible: number;
+}
+
+function acumuladoRevisiones(): AcumuladoRevisiones {
+  const ultima = new Map<string, ReturnType<typeof leerRevisiones>[number]>();
+  for (const r of leerRevisiones()) {
+    const previa = ultima.get(r.codigo);
+    if (!previa || r.revisado_en >= previa.revisado_en) ultima.set(r.codigo, r);
+  }
+  const todas = [...ultima.values()];
+  return {
+    compras: todas.length,
+    con_contacto: todas.filter((r) => r.contactos_encontrados > 0).length,
+    sin_adjuntos: todas.filter((r) => r.adjuntos_listados === 0).length,
+    con_adjunto_ilegible: todas.filter((r) => r.adjuntos_sin_texto.length > 0).length,
+  };
 }
 
 function esc(s: string | number | null | undefined): string {
@@ -71,11 +99,14 @@ function urlPortal(codigo: string): string {
 }
 
 function tarjeta(l: LeadConsolidado): string {
-  const nombre = l.nombre ?? (l.buzon_funcional ? "Buzón institucional" : "Sin nombre en los documentos");
+  const nombre =
+    l.nombre ??
+    (l.es_facturacion ? "Buzón de facturación" : l.buzon_funcional ? "Buzón institucional" : "Sin nombre en los documentos");
   const claseNombre = l.nombre ? "" : " sin-nombre";
   const insignias: string[] = [];
   if (l.compras.length > 1) insignias.push(`<span class="chip repetidor">${l.compras.length} compras</span>`);
-  if (l.buzon_funcional) insignias.push(`<span class="chip">buzón de área</span>`);
+  if (l.es_facturacion) insignias.push(`<span class="chip aviso">cuentas por pagar</span>`);
+  else if (l.buzon_funcional) insignias.push(`<span class="chip">buzón de área</span>`);
   if (l.tipo_dominio === "correo genérico") insignias.push(`<span class="chip aviso">correo no institucional</span>`);
   if (l.confianza_nombre === "baja") insignias.push(`<span class="chip aviso">nombre deducido</span>`);
 
@@ -105,7 +136,7 @@ function tarjeta(l: LeadConsolidado): string {
     .join("");
 
   return `
-      <article class="lead" data-filtro="${filtro}" data-categorias="${esc(l.categorias.join(" "))}" data-estados="${esc(estados.join(" "))}" data-tipo="${esc(l.tipo_dominio)}" data-persona="${l.nombre && !l.buzon_funcional ? "si" : "no"}">
+      <article class="lead" data-filtro="${filtro}" data-categorias="${esc(l.categorias.join(" "))}" data-estados="${esc(estados.join(" "))}" data-tipo="${esc(l.tipo_dominio)}" data-facturacion="${l.es_facturacion ? "si" : "no"}" data-persona="${l.nombre && !l.buzon_funcional && !l.es_facturacion ? "si" : "no"}">
         <header>
           <h3 class="${claseNombre.trim()}">${esc(nombre)}</h3>
           <div class="chips">${insignias.join("")}</div>
@@ -125,20 +156,24 @@ function tarjeta(l: LeadConsolidado): string {
 }
 
 function bloqueResumen(leads: LeadConsolidado[], r: ResumenCorridaLeads): string {
-  const conNombre = leads.filter((l) => l.nombre && !l.buzon_funcional).length;
-  const instituciones = new Set(leads.map((l) => l.organismo)).size;
-  const repetidores = leads.filter((l) => l.compras.length > 1).length;
-  const compras = new Set(leads.flatMap((l) => l.compras.map((c) => c.codigo))).size;
+  // Los buzones de cuentas por pagar NO se cuentan como leads: son contactos reales, pero de un
+  // área que no decide nada de esta compra. Se publican aparte, detrás de su propio filtro.
+  const venta = leads.filter((l) => !l.es_facturacion);
+  const conNombre = venta.filter((l) => l.nombre && !l.buzon_funcional).length;
+  const instituciones = new Set(venta.map((l) => l.organismo)).size;
+  const repetidores = venta.filter((l) => l.compras.length > 1).length;
+  const compras = new Set(venta.flatMap((l) => l.compras.map((c) => c.codigo))).size;
   const stat = (n: number | string, label: string) =>
     `<div class="stat"><div class="num">${n}</div><div class="label">${label}</div></div>`;
   return `
     <div class="stat-grid">
-      ${stat(leads.length, "contactos únicos")}
+      ${stat(venta.length, "contactos útiles para vender")}
       ${stat(conNombre, "con nombre de persona")}
       ${stat(instituciones, "instituciones distintas")}
       ${stat(repetidores, "contactos que compraron más de una vez")}
       ${stat(compras, "Compras Ágiles que los evidencian")}
-      ${stat(r.requests_api, "requests a la API en la última corrida")}
+      ${stat(acumuladoRevisiones().compras, "Compras Ágiles revisadas en total")}
+      ${stat(leads.length - venta.length, "buzones de cuentas por pagar (aparte)")}
     </div>`;
 }
 
@@ -146,6 +181,7 @@ export function renderPaginaLeads(leads: LeadConsolidado[], r: ResumenCorridaLea
   const categorias = [...new Set(leads.flatMap((l) => l.categorias))].sort();
   const estados = [...new Set(leads.flatMap((l) => l.compras.map((c) => c.estado)))].sort();
   const csv = aCsv(leads);
+  const acu = acumuladoRevisiones();
 
   const opcionesCategoria = categorias.map((c) => `<option value="${esc(c)}">${esc(c)}</option>`).join("");
   const opcionesEstado = estados
@@ -274,6 +310,7 @@ export function renderPaginaLeads(leads: LeadConsolidado[], r: ResumenCorridaLea
       <select id="f-estado"><option value="">Todos los estados</option>${opcionesEstado}</select>
       <label><input type="checkbox" id="f-persona"> solo con nombre de persona</label>
       <label><input type="checkbox" id="f-repetidor"> solo repetidores</label>
+      <label><input type="checkbox" id="f-facturacion"> incluir buzones de facturación</label>
       <button class="btn secondary" id="copiar">Copiar correos visibles</button>
       <button class="btn" id="csv">Descargar CSV</button>
     </div>
@@ -310,18 +347,22 @@ ${leads.map(tarjeta).join("\n")}
       <tr><th>Categorías</th><td>${esc(r.categorias.map((c) => `${c.nombre} (${c.id})`).join(" · "))}</td></tr>
       <tr><th>Consultas a la API</th><td>${r.consultas_hechas} · ${r.compras_vistas} resultado(s) revisado(s)</td></tr>
       <tr><th>Compras confirmadas por el filtro</th><td>${r.compras_confirmadas}${r.compras_por_verificar ? ` (+${r.compras_por_verificar} verificadas con el texto de sus adjuntos)` : ""}</td></tr>
-      <tr><th>Compras cuyos adjuntos se leyeron</th><td>${r.compras_revisadas} en esta corrida · ${r.compras_ya_revisadas} ya revisadas antes</td></tr>
-      <tr><th>Adjuntos con texto</th><td>${r.adjuntos_leidos} leído(s) · ${r.adjuntos_sin_texto} sin capa de texto o ilegibles</td></tr>
-      <tr><th>Compras sin ningún adjunto</th><td>${r.compras_sin_adjuntos} — de esas no se puede sacar contacto</td></tr>
-      <tr><th>Rendimiento del método</th><td>${r.compras_con_contacto} de ${r.compras_revisadas} compra(s) revisada(s) dejaron algún contacto${r.compras_revisadas ? ` (${Math.round((r.compras_con_contacto / r.compras_revisadas) * 100)}%)` : ""}</td></tr>
+      <tr><th>Compras cuyos adjuntos se leyeron</th><td><strong>${acu.compras}</strong> en total (acumulado de todas las corridas) · ${r.compras_revisadas} en esta corrida</td></tr>
+      <tr><th>Adjuntos con texto</th><td>${r.adjuntos_leidos} leído(s) en esta corrida · ${acu.con_adjunto_ilegible} compra(s) traen algún adjunto sin capa de texto (PDF escaneado)</td></tr>
+      <tr><th>Compras sin ningún adjunto</th><td>${acu.sin_adjuntos} de ${acu.compras} — de esas no se puede sacar contacto</td></tr>
+      <tr><th>Rendimiento del método</th><td><strong>${acu.con_contacto} de ${acu.compras}</strong> compra(s) revisada(s) dejaron algún contacto${acu.compras ? ` (${Math.round((acu.con_contacto / acu.compras) * 100)}%)` : ""}</td></tr>
       ${r.compras_postergadas ? `<tr><th>Postergadas para la próxima corrida</th><td>${r.compras_postergadas} — quedaron fuera por el tope de compras por corrida</td></tr>` : ""}
     </table>
     <p class="section-sub" style="margin-top:1rem">
-      Los tres huecos conocidos, dichos de frente: (1) una compra <strong>sin adjuntos</strong> no deja
+      Los huecos conocidos, dichos de frente: (1) una compra <strong>sin adjuntos</strong> no deja
       ningún contacto, y son muchas; (2) un PDF <strong>escaneado</strong> no tiene capa de texto y
       haría falta OCR; (3) el filtro por categoría se evalúa sobre el <em>nombre</em> de la compra y el
       texto de sus adjuntos, así que una compra que solo nombra el producto en su descripción se
-      escapa salvo que se corra con <code>--con-detalle</code>.
+      escapa salvo que se corra con <code>--con-detalle</code>; y (4) el extractor de PDF entrega el
+      texto partido en fragmentos, y en unos pocos casos un correo pierde su primera letra
+      (<code>elipe.gutierrez@…</code> por <code>felipe.gutierrez@…</code>). No se corrige
+      automáticamente —reconstruir una dirección de correo es inventarla—, pero se ve en la cita:
+      por eso la cita está publicada al lado de cada contacto.
     </p>
     ${r.cuota_agotada ? `<p class="note">La cuota de la API se agotó a mitad del barrido: el listado está incompleto y la próxima corrida lo continúa desde donde quedó (las compras ya revisadas no se vuelven a bajar).</p>` : ""}
     ${r.solo_indice ? `<p class="note">Corrida con <code>--solo-indice</code>: no se consultó la API, solo se revisaron compras ya conocidas.</p>` : ""}
@@ -355,6 +396,7 @@ ${leads.map(tarjeta).join("\n")}
   var fEst = document.getElementById("f-estado");
   var fPer = document.getElementById("f-persona");
   var fRep = document.getElementById("f-repetidor");
+  var fFac = document.getElementById("f-facturacion");
   var conteo = document.getElementById("conteo");
 
   function visibles() {
@@ -371,12 +413,14 @@ ${leads.map(tarjeta).join("\n")}
       if (ok && est && (" " + t.getAttribute("data-estados") + " ").indexOf(" " + est + " ") === -1) ok = false;
       if (ok && fPer.checked && t.getAttribute("data-persona") !== "si") ok = false;
       if (ok && fRep.checked && t.querySelectorAll("ul.compras li").length < 2) ok = false;
+      // Los buzones de cuentas por pagar quedan fuera por defecto: coparían el listado.
+      if (ok && !fFac.checked && t.getAttribute("data-facturacion") === "si") ok = false;
       t.style.display = ok ? "" : "none";
     });
     conteo.textContent = visibles().length + " de " + tarjetas.length + " contacto(s)";
   }
 
-  [q, fCat, fEst, fPer, fRep].forEach(function (el) {
+  [q, fCat, fEst, fPer, fRep, fFac].forEach(function (el) {
     el.addEventListener("input", filtrar);
     el.addEventListener("change", filtrar);
   });
@@ -420,18 +464,21 @@ export function escribirPaginaLeads(leads: LeadConsolidado[], r: ResumenCorridaL
 
 /** Mismo contenido en Markdown, para leerlo desde el repo sin abrir el navegador. */
 export function escribirInformeLeads(leads: LeadConsolidado[], r: ResumenCorridaLeads): string {
-  const conNombre = leads.filter((l) => l.nombre && !l.buzon_funcional).length;
-  const instituciones = new Set(leads.map((l) => l.organismo)).size;
+  const venta = leads.filter((l) => !l.es_facturacion);
+  const conNombre = venta.filter((l) => l.nombre && !l.buzon_funcional).length;
+  const instituciones = new Set(venta.map((l) => l.organismo)).size;
+  const acu = acumuladoRevisiones();
   const lineas: string[] = [
     `# Leads de Compra Ágil — barrido histórico`,
     ``,
     `Generado ${r.generado_en} por \`npm run leads\`. Regenerable; el índice acumulado está en`,
     `\`historico/leads.jsonl\` y la página publicada en \`docs/leads.html\`.`,
     ``,
-    `- **${leads.length}** contactos únicos · **${conNombre}** con nombre de persona · **${instituciones}** instituciones`,
+    `- **${venta.length}** contactos útiles para vender · **${conNombre}** con nombre de persona · **${instituciones}** instituciones`,`- **${leads.length - venta.length}** buzones de cuentas por pagar, listados aparte y no contados como leads`,
     `- Estados barridos: ${r.estados.join(", ")}`,
     `- Categorías: ${r.categorias.map((c) => c.id).join(", ")}`,
-    `- Compras con adjuntos leídos: ${r.compras_revisadas} en esta corrida (${r.compras_ya_revisadas} ya revisadas antes)`,
+    `- Compras revisadas: **${acu.compras}** en total (acumulado) · ${acu.con_contacto} dejaron algún contacto · ${acu.sin_adjuntos} no traen ningún adjunto`,
+    `- Esta corrida revisó ${r.compras_revisadas} compra(s)`,
     `- Requests a la API en esta corrida: ${r.requests_api}`,
     ``,
     `El dato de contacto **no viene de la API** —no lo expone— sino del texto de los adjuntos que`,
@@ -440,8 +487,10 @@ export function escribirInformeLeads(leads: LeadConsolidado[], r: ResumenCorrida
     `| Nombre | Correo | Cargo | Institución | Compras | Última |`,
     `|---|---|---|---|---|---|`,
   ];
-  for (const l of leads) {
-    const nombre = l.nombre ?? (l.buzon_funcional ? "_(buzón de área)_" : "_(sin nombre)_");
+  for (const l of [...venta, ...leads.filter((l) => l.es_facturacion)]) {
+    const nombre =
+      l.nombre ??
+      (l.es_facturacion ? "_(cuentas por pagar)_" : l.buzon_funcional ? "_(buzón de área)_" : "_(sin nombre)_");
     const marca = l.confianza_nombre === "baja" ? " ⚠︎" : "";
     lineas.push(
       `| ${nombre}${marca} | ${l.email} | ${l.cargo ?? "—"} | ${l.organismo} | ${l.compras.length} (${l.compras

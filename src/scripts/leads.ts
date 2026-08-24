@@ -16,7 +16,7 @@
  * Cuota: solo la gastan los listados (y `--con-detalle`, que es opcional). El barrido de adjuntos
  * es gratis, así que el tope de compras a revisar se mide en tiempo, no en cuota.
  */
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR } from "../lib/config.js";
 import {
@@ -35,7 +35,7 @@ import {
   type CompraAgilListItem,
   type EstadoCompraAgil,
 } from "../lib/api.js";
-import { listarAdjuntos, descargarAdjunto } from "../lib/adjuntos.js";
+import { listarAdjuntos, descargarAdjunto, type AdjuntoListado } from "../lib/adjuntos.js";
 import { extraerTexto } from "../../licitaciones/src/lib/documentos-texto.js";
 import { configurarCuota, CuotaLocalAgotadaError, ledgerHoy } from "../lib/cuota.js";
 import {
@@ -66,7 +66,8 @@ const numero = (n: string, def: number) => {
   return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : def;
 };
 
-const SOLO_INDICE = bandera("solo-indice");
+const SOLO_CONOCIDAS = bandera("solo-conocidas");
+const SOLO_INDICE = bandera("solo-indice") || SOLO_CONOCIDAS;
 const RE_REVISAR = bandera("rerevisar");
 const CON_DETALLE = bandera("con-detalle");
 const MAX_PAGINAS = numero("max-paginas", 3);
@@ -144,6 +145,33 @@ function nombreArchivoSeguro(nombre: string): string {
   );
 }
 
+/**
+ * Manifiesto de adjuntos ya bajados de una compra. Guarda la correspondencia entre el nombre real
+ * del archivo (que es lo que se cita como fuente del contacto) y el nombre saneado con que quedó en
+ * disco, que `nombreArchivoSeguro` deja irreconocible.
+ */
+const MANIFIESTO = "_manifiesto.json";
+
+function leerManifiesto(dir: string): AdjuntoListado[] | null {
+  const p = path.join(dir, MANIFIESTO);
+  if (!existsSync(p)) return null;
+  try {
+    const datos = JSON.parse(readFileSync(p, "utf-8")) as AdjuntoListado[];
+    // Solo sirve si TODOS sus archivos siguen en disco: `data/` es efímero y se limpia entero.
+    return datos.every((a) => existsSync(path.join(dir, nombreArchivoSeguro(a.nombreArchivo)))) ? datos : null;
+  } catch {
+    return null;
+  }
+}
+
+function escribirManifiesto(dir: string, adjuntos: AdjuntoListado[]): void {
+  try {
+    writeFileSync(path.join(dir, MANIFIESTO), JSON.stringify(adjuntos, null, 2), "utf-8");
+  } catch {
+    // El manifiesto es una optimización: si no se puede escribir, la próxima corrida re-baja.
+  }
+}
+
 /** Corre `tarea` sobre `items` con como mucho `limite` en vuelo. Sin dependencias nuevas. */
 async function enParalelo<T>(items: T[], limite: number, tarea: (item: T, i: number) => Promise<void>): Promise<void> {
   let siguiente = 0;
@@ -163,6 +191,9 @@ async function main(): Promise<void> {
   const ahoraIso = new Date().toISOString();
 
   configurarCuota({ script: "leads", maxRequests: SOLO_INDICE ? 0 : PRESUPUESTO });
+  // El ledger cuenta el DÍA, no la corrida: sin esta línea base, una segunda corrida del mismo día
+  // publicaba el acumulado como si lo hubiera gastado ella sola.
+  const requestsAlArrancar = ledgerHoy().por_script["leads"] ?? 0;
 
   console.log(`Barrido histórico de leads — ${categorias.length} categoría(s), ${estados.length} estado(s).`);
   console.log(`Categorías: ${categorias.map((c) => c.id).join(", ")}`);
@@ -218,6 +249,36 @@ async function main(): Promise<void> {
     });
   }
   console.log(`\n— Semilla desde historico/observaciones.jsonl: ${candidatas.size} compra(s), 0 requests.`);
+
+  // ── 1b. Semilla desde el propio índice de leads ────────────────────────────────────────────
+  // `historico/leads.jsonl` guarda la ficha completa de cada compra que ya dejó al menos un
+  // correo, así que **reprocesar esas compras no cuesta un solo request**. Es lo que hace posible
+  // mejorar el extractor y volver a pasarlo sobre todo lo ya descubierto: `--solo-conocidas`
+  // (con `--rerevisar`) re-lee los adjuntos cacheados y reescribe los leads con el extractor
+  // nuevo, sin volver a pagar el descubrimiento. Una compra que no dejó ningún correo no gana
+  // nada con esto, por eso el modo se conforma con las que sí.
+  for (const l of leerLeads()) {
+    const previa = candidatas.get(l.codigo);
+    if (previa) {
+      for (const id of l.categorias) previa.confirmadas.add(id);
+      continue;
+    }
+    candidatas.set(l.codigo, {
+      codigo: l.codigo,
+      nombre: l.nombre_compra,
+      estado: l.estado,
+      organismo: l.organismo,
+      rut_organismo: l.rut_organismo,
+      unidad_compra: l.unidad_compra,
+      region: l.region,
+      nombre_region: l.nombre_region,
+      fecha_publicacion: l.fecha_publicacion,
+      monto_disponible_clp: l.monto_disponible_clp,
+      confirmadas: new Set(l.categorias),
+      porVerificar: new Set(),
+    });
+  }
+  console.log(`— Semilla desde historico/leads.jsonl: ${candidatas.size} compra(s) acumuladas, 0 requests.`);
 
   // ── 2. Barrido de la API: cada variante `q` contra cada estado ─────────────────────────────
   // Las variantes se deduplican entre categorías ("inteligencia artificial" la usan dos): una
@@ -279,7 +340,10 @@ async function main(): Promise<void> {
       }
     }
   } else {
-    console.log(`\n— \`--solo-indice\`: no se consulta la API. Se revisan solo las compras ya conocidas.`);
+    console.log(
+      `\n— \`${SOLO_CONOCIDAS ? "--solo-conocidas" : "--solo-indice"}\`: no se consulta la API. ` +
+        `Se revisan solo las compras que ya están en historico/.`,
+    );
   }
 
   // ── 3. Selección: qué compras se revisan ───────────────────────────────────────────────────
@@ -316,15 +380,16 @@ async function main(): Promise<void> {
     let listados = 0;
     const sinTexto: string[] = [];
     try {
-      const adjuntos = await listarAdjuntos(c.codigo);
-      listados = adjuntos.length;
       const dir = path.join(dirBase, c.codigo, "leads-adjuntos");
+      const adjuntos = leerManifiesto(dir) ?? (await listarAdjuntos(c.codigo));
+      listados = adjuntos.length;
       if (adjuntos.length > 0) mkdirSync(dir, { recursive: true });
       for (const a of adjuntos) {
         try {
-          const contenido = await descargarAdjunto(a.id);
           const ruta = path.join(dir, nombreArchivoSeguro(a.nombreArchivo));
-          writeFileSync(ruta, contenido);
+          // El archivo ya en disco vale igual que el recién bajado: reprocesar con un extractor
+          // mejorado no tiene por qué volver a golpear el servicio de adjuntos.
+          if (!existsSync(ruta)) writeFileSync(ruta, await descargarAdjunto(a.id));
           const extraido = await extraerTexto(ruta);
           if (extraido.texto.trim()) archivos.push({ nombre: a.nombreArchivo, texto: extraido.texto });
           else sinTexto.push(a.nombreArchivo);
@@ -332,6 +397,7 @@ async function main(): Promise<void> {
           sinTexto.push(`${a.nombreArchivo} (${(err as Error).message.slice(0, 120)})`);
         }
       }
+      if (adjuntos.length > 0) escribirManifiesto(dir, adjuntos);
     } catch (err) {
       sinTexto.push(`(listado) ${(err as Error).message.slice(0, 160)}`);
     }
@@ -420,7 +486,7 @@ async function main(): Promise<void> {
     console.log(`  (las confirmadas acá se revisan en la próxima corrida, ya sin costo de descubrimiento)`);
   }
 
-  resumen.requests_api = ledgerHoy().por_script["leads"] ?? 0;
+  resumen.requests_api = (ledgerHoy().por_script["leads"] ?? 0) - requestsAlArrancar;
 
   // ── 6. Publicar ────────────────────────────────────────────────────────────────────────────
   const consolidados = consolidar(leerLeads());

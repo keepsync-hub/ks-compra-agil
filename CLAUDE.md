@@ -100,6 +100,16 @@ Lo que hay que saber antes de tocar esto:
   y varias traen PDF escaneados sin capa de texto. La tabla de cierre publica cuántas compras se
   revisaron, cuántas dejaron contacto y qué se perdió por cada motivo.
 
+**Lo medido en el primer barrido completo (2026-08-24), que es lo que hay que saber antes de tocar
+esto:** 65 combinaciones de consulta × estado costaron **93 requests** y descubrieron 258 compras;
+sus adjuntos —gratis— dieron **62 contactos útiles para vender en 41 instituciones**, 29 de ellos con
+nombre de persona. El rendimiento real es **97 de 258 compras (38%)**: 34 no traen ningún adjunto y
+varias traen PDF escaneados sin capa de texto. Y hubo que separar una categoría entera que en la
+primera pasada copó el listado: los **buzones de cuentas por pagar** (`facturas@`, los DTE de
+`custodium.com`/`febos.cl`, un RUT como buzón), que se repiten en cada compra del mismo organismo
+porque van en la cláusula administrativa de facturación. Son contactos reales, pero de un área que no
+decide nada: quedan clasificados aparte y no se cuentan como leads.
+
 El índice se acumula en `historico/leads.jsonl` y `historico/leads-revisiones.jsonl` (versionados,
 como `observaciones.jsonl`, porque `data/` es efímero): cada corrida continúa la anterior sin volver a
 bajar lo ya leído, y `--solo-indice` republica la página con **0 requests**. La página se publica con
