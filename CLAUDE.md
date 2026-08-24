@@ -74,6 +74,49 @@ descarta en admisibilidad), y **sigue sin confirmarse si KeepSync es OTEC regist
 de eso dependen tanto puntaje directo en algunas bases como la exención de IVA del art. 13 N°4 con
 que Dipres presupuesta. Ver el detalle en `.claude/skills/compra-agil-ofertar/SKILL.md`.
 
+## Listado de leads: el único dato que la API no tiene
+
+`npm run leads` barre las **mismas cinco categorías del radar en los cinco estados** —incluidas
+`cerrada`, `proveedor_seleccionado`, `desierta` y `cancelada`, que al radar no le sirven porque ya no
+se puede ofertar, pero que acá son las mejores: son organismos que ya demostraron que compran esto— y
+publica `docs/leads.html`, una página **nueva y separada**. No toca `docs/index.html` ni sus tres
+pares de marcadores.
+
+Lo que hay que saber antes de tocar esto:
+
+- **`/v2/compra-agil` no expone contacto alguno.** Verificado pidiendo el detalle de `607-180-COT26`:
+  organismo, RUT y unidad de compra, y nada más. El nombre y el correo están en los **adjuntos**, y
+  esos se bajan por el servicio público de `adjuntos.ts`, que **no gasta cuota**. La cuota la gastan
+  solo los listados: el tope de compras por corrida se mide en tiempo, no en requests.
+- **El embudo de categoría se cierra con el texto de los adjuntos, gratis.** Una compra cuyo nombre
+  dice "Power BI" pero no dice si es un *curso* queda "por verificar" y la resuelve el texto de sus
+  bases, sin pagar el detalle. Lo que ni el nombre ni los adjuntos confirman se descarta y **se
+  reporta**; solo `--con-detalle` (apagado por defecto) paga un request por compra para recuperarlo.
+- **Nada se afirma sin cita.** Cada contacto guarda archivo + ventana de texto, y la tarjeta las
+  muestra. Un nombre que solo se pudo deducir del correo (`juan.perez@…`) se publica **marcado como
+  deducción**, con confianza baja; si no hay nombre, el lead se publica igual sin inventarlo y
+  rotulado como buzón de área (`adquisiciones@` es un contacto útil, no un defecto).
+- **El rendimiento del método es bajo y la página lo dice.** Muchas Compras Ágiles no traen adjuntos
+  y varias traen PDF escaneados sin capa de texto. La tabla de cierre publica cuántas compras se
+  revisaron, cuántas dejaron contacto y qué se perdió por cada motivo.
+
+**Lo medido en el primer barrido completo (2026-08-24), que es lo que hay que saber antes de tocar
+esto:** 65 combinaciones de consulta × estado costaron **93 requests** y descubrieron 258 compras;
+sus adjuntos —gratis— dieron **62 contactos útiles para vender en 41 instituciones**, 29 de ellos con
+nombre de persona. El rendimiento real es **97 de 258 compras (38%)**: 34 no traen ningún adjunto y
+varias traen PDF escaneados sin capa de texto. Y hubo que separar una categoría entera que en la
+primera pasada copó el listado: los **buzones de cuentas por pagar** (`facturas@`, los DTE de
+`custodium.com`/`febos.cl`, un RUT como buzón), que se repiten en cada compra del mismo organismo
+porque van en la cláusula administrativa de facturación. Son contactos reales, pero de un área que no
+decide nada: quedan clasificados aparte y no se cuentan como leads.
+
+El índice se acumula en `historico/leads.jsonl` y `historico/leads-revisiones.jsonl` (versionados,
+como `observaciones.jsonl`, porque `data/` es efímero): cada corrida continúa la anterior sin volver a
+bajar lo ya leído, y `--solo-indice` republica la página con **0 requests**. La página se publica con
+`noindex` y declara el origen de los datos —puntos de contacto funcionales que el propio Estado
+publica dentro del procedimiento de compra— además de recomendar que el primer correo cite la compra
+de la que salió el dato.
+
 ## Panel operativo y expediente de oferta (n8n + GitHub Actions)
 
 Entre «esta compra me sirve» y «tengo la oferta lista» no había nada, y los seis TDR de capacitación

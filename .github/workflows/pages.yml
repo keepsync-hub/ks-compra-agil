@@ -13,6 +13,7 @@ on:
       - claude/revisar-contexto-plan-ttaumn
       - claude/array-agile-purchases-page-det2d4
       - claude/n8n-radar-cotizaciones-08vr00
+      - claude/agile-purchases-leads-list-m1o3jq
       - main
       - master
     paths:
