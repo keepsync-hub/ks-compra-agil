@@ -20,17 +20,68 @@
  * El archivo queda asociado a la sesión que lo generó: sin la cookie del paso previo, la descarga
  * responde 200 con cuerpo vacío (verificado). Por eso se conserva el cookie jar entre llamadas.
  *
- * Límite conocido: 1.000 resultados por descarga. Con consultas por categoría (cientos de
- * resultados cada una) queda holgado; una consulta vacía —las ~4.500 publicadas del país— se
- * truncaría, y por eso no se hace.
+ * Límite conocido: 1.000 resultados por descarga (`TOPE_FILAS_DESCARGA`). Con consultas por
+ * categoría sobre licitaciones publicadas queda holgado; una consulta vacía —las ~4.500 publicadas
+ * del país— se truncaría, y por eso no se hace. Sobre el histórico, en cambio, el tope se alcanza
+ * casi siempre, y la salida medida es rotar `idOrden` (ver `ORDENES_BUSCADOR`), no ventanear por
+ * fecha.
  */
 
 const BASE = "https://www.mercadopublico.cl/BuscarLicitacion";
 const UA =
   "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 
-/** Estados del buscador (constante `config.estados` de su propio `busqueda.js`). */
+/**
+ * Estados del buscador. Salen de la constante `config.estados` de su propio `busqueda.js`, que se
+ * bajó y se leyó el 2026-08-25 (los mismos valores aparecen en `busqueda.filtros.js`). No son
+ * inferidos: `publicadas` es el único que el repo usaba, y los otros cuatro son los que abren el
+ * histórico — cerradas, desiertas, adjudicadas y revocadas— sin gastar un solo request de la API.
+ */
+export const ESTADO_TODOS = "-1";
 export const ESTADO_PUBLICADAS = "5";
+export const ESTADO_CERRADAS = "6";
+export const ESTADO_DESIERTAS = "7";
+export const ESTADO_ADJUDICADAS = "8";
+export const ESTADO_REVOCADAS = "15";
+
+/** Nombre legible -> id, para que un CLI acepte `--estados=adjudicadas,cerradas`. */
+export const ESTADOS_BUSCADOR = {
+  todos: ESTADO_TODOS,
+  publicadas: ESTADO_PUBLICADAS,
+  cerradas: ESTADO_CERRADAS,
+  desiertas: ESTADO_DESIERTAS,
+  adjudicadas: ESTADO_ADJUDICADAS,
+  revocadas: ESTADO_REVOCADAS,
+} as const;
+
+export type NombreEstadoBuscador = keyof typeof ESTADOS_BUSCADOR;
+
+/**
+ * Criterios de orden (`config.ordenCodigo` del mismo `busqueda.js`).
+ *
+ * No son cosmética: el buscador topa la descarga en `TOPE_FILAS_DESCARGA` filas, así que el orden
+ * decide CUÁLES 1.000 devuelve. Medido el 2026-08-25 con `q="gestion documental"` sobre
+ * adjudicadas: relevancia y "últimas adjudicadas" comparten solo **162** de sus 1.000 filas, y la
+ * unión de tres órdenes distintos da **2.545 códigos únicos**. Rotar el orden es, por lejos, la
+ * forma más barata de ver más allá del tope — más que las ventanas de fecha, que además filtran una
+ * fecha distinta según el estado y devuelven cero en `publicadas` (su cierre es futuro).
+ */
+export const ORDENES_BUSCADOR = {
+  relevantes: "1",
+  porCerrarse: "2",
+  publicadas: "3",
+  cerradas: "4",
+  adjudicadas: "5",
+  revocadas: "6",
+  mayorMonto: "7",
+  menorMonto: "8",
+} as const;
+
+/**
+ * Tope duro de filas por descarga. Una consulta que devuelve exactamente este número está
+ * truncada: hay cola que no se vio, y quien la llame debe decirlo en vez de callarlo.
+ */
+export const TOPE_FILAS_DESCARGA = 1000;
 
 /** Una fila del CSV que entrega el buscador. Columnas verificadas contra la descarga real. */
 export interface ResultadoBusquedaPortal {
@@ -85,7 +136,7 @@ function cabeceras(cookies: Cookies, extra: Record<string, string> = {}): Record
  * (capturados del request real): cambiarlos por variantes "más razonables" —`codigoRegion: ""` en
  * vez de `"-1"`, por ejemplo— hace que el servidor responda "sin coincidencias".
  */
-function cuerpoBusqueda(texto: string, estado: string, pagina: number): string {
+function cuerpoBusqueda(texto: string, estado: string, pagina: number, orden: string = ORDENES_BUSCADOR.relevantes): string {
   return JSON.stringify({
     textoBusqueda: texto,
     idEstado: estado,
@@ -95,7 +146,7 @@ function cuerpoBusqueda(texto: string, estado: string, pagina: number): string {
     fechaFin: null,
     registrosPorPagina: "10",
     idTipoFecha: [],
-    idOrden: "1",
+    idOrden: orden,
     compradores: [],
     garantias: null,
     rubros: [],
@@ -118,7 +169,7 @@ function parsearCsv(csv: string): ResultadoBusquedaPortal[] {
   // El portal emite el CSV sin comillas y con `;` como separador; cada registro en una línea
   // (verificado: 744 líneas para 743 resultados, todas con 11 columnas exactas). Si alguna fila
   // no tiene 11 columnas se descarta en vez de desalinear los campos.
-  const lineas = csv.replace(/^﻿/, "").split(/\r?\n/).filter((l) => l.trim().length > 0);
+  const lineas = csv.replace(/^\ufeff/, "").split(/\r?\n/).filter((l) => l.trim().length > 0);
   const filas = lineas.slice(1).map((l) => l.split(";"));
   return filas
     .filter((c) => c.length === 11)
@@ -135,16 +186,28 @@ function parsearCsv(csv: string): ResultadoBusquedaPortal[] {
       montoTexto: (c[9] ?? "").trim(),
       organismo: (c[10] ?? "").trim(),
     }))
-    .filter((r) => /^[\w-]+-[A-Z]{1,2}\d{2}$/.test(r.codigo));
+    // El sufijo del código es el TIPO seguido del año: "LE26", pero también "L126" (tipo L1),
+    // "B226" (B2), "I226" (I2), "CI226" (CI2)… El patrón anterior era `[A-Z]{1,2}\d{2}`, que exigía
+    // exactamente dos dígitos y por eso descartaba EN SILENCIO todos los tipos que llevan un dígito
+    // en su sigla: medido el 2026-08-25, 22 de cada 1.000 filas — entre ellas todas las L1
+    // (licitación pública menor a 100 UTM) y las privadas B2/H2/I2. El `\d?` opcional los recupera
+    // sin dejar pasar basura: la cabecera del CSV y las líneas partidas siguen fuera.
+    .filter((r) => /^[\w-]+-[A-Z]{1,2}\d?\d{2}$/.test(r.codigo));
 }
 
 /**
  * Busca por texto en el portal y devuelve los resultados ya parseados. Una consulta = dos
  * requests HTTP y cero cuota de API.
  */
+export interface OpcionesBusquedaPortal {
+  /** Uno de `ORDENES_BUSCADOR`. Por defecto, relevancia — el mismo que usaba el repo. */
+  orden?: string;
+}
+
 export async function buscarEnPortal(
   texto: string,
   estado: string = ESTADO_PUBLICADAS,
+  opciones: OpcionesBusquedaPortal = {},
 ): Promise<ResultadoBusquedaPortal[]> {
   const cookies: Cookies = { jar: new Map() };
 
@@ -160,7 +223,7 @@ export async function buscarEnPortal(
     }),
     // `pagina: 1` es lo que manda el botón del sitio: significa "los primeros 1.000 resultados",
     // no la segunda página (así está comentado en su propio código).
-    body: cuerpoBusqueda(texto, estado, 1),
+    body: cuerpoBusqueda(texto, estado, 1, opciones.orden ?? ORDENES_BUSCADOR.relevantes),
   });
   guardarCookies(generar, cookies);
   const meta = (await generar.json()) as { FileGuid?: string; nombreArchivo?: string; estado?: boolean };

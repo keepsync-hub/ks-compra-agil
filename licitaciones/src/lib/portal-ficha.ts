@@ -237,9 +237,15 @@ export async function descargarFichaPublica(codigo: string): Promise<{ url: stri
     );
   }
   const html = await res.text();
-  if (!/id="Ficha1"/.test(html)) {
+  // Se exige AL MENOS UNA sección, no específicamente la 1. Verificado el 2026-08-25: las
+  // licitaciones tipo L1 (pública menor a 100 UTM) renderizan una ficha más corta que puede
+  // empezar en `id="Ficha3"` —por ejemplo 2448-87-L126 «SOFTWARE DE GESTIÓN Y CONTROL DE
+  // PROYECTO», 127 KB de HTML perfectamente parseables—. Exigir `Ficha1` las rechazaba enteras
+  // como si el código no existiera. `parsearSecciones` ya recorre los marcadores presentes y no
+  // asume que estén todos, así que aceptar la ficha corta no requiere ningún otro cambio.
+  if (!/id="Ficha\d"/.test(html)) {
     throw new Error(
-      `La ficha de ${codigo} respondió 200 pero sin las secciones esperadas (id="Ficha1"). ` +
+      `La ficha de ${codigo} respondió 200 pero sin ninguna sección (id="FichaN"). ` +
         `Puede ser un código inexistente o un cambio de layout del portal.`,
     );
   }

@@ -619,6 +619,118 @@ formulario real del portal.
 5. Si un ítem de la licitación no mapea con confianza a una clave del catálogo de costos, o la
    cantidad no es clara, `cotizar.ts` se detiene y pide revisión manual — no adivina.
 
+## Barrido histórico de Transformación Digital / Ley 21.180 (2026-08-25)
+
+Nicho nuevo, independiente del catálogo de Array: `npm run transformacion-digital`. Responde otra
+pregunta que el radar de este directorio —no *"¿ofertamos?"* sino *"¿qué le está pidiendo el Estado a
+un sistema documental?"*— y por eso barre los **cinco estados**, no solo las activas. Config en
+`licitaciones/config/transformacion-digital.json`, código en `src/lib/transformacion-digital.ts`,
+`src/lib/pagina-transformacion-digital.ts` y `src/scripts/transformacion-digital.ts`. Publica
+`docs/transformacion-digital.html` y `docs/transformacion-digital-documentos.json`.
+
+### Los estados del buscador existían y estaban a la vista
+
+`PLAN.md:147-153` ya decía que el buscador acepta cerradas/desiertas/adjudicadas/revocadas sin costo
+de cuota, y que reponer el histórico estaba bloqueado por volumen, no por el ticket. Se bajó el
+`busqueda.js` del portal y ahí está la constante, confirmada también en `busqueda.filtros.js`:
+
+```js
+estados: { todos: "-1", publicadas: "5", cerradas: "6", desiertas: "7", adjudicadas: "8", revocadas: "15" }
+```
+
+`buscarEnPortal(texto, estado)` ya aceptaba el parámetro; solo faltaban las constantes. Ahora están
+en `buscador-portal.ts` junto con `ESTADOS_BUSCADOR` (nombre → id) para las banderas del CLI.
+
+### Rotar `idOrden` bate a ventanear por fecha, y por tres razones distintas
+
+El tope de 1.000 filas por descarga se alcanza casi siempre con estas consultas. Se midieron las dos
+salidas posibles:
+
+**Ventanas de fecha.** Funcionan: `fechaInicio:"2026/01/01"` / `fechaFin:"2026/03/31"` con
+`idEstado:"8"` devuelve otro conjunto. Pero tienen tres modos de falla, y los tres son feos:
+
+1. **La fecha que filtran depende del estado.** Lo dice el propio `cambiarTituloFechasPorEstado` del
+   JS del portal: publicadas/cerradas/desiertas → fecha de cierre; adjudicadas → adjudicación;
+   revocadas → revocación. La prueba de arriba volvió con publicaciones de sep–dic 2025 porque
+   filtró la fecha de adjudicación.
+2. **En `publicadas` devuelven cero.** Su fecha de cierre es futura, así que una ventana hacia atrás
+   no matchea nada.
+3. **Fallan en silencio.** Ante un formato inválido el buscador contesta *"sin coincidencias"*, no un
+   error. Una corrida entera saldría vacía sin que nada lo delate — y "no hay licitaciones de esto"
+   es exactamente la conclusión equivocada que uno sacaría.
+
+**Rotar `idOrden`** (`config.ordenCodigo` del mismo `busqueda.js`: relevantes 1 … menorMonto 8). Con
+`q="gestion documental"` sobre adjudicadas, tres órdenes distintos toparon los tres en 1.000 filas,
+el solapamiento entre relevancia y "últimas adjudicadas" fue de **162 filas**, y la unión de los tres
+dio **2.545 códigos únicos**. Multiplicador de ~2,5× por consulta, sin ninguno de los tres problemas
+anteriores.
+
+Decisión: `buscador-portal.ts` expone `ORDENES_BUSCADOR` y **no** implementa ventanas de fecha. El
+script rota el orden solo en las combinaciones que toparon, y corta apenas una pasada no aporta
+códigos nuevos. Si alguna vez una consulta resulta insuficiente incluso rotando los ocho órdenes, la
+salida barata es agregar otra redacción de la consulta, no reintroducir las ventanas.
+
+### La corrida completa
+
+50 combinaciones consulta × estado, 15 truncadas, 42 rotaciones → **66.390 filas, 24.302 códigos
+únicos, 72 del nicho**. 100 requests HTTP para descubrir y ~216 más para indexar las 72 fichas.
+**Cero cuota de la API con ticket.** Las 72 fichas se indexaron sin un solo fallo definitivo.
+
+El embudo local es lo que hace la precisión, porque el buscador OR-ea tokens: `q="ley 21.180"` sobre
+cerradas devuelve 1.000 filas encabezadas por *"ADQUISICIÓN DE MATERIAL DEPORTIVO"*, *"Construcción
+Multicancha"* y *"Conservación Cuartel de Bomberos"* — matcheó «ley».
+
+### Dos bugs preexistentes que este barrido destapó, arreglados en libs compartidas
+
+Los dos afectaban también al radar de Array, en silencio:
+
+1. **`parsearCsv` descartaba los códigos cuyo tipo lleva un dígito.** El filtro era
+   `/^[\w-]+-[A-Z]{1,2}\d{2}$/`, que exige exactamente dos dígitos finales, así que rechazaba
+   `2770-95-B226` (tipo B2), `5061-23-L126` (L1), `1057417-43-I226` (I2) y todos los CI2/DC2/O1/O2/E2
+   /H2. Medido: **22 de cada 1.000 filas**, entre ellas todas las L1 (licitación pública menor a 100
+   UTM). El síntoma que lo delató fue indirecto y vale anotarlo: ninguna combinación se marcaba
+   truncada pese a topar, porque 1.000 filas crudas llegaban parseadas como 978. Corregido a
+   `[A-Z]{1,2}\d?\d{2}`.
+2. **`descargarFichaPublica` exigía `id="Ficha1"`.** Las licitaciones L1 renderizan una ficha más
+   corta que puede empezar en `id="Ficha3"` — `2448-87-L126` *"SOFTWARE DE GESTIÓN Y CONTROL DE
+   PROYECTO"*, 127 KB de HTML perfectamente parseables, se rechazaba como si el código no existiera.
+   Ahora se exige al menos una sección; `parsearSecciones` ya recorría los marcadores presentes sin
+   asumir que estuvieran todos.
+
+### Dos decisiones de datos que costaron una corrida entender
+
+**El payload no cabe en el índice.** Una línea de jsonl tiene que caber en 4.000 bytes (atomicidad de
+`appendFileSync` bajo PIPE_BUF, y lo escriben dos máquinas) y un registro enriquecido pesa
+3.600–4.000: las URLs del visor llevan un `enc=` de ~400 caracteres y hay una por licitación. El
+primer intento metía todo en el jsonl y la degradación silenciosa se comía documentos y
+requerimientos. Ahora el jsonl guarda la **observación** (qué se vio, cuándo, con qué consulta, con
+qué cita) más los conteos, y `docs/transformacion-digital-documentos.json` guarda el **contenido**;
+`rehidratar()` los junta al republicar. No son dos fuentes de verdad: salen del mismo array en la
+misma corrida, y el manifiesto está versionado y lo publica Pages.
+
+**`observado_en` hay que resellarlo al republicar.** `ultimaPorCodigo()` desempata con un `>`
+estricto. Una línea enriquecida que conservaba el timestamp de la observación original empataba con
+la línea vieja sin enriquecer y perdía el desempate: la ficha se bajaba, se escribía, y la corrida
+siguiente la leía como si nunca se hubiera indexado. Silencioso y caro.
+
+### Los requerimientos funcionales necesitaban su propio detector
+
+`decision.ts` produce `exigencias` desde 15 `PATRONES_EXIGENCIA`, pero son **administrativos y
+contractuales** (garantía de seriedad, declaración jurada, patente municipal, multas, visita a
+terreno): sirven para decidir si una oferta es admisible, que es para lo que se escribieron. No
+responden *"qué tiene que hacer el software"*. `transformacion-digital.ts` trae 28 patrones en 7 ejes
+(interoperabilidad, firma, documental, trazabilidad, marco legal, despliegue, acceso), con la misma
+disciplina de este directorio: patrón → **cita literal** → sección de origen. `decision.ts` no se
+tocó: es compartido con el nicho `ged` y ampliarlo ahí habría cambiado el comportamiento de un radar
+que no tiene nada que ver.
+
+### Lo que no se hizo, a propósito
+
+Los ARCHIVOS adjuntos siguen sin bajarse: el visor está tras el reCAPTCHA por score que este mismo
+documento ya midió cinco veces (ver "Acceso a los antecedentes"). Lo que se publica es la URL con
+`acceso: "navegador"`, que es la Fase 2 y tiene una persona. Y la Fase 3 —comparar contra la
+documentación del sistema actual— no tiene baseline: esa documentación no existe en el repo.
+
 ## Orden de trabajo pendiente
 
 1. ~~Obtener `LICITACIONES_API_TICKET` y correr `npm run radar-licitaciones` contra la API real;

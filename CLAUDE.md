@@ -39,6 +39,11 @@ como pendiente, y se persiste pegando el JSON en `config/categorias-extra.json` 
 `licitaciones/config/keywords-extra.json` (licitaciones), o con `npm run keywords` /
 `npm run keywords-licitaciones`. Esos dos archivos son de **frases literales**, no de regex.
 
+Hay una tercera página generada entera desde cero, `docs/transformacion-digital.html` (ver "Cuarto
+frente" más abajo), que no usa marcadores y no toca a las otras dos. Su formulario de palabras clave
+es **de solo lectura** a propósito: las dos páginas viejas comparten la llave de `localStorage`
+`ks-lic-kw-pendientes` en el mismo origen y sus pendientes se mezclan; no repetir ese patrón.
+
 ## Estado del proyecto
 
 Implementado y probado contra la API real: scaffolding, el skill `compra-agil-radar-claude`
@@ -306,6 +311,77 @@ marcados PRELIMINAR: antes de que cualquiera de estas cotizaciones sirva para un
 hace falta resolver el mismo tipo de insumo bloqueante que el nicho Claude (¿vía real de
 fulfillment/facturación para Array, y a qué costo?) — sin resolverlo, esto es solo investigación
 de mercado, igual que el radar de solo lectura.
+
+## Cuarto frente: qué le pide el Estado a un sistema documental (`docs/transformacion-digital.html`)
+
+`npm run transformacion-digital` barre licitaciones de **Transformación Digital / Ley 21.180**
+—sistema de gestión documental web, procesos documentales, firma electrónica, DocDigital, FirmaGob,
+Exedoc—, **activas y pasadas**, y publica una página nueva más un **manifiesto JSON** con acceso
+ordenado a los documentos de cada una. Es la Fase 1 de tres: la Fase 2 (bajar los archivos) la corre
+Claude Cowork en la máquina del usuario, y la Fase 3 (comparar contra la documentación del sistema
+actual) **no tiene baseline todavía** — esa documentación no existe en el repo y no se inventa.
+
+Se solapa en las palabras con el nicho `ged` de `licitaciones/config/keywords.json` y aun así es
+config y página **aparte**, a propósito: `ged` responde *"¿ofertamos en esta?"* y por eso barre solo
+activas; esto responde *"¿qué le está pidiendo el Estado a un sistema como el nuestro?"*, y ahí las
+que enseñan son las **pasadas** —ya tienen bases completas y foro respondido—. No toca
+`docs/licitaciones.html` ni `docs/index.html` ni ninguno de sus marcadores.
+
+Lo medido en la primera corrida completa (2026-08-25), que es lo que hay que saber antes de tocarlo:
+
+- **Rotar `idOrden` bate a ventanear por fecha.** El buscador topa en 1.000 filas y con estas
+  consultas ese tope se alcanza siempre. Tres criterios de orden distintos sobre la misma consulta
+  comparten solo **162** de sus 1.000 filas y su unión da **2.545 códigos únicos**. Las ventanas de
+  fecha también funcionan, pero filtran una fecha distinta según el estado, devuelven cero en
+  `publicadas` (cuyo cierre es futuro) y ante un formato inválido el portal contesta *"sin
+  coincidencias"* en vez de un error — una corrida entera vacía sin que nada lo delate. Por eso
+  `buscador-portal.ts` expone `ORDENES_BUSCADOR` y **no** implementa ventanas.
+- **50 combinaciones consulta × estado, 15 truncadas, 42 rotaciones: 66.390 filas, 24.302 códigos
+  únicos, 72 del nicho.** 100 requests HTTP para descubrir y ~216 más para indexar las 72 fichas,
+  con **cero cuota de la API con ticket**.
+- **El embudo local es todo.** El buscador OR-ea tokens: `ley 21.180` sobre cerradas devuelve 1.000
+  filas encabezadas por *"ADQUISICIÓN DE MATERIAL DEPORTIVO"* y *"Construcción Multicancha"*, porque
+  matcheó «ley». La precisión la pone `patron_requerido` (exige que la compra sea del **servicio** y
+  no solo que mencione la materia) más dos excluyentes, cada uno con su caso real citado.
+- **Dos campos de exclusión, no uno.** `patron_excluyente` mira nombre + descripción;
+  `patron_excluyente_nombre` mira solo el nombre. Hace falta porque `capacitación` a secas mataría
+  casi todos los aciertos —toda licitación documental incluye capacitación a usuarios como
+  entregable, y `decision.ts` la lista como *exigencia*, o sea como señal de acierto—, pero en el
+  nombre *"Curso de Transformación Digital"* sí hay que descartarlo.
+- **Ojo con los excluyentes en castellano.** `\bsobres?\b` (para descartar la compra de sobres)
+  matchea la **preposición** «sobre» y estaba descartando `4371-26-LE26`, cuya descripción dice *"en
+  conformidad con la Ley N° 21.180 **sobre** Transformación Digital del Estado"* — o sea, mataba
+  justo el mejor tipo de acierto. Va en plural por eso.
+- **Los requerimientos funcionales necesitan su propio detector.** Los 15 `PATRONES_EXIGENCIA` de
+  `decision.ts` son administrativos (garantía de seriedad, declaración jurada, patente municipal);
+  no responden *"qué tiene que hacer el software"*. `transformacion-digital.ts` trae 28 patrones en
+  7 ejes, con la misma disciplina: patrón → **cita literal** → sección de origen. `decision.ts` no
+  se tocó (es compartido con `ged`).
+- **El índice y el manifiesto se reparten el peso.** Una línea de jsonl tiene que caber en 4.000
+  bytes (atomicidad de `appendFileSync`) y un registro completo pesa 3.600–4.000: las URLs del visor
+  llevan un `enc=` de ~400 caracteres. El jsonl guarda la **observación**;
+  `docs/transformacion-digital-documentos.json` guarda el **contenido**, y `rehidratar()` los junta
+  al republicar. No son dos fuentes de verdad: salen del mismo array en la misma corrida.
+- **`observado_en` se resella al republicar.** `ultimaPorCodigo()` desempata con un `>` estricto, así
+  que una línea enriquecida que conservara el timestamp original empataba con la vieja y perdía. El
+  síntoma era silencioso: la ficha se bajaba, se escribía, y la corrida siguiente la leía como si
+  nunca se hubiera indexado.
+
+Banderas: `--fichas=N` (0 por defecto — la página se publica sin bajar ninguna ficha, porque el CSV
+ya trae nombre y descripción completos), `--solo-indice` (no barre el portal; sí puede seguir
+indexando fichas), `--refiltrar` (recalibra las regex sobre el barrido ya descargado, **0 requests**;
+`licitaciones/data/_td-descartados.json` guarda cada fila descartada junto al patrón que la mató),
+`--consultas=`, `--estados=`.
+
+Dos bugs preexistentes del repo salieron acá y se arreglaron en libs compartidas, así que el radar de
+Array también los hereda: `parsearCsv` descartaba **en silencio** todo código cuyo tipo lleva un
+dígito (L1, B2, E2, I2, CI2…) porque el regex exigía exactamente dos dígitos finales —22 de cada
+1.000 filas—; y `descargarFichaPublica` exigía `id="Ficha1"`, cuando las L1 renderizan una ficha
+corta que puede empezar en `Ficha3`.
+
+**Guardrails que este flujo no relaja:** los archivos adjuntos **no se bajan** — el visor está tras
+un reCAPTCHA por score que este repo ya midió cinco veces, y lo que se publica es la URL marcada
+`acceso: "navegador"`; abrirla es la Fase 2, con una persona. Nada se afirma sin su cita.
 
 ## Segundo nicho: Licitaciones públicas para los servicios de Array (`licitaciones/`)
 
