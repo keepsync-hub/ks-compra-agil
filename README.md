@@ -59,6 +59,7 @@ cotizar, pero cada PDF/PPTX generado queda marcado BORRADOR hasta que se confirm
 | `npm run generar-documento -- <codigo> [NN…]` | Genera los documentos de una oferta: rellena los anexos `.docx` del organismo desde su plantilla marcada (`config/anexos/`) y arma la propuesta técnica / oferta económica en PDF desde `config/capacitaciones.json`. **No genera los documentos `acopio`** —título del relator/a, CV, certificados, órdenes de compra— porque los emite un tercero y producirlos sería falsificarlos: esos se suben desde la página de expediente. Sin plantilla no improvisa un documento propio: deja el documento en `bloqueado` y dice qué falta. Escribe `output/expedientes/<codigo>/`. |
 | `npm run postear-n8n -- radar \| cotizacion <codigo> \| expediente <codigo> [--dry-run]` | Arma y postea a n8n el estado del repo. Para `radar` reutiliza `ultimaPorCodigo()` sobre `historico/observaciones.jsonl` — no hace falta un artefacto nuevo. `--dry-run` imprime el payload sin enviarlo, que es como se prueba sin `N8N_BASE_URL` / `N8N_CLAVE`. Lo llama `.github/workflows/mp.yml`. |
 | `node n8n/construir.mjs <workflow>` | Arma el código SDK final de un workflow de n8n reemplazando los marcadores `__CHUNK:archivo__` por el contenido de `n8n/chunks/`, ya escapado. Necesario porque el builder del SDK no admite `import`, `require` ni `.join()`. Deja el resultado en `n8n/build/`. |
+| `npm run transformacion-digital [-- --fichas=N --solo-indice --refiltrar --consultas=<lista> --estados=<lista>]` | Barre licitaciones de **Transformación Digital / Ley 21.180** —gestión documental web, procesos documentales, firma electrónica, DocDigital, FirmaGob, Exedoc—, **activas y pasadas** (los cinco estados del buscador), y publica `docs/transformacion-digital.html` + `docs/transformacion-digital-documentos.json`, el manifiesto que consume Claude Cowork en la Fase 2. **Cero cuota de API**: todo sale del buscador público y de las fichas públicas. Cuando una consulta topa en las 1.000 filas del portal, **rota el criterio de orden** para ver otro corte (medido: tres órdenes distintos comparten 162 de 1.000 filas y su unión da 2.545 códigos únicos) — no ventanea por fecha, y `licitaciones/PLAN.md` explica por qué. Por defecto **no baja ninguna ficha**: la página sale del CSV, que ya trae nombre y descripción completos; `--fichas=N` indexa las N primeras y es el costo real (~3 requests c/u). `--solo-indice` no consulta el portal pero sí puede seguir indexando fichas; `--refiltrar` recalibra las regex sobre el barrido ya descargado con **0 requests**, y `licitaciones/data/_td-descartados.json` dice qué patrón mató cada fila. |
 | `npm run typecheck` | `tsc --noEmit`. |
 
 ## Agentes de GitHub Copilot (cloud agent)
@@ -257,6 +258,48 @@ Sobre los datos: son puntos de contacto **funcionales, publicados por el propio 
 procedimiento de compra —el correo está ahí justamente para que un proveedor escriba—. Aun así la
 página se publica con `noindex`, y dice de frente que un primer contacto en frío debería mencionar la
 compra concreta de la que salió el dato y ofrecer una salida clara.
+
+## Transformación Digital y Ley 21.180: qué le pide el Estado a un sistema documental
+
+`npm run transformacion-digital` → **`docs/transformacion-digital.html`** +
+**`docs/transformacion-digital-documentos.json`**
+
+Es la **Fase 1 de tres**, y conviene tener claro dónde termina:
+
+| Fase | Qué | Dónde corre |
+|---|---|---|
+| **1 — buscar** | Encontrar las licitaciones del nicho, activas y pasadas, y publicar el acceso ordenado a sus documentos. | Este repo. **Hecho.** |
+| **2 — bajar** | Descargar cada documento a una carpeta local para leer los requerimientos completos. | Claude Cowork, en la máquina del usuario: los adjuntos están tras el reCAPTCHA del visor del portal. |
+| **3 — comparar** | Cruzar esos requerimientos contra la documentación del sistema actual e identificar brechas. | **Sin baseline todavía**: esa documentación no existe en el repo y no se inventa. |
+
+Lo que la primera corrida completa dejó (2026-08-25): **72 licitaciones**, 59 organismos distintos,
+**288 documentos indexados** (216 descargables por script, 72 tras el reCAPTCHA) y **156
+requerimientos funcionales detectados**, cada uno con su cita literal y la sección de las bases de
+donde salió. 19 de las 72 citan la Ley 21.180 o la transformación digital del Estado explícitamente.
+
+**El manifiesto es el entregable de la Fase 2.** `docs/transformacion-digital-documentos.json` trae,
+por licitación, su orden, la carpeta destino sugerida y cada documento con su URL y su campo
+`acceso`: `directo` (un `fetch` lo trae sin autenticación — ficha, foro, Excel de preguntas) o
+`navegador` (el visor de adjuntos, que abre una persona). El campo `esquema` está versionado para que
+la Fase 2 falle ruidosamente si cambia, en vez de adivinar. Y el estado de las descargas **no** se
+escribe ahí: la Fase 2 lleva el suyo, para que el manifiesto siga siendo reproducible desde el
+índice.
+
+**El orden de la página no es cronológico**, y está explicado en la propia página: existe para
+decidir de qué licitación bajar los documentos primero, y para eso una adjudicada del año pasado vale
+más que una publicada ayer — ya tiene el foro respondido, las bases definitivas y el acta de
+adjudicación.
+
+**Lo que la página declara de sí misma**, porque una lista sin su margen de error se lee como si
+fuera completa: cuántas de las 50 combinaciones consulta × estado toparon en las 1.000 filas del
+portal (15) y en cuáles se rotó el orden (42 pasadas); que el buscador matchea tokens sueltos —
+`ley 21.180` sobre cerradas devuelve 1.000 filas encabezadas por *"ADQUISICIÓN DE MATERIAL
+DEPORTIVO"*—; cuántas filas descartó cada excluyente; y que los requerimientos son un detector por
+patrón sobre el texto disponible, no una lectura del pliego.
+
+Los patrones viven en `licitaciones/config/transformacion-digital.json`, con el caso real citado en
+cada excluyente. Se recalibran editando el JSON y corriendo `--refiltrar`, que no gasta requests.
+Detalle del diseño y de lo medido: la sección "Cuarto frente" de `CLAUDE.md`.
 
 ## Estado y pendientes
 

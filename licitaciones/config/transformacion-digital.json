@@ -1,0 +1,143 @@
+{
+  "_fuente": "Los siete términos que pidió el usuario el 2026-08-25 —Transformación Digital, Ley 21.180, sistema de gestión documental web, Procesos Documentales, Firma Electrónica, DocDigital, FirmaGob— más `exedoc`, que no pidió y que apareció midiendo (622-7-LP26, 'Soporte y Mant. correctiva-evolutiva Exedoc TGR'): es el sistema documental de la SEGPRES, hermano de DocDigital y FirmaGob, y ninguna de las ocho consultas restantes lo habría traído.",
+
+  "_por_que_config_aparte": "Es INDEPENDIENTE de keywords.json (nicho `ged`, catálogo de Array) a propósito: ahí la pregunta es «¿ofertamos en esta?» y solo se barren licitaciones activas; acá la pregunta es «¿qué le está pidiendo el Estado a un sistema como este?», y las licitaciones que más enseñan son las PASADAS —cerradas y adjudicadas—, que ya tienen bases completas y foro de preguntas respondido. Dos preguntas distintas, dos cadencias distintas, dos páginas.",
+
+  "_como_se_usa": "`consultas_portal` es el barrido grueso contra el buscador público del portal, que filtra por texto en el SERVIDOR pero matchea tokens sueltos y topa en 1.000 filas por descarga. La precisión la pone el embudo local sobre `nombre` y `descripcion` —que el CSV entrega COMPLETOS—: primero `patron_requerido` (global), después `patron_excluyente` y `patron_excluyente_nombre`, y recién ahí las categorías.",
+
+  "_por_que_dos_campos_de_exclusion": "`patron_excluyente` se evalúa sobre nombre + descripción; `patron_excluyente_nombre`, solo sobre el nombre. La distinción no es estética y tiene un caso concreto: `capacitación` a secas —el excluyente que usan las categorías `bi` y `pmo` de keywords.json— mataría casi todos los aciertos de este nicho, porque TODA licitación de gestión documental incluye «capacitación a usuarios» como entregable (de hecho decision.ts la lista entre sus PATRONES_EXIGENCIA, o sea como señal de acierto). En el NOMBRE, en cambio, «Curso de Transformación Digital para funcionarios» sí hay que descartarlo. Dos campos separados resuelven eso sin depender de anclajes `^` que obligarían a recordar en qué forma exacta viene el texto evaluado.",
+
+  "_hipotesis_a_validar": "Todo excluyente de este archivo cita el caso real que lo motivó, y esa es la regla del repo: no hay excluyentes sin caso en keywords.json ni en categorias.json. Si una corrida futura agrega uno sin caso, tiene una corrida de plazo para conseguirlo desde `licitaciones/data/_td-descartados.json` (que guarda cada fila descartada junto al patrón que la mató) o para desaparecer.",
+
+  "patron_requerido": "(sistema|plataforma|software|soluci[oó]n\\s+inform[aá]tica|servicio|gestor|suite|aplicaci[oó]n|arriendo|suscripci[oó]n|\\berp\\b|intranet|portal)[^\\n]{0,70}(gesti[oó]n\\s+(electr[oó]nica\\s+)?documental|gestor\\s+documental|documental|expediente\\s+electr[oó]nico|oficina\\s+de\\s+partes|firma\\s+electr[oó]nica|tr[aá]mites?\\s+en\\s+l[ií]nea|tramitaci[oó]n\\s+(electr[oó]nica|en\\s+l[ií]nea))|(gesti[oó]n\\s+documental|gestor\\s+documental|expediente\\s+electr[oó]nico|oficina\\s+de\\s+partes|procesos?\\s+documentales?)[^\\n]{0,70}(sistema|plataforma|software|web|saas|en\\s+l[ií]nea|digital)|ley\\s*(n[°º]\\s*)?21[\\.\\s]?180|21[\\.\\s]?180\\s*,?\\s*(sobre|de)\\s+transformaci[oó]n\\s+digital|doc\\s?digital|firma\\s?gob|\\bexedoc\\b",
+  "_patron_requerido_nota": "Exige que la compra sea del SERVICIO buscado y no solo que mencione la materia — mismo criterio que ya usan las categorías de Compra Ágil («un curso de Power BI, no una licencia de Power BI»). Medido el 2026-08-25 sobre 4.415 filas únicas de doce consultas: este patrón más los excluyentes de abajo dejaron 43 candidatos, ~34 de ellos del nicho de verdad. Nunca se busca `ley` sola: el buscador del portal devuelve 1.000 filas encabezadas por «ADQUISICIÓN DE MATERIAL DEPORTIVO» y «Construcción Multicancha» porque matchea ese token, y este patrón es lo único que impide que ese ruido llegue a la página.",
+
+  "patron_excluyente": "certificad[oa]s?\\s+de\\s+firma|e-?token|token\\s+de\\s+firma|token(es)?\\s+(usb|criptogr[aá]fic)|imagenolog[ií]a|radiolog[ií]a|mamograf|ecograf|rayos\\s+x|residuos\\s+(peligrosos|especiales|biol[oó]gico)|disposici[oó]n\\s+final\\s+de\\s+residuos|procesador(es)?\\s+intel|\\bxeon\\b|switch(es)?\\s+|fibra\\s+[oó]ptica|\\bups\\b|disco\\s+duro|servidor(es)?\\s+(hp|dell|lenovo|rack|torre)|adobe\\s+acrobat|atlassian|\\bjira\\b|amazon\\s+web\\s+services|\\baws\\b|(bodegaje|custodia|almacenaje|almacenamiento|retiro|destrucci[oó]n)\\s+(y\\s+[\\wáéíóúñ]+\\s+)?(de\\s+)?(cajas|documenta|archivos?)|archivo\\s+f[ií]sico|mano\\s+de\\s+obra|apoyo\\s+administrativo|\\bsobres\\b|impresora|multifuncional|fotocopiadora|t[oó]ner|microfilm",
+  "_patron_excluyente_notas": {
+    "certificado / e-token de firma": "Ya está en la categoría `ged` de keywords.json: el certificado de firma es un insumo de $50.000, no una plataforma. Ojo con el matiz que este nicho agrega: se descarta la COMPRA del certificado, no la frase «el sistema deberá permitir firmar con certificado de firma electrónica avanzada», que es un acierto. Por eso el patrón exige la palabra 'certificados de firma' / 'e-token' y no 'firma electrónica' a secas.",
+    "imagenología / radiología": "2111-197-LR26 'DIGITALIZACION PARA IMAGENOLOGIA' — equipamiento clínico, no gestión documental. Caso ya documentado en keywords.json.",
+    "residuos": "4291-43-LP26 (Universidad de Antofagasta), retiro de residuos peligrosos que incluye 'la gestión documental y de trazabilidad de los residuos'. Caso ya documentado en keywords.json.",
+    "hardware y conectividad": "Cuatro casos medidos el 2026-08-25, y los cuatro entraron por citar la Ley 21.180 en su PÁRRAFO DE JUSTIFICACIÓN, no en su objeto: 2735-199-LQ25 (switches, UPS y fibra óptica), 3986-3-LE26 (servidor y disco duro), 2200-22-LE26 (reparación de un sistema de audio) y 1020-40-LP26 (nube AWS para ALOJAR los gestores documentales de un ministerio). Es el mismo caso que el 'Intel Xeon' de 691232-7-LE26 que keywords.json ya excluye: comprar el fierro donde corre el sistema de otro no es contratar un sistema.",
+    "licencias de terceros": "610-6-LE26 'Suscripción Anual Licencias Adobe Acrobat' y 711-29-LE25 'RENOVACIÓN Y UPGRADE DE SUSCRIPCIÓN DE LAS LICENCIAS ATLASSIAN JIRA', ambas justificadas con la Ley 21.180. Comprar licencias de una herramienta ajena no es contratar un sistema de gestión documental.",
+    "archivo físico": "1057492-89-LE26 'SS CUSTODIA ALMACENAJE Y ADMI DE ARCHIVO DOCUMENTAL' y 1588-13-LE26 'servicio de almacenamiento de documentación física'. Usan exactamente la frase 'gestión documental' para un servicio de bodegaje.",
+    "dotación de personas": "1057374-5-LE26 '1 APOYO ADMINISTRATIVO PARA UNIDAD DE OFICINA DE PARTES', 1057402-81-LP26 'Apoyo de Mano de Obra' y 2270-30-CO26 'APOYO ADMINISTRATIVO COMPIN'. Contratar personas para operar una oficina de partes no es comprar el sistema.",
+    "insumos e impresión": "OJO con `sobres`: va en PLURAL a propósito. `\\bsobres?\\b` matchea la PREPOSICIÓN «sobre» y descartaba 4371-26-LE26, cuya descripción dice «en conformidad con la Ley N° 21.180 SOBRE Transformación Digital del Estado» — o sea, el excluyente mataba justo el mejor tipo de acierto del nicho. Casos reales: 1111089-7-LE26 'ADQUISICION DE SOBRES PARA GESTOR DOCUMENTAL ANID' (30.000 sobres), 1233616-49-LE26 'MANTENIMIENTO IMPRESORAS Y MULTIFUNCIONALES' y 2686-75-LE26 'ARRIENDO Y MANTENCIÓN DE FOTOCOPIADORAS'."
+  },
+
+  "patron_excluyente_nombre": "\\b(cursos?|diplomado|seminario|talleres?|charla|relator[ií]a|m[aá]g[ií]ster|capacitaci[oó]n)\\b|servicio\\s+integral\\s+de\\s+digitalizaci[oó]n|digitalizaci[oó]n\\s+(masiva|clasificaci[oó]n)",
+  "_patron_excluyente_nombre_nota": "Solo se evalúa contra el NOMBRE. 'Capacitación' en la descripción es señal de acierto (todo sistema documental se entrega con capacitación a usuarios); en el nombre es otro rubro entero — el mismo caso que motivó el excluyente de `bi` y `pmo` en keywords.json (2020-153-COT26 'Curso Gestión de proyectos ágiles'). La digitalización masiva como servicio externo se descarta por 4718-1-LE26 'SERVICIO DE DIGITALIZACIÓN CLASIFICACIÓN Y CUSTODIA DE DOCUMENTACIÓN PARA SENCE LOS LAGOS': es escanear con terceros, no entregar un sistema.",
+
+  "categorias": [
+    {
+      "id": "ley21180",
+      "nombre": "Ley 21.180 / Transformación Digital del Estado",
+      "descripcion": "La licitación invoca la norma o el programa. Es la señal de mayor precisión del nicho: el número de ley no se matchea por azar.",
+      "patron_mencion": "ley\\s*(n[°º]\\s*|n\\.?\\s*°?\\s*)?21[\\.\\s]?180|21[\\.\\s]?180\\s*,?\\s*(sobre|de)\\s+transformaci[oó]n\\s+digital|ley\\s+de\\s+transformaci[oó]n\\s+digital\\s+del\\s+estado|transformaci[oó]n\\s+digital\\s+del\\s+estado",
+      "_patron_mencion_nota": "El número va SIEMPRE anclado a «ley», «N°» o a la frase «sobre/de transformación digital». Sin ese ancla, `21.180` pesca montos ($21.180) y numerales de artículos.",
+      "consultas_portal": ["ley 21.180", "transformacion digital"]
+    },
+    {
+      "id": "ged-web",
+      "nombre": "Sistema de gestión documental web / procesos documentales",
+      "descripcion": "El sistema mismo: el objeto central de la búsqueda.",
+      "patron_mencion": "gesti[oó]n\\s+(electr[oó]nica\\s+)?documental|gestor\\s+documental|sistema\\s+documental|plataforma\\s+documental|repositorio\\s+documental|gesti[oó]n\\s+de\\s+documentos?|procesos?\\s+documentales?|expediente\\s+electr[oó]nico|documento\\s+electr[oó]nico|oficina\\s+de\\s+partes|archivo\\s+(digital|electr[oó]nico)|tr[aá]mites?\\s+en\\s+l[ií]nea|\\bsgd\\b",
+      "_patron_mencion_nota": "Acá NO se matchean prefijos truncados («documen», «proceso») como sí hace `ged` en keywords.json, y por una razón concreta: aquel patrón compensa que el LISTADO DE LA API entrega el Nombre cortado a ~50 caracteres. Este barrido descubre por el buscador del portal, que entrega nombre y descripción COMPLETOS, así que se puede exigir la frase entera y ganar precisión sin perder recall.",
+      "consultas_portal": [
+        "gestion documental",
+        "sistema de gestion documental web",
+        "procesos documentales",
+        "expediente electronico"
+      ]
+    },
+    {
+      "id": "firma",
+      "nombre": "Firma electrónica avanzada",
+      "descripcion": "Firma como capacidad de la plataforma, no como certificado comprado por unidad.",
+      "patron_mencion": "firma\\s+electr[oó]nica(\\s+avanzada)?|firma\\s+digital|\\bfirmador\\b|visaci[oó]n\\s+electr[oó]nica|firma\\s+de\\s+documentos?\\s+electr[oó]nic",
+      "consultas_portal": ["firma electronica avanzada"]
+    },
+    {
+      "id": "docdigital",
+      "nombre": "DocDigital / FirmaGob / Exedoc / ClaveÚnica",
+      "descripcion": "Los servicios documentales y de firma del propio Estado, nombrados por su nombre. Precisión casi total y recall bajísimo: 0 filas en publicadas, 1 en cerradas y 1 en adjudicadas al 2026-08-25. Pero cuando aparecen es casi siempre como REQUISITO DE INTEGRACIÓN, o sea, un requerimiento funcional explícito — justo el insumo de la Fase 3.",
+      "patron_mencion": "doc\\s?digital|firma\\s?gob|\\bexedoc\\b|clave\\s?[uú]nica|\\bpisee\\b",
+      "consultas_portal": ["docdigital", "firmagob", "exedoc"]
+    }
+  ],
+
+  "_consultas_portal_nota": "Nueve consultas. Varias son casi sinónimas a propósito («gestion documental», «sistema de gestion documental web»): como el buscador topa en 1.000 filas ordenadas por relevancia, cada redacción devuelve un top-1.000 distinto. La otra vía —y la medida como mejor— es rotar `idOrden`, que sobre la misma consulta da un corte distinto: ver ORDENES_BUSCADOR en licitaciones/src/lib/buscador-portal.ts.",
+
+  "ejes_requerimientos": [
+    {
+      "id": "interoperabilidad",
+      "nombre": "Interoperabilidad e integraciones",
+      "patrones": [
+        { "requisito": "Integración con FirmaGob", "patron": "firma\\s?gob[^.\\n]{0,140}" },
+        { "requisito": "Integración con DocDigital", "patron": "doc\\s?digital[^.\\n]{0,140}" },
+        { "requisito": "Integración con Exedoc", "patron": "exedoc[^.\\n]{0,140}" },
+        { "requisito": "Autenticación con ClaveÚnica", "patron": "clave\\s?[uú]nica[^.\\n]{0,140}" },
+        { "requisito": "API REST o servicios web", "patron": "(api\\s+rest|\\bapi\\b\\s+de\\s+integraci|servicios?\\s+web|web\\s?service|interoperabilidad|\\bpisee\\b)[^.\\n]{0,140}" }
+      ]
+    },
+    {
+      "id": "firma",
+      "nombre": "Firma y visación",
+      "patrones": [
+        { "requisito": "Firma electrónica avanzada", "patron": "firma\\s+electr[oó]nica\\s+avanzada[^.\\n]{0,140}" },
+        { "requisito": "Flujo de visación o aprobación", "patron": "(visaci[oó]n|flujo\\s+de\\s+aprobaci[oó]n|firma\\s+en\\s+cadena|firma\\s+m[uú]ltiple)[^.\\n]{0,140}" },
+        { "requisito": "Sello o estampado de tiempo", "patron": "(timbre\\s+electr[oó]nico|estampado\\s+de\\s+tiempo|sello\\s+de\\s+tiempo)[^.\\n]{0,140}" }
+      ]
+    },
+    {
+      "id": "documental",
+      "nombre": "Capacidades documentales",
+      "patrones": [
+        { "requisito": "Expediente electrónico", "patron": "expediente\\s+electr[oó]nico[^.\\n]{0,140}" },
+        { "requisito": "Foliación o numeración correlativa", "patron": "(foliaci[oó]n|foliado|numeraci[oó]n\\s+correlativa)[^.\\n]{0,140}" },
+        { "requisito": "Metadatos y norma documental", "patron": "(metadatos?|iso\\s*15489|\\bmoreq\\b|\\bnch\\s*\\d+)[^.\\n]{0,140}" },
+        { "requisito": "OCR / reconocimiento óptico", "patron": "(\\bocr\\b|reconocimiento\\s+[oó]ptico)[^.\\n]{0,140}" },
+        { "requisito": "Búsqueda de texto completo", "patron": "(b[uú]squeda\\s+(de\\s+)?texto\\s+completo|full\\s?-?text|b[uú]squeda\\s+avanzada)[^.\\n]{0,140}" },
+        { "requisito": "Notificación electrónica", "patron": "notificaci[oó]n\\s+electr[oó]nica[^.\\n]{0,140}" },
+        { "requisito": "Oficina de partes electrónica", "patron": "oficina\\s+de\\s+partes[^.\\n]{0,140}" }
+      ]
+    },
+    {
+      "id": "trazabilidad",
+      "nombre": "Trazabilidad y conservación",
+      "patrones": [
+        { "requisito": "Trazabilidad y auditoría", "patron": "(trazabilidad|pista\\s+de\\s+auditor[ií]a|log\\s+de\\s+auditor[ií]a|bit[aá]cora)[^.\\n]{0,140}" },
+        { "requisito": "Retención y eliminación documental", "patron": "(conservaci[oó]n\\s+de\\s+documentos|per[ií]odo\\s+de\\s+retenci[oó]n|eliminaci[oó]n\\s+documental|tabla\\s+de\\s+retenci[oó]n)[^.\\n]{0,140}" }
+      ]
+    },
+    {
+      "id": "marco-legal",
+      "nombre": "Marco legal invocado",
+      "patrones": [
+        { "requisito": "Ley 21.180 (Transformación Digital)", "patron": "(ley\\s*(n[°º]\\s*)?21[\\.\\s]?180|transformaci[oó]n\\s+digital\\s+del\\s+estado)[^.\\n]{0,140}" },
+        { "requisito": "Ley 19.880 (Procedimiento Administrativo)", "patron": "ley\\s*(n[°º]\\s*)?19[\\.\\s]?880[^.\\n]{0,140}" },
+        { "requisito": "Ley 19.799 (Firma Electrónica)", "patron": "ley\\s*(n[°º]\\s*)?19[\\.\\s]?799[^.\\n]{0,140}" }
+      ]
+    },
+    {
+      "id": "despliegue",
+      "nombre": "Despliegue y dimensionamiento",
+      "patrones": [
+        { "requisito": "Nube, SaaS u on-premise", "patron": "(en\\s+la\\s+nube|\\bcloud\\b|\\bsaas\\b|on\\s?-?premise|infraestructura\\s+del\\s+(mandante|servicio|municipio))[^.\\n]{0,140}" },
+        { "requisito": "Respaldo y disponibilidad", "patron": "(respaldo|\\bbackup\\b|disponibilidad\\s+del?\\s*\\d|99[,.]\\d\\s*%)[^.\\n]{0,140}" },
+        { "requisito": "Volumen de usuarios o documentos", "patron": "\\d[\\d.]*\\s*(usuarios?|licencias?|documentos?)[^.\\n]{0,140}" },
+        { "requisito": "Migración de datos", "patron": "(migraci[oó]n\\s+de\\s+(datos|documentos|informaci[oó]n)|portabilidad)[^.\\n]{0,140}" },
+        { "requisito": "Nivel de servicio (SLA)", "patron": "(nivel(es)?\\s+de\\s+servicio|\\bsla\\b|tiempo\\s+de\\s+respuesta)[^.\\n]{0,140}" }
+      ]
+    },
+    {
+      "id": "acceso",
+      "nombre": "Perfiles, roles y acceso",
+      "patrones": [
+        { "requisito": "Perfiles, roles y permisos", "patron": "(perfiles\\s+de\\s+usuario|roles\\s+y\\s+permisos|control\\s+de\\s+acceso)[^.\\n]{0,140}" },
+        { "requisito": "Accesibilidad web", "patron": "(accesibilidad\\s+web|\\bwcag\\b|decreto\\s+n?[°º]?\\s*1\\b)[^.\\n]{0,140}" },
+        { "requisito": "Portal ciudadano", "patron": "(portal\\s+ciudadan|atenci[oó]n\\s+ciudadana|ventanilla\\s+[uú]nica)[^.\\n]{0,140}" }
+      ]
+    }
+  ],
+  "_ejes_requerimientos_nota": "Estos patrones NO están en decision.ts a propósito. Los 15 PATRONES_EXIGENCIA de decision.ts son administrativos y contractuales (garantía de seriedad, declaración jurada, patente municipal, multas, visita a terreno): sirven para decidir si una oferta es admisible, que es para lo que se escribieron, pero no responden «qué tiene que hacer el software», que es justo lo que compara la Fase 3. decision.ts es compartido con el nicho `ged` y no se toca. Misma disciplina que allá: patrón -> cita literal -> sección de origen; nada se afirma sin la frase que lo respalda."
+}

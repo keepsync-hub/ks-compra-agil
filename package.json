@@ -29,6 +29,7 @@
     "antecedentes-licitacion": "tsx licitaciones/src/scripts/antecedentes.ts",
     "adjuntos-licitacion": "tsx licitaciones/src/scripts/adjuntos-navegador.ts",
     "leer-adjuntos": "tsx licitaciones/src/scripts/leer-adjuntos.ts",
+    "transformacion-digital": "tsx licitaciones/src/scripts/transformacion-digital.ts",
     "login-portal": "tsx licitaciones/src/scripts/login-portal.ts",
     "postear-n8n": "tsx src/scripts/postear-n8n.ts",
     "generar-documento": "tsx src/scripts/generar-documento.ts"
