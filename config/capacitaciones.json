@@ -3,6 +3,11 @@
   "_como_se_llenó": "Extraído del texto de los adjuntos ya descargados por el radar en data/<codigo>/attachments/ (pypdfium2 para PDF, python-docx para DOCX, catdoc para el .doc legado). No se infirió nada que no esté escrito en esos documentos; lo que el organismo no declara queda como null o 'no_declarado', nunca completado por analogía con otra compra. Una sola excepción: el bloque `relator` no sale de los adjuntos del organismo sino de los antecedentes del propio oferente (carpeta del relator/a designado/a), y declara su origen en el campo `fuente`. Todo lo demás sigue saliendo de los documentos de la compra.",
   "_regla_precio": "total = tope × 0.9 (10% bajo el tope), regla fijada explícitamente por el usuario el 2026-08-22 para el nicho de capacitación. NO se deriva de un costo real de KeepSync: no existe catálogo de costos de servicios (ver config/keepsync-oferta.json, insumo bloqueante `sin-catalogo-de-costos-de-servicios`). Por eso cada PDF sale marcado PRELIMINAR, igual que las cotizaciones de Array.",
   "_advertencia_evaluacion": "En las tres compras de Dipres el criterio de selección es EL MENOR PRECIO TOTAL entre las ofertas que cumplen todas las especificaciones. Cotizar al 90% del tope es, por construcción, una posición débil frente a un competidor que cotice más abajo. La regla la fijó el usuario; queda registrada acá la tensión, no corregida en silencio.",
+  "_no_cotizadas_y_por_que": "Compras Ágiles que el radar sí encontró en el nicho y que este archivo NO cubre, con el motivo. Se anota acá para que la ausencia se lea como una decisión y no como un olvido.",
+  "_no_cotizadas": {
+    "4491-375-COT26": "Ilustre Municipalidad de Penco - Educación, «Capacitación Estrategias de Inteligencia Artificial para el aula, Escuela Vipla». Tope $1.200.000, cierre 2026-08-28 17:00. Su único adjunto (Capacitación IA Vipla.pdf) es un PDF escaneado SIN capa de texto: no se pudo leer un solo requisito. Llenar esta ficha exigiría OCR o inventar el contenido del curso, y el cotizador no inventa. Queda sin cotizar y publicada solo en la grilla de oportunidades del radar.",
+    "1107279-199-COT26": "Instituto de Investigaciones Agropecuarias, «OpenAI ChatGPT API Créditos y Anthropic Claude API créditos». Tope $4.195.671, cierre 2026-08-28 15:45. No es capacitación: es el nicho de licencias, que se cotiza con npm run cotizar (fórmula de precio de lista + IVA + markup), no con la regla tope × 0,9 de este archivo. Hoy no se puede: config/company.json no está en el repo (es gitignored) y el cotizador de licencias se detiene antes de calcular. Sigue además pendiente el insumo bloqueante del nicho — la vía real de fulfillment y facturación de licencias Claude (ver CLAUDE.md)."
+  },
   "cotizaciones": {
     "1618-67-COT26": {
       "curso": "Herramientas básicas de Power BI para el análisis de datos",
@@ -1176,6 +1181,836 @@
           "id": "identidad-oferente",
           "exige": "Razón social, RUT y representante legal del oferente para completar la carátula y los anexos firmados.",
           "cita": "Anexos y formularios de la oferta",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "425-325-COT26": {
+      "curso": "Curso de capacitación en Power BI, niveles básico e intermedio",
+      "organismo_corto": "CAPJ — Poder Judicial",
+      "organismo_nombre": "Corporación Administrativa del Poder Judicial",
+      "_organismo_nombre_nota": "La API entrega institucion.organismo_comprador abreviado («CORP ADMINISTRATIVA DEL PODER JUDICIAL»). El TDR usa el nombre completo: «La Corporación Administrativa del Poder Judicial requiere contratar, para el Departamento de Contraloría Interna, una capacitación sobre Power BI».",
+      "fuente_documentos": [
+        "TDR_Curso_Capacitación_Power_BI_(publicar).pdf"
+      ],
+      "tributacion": {
+        "regimen": "no_declarado",
+        "cita": "«Presupuesto estimado $2.100.000. La cotización deberá estar expresada en pesos chilenos. Todos los precios que se incluyan en la cotización deberán expresarse en valores totales» — TDR, apartado I. Propuesta económica. El TDR no declara si el monto es neto, exento o con impuestos incluidos: se presenta el valor como TOTAL y el tratamiento tributario queda por confirmar con la Corporación."
+      },
+      "objetivo": "Proporcionar a los participantes las competencias fundamentales e intermedias que les permitan extraer, transformar, modelar, analizar y visualizar datos dispersos en múltiples sistemas institucionales mediante Microsoft Power BI, capacitándolos en la construcción de paneles de control dinámicos y transversales orientados al control interno, la auditoría y la toma de decisiones.",
+      "participantes": {
+        "maximo": 33,
+        "glosa": "33 funcionarios del Departamento de Contraloría Interna de la CAPJ, sin perjuicio de que la cantidad pueda variar por ajustes en la planificación."
+      },
+      "duracion": {
+        "horas_cronologicas": 21,
+        "sesiones": 14,
+        "horas_por_sesion": 1.5,
+        "glosa": "21 horas cronológicas (1.260 minutos) en 14 sesiones de 1,5 horas (90 min / 2 horas pedagógicas), con frecuencia de 3 clases por semana, en 4 semanas y dos días."
+      },
+      "modalidad": {
+        "tipo": "Virtual sincrónica",
+        "plataforma": "Plataforma Zoom provista por la Corporación Administrativa del Poder Judicial.",
+        "horario": "Días y horas laborales, idealmente en horario AM. Los días y horarios exactos se coordinan al momento de la contratación."
+      },
+      "fechas_ejecucion": "El TDR no fija fechas: «Los días y horarios exactos serán coordinados al momento de la contratación» (apartado B).",
+      "modulos": [
+        {
+          "titulo": "Módulo 1 — Introducción a Power BI Desktop y arquitectura de Business Intelligence",
+          "horas": 5,
+          "temas": [
+            "Conceptos de BI y arquitectura BI: datos operacionales y analíticos, ETL, ELT, Data Warehouse, Data Mart",
+            "Ecosistema Power BI: qué componentes existen y para qué sirve cada uno (Desktop y Service)",
+            "Recorrido por Power BI Desktop",
+            "Vistas Informe / Datos / Modelo",
+            "Flujo de trabajo de Power BI",
+            "Ejercicios guiados básicos, repaso y consultas"
+          ]
+        },
+        {
+          "titulo": "Módulo 2 — Conexión, extracción y preparación de datos multi-fuente (Power Query)",
+          "horas": 4,
+          "temas": [
+            "Conexión a múltiples orígenes: archivos planos (Excel, CSV), bases de datos institucionales y servicios en la nube",
+            "Limpieza y perfilado de datos",
+            "Combinación (Merge) y anexado (Append) de tablas de distintos sistemas",
+            "Despivoteo de columnas y tratamiento de valores nulos y errores",
+            "Automatización de la carga de datos estructurados"
+          ]
+        },
+        {
+          "titulo": "Módulo 3 — Modelado de datos y fundamentos de DAX aplicado a auditoría",
+          "horas": 4,
+          "temas": [
+            "Arquitectura de datos: esquema en estrella vs. copo de nieve",
+            "Relaciones entre tablas maestras y transaccionales; direccionalidad de filtros",
+            "Tablas de dimensiones temporales (Tabla Calendario)",
+            "Columnas calculadas vs. medidas agregadas",
+            "Funciones DAX para el control interno: SUM, AVERAGE, COUNT, CALCULATE, FILTER, ALL",
+            "Comparativas temporales: SAMEPERIODLASTYEAR, YTD"
+          ]
+        },
+        {
+          "titulo": "Módulo 4 — Diseño de informes visuales, storytelling y análisis transversal",
+          "horas": 4,
+          "temas": [
+            "Principios de diseño visual y comunicación efectiva de datos para comités de auditoría y jefaturas",
+            "Selección del gráfico adecuado por tipo de análisis: tendencias, distribución, composición, cumplimiento",
+            "Segmentadores (slicers), filtros cruzados y jerarquías (drill-down / drill-through)",
+            "Marcadores (bookmarks), paneles de selección y botones de navegación dinámica"
+          ]
+        },
+        {
+          "titulo": "Módulo 5 — Publicación, paneles y colaboración en Power BI Service",
+          "horas": 4,
+          "temas": [
+            "Publicación de informes y gestión de áreas de trabajo (Workspaces)",
+            "Creación y configuración de paneles de control (dashboards) ejecutivos",
+            "Actualizaciones automáticas de datos (Scheduled Refresh)",
+            "Nociones de Seguridad a Nivel de Fila (RLS) para información sensible de contraloría"
+          ]
+        }
+      ],
+      "modulos_nota": "Los cinco módulos, sus títulos y sus contenidos son los que fija el TDR en el apartado B («los contenidos deben considerar una distribución en cuatro (5) módulos», con el listado detallado de cada uno). El TDR fija el total de 21 horas cronológicas pero no reparte las horas entre módulos: la distribución 5+4+4+4+4 es propuesta de KeepSync y se ajusta con la contraparte técnica.",
+      "requisitos_metodologicos": [
+        "Metodología activo-participativa.",
+        "Evaluación diagnóstica inicial que permita conocer el nivel en que se encuentran los asistentes.",
+        "Casos prácticos, simulaciones y ejercicios aplicados, realizados con las herramientas institucionales sobre archivos de prueba.",
+        "Actividades de activación del conocimiento y cierre en cada jornada.",
+        "Al inicio de cada jornada, espacio para dudas y consultas de los participantes."
+      ],
+      "relator_exigido": {
+        "formacion": "Título profesional (excluyente) de al menos 8 semestres en Ciencias de la Administración, Ciencias de la Computación o Ingeniería, de universidad o IP reconocido por el Estado, acreditado con certificado verificable.",
+        "experiencia_laboral": "Especialización acreditada en Power BI de al menos 16 horas cronológicas (excluyente), con certificado o acta de la institución que la impartió. Deseable Auditoría si no es Contador Auditor.",
+        "experiencia_relatoria": "«Certificado de Experiencia» firmado y timbrado por la institución que recibió una capacitación previa en Power BI de al menos 21 horas (excluyente). La pauta da 100 puntos con 3 o más cursos y 50 con 1–2, sobre el 60% de la evaluación."
+      },
+      "entregables": [
+        "Ejecución de la capacitación según los objetivos y la metodología del TDR.",
+        "Evaluación sumativa grupal final: un caso preparado por el evaluador y resuelto en equipos.",
+        "Acta de asistencia y aprobación con las horas de la capacitación.",
+        "Envío del material a los participantes antes de cada jornada."
+      ],
+      "logistica": "Clases por Zoom con la cuenta de la Corporación. Reunión informativa post adjudicación, por Zoom, en fecha a convenir. Las notificaciones contractuales llegan al correo que informe el contratista, que debe admitir mensajes de al menos 25 MB.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Copia simple del título profesional del relator (requisito excluyente)",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificado o acta de especialización en Power BI de al menos 16 horas cronológicas (requisito excluyente)",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificado de Experiencia firmado y timbrado por la institución que recibió la capacitación (requisito excluyente)",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Propuesta económica en pesos chilenos, en valores totales, con nombre, teléfono y correo electrónico de contacto del proveedor",
+          "tipo": "generable"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "puntaje",
+        "detalle": [
+          "Propuesta económica — 40%. Fórmula: (Precio mínimo ofertado / Oferta que se evalúa) × 100.",
+          "Experiencia del oferente — 60%. 1 a 2 cursos impartidos: 50 puntos. 3 o más cursos impartidos: 100 puntos.",
+          "El TDR advierte que en caso de diferencias entre el precio ofertado en el portal y el documento de cotización, prevalece el indicado en la cotización."
+        ]
+      },
+      "multas": "Multa equivalente al 10% del valor total de cada jornada no realizada si el adjudicatario no se presenta a una sesión, no proporciona un reemplazo con la formación y certificación correspondiente y no solicitó el cambio con un mínimo de 48 horas de anticipación. Se aplica en el pago más próximo. El adjudicatario dispone de cinco días hábiles para presentar descargos, ampliables hasta treinta días.",
+      "pago": "Contra entrega del Acta que da cuenta de la asistencia y evaluación de los asistentes, al término de la capacitación. Si el proceso no finaliza, se pagan las horas utilizadas contra un informe de evaluación y avance aprobado por Contraloría Interna. El pago se realiza dentro de 30 días corridos desde la presentación de la factura o boleta de honorarios, previa recepción conforme.",
+      "criterios_direccionadores": [
+        {
+          "id": "relator-titulo-8-semestres",
+          "exige": "Título profesional de 8 semestres o más en Ciencias de la Administración, Ciencias de la Computación o Ingeniería, acreditado con certificado que permita verificarlo electrónicamente. Es requisito excluyente: sin él la oferta no se evalúa.",
+          "cita": "TDR, apartado C — «El relator debe contar con título profesional (requisito excluyente) … de al menos 8 semestres. … La acreditación de la formación académica es un requisito excluyente.»",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-especializacion-powerbi-16h",
+          "exige": "Certificado o acta de especialización en Power BI de al menos 16 horas cronológicas, emitido por la institución que la impartió. Requisito excluyente.",
+          "cita": "TDR, apartado C — «La especialización en Power BI, debe tener a lo menos 16 hrs. cronológicas de duración y debe ser acreditada mediante un certificado o acta, emitido por la institución que efectuó dicha especialización como requisito excluyente.»",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "certificado-experiencia-timbrado",
+          "exige": "«Certificado de Experiencia» firmado y timbrado por la empresa o institución que recibió una capacitación previa en Power BI de al menos 21 horas. Requisito excluyente y emitido por un tercero: no se puede producir, hay que pedirlo.",
+          "cita": "TDR, apartado C — «adjuntando un “Certificado de Experiencia”, como requisito excluyente, el cual debe ser completado con los datos solicitados, firmado y timbrado por la empresa o institución que haya recibido la capacitación … con una cantidad de horas a lo menos igual a las solicitadas en el curso a contratar.»",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "experiencia-3-cursos-100-puntos",
+          "exige": "Acreditar 3 o más cursos de Power BI impartidos para obtener los 100 puntos del factor Experiencia, que pesa el 60% de la evaluación. Con 1 o 2 cursos el puntaje cae a la mitad, una brecha de 30 puntos ponderados que el 40% de precio no alcanza a compensar.",
+          "cita": "TDR, apartado H — «Criterio Experiencia del oferente … 1-2 cursos impartidos 50 puntos … 3 o más cursos impartidos 100 [puntos] … Ponderado 60%».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "regimen-tributario",
+          "exige": "Confirmar con la Corporación si el presupuesto estimado de $2.100.000 es neto, exento o con impuestos incluidos: el TDR solo pide «valores totales» y el régimen cambia el valor a ingresar en el portal.",
+          "cita": "TDR, apartado I — «Presupuesto estimado $2.100.000 … Todos los precios que se incluyan en la cotización deberán expresarse en valores totales.»",
+          "tipo": "tributario",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "identidad-oferente",
+          "exige": "Razón social, RUT, teléfono y correo electrónico ubicable del oferente para la propuesta económica y la eventual orden de compra.",
+          "cita": "TDR, apartado L — «El proveedor que cotice deberá adjuntar copia simple de Título Profesional, Certificación, Certificado de Experiencia u otros documentos que acrediten tal condición (orden de compra y/o factura) y la Propuesta Económica, además, indicar número de teléfono y correo electrónico.»",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "3616-123-COT26": {
+      "curso": "Curso de capacitación «Inteligencia artificial en salud»",
+      "organismo_corto": "Municipalidad de Combarbalá — DESAM",
+      "organismo_nombre": "I. Municipalidad de Combarbalá — Departamento de Salud Municipal",
+      "fuente_documentos": [
+        "Bases técnicas Inteligencia artificial en salud.pdf"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«El monto máximo disponible es de $1.600.000.- valor bruto» — Bases técnicas, apartado 3, Monto Disponible. El organismo declara el tope como valor bruto, es decir con impuestos incluidos."
+      },
+      "objetivo": "Fortalecer las competencias de los funcionarios del Departamento de Salud de Combarbalá en el uso responsable y estratégico de herramientas de Inteligencia Artificial, promoviendo su aplicación en los procesos clínicos, administrativos y de gestión de la Atención Primaria de Salud, considerando criterios de innovación, ética, protección de datos, sostenibilidad y mejora continua de la atención.",
+      "participantes": {
+        "maximo": 80,
+        "glosa": "80 funcionarios del Departamento de Salud de Combarbalá."
+      },
+      "duracion": {
+        "horas_cronologicas": 15,
+        "sesiones": 2,
+        "horas_por_sesion": 7.5,
+        "glosa": "20 horas pedagógicas (15 cronológicas) en dos jornadas de 8:30 a 16:00 hrs."
+      },
+      "modalidad": {
+        "tipo": "Presencial",
+        "plataforma": "Dependencias del Departamento de Salud de Combarbalá. Los talleres se hacen con los dispositivos de los participantes (celular, tablet, notebook).",
+        "horario": "08 y 09 de septiembre de 2026, de 8:30 a 16:00 hrs."
+      },
+      "modalidad_observacion": "Las bases no escriben la palabra «presencial», pero fijan la modalidad de hecho: entrega de coffee break o colación fría cada día en el lugar, certificados en formato físico, y talleres con dispositivos de los participantes. La propuesta se presenta como presencial en Combarbalá y se deja la confirmación como consulta al Departamento de Salud.",
+      "fechas_ejecucion": "08 y 09 de septiembre de 2026, 8:30 a 16:00 hrs. Los contenidos educativos (PPT, guías) deben entregarse en formato digital 2 días hábiles antes del inicio, con plazo el 04 de septiembre de 2026.",
+      "modulos": [
+        {
+          "titulo": "Módulo 1 — Introducción a la Inteligencia Artificial (primer día)",
+          "horas": 3,
+          "temas": [
+            "Conceptos fundamentales de Inteligencia Artificial",
+            "Evolución histórica de la IA",
+            "Tipos de Inteligencia Artificial",
+            "Aprendizaje automático (Machine Learning)",
+            "IA generativa y modelos de lenguaje",
+            "Tendencias mundiales en IA aplicada a la salud",
+            "Estrategia Nacional de Inteligencia Artificial en Chile"
+          ]
+        },
+        {
+          "titulo": "Módulo 2 — Aplicaciones de la IA en Atención Primaria de Salud, con talleres prácticos 1 y 2",
+          "horas": 4,
+          "temas": [
+            "Automatización de procesos administrativos",
+            "Apoyo a la toma de decisiones clínicas",
+            "Gestión de agendas y listas de espera; análisis predictivo en salud",
+            "IA para educación de pacientes, promoción y prevención",
+            "Casos de uso nacionales e internacionales",
+            "Taller práctico N.º 1 — Uso de herramientas de IA generativa: documentos institucionales, informes técnicos, protocolos, presentaciones y material educativo",
+            "Taller práctico N.º 2 — Diseño de asistentes digitales para funciones de APS"
+          ]
+        },
+        {
+          "titulo": "Módulo 3 — Ética, seguridad y protección de datos (segundo día)",
+          "horas": 3,
+          "temas": [
+            "Principios éticos de la IA y transparencia algorítmica",
+            "Protección de datos personales y confidencialidad de la información clínica",
+            "Riesgos del uso indiscriminado de IA",
+            "Sesgos algorítmicos",
+            "Gobernanza de datos en salud"
+          ]
+        },
+        {
+          "titulo": "Módulo 4 — IA, innovación y sostenibilidad, con talleres prácticos 3 y 4",
+          "horas": 5,
+          "temas": [
+            "Transformación digital del sector salud e IA para la gestión sanitaria",
+            "Automatización de procesos e innovación en Atención Primaria",
+            "Impacto ambiental de la infraestructura digital y consumo energético de plataformas de IA",
+            "Uso eficiente y sostenible de tecnologías digitales; buenas prácticas para reducir la huella ambiental digital",
+            "Taller práctico N.º 3 — Análisis del impacto sanitario y ambiental del uso de IA",
+            "Taller práctico N.º 4 — Elaboración de un Plan de Implementación de IA para la APS de Combarbalá"
+          ]
+        }
+      ],
+      "modulos_nota": "Los cuatro módulos, los cuatro talleres prácticos y todos sus contenidos son los que fijan las bases técnicas en el apartado 3, Especificaciones Técnicas → Contenidos, con su reparto por día. Las bases declaran el total (20 horas pedagógicas) pero no reparten las horas entre módulos: la distribución 3+4+3+5 es propuesta de KeepSync y se ajusta con el encargado de capacitación.",
+      "requisitos_metodologicos": [
+        "Metodología activa, participativa y experiencial.",
+        "Exposiciones dialogadas, análisis de casos y demostraciones.",
+        "Talleres prácticos con herramientas de IA sobre los dispositivos de los participantes.",
+        "Resolución de problemas y ejercicios colaborativos.",
+        "Actividades situadas en escenarios propios de la Atención Primaria de Salud.",
+        "Reflexión sobre desafíos éticos, impacto ambiental e innovación."
+      ],
+      "exigencias_adicionales": [
+        "Coffee break o colación fría cada día, o bien carpeta, lapicera y bloc de apuntes.",
+        "Diploma físico por participante en 10 días corridos, con los 9 datos y el orden que fijan las bases, incluida la mención «NIVEL TÉCNICO ALTO»; los errores se enmiendan en 5 días hábiles.",
+        "Aprobación con 85% de asistencia o más.",
+        "Entrevista previa del relator, telefónica o por videollamada, al menos 4 días corridos antes.",
+        "Comprobante de rendición al correo del funcionario si las pruebas son virtuales."
+      ],
+      "relator_exigido": {
+        "formacion": "Título profesional del relator que realizará la capacitación (documento exigido en la oferta). Las bases no acotan la disciplina.",
+        "experiencia_laboral": "Currículum Vitae del relator. Las bases no fijan años mínimos de ejercicio.",
+        "experiencia_relatoria": "Certificaciones del relator como docente en cursos de la temática. Solo del relator que dictará el curso: «no se aceptarán suplentes». Un cambio no notificado habilita a suspender la capacitación y sancionar."
+      },
+      "entregables": [
+        "Dos jornadas con los cuatro módulos y los cuatro talleres prácticos.",
+        "Contenidos educativos (PPT, guías) en digital, 2 días hábiles antes (04-09-2026).",
+        "Evaluación de los participantes con registro de la nota obtenida.",
+        "Diplomas físicos de aprobación, dentro de 10 días corridos del término.",
+        "Coffee break o colación por día, o los materiales alternativos.",
+        "Entrevista previa del relator con el encargado de capacitación."
+      ],
+      "logistica": "Dos jornadas en Combarbalá para 80 funcionarios. La coordinación se pacta al confirmar la aceptación; los contenidos digitales van al encargado de capacitación.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Título profesional del relator",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Currículum Vitae del relator",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificaciones del relator como docente en cursos relacionados con la temática",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Carta de compromiso que garantice la participación del relator presentado en la propuesta",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Programa del curso en formato digital",
+          "tipo": "generable"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "no_declarado",
+        "detalle": [
+          "Las bases no publican pauta ponderada: «Se adjudicará la oferta que cumpla de mejor manera y a cabalidad con el requerimiento».",
+          "Admisibilidad: personas naturales y jurídicas que cumplan el artículo 4 de la Ley 19.886, sin causales de inhabilidad de ese artículo ni del 35 quáter, y con giros comerciales referentes al área de la contratación.",
+          "«El mandante se reserva el derecho de no considerar ofertas de empresas que presenten reclamos en la plataforma de Mercado Público por contrataciones de esta u otra institución.»",
+          "«De no presentar [la documentación solicitada], el mandante se reserva el derecho de no considerar la oferta y su revisión.»"
+        ]
+      },
+      "multas": "Desde el término anticipado del contrato hasta una multa equivalente al 5% del monto contratado, fundada en un informe de la unidad requirente, por incumplir instrucciones del requirente o la propia oferta (cambio injustificado del relator, contenidos distintos al programa ofertado, entre otros).",
+      "pago": "Treinta días contados desde la fecha de emisión de la factura, sujeto a la entrega de los certificados al encargado de capacitación con todos los datos solicitados y a su recepción conforme.",
+      "criterios_direccionadores": [
+        {
+          "id": "relator-designado-sin-suplentes",
+          "exige": "Designar en la oferta al relator que efectivamente dictará el curso, con su documentación: no se aceptan suplentes y un cambio no notificado con 5 días hábiles habilita a suspender la capacitación y sancionar por incumplimiento.",
+          "cita": "Bases técnicas — «En su oferta debe adjuntar documentación solicitada SOLO del relator que realizará la capacitación, no se aceptaran suplentes.»",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-titulo-profesional",
+          "exige": "Título profesional del relator, adjunto a la oferta. Lo emite un tercero: solo puede recopilarse.",
+          "cita": "Bases técnicas, Documentación Solicitada al momento de ofertar — «Título profesional del relator.»",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-certificaciones-docencia",
+          "exige": "Certificaciones del relator que acrediten haber participado como docente en cursos relacionados con IA en salud. Sin ellas el mandante se reserva el derecho de no revisar la oferta.",
+          "cita": "Bases técnicas — «Certificaciones del relator de la capacitación, donde haya participado como docente en cursos relacionados al tema a tratar.»",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "logistica-presencial-combarbala",
+          "exige": "Ejecutar dos jornadas presenciales para 80 funcionarios en Combarbalá (Región de Coquimbo) el 08 y 09 de septiembre de 2026, con coffee break o colación por día y certificados impresos. Es logística que dirige la adjudicación hacia un proveedor con presencia o capacidad de despliegue en la zona.",
+          "cita": "Bases técnicas — «Destinatarios 80 Funcionarios del Departamento de Salud de Combarbalá … Se considera que el oferente pueda entregar un Coffe break o colación fría cada día de la capacitación … Los certificados deben ser entregados de forma física».",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "sin-reclamos-en-el-portal",
+          "exige": "No registrar reclamos en la plataforma de Mercado Público, de esta u otra institución: el mandante se reserva el derecho de no considerar esas ofertas.",
+          "cita": "Bases técnicas, Selección de ofertas — «el mandante se reserva el derecho de no considerar ofertas de empresas que presenten reclamos en la plataforma de Mercado Público por contrataciones de esta u otra institución.»",
+          "tipo": "historial_portal",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "giro-comercial-del-area",
+          "exige": "Tener giro comercial referente al área materia de la contratación (capacitación) y no estar afecto a las inhabilidades de los artículos 4 y 35 quáter de la Ley 19.886.",
+          "cita": "Bases técnicas, Selección de ofertas — «aceptándose las ofertas de las personas naturales y jurídicas que cumplan con los requisitos establecidos en el artículo 4 de la Ley 19.886 … y que tengan giros comerciales referentes al área materia de la contratación.»",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "fechas-fijas-de-ejecucion",
+          "exige": "Disponibilidad del relator para el 08 y 09 de septiembre de 2026 y entrega de los contenidos digitales el 04 de septiembre: la compra cierra el 28 de agosto, dejando una ventana muy corta entre adjudicación y ejecución.",
+          "cita": "Bases técnicas — «Fecha y Horarios 08 y 09 de septiembe de 2026 horario 8:30 a 16:00 hrs.» y «considerando el plazo de entrega el 04 de septiembre del 2026».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "identidad-oferente",
+          "exige": "Razón social, RUT y representante legal del oferente para la carta de compromiso y la eventual orden de compra.",
+          "cita": "Bases técnicas — «Carta de Compromiso que garantice la participación del relator que el oferente presenta en su propuesta.»",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "2306-700-COT26": {
+      "curso": "Curso de perfeccionamiento docente «Uso de nuevas tecnologías (Inteligencia Artificial)»",
+      "organismo_corto": "DAEM Osorno",
+      "organismo_nombre": "I. Municipalidad de Osorno — Departamento de Administración de Educación Municipal (DAEM), Escuela Sociedad Socorro de Señoras",
+      "fuente_documentos": [
+        "Términos Tec. de Referencia.pdf"
+      ],
+      "_fuente_nota": "El PDF del TDR está digitalizado con OCR de baja calidad (tildes y ñ corruptas). Las citas se transcriben con la ortografía corregida; el sentido y las cifras se conservan tal como aparecen.",
+      "tributacion": {
+        "regimen": "no_declarado",
+        "cita": "«13. FINANCIAMIENTO — El curso se financiará con recursos provenientes de la Subvención Escolar Preferencial (SEP). FUENTE DE FINANCIAMIENTO SEP — PRESUPUESTO DISPONIBLE 4.000.000.- TOTAL 4.000.000.-» — TDR, apartado 13. El documento no declara si el monto es neto, exento o con impuestos incluidos: se presenta el valor como TOTAL y el régimen queda por confirmar con el DAEM."
+      },
+      "objetivo": "Fortalecer las competencias digitales de los docentes mediante la capacitación en el uso pedagógico de herramientas de inteligencia artificial, promoviendo su integración ética, crítica y efectiva en los procesos de enseñanza y aprendizaje, en concordancia con el currículo nacional chileno.",
+      "participantes": {
+        "maximo": 25,
+        "glosa": "25 profesores y asistentes de la educación. Se paga por la cantidad efectiva de participantes."
+      },
+      "duracion": {
+        "horas_cronologicas": 8,
+        "sesiones": 1,
+        "horas_por_sesion": 8,
+        "glosa": "8 horas cronológicas presenciales en una jornada, sujeta a cambio según disposición del mandante."
+      },
+      "modalidad": {
+        "tipo": "Presencial",
+        "plataforma": "Laboratorio de computación de la Escuela Sociedad Socorro de Señoras, Osorno.",
+        "horario": "15 de septiembre de 2026, de 9:00 a 17:00 hrs."
+      },
+      "fechas_ejecucion": "15 de septiembre de 2026, 9:00 a 17:00 hrs., sujeto a cambios según disposición del mandante.",
+      "modulos": [
+        {
+          "titulo": "Módulo 1 — Introducción a la Inteligencia Artificial en Educación",
+          "horas": 1.5,
+          "temas": [
+            "Conceptos básicos de Inteligencia Artificial",
+            "Evolución de la IA",
+            "Marco normativo",
+            "Usos éticos de la IA en el aula"
+          ]
+        },
+        {
+          "titulo": "Módulo 2 — Herramientas de Inteligencia Artificial para la labor docente",
+          "horas": 2,
+          "temas": [
+            "Generación de textos con IA",
+            "Diseño de prompts efectivos",
+            "Comparación de diferentes herramientas de IA generativa (asistentes conversacionales, generadores de imágenes, plataformas de apoyo a la planificación)"
+          ]
+        },
+        {
+          "titulo": "Módulo 3 — Integración pedagógica de la IA",
+          "horas": 2,
+          "temas": [
+            "Diseño de planificación de clase con apoyo de IA",
+            "Elaboración de actividades de aprendizaje",
+            "Creación de material didáctico",
+            "Alineación con los Objetivos de Aprendizaje del currículo nacional"
+          ]
+        },
+        {
+          "titulo": "Módulo 4 — Evaluación de los aprendizajes con apoyo de IA",
+          "horas": 1.5,
+          "temas": [
+            "Diseño de instrumentos de evaluación",
+            "Elaboración de rúbricas",
+            "Elaboración de listas de cotejo"
+          ]
+        },
+        {
+          "titulo": "Módulo 5 — Aplicación práctica en aula y producto final",
+          "horas": 1,
+          "temas": [
+            "Implementación de estrategias en el aula",
+            "Adaptación de recursos para estudiantes",
+            "Producto final: planificación de clase o secuencia didáctica que incorpore herramientas de IA",
+            "Plenario de cierre"
+          ]
+        }
+      ],
+      "modulos_nota": "Los cinco focos de contenido son los mínimos que exige el TDR en el apartado 7 («La empresa ATE deberá diseñar y presentar una Propuesta Técnica Pedagógica que incorpore como contenidos mínimos las temáticas o focos indicados a continuación»). El TDR fija la jornada de 8 horas cronológicas pero no reparte las horas: la distribución 1,5+2+2+1,5+1 es propuesta de KeepSync y se ajusta con el coordinador técnico-pedagógico del DAEM.",
+      "requisitos_metodologicos": [
+        "Metodología teórico-práctica, aprendizaje activo, aprender haciendo.",
+        "Exposiciones breves más exploración práctica de herramientas de IA.",
+        "Talleres de manejo de IA generativa.",
+        "Aprendizaje basado en problemas sobre situaciones reales del contexto escolar.",
+        "Trabajo colaborativo, estudio de casos de uso ético y seguro, y plenarios.",
+        "Producto final: planificación de clase con IA alineada al currículo nacional."
+      ],
+      "exigencias_adicionales": [
+        "Un almuerzo con plato de fondo de carne y opción vegetariana, ensaladas, bebida, postre y café, y dos coffee breaks con la composición detallada que fija el TDR, servidos en el mismo establecimiento.",
+        "Dossier impreso y lápiz de pasta azul por participante, más el PPT por correo.",
+        "Evaluación sumativa escrita al término, que incide en la aprobación.",
+        "Aprobación con 100% de asistencia y nota mínima 4,0.",
+        "Certificado por participante titulado «Uso de nuevas tecnologías (Inteligencia Artificial)»."
+      ],
+      "relator_exigido": {
+        "formacion": "Título de Profesor de Educación General Básica o Media, o Ingeniero en Informática, Civil Informática o Computación, o profesional TI con formación en educación; más posgrado en Tecnología Educativa, Competencias Digitales o IA en educación.",
+        "experiencia_laboral": "Manejo de herramientas de IA generativa de uso educativo y de sus implicancias éticas y pedagógicas; dominio del currículo nacional y del Marco para la Buena Enseñanza.",
+        "experiencia_relatoria": "Experiencia acreditada en capacitación docente y uso pedagógico de IA, con antecedentes recientes. Además, inscripción en el Registro ATE como relator habilitado para este curso."
+      },
+      "entregables": [
+        "Jornada presencial de 8 horas en el laboratorio de computación del establecimiento.",
+        "Propuesta Técnica Pedagógica con los contenidos mínimos exigidos.",
+        "Evaluación sumativa escrita y certificado de aprobación de cada participante.",
+        "Alimentación (un almuerzo y dos coffee breaks) y materiales para los participantes.",
+        "Informe final en papel y digital, en 5 días hábiles."
+      ],
+      "logistica": "Jornada en el laboratorio de computación de la escuela, en Osorno, para 25 profesionales. El informe y los certificados entran por oficina de partes del DAEM.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Certificado ATE de la institución (Registro Nacional de Asistencia Técnica Educativa)",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificado ATE que acredite el curso inscrito en el Registro ATE",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Respaldo del relator como relator habilitado ATE para este curso",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Currículum, título profesional y certificado de posgrado del capacitador",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Antecedentes de capacitaciones similares recientes",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Propuesta Técnica Pedagógica con los contenidos mínimos",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Oferta económica por la totalidad de los servicios",
+          "tipo": "generable"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "no_declarado",
+        "detalle": [
+          "El TDR no publica pauta ponderada de evaluación. Fija requisitos de la institución proponente (apartado 6) y exige ofertar por la totalidad de los servicios solicitados a través del portal (apartado 15).",
+          "El filtro determinante es de admisibilidad: institución acreditada en el Registro ATE, curso inscrito en el Registro ATE y relator habilitado en ese registro para este curso."
+        ]
+      },
+      "multas": "El TDR no declara multas ni sanciones pecuniarias.",
+      "pago": "La entrega de informes y certificados no puede superar los 5 días hábiles finalizada la capacitación, ingresados a oficina de partes del DAEM-Osorno. Tras la recepción conforme por parte del DAEM, la empresa puede iniciar la emisión de la factura.",
+      "criterios_direccionadores": [
+        {
+          "id": "registro-ate-institucion",
+          "exige": "Estar acreditada en el Registro Nacional de Asistencia Técnica Educativa (ATE) del Ministerio de Educación, con el servicio validado mediante certificado ATE. Es el filtro que decide quién puede ofertar: sin registro ATE la oferta no es admisible.",
+          "cita": "TDR, apartado 6 — «Institución acreditada en el Registro Nacional de Asistencia Técnica Educativa (ATE) del Ministerio de Educación con el servicio validado mediante certificado ATE correspondiente».",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "curso-inscrito-en-registro-ate",
+          "exige": "Que el curso ofertado esté inscrito en el Registro ATE con nombre y temática similar al solicitado, demostrable con el certificado ATE, y que su propuesta técnico-pedagógica comprenda todos los contenidos requeridos. No basta con estar registrado como ATE: el curso mismo tiene que estarlo.",
+          "cita": "TDR, apartado 6 — «El curso a licitar “USO DE NUEVAS TECNOLOGÍAS (INTELIGENCIA ARTIFICIAL)”, de la entidad ejecutora ATE debe estar inscrito en el registro ATE, lo cual debe ser demostrable mediante el certificado ATE correspondiente.»",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-habilitado-en-registro-ate",
+          "exige": "Que el relator que dicte el curso esté inscrito en el Registro ATE como relator habilitado para este curso específico, adjuntando el respaldo que lo acredite.",
+          "cita": "TDR, apartado 6 — «Los relatores que impartan el curso … deben estar inscritos en el Registro ATE como relatores habilitados para este curso, adjuntando el respaldo que los acredite.»",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-titulo-y-posgrado",
+          "exige": "Título de Profesor de Educación General Básica o Media, o Ingeniero en Informática, Civil Informática o en Computación, o profesional TI con formación complementaria en educación; más posgrado o especialización en Tecnología Educativa, Innovación Educativa, Competencias Digitales o IA aplicada a la educación, con su certificado.",
+          "cita": "TDR, apartado 6 — «Poseer título profesional de Profesor(a) de Educación General Básica o de Enseñanza Media o ingeniero(a) en Informática … Profesional con posgrado o especialización en Tecnología Educativa, Innovación Educativa, Competencias Digitales o Inteligencia Artificial aplicada a la educación.»",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "experiencia-capacitacion-docente",
+          "exige": "Acreditar experiencia en capacitación docente, en uso pedagógico de IA y en el diseño e implementación de programas de formación para docentes o establecimientos, con antecedentes de capacitaciones similares de los últimos años.",
+          "cita": "TDR, apartado 6 — «Acreditar experiencia en capacitación docente y en el uso pedagógico de herramientas de inteligencia artificial … Presentar antecedentes de capacitaciones similares realizadas en los últimos años.»",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "dominio-marco-curricular-nacional",
+          "exige": "Manejo del currículo nacional, los Estándares de la Profesión Docente y el Marco para la Buena Enseñanza, que es lo que ordena los contenidos del curso y su producto final.",
+          "cita": "TDR, apartado 6 — «Manejar el currículo nacional, los Estándares de la Profesión Docente y el Marco para la Buena Enseñanza.»",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "logistica-alimentacion-y-materiales",
+          "exige": "Proveer, en Osorno y dentro del establecimiento, un almuerzo con menú detallado (incluida opción vegetariana), dos coffee breaks con composición fijada al detalle, y un dossier impreso más lápiz por participante. Es logística de catering e impresión local que dirige la adjudicación hacia un proveedor con presencia en la zona.",
+          "cita": "TDR, apartados 8 y 9 — «8 SERVICIOS ADICIONALES El curso debe considerar A) 1 servicio de almuerzo … b) 2 servicios de Coffe Break … c) El oferente debe contemplar que la alimentación será en el mismo establecimiento. 9 MATERIALES DE ENTREGA … Dossier con el material impreso para tomar apuntes. Lápiz de pasta azul.»",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "regimen-tributario",
+          "exige": "Confirmar con el DAEM si los $4.000.000 de presupuesto SEP son netos, exentos o con impuestos incluidos: el TDR no lo declara y cambia el valor a ingresar en el portal.",
+          "cita": "TDR, apartado 13 — «FUENTE DE FINANCIAMIENTO SEP — PRESUPUESTO DISPONIBLE 4.000.000.- TOTAL 4.000.000.-», sin mención al régimen tributario.",
+          "tipo": "tributario",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "identidad-oferente",
+          "exige": "Razón social, RUT y representante legal del oferente, y su condición de entidad ATE, para la propuesta y la eventual orden de compra.",
+          "cita": "TDR, apartado 15 — «El oferente deberá ofertar por la totalidad de los servicios solicitados, a través del portal de compras públicas www.mercadopublico.cl».",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "2735-1052-COT26": {
+      "curso": "Programa de capacitación asincrónica para emprendedores en innovación, startups e inteligencia artificial (HUB Emprende 2026)",
+      "organismo_corto": "Municipalidad de Lo Barnechea",
+      "organismo_nombre": "I. Municipalidad de Lo Barnechea — Dirección de Desarrollo Comunitario, programa HUB Emprende 2026",
+      "fuente_documentos": [
+        "REQUERIMIENTO COMPRA AGIL PROGRAMA CAPACITACION INNOVA + IA.docx",
+        "01. Cláusula de desempate Compra Ágil.pdf",
+        "03. Reglamento de Pago.pdf",
+        "04. Condiciones y plazos para la aceptación de la orden de compra.pdf"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«El oferente deberá presentar documento de cotización que indique el valor total del servicio de capacitación, considerando impuestos incluidos» — Especificaciones Técnicas, apartado IV. Admisibilidad, Documento de cotización."
+      },
+      "objetivo": "Capacitar a emprendedores en metodologías ágiles, transformación digital y estrategias de vanguardia para que desarrollen modelos de negocio competitivos, escalables y sostenibles, capaces de resolver problemas reales mediante soluciones innovadoras y adaptables al mercado actual.",
+      "participantes": {
+        "maximo": 100,
+        "glosa": "Hasta 100 emprendedores de la comuna (pack de hasta 100 diagnósticos)."
+      },
+      "duracion": {
+        "horas_cronologicas": 44,
+        "sesiones": 11,
+        "horas_por_sesion": 4,
+        "glosa": "11 cursos en cápsulas asincrónicas de 4 horas cada uno, disponibles 6 meses. El requerimiento no fija la carga horaria: exige declararla."
+      },
+      "modalidad": {
+        "tipo": "100% asincrónica (e-learning)",
+        "plataforma": "Plataforma propia con la identidad del Hub Lo Barnechea, enlazada desde el sitio web municipal y disponible al menos 6 meses.",
+        "horario": "Sin horario fijo: cada emprendedor avanza a su propio ritmo durante los 6 meses de disponibilidad de la plataforma."
+      },
+      "modalidad_observacion": "El requerimiento justifica expresamente la modalidad asincrónica («La elección de un programa formativo 100% asincrónico responde a criterios de eficiencia, cobertura y conciliación laboral») y la admisibilidad exige que la propuesta contemple la ejecución «en formato 100% asincrónico». Una propuesta sincrónica o presencial sería inadmisible.",
+      "fechas_ejecucion": "El ITS solicita el servicio por correo con 2 semanas de anticipación; el contratista entrega el programa en 5 días hábiles. La plataforma queda disponible al menos 6 meses.",
+      "modulos": [
+        {
+          "titulo": "Design Thinking para Emprendedores",
+          "horas": 4,
+          "temas": [
+            "Empatía con el cliente y definición de problemas",
+            "Ideación, prototipado rápido y testeo",
+            "Técnicas de entrevista para descubrir necesidades ocultas del cliente"
+          ]
+        },
+        {
+          "titulo": "Metodología Lean Startup",
+          "horas": 4,
+          "temas": [
+            "Ciclo Construir-Medir-Aprender",
+            "Producto Mínimo Viable (MVP) para probar hipótesis críticas",
+            "Pivotaje y contabilidad de la innovación"
+          ]
+        },
+        {
+          "titulo": "Transformación Digital para Pymes",
+          "horas": 4,
+          "temas": [
+            "Diagnóstico digital del negocio",
+            "Herramientas en la nube",
+            "Identificación de cuellos de botella operativos sustituibles por herramientas digitales"
+          ]
+        },
+        {
+          "titulo": "Marketing y ventas en E-Commerce",
+          "horas": 4,
+          "temas": [
+            "Modelo Canvas para e-commerce y claves para potenciarlo",
+            "Introducción al marketing y audiencias definidas",
+            "Segmentación en redes sociales"
+          ]
+        },
+        {
+          "titulo": "Modelos de Negocio Innovadores",
+          "horas": 4,
+          "temas": [
+            "Business Model Canvas y sus módulos",
+            "Patrones de modelos de negocio",
+            "Mapeo visual de infraestructura, oferta y clientes"
+          ]
+        },
+        {
+          "titulo": "Inteligencia Artificial Aplicada al Emprendimiento",
+          "horas": 4,
+          "temas": [
+            "Prompts eficientes",
+            "Herramientas de generación de texto y creación de copys de marketing",
+            "Automatización de la atención de clientes frecuentes con asistentes virtuales"
+          ]
+        },
+        {
+          "titulo": "Growth Hacking: Innovación en Mercadotecnia",
+          "horas": 4,
+          "temas": [
+            "Embudo de conversión y detección de fugas de clientes",
+            "Experimentos de marketing de bajo costo",
+            "Retención y viralidad"
+          ]
+        },
+        {
+          "titulo": "Propiedad Intelectual y Gestión de la Innovación",
+          "horas": 4,
+          "temas": [
+            "Patentes, marcas comerciales y derechos de autor",
+            "Secretos industriales",
+            "Búsqueda de antecedentes de marcas para asegurar la viabilidad del registro"
+          ]
+        },
+        {
+          "titulo": "Gestión del Cambio y Cultura de Innovación",
+          "horas": 4,
+          "temas": [
+            "Liderazgo adaptativo y fomento de la creatividad",
+            "Tolerancia al fracaso",
+            "Metodologías ágiles de trabajo"
+          ]
+        },
+        {
+          "titulo": "Innovación Sostenible y Economía Circular",
+          "horas": 4,
+          "temas": [
+            "Ecodiseño y modelos de negocio circulares",
+            "Reducción de huella de carbono y valor compartido",
+            "Rediseño de procesos productivos bajo reducción, reutilización y reciclaje"
+          ]
+        },
+        {
+          "titulo": "Financiamiento de la Innovación y Venture Capital",
+          "horas": 4,
+          "temas": [
+            "Fuentes de financiamiento",
+            "Armado de Pitch Deck para inversionistas ángeles",
+            "Valoración de startups"
+          ]
+        }
+      ],
+      "modulos_nota": "Los once cursos y sus contenidos son los que fija el requerimiento en el apartado III, Especificaciones Técnicas → Contenidos Formativos, con su objetivo general y sus objetivos específicos. El requerimiento no declara horas por curso ni total del programa: la asignación uniforme de 4 horas cronológicas por curso (44 en total) es propuesta de KeepSync para poder emitir el diploma, que sí debe declarar «Duración en horas cronológicas», y se ajusta con el ITS del contrato. El requerimiento admite ampliar el temario: «El adjudicatario puede incorporar más contenido si encuentra necesario».",
+      "requisitos_metodologicos": [
+        "Formato 100% asincrónico, en cápsulas con horas y minutos claramente descritos.",
+        "Plataforma personalizada con la identidad del Hub Lo Barnechea, con diagnóstico, ruta de aprendizaje, cursos, talleres y novedades.",
+        "Pack de hasta 100 diagnósticos de emprendimiento y habilidades del emprendedor, con informe detallado del pool de evaluación.",
+        "Materiales, recursos físicos y digitales y plataformas necesarias para el aprendizaje, provistos por el adjudicatario."
+      ],
+      "exigencias_adicionales": [
+        "Plataforma disponible al menos 6 meses, con las actualizaciones necesarias.",
+        "Diploma digital por emprendedor, firmado por el alcalde y el ente ejecutor, con los 6 datos exigidos, enviado para visto bueno.",
+        "Lista de asistencia e informe de retroalimentación con la encuesta de satisfacción y sus 5 preguntas obligatorias.",
+        "El oferente y el relator asisten a las reuniones de coordinación; toda comunicación con el ITS, por correo institucional."
+      ],
+      "relator_exigido": {
+        "formacion": "El requerimiento no fija título ni disciplina del relator: la admisibilidad se juega en la experiencia acreditada del oferente.",
+        "experiencia_laboral": "No se exige experiencia individual del relator. Sí que el oferente y el relator asistan a las reuniones de coordinación que cite la unidad requirente.",
+        "experiencia_relatoria": "Del oferente: al menos 2 capacitaciones digitales en emprendimiento, innovación, transformación digital o aceleración ejecutadas entre el 01-01-2024 y el 31-07-2026, acreditadas con facturas, órdenes de compra, contratos o certificados."
+      },
+      "entregables": [
+        "Plataforma con la identidad del Hub Lo Barnechea, operativa al menos 6 meses.",
+        "Hasta 100 diagnósticos con informe consolidado para el equipo del Hub.",
+        "Los once cursos en cápsulas asincrónicas, con horas y minutos declarados.",
+        "Programa y levantamiento de necesidades técnicas en 5 días hábiles.",
+        "Diploma digital por emprendedor y lista de asistencia.",
+        "Informe final de ejecución con encuesta de satisfacción y actividad de cierre."
+      ],
+      "logistica": "Servicio íntegramente en línea, sobre la plataforma del adjudicatario enlazada desde el sitio web municipal. Supervisa el ITS del contrato.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Documento de cotización con el valor total del servicio, impuestos incluidos, contemplando ejecución 100% asincrónica",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Acreditación de al menos 2 capacitaciones digitales ejecutadas entre el 01-01-2024 y el 31-07-2026: facturas, órdenes de compra, contratos y/o certificados de conformidad",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Propuesta técnica del programa: plataforma, diagnóstico, catálogo de cápsulas, entregables y plan de ejecución",
+          "tipo": "generable"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "no_declarado",
+        "detalle": [
+          "El requerimiento no publica pauta ponderada. Fija una barrera de admisibilidad: «Las ofertas que no acrediten experiencia ejecutada durante el período comprendido entre el 1 de enero de 2024 y el 31 de julio de 2026 … serán declaradas inadmisibles y no continuarán en el proceso de evaluación.»",
+          "La experiencia debe corresponder a capacitación digital (cápsulas de video, cursos virtuales o e-learning), a la temática (innovación, emprendimiento, transformación digital, aceleración de startups) o al público objetivo (emprendedores, fundadores, micro y pequeñas empresas).",
+          "Desempate: en caso de empate entre ofertas que cumplan íntegramente las especificaciones y presenten el mismo valor económico, se adjudica a la que figure primero en el orden de ingreso registrado en «Descargar resultados en Excel» del portal."
+        ]
+      },
+      "multas": "El requerimiento no fija monto de multa. Establece que si el contratista no entrega el programa del curso y el levantamiento de necesidades técnicas dentro de los cinco días hábiles desde la solicitud del ITS, «podrá cursarse la respectiva multa o bien, si la falta lo amerita, poner término anticipado de contrato».",
+      "pago": "El pago se realiza según lo cotizado, en base a una propuesta y desarrollo de plataforma completa, previo Informe Final de Ejecución del servicio, entrega de los diplomas y realización de la actividad de cierre, y asegurando un servicio de al menos 6 meses. Rige además el Reglamento de Pago adjunto a la compra.",
+      "criterios_direccionadores": [
+        {
+          "id": "experiencia-2-capacitaciones-digitales",
+          "exige": "Acreditar al menos 2 capacitaciones digitales en emprendimiento, innovación, transformación digital o aceleración, ejecutadas entre el 01-01-2024 y el 31-07-2026, con facturas, órdenes de compra, contratos o certificados de conformidad de terceros. Es requisito de admisibilidad: sin él la oferta no pasa a evaluación, y la evidencia la emite el cliente, no el oferente.",
+          "cita": "Especificaciones Técnicas, IV. Admisibilidad — «El oferente deberá acreditar haber ejecutado al menos 2 capacitaciones digitales enfocadas en programas de emprendimiento, innovación, transformación digital o aceleración, durante los últimos tres años … Las ofertas que no acrediten experiencia … serán declaradas inadmisibles y no continuarán en el proceso de evaluación.»",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "plataforma-personalizada-hub-6-meses",
+          "exige": "Disponer de una plataforma e-learning propia, personalizable con la identidad del Hub Lo Barnechea, integrable al sitio web municipal y operativa al menos 6 meses con ruta de aprendizaje, talleres, novedades y actualizaciones. Dirige la adjudicación hacia proveedores que ya operan una plataforma, no hacia relatores.",
+          "cita": "Especificaciones Técnicas, VI. Requisitos de entrega — «Plataforma personalizada con la identidad del Hub Lo Barnechea durante al menos 6 meses, con acceso a diagnóstico, ruta de aprendizaje, cursos, talleres, novedades y demás contenidos disponibles.»",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "instrumento-100-diagnosticos",
+          "exige": "Contar con un instrumento de diagnóstico de emprendimiento y habilidades del emprendedor aplicable a hasta 100 personas, más un informe consolidado de resultados para el equipo del Hub.",
+          "cita": "Especificaciones Técnicas, III — «Diagnóstico Emprendimiento + Habilidades Emprendedor (pack de hasta 100 diagnósticos). Informe detallado del pull de evaluación.»",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "catalogo-11-cursos-producidos",
+          "exige": "Tener producidas —o producir antes de la ejecución— once cápsulas asincrónicas con los contenidos exactos que lista el requerimiento, cada una con horas y minutos declarados. Es un catálogo audiovisual completo, no una relatoría.",
+          "cita": "Especificaciones Técnicas, III — «Cursos en cápsulas asincrónicas con horas y minutos claramente descritos», seguido del listado de once contenidos formativos con sus objetivos.",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "duracion-no-declarada",
+          "exige": "Definir con el ITS la carga horaria del programa: el requerimiento no la fija, pero el diploma debe declarar la duración en horas cronológicas. Las 44 horas de esta propuesta son un supuesto de KeepSync, no un dato del organismo.",
+          "cita": "Especificaciones Técnicas, VI — «Este diploma debe contener lo siguiente: … d. Duración en horas cronológicas», sin que ninguna parte del requerimiento fije ese número.",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "desempate-por-orden-de-ingreso",
+          "exige": "Ante empate en cumplimiento y precio, gana la oferta ingresada primero. Presentar tarde es perder el desempate, y la compra cierra el 28 de agosto de 2026 a las 09:30.",
+          "cita": "Cláusula de Desempate en Compras Ágiles — «se seleccionará la propuesta del proveedor cuya oferta figure en primer lugar dentro del mencionado registro».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "identidad-oferente",
+          "exige": "Razón social, RUT, representante legal y correo institucional del oferente para el documento de cotización, las comunicaciones con el ITS y la eventual orden de compra.",
+          "cita": "Especificaciones Técnicas, VI — «el contratista deberá informar al ITS al inicio del contrato el correo electrónico que utilizará para efectuar las comunicaciones.»",
           "tipo": "identidad",
           "estado": "sin_informacion"
         }

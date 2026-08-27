@@ -3,6 +3,7 @@ import path from "node:path";
 import { ROOT_DIR } from "./config.js";
 import { reemplazarBloque } from "./pagina-compra-agil.js";
 import { GLOSA_TIPO, bandaScore, type CriterioDireccionador, type ScoreCapacitacion } from "./scoring-capacitacion.js";
+import { cierreYaPaso } from "./tiempo.js";
 
 const MARCA_INICIO =
   "<!-- COTIZACIONES:INICIO (generado por `npm run cotizar-capacitacion` — no editar a mano) -->";
@@ -82,6 +83,13 @@ const GLOSA_CRITERIO: Record<CotizacionPublicada["criterioEvaluacion"], string> 
 };
 
 function tarjeta(c: CotizacionPublicada): string {
+  // Este índice se acumula y nunca borra: una corrida de un solo código no puede hacer desaparecer
+  // de la página a las demás. El efecto secundario es que los borradores siguen publicados después
+  // del cierre, y una tarjeta cerrada es indistinguible de una viva salvo por leer la fecha. Se
+  // marca acá, en hora de Chile, y se manda al final de la grilla: publicar un borrador de una
+  // compra en la que ya no se puede ofertar, sin decirlo, es el mismo defecto que la grilla de
+  // oportunidades corrigió (ver CLAUDE.md, "Cuota agotada").
+  const cerrada = cierreYaPaso(c.fechaCierre);
   // El chip del régimen es `bad` cuando el organismo no lo declaró: no es un detalle contable
   // menor, decide qué número se ingresa en el portal y hay que preguntarlo antes de ofertar.
   const claseRegimen = c.regimenTributario === "no_declarado" ? "bad" : "ok";
@@ -94,7 +102,7 @@ function tarjeta(c: CotizacionPublicada): string {
     .map((t) => `${t.n} de ${GLOSA_TIPO[t.tipo].toLowerCase()}`)
     .join(", ");
 
-  return `      <article class="opp-card">
+  return `      <article class="opp-card${cerrada ? " cerrada" : ""}">
         <div class="score-row">
           <div class="score ${banda}">
             <span class="score-n">${c.score.score}%</span>
@@ -113,7 +121,7 @@ function tarjeta(c: CotizacionPublicada): string {
         <dl>
           <dt>Presupuesto del organismo</dt><dd>${clp(c.topeClp)}</dd>
           <dt>Valor ofertado</dt><dd><strong>${clp(c.totalClp)}</strong> · ${c.descuentoPct}% bajo el tope</dd>
-          <dt>Cierre de ofertas</dt><dd>${esc(c.fechaCierre)}</dd>
+          <dt>Cierre de ofertas</dt><dd>${esc(c.fechaCierre)}${cerrada ? ' <span class="badge bad">Cerrada — ya no se puede ofertar</span>' : ""}</dd>
           <dt>Relator/a</dt><dd>${
             c.relator
               ? `<strong>${esc(c.relator.nombre)}</strong> · ${esc(c.relator.titulo)}${
@@ -169,7 +177,10 @@ export function renderCotizacionesCapacitacion(cotizaciones: Map<string, Cotizac
   // este bloque existe para decidir dónde poner el esfuerzo, y lo primero que hay que ver es la
   // compra más abierta. El cierre desempata.
   const lista = [...cotizaciones.values()].sort(
-    (a, b) => b.score.score - a.score.score || a.fechaCierre.localeCompare(b.fechaCierre),
+    (a, b) =>
+      Number(cierreYaPaso(a.fechaCierre)) - Number(cierreYaPaso(b.fechaCierre)) ||
+      b.score.score - a.score.score ||
+      a.fechaCierre.localeCompare(b.fechaCierre),
   );
 
   if (lista.length === 0) {

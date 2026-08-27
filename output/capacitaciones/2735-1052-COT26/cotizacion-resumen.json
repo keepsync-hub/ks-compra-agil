@@ -1,0 +1,33 @@
+{
+  "codigo": "2735-1052-COT26",
+  "curso": "Programa de capacitación asincrónica para emprendedores en innovación, startups e inteligencia artificial (HUB Emprende 2026)",
+  "organismo": "I. Municipalidad de Lo Barnechea — Dirección de Desarrollo Comunitario, programa HUB Emprende 2026",
+  "tope_clp": 6116000,
+  "total_clp": 5504400,
+  "descuento_pct": 10,
+  "regimen_tributario": "impuestos_incluidos",
+  "formula": "90% del presupuesto disponible — regla del usuario, no derivada de costos reales",
+  "criterio_evaluacion_organismo": "no_declarado",
+  "archivo_publicable": "Q-20260827-IMunicipalidadDeLoBarnecheaDireccionDeDesarrolloCo.pdf",
+  "fuente_documentos": [
+    "REQUERIMIENTO COMPRA AGIL PROGRAMA CAPACITACION INNOVA + IA.docx",
+    "01. Cláusula de desempate Compra Ágil.pdf",
+    "03. Reglamento de Pago.pdf",
+    "04. Condiciones y plazos para la aceptación de la orden de compra.pdf"
+  ],
+  "requisitos_por_confirmar": 5,
+  "relator": null,
+  "score_apertura_pct": 65,
+  "score_criterios_sin_informacion": 7,
+  "score_criterios_cubiertos": 0,
+  "_score_nota": "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que falte revisar (config/capacitaciones.json → criterios_direccionadores).",
+  "pendientes": [
+    "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+    "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+    "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
+    "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
+    "Aclarar la contradicción de modalidad en las bases mediante consulta formal. El requerimiento justifica expresamente la modalidad asincrónica («La elección de un programa formativo 100% asincrónico responde a criterios de eficiencia, cobertura y conciliación laboral») y la admisibilidad exige que la propuesta contemple la ejecución «en formato 100% asincrónico». Una propuesta sincrónica o presencial sería inadmisible."
+  ],
+  "apto_para_enviar": false,
+  "_apto_nota": "Siempre false: falta designar relator/a con credenciales verificables, y el precio no sale de un costo real. El envío lo hace un humano, nunca este script."
+}

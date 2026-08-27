@@ -81,6 +81,10 @@
      "Este comprador, antes") y a menor ancho cada valor se parte en tres líneas. */
   .card-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); }
   .opp-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem; }
+  /* Borrador de una compra que ya cerró. El índice de cotizaciones se acumula y no borra, así que
+     estas tarjetas siguen publicadas; atenuadas y al final de la grilla se leen como lo que son:
+     antecedente, no oportunidad. */
+  .opp-card.cerrada { opacity: 0.62; border-style: dashed; }
   .opp-card .codigo { font-family: ui-monospace, Menlo, monospace; color: var(--accent-light); font-size: 0.85rem; }
   .opp-card .org { font-weight: 700; font-size: 1.05rem; line-height: 1.3; }
   .opp-card .nombre { color: var(--gray); font-size: 0.88rem; }
@@ -256,260 +260,206 @@
       oferta fuera — más lo que este mismo comprador hizo en sus compras anteriores. Todo sale de la
       ficha oficial; nada está inferido.
     </p>
-    <p class="meta-corrida">6 Compra(s) Ágil(es) abierta(s) · 3 × Cursos BI / datos · 3 × Cursos IA · revisado el 2026-08-22</p>
+    <p class="meta-corrida">6 Compra(s) Ágil(es) abierta(s) · 4 × Cursos IA · 1 × Cursos BI / datos · 1 × Licencias Claude / Anthropic · revisado el 2026-08-27</p>
     <div class="card-grid">
-      <div class="opp-card" id="1618-67-COT26">
-        <span class="cat-tags"><span class="cat-tag">Cursos BI / datos</span></span>
-        <span class="codigo">1618-67-COT26</span>
-        <span class="org">DIRECCION DE PRESUPUESTOS MINISTERIO DE</span>
-        <span class="nombre">Curso herramientas básicas de Power BI para el análisis de datos para un máximo de 20 funcionarios de la Dipres</span>
-        <span class="unidad">Ministerio de Hacienda - Dipres</span>
-        <p class="descripcion">DIPRES requiere la contratación de capacitación del curso denominado “Herramientas básicas de Power BI para el análisis de datos”, con el propósito de desarrollar competencias en los/as participantes para utilizar Power BI como herramienta de análisis y visualización de datos, aplicando técnicas de importación, transformación y modelamiento de información que permitan elaborar reportes dinámicos y tableros interactivos para un máximo de 20 funcionario/as.
-Se adjuntan especificaciones técnicas.</p>
-        <div class="chips"><span>primer llamado · solo EMT</span><span>5 oferta(s) ya recibida(s)</span><span>entrega 5 día(s)</span><span>1 cláusula(s) excluyente(s)</span><span>3 adjunto(s)</span></div>
-        <dl>
-          <dt>Tope</dt><dd>$1.500.000 CLP</dd>
-          <dt>Cierre</dt><dd>2026-08-25 11:00 — cierra en 3 días</dd>
-          <dt>Quién puede ofertar</dt><dd>Primer llamado — <strong>reservado a Empresas de Menor Tamaño</strong> (KeepSync es EMT)</dd>
-          <dt>Competencia</dt><dd>5 oferta(s) recibida(s)</dd>
-          <dt>Plazo de entrega</dt><dd>5 día(s) desde la orden de compra</dd>
-          <dt>Dirección de entrega</dt><dd>Teatinos 120 8vo. piso</dd>
-          <dt>Este comprador, antes</dt><dd>2 compra(s) ágil(es) previa(s) · 5 oferta(s) en promedio</dd>
-          <dt>Región</dt><dd>Región Metropolitana de Santiago</dd>
-        </dl>
-        <details class="detalle-lista">
-          <summary>1 producto(s) solicitado(s)</summary>
-          <ul>
-            <li>1 × Formación, capacitación y entrenamiento de personal — DIPRES requiere la contratación del curso denominado “Herramientas básicas de Power BI para el análisis de datos”, con el propósito de desarrollar competencias en los/as participantes para utilizar Power BI como herramienta de análisis y visualización de datos, aplicando técnicas de importación, transformación y modelamiento de información que permitan elaborar reportes dinámicos y tableros interactivos.
-Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio completar.
-</li>
-          </ul>
-        </details>
-        <details class="detalle-lista alerta">
-          <summary>Requisitos y causales de inadmisibilidad</summary>
-          <p><strong>Frases que dejan la oferta fuera</strong>, tal como las escribió el organismo:</p><ul><li>obligatorio completar.</li></ul>
-        </details>
-        <details class="detalle-lista">
-          <summary>3 documento(s) publicado(s) por el organismo</summary>
-          <ul>
-            <li>ANEXO N1.docx</li>
-            <li>ANEXO N2.docx</li>
-            <li>TDR Herramientas Básicas de PowerBI para análisis de datos.pdf</li>
-          </ul>
-          <p class="hint">El portal los entrega sin login: el radar los deja en <code>data/1618-67-COT26/attachments/</code>. Son documentos del comprador, no se republican acá.</p>
-        </details>
-        <div class="cta">
-          <span class="badge warn">Quedan 3 días para ofertar</span>
-          <a class="btn secondary" href="https://www.mercadopublico.cl/Portal/CompraAgil/DetalleCompra?codigo=1618-67-COT26">Ver en el portal y ofertar</a>
-        </div>
-      </div>
-
-      <div class="opp-card" id="577290-82-COT26">
+      <div class="opp-card" id="3616-123-COT26">
         <span class="cat-tags"><span class="cat-tag">Cursos IA</span></span>
-        <span class="codigo">577290-82-COT26</span>
-        <span class="org">Subsecretaria de Transportes </span>
-        <span class="nombre">ADQUISICIÓN DE CURSO AUTOMATIZACIÓN DEPROCESOS CON INTELIGENCIA ARTIFICIAL</span>
-        <span class="unidad">Subsidio Nacional Transporte Publico</span>
-        <p class="descripcion">ADQUISICIÓN DE CURSO AUTOMATIZACIÓN DEPROCESOS CON INTELIGENCIA ARTIFICIAL, PARA 2 PARTICIPANTES
-
-VER  HOJA DE REQUERIMIENTO TÉCNICO</p>
-        <div class="chips"><span>primer llamado · solo EMT</span><span>2 oferta(s) ya recibida(s)</span><span>entrega 60 día(s)</span><span>1 adjunto(s)</span></div>
+        <span class="codigo">3616-123-COT26</span>
+        <span class="org">ILUSTRE MINICIPALIDAD DE COMBARBALA</span>
+        <span class="nombre">Curso de Capacitación &quot;Inteligencia artificial en salud&quot;</span>
+        <span class="unidad">Departamento de Salud</span>
+        <div class="chips"><span>primer llamado · solo EMT</span><span>0 oferta(s) ya recibida(s)</span><span>1 adjunto(s)</span></div>
         <dl>
-          <dt>Tope</dt><dd>$1.000.000 CLP</dd>
-          <dt>Cierre</dt><dd>2026-08-25 11:00 — cierra en 3 días</dd>
+          <dt>Tope</dt><dd>$1.600.000 CLP</dd>
+          <dt>Cierre</dt><dd>2026-08-28 09:00 — <strong>cierra mañana</strong></dd>
           <dt>Quién puede ofertar</dt><dd>Primer llamado — <strong>reservado a Empresas de Menor Tamaño</strong> (KeepSync es EMT)</dd>
-          <dt>Competencia</dt><dd>2 oferta(s) recibida(s)</dd>
-          <dt>Plazo de entrega</dt><dd>60 día(s) desde la orden de compra</dd>
-          <dt>Dirección de entrega</dt><dd>AMUNATEGUI 139</dd>
-          <dt>Región</dt><dd>Región Metropolitana de Santiago</dd>
+          <dt>Competencia</dt><dd>0 oferta(s) recibida(s) <span class="sin-dato">(nadie ha ofertado aún)</span></dd>
+          <dt>Región</dt><dd>Región de Coquimbo </dd>
+          <dt>Detalle</dt><dd><span class="sin-dato">ficha resumida: la cuota diaria de la API se agotó antes de poder leer la ficha completa. Falta la descripción, los productos pedidos y el plazo de entrega — están en la ficha del portal.</span></dd>
         </dl>
-        <details class="detalle-lista">
-          <summary>1 producto(s) solicitado(s)</summary>
-          <ul>
-            <li>1 × Formación, capacitación y entrenamiento de personal — ADQUISICIÓN DE CURSO AUTOMATIZACIÓN DEPROCESOS CON INTELIGENCIA ARTIFICIAL
-
-VER REQUERIMIENTO TÉCNICO
-
-</li>
-          </ul>
-        </details>
         <details class="detalle-lista">
           <summary>1 documento(s) publicado(s) por el organismo</summary>
           <ul>
-            <li>Requerimiento de Compra_2026.doc</li>
+            <li>Bases técnicas Inteligencia artificial en salud.pdf</li>
           </ul>
-          <p class="hint">El portal los entrega sin login: el radar los deja en <code>data/577290-82-COT26/attachments/</code>. Son documentos del comprador, no se republican acá.</p>
+          <p class="hint">El portal los entrega sin login: el radar los deja en <code>data/3616-123-COT26/attachments/</code>. Son documentos del comprador, no se republican acá.</p>
         </details>
         <div class="cta">
-          <span class="badge warn">Quedan 3 días para ofertar</span>
-          <a class="btn secondary" href="https://www.mercadopublico.cl/Portal/CompraAgil/DetalleCompra?codigo=577290-82-COT26">Ver en el portal y ofertar</a>
+          <span class="badge bad">Cierra mañana</span>
+          <a class="btn secondary" href="https://www.mercadopublico.cl/Portal/CompraAgil/DetalleCompra?codigo=3616-123-COT26">Ver en el portal y ofertar</a>
         </div>
       </div>
 
-      <div class="opp-card" id="1057503-2156-COT26">
-        <span class="cat-tags"><span class="cat-tag">Cursos BI / datos</span></span>
-        <span class="codigo">1057503-2156-COT26</span>
-        <span class="org">HOSPITAL PADRE ALBERTO HURTADO</span>
-        <span class="nombre">Memo Nº96(03.08.26) capacitación. Curso herramientas de Power BI en análisis de datos (octubre y noviembre)</span>
-        <span class="unidad">Bienes y Servicios</span>
-        <p class="descripcion">Adquirir las habilidades necesarias para transformar datos en información útil mediante la creación de informes interactivos, paneles visuales y análisis avanzados que apoyen la toma de decisiones en una organización.</p>
-        <div class="chips"><span>primer llamado · solo EMT</span><span>2 oferta(s) ya recibida(s)</span><span>entrega 5 día(s)</span><span>1 adjunto(s)</span></div>
+      <div class="opp-card" id="2735-1052-COT26">
+        <span class="cat-tags"><span class="cat-tag">Cursos IA</span></span>
+        <span class="codigo">2735-1052-COT26</span>
+        <span class="org">I MUNICIPALIDAD LO BARNECHEA</span>
+        <span class="nombre">CAPACITACIÓN PARA EMPRENDEDORES DE INNOVACIÓN, STARTUPS Y/O INTELIGENCIA ARTIFICIAL</span>
+        <span class="unidad">Municipalidad de lo Barnechea - Adquisiciones - Consistorial</span>
+        <div class="chips"><span>primer llamado · solo EMT</span><span>0 oferta(s) ya recibida(s)</span><span>6 adjunto(s)</span></div>
         <dl>
-          <dt>Tope</dt><dd>$4.320.000 CLP</dd>
-          <dt>Cierre</dt><dd>2026-08-25 12:00 — cierra en 3 días</dd>
+          <dt>Tope</dt><dd>$6.116.000 CLP</dd>
+          <dt>Cierre</dt><dd>2026-08-28 09:30 — <strong>cierra mañana</strong></dd>
+          <dt>Quién puede ofertar</dt><dd>Primer llamado — <strong>reservado a Empresas de Menor Tamaño</strong> (KeepSync es EMT)</dd>
+          <dt>Competencia</dt><dd>0 oferta(s) recibida(s) <span class="sin-dato">(nadie ha ofertado aún)</span></dd>
+          <dt>Región</dt><dd>Región Metropolitana de Santiago</dd>
+          <dt>Detalle</dt><dd><span class="sin-dato">ficha resumida: la cuota diaria de la API se agotó antes de poder leer la ficha completa. Falta la descripción, los productos pedidos y el plazo de entrega — están en la ficha del portal.</span></dd>
+        </dl>
+        <details class="detalle-lista">
+          <summary>6 documento(s) publicado(s) por el organismo</summary>
+          <ul>
+            <li>04. Condiciones y plazos para la aceptación de la orden de compra.pdf</li>
+            <li>03. Reglamento de Pago.pdf</li>
+            <li>05. Código_de_Integridad_Municipal.pdf</li>
+            <li>REQUERIMIENTO COMPRA AGIL PROGRAMA CAPACITACION INNOVA + IA.docx</li>
+            <li>02. Infografía Canal de Denuncias.png</li>
+            <li>01. Cláusula de desempate Compra Ágil.pdf</li>
+          </ul>
+          <p class="hint">El portal los entrega sin login: el radar los deja en <code>data/2735-1052-COT26/attachments/</code>. Son documentos del comprador, no se republican acá.</p>
+        </details>
+        <div class="cta">
+          <span class="badge bad">Cierra mañana</span>
+          <a class="btn secondary" href="https://www.mercadopublico.cl/Portal/CompraAgil/DetalleCompra?codigo=2735-1052-COT26">Ver en el portal y ofertar</a>
+        </div>
+      </div>
+
+      <div class="opp-card" id="1107279-199-COT26">
+        <span class="cat-tags"><span class="cat-tag">Licencias Claude / Anthropic</span></span>
+        <span class="codigo">1107279-199-COT26</span>
+        <span class="org">INSTITUTO DE INVESTIGACIONES AGROPECUARIAS</span>
+        <span class="nombre">OpenAI ChatGPT API Creditos  y Anthropic Claude API creditos SEGUN REQUISITOS EN DOCUMENTO ADJUNTO</span>
+        <span class="unidad">QUILAMAPU</span>
+        <p class="descripcion">OpenAI ChatGPT API Creditos  y Anthropic Claude API creditos SEGUN REQUISITOS EN DOCUMENTO ADJUNTO</p>
+        <div class="chips"><span>primer llamado · solo EMT</span><span>2 oferta(s) ya recibida(s)</span><span>entrega 1 día(s)</span><span>1 adjunto(s)</span></div>
+        <dl>
+          <dt>Tope</dt><dd>$4.195.671 CLP</dd>
+          <dt>Cierre</dt><dd>2026-08-28 15:45 — <strong>cierra mañana</strong></dd>
           <dt>Quién puede ofertar</dt><dd>Primer llamado — <strong>reservado a Empresas de Menor Tamaño</strong> (KeepSync es EMT)</dd>
           <dt>Competencia</dt><dd>2 oferta(s) recibida(s)</dd>
-          <dt>Plazo de entrega</dt><dd>5 día(s) desde la orden de compra</dd>
-          <dt>Dirección de entrega</dt><dd>Esperanza 2150</dd>
-          <dt>Región</dt><dd>Región Metropolitana de Santiago</dd>
+          <dt>Vigencia pedida</dt><dd>12 mes(es)</dd>
+          <dt>Plazo de entrega</dt><dd>1 día(s) desde la orden de compra</dd>
+          <dt>Dirección de entrega</dt><dd>AV VICENTE MENDEZ 515</dd>
+          <dt>Región</dt><dd>Región del Ñuble</dd>
         </dl>
         <details class="detalle-lista">
           <summary>2 producto(s) solicitado(s)</summary>
           <ul>
-            <li>1 × Formación, capacitación y entrenamiento de personal — 52046000 CURSO DE CAPACITACION  Y OTROS: Curso herramientas de Power BI en análisis de datos desarrollo OCTUBRE. Detalles y características del curso en documento adjunto.</li>
-            <li>1 × Formación, capacitación y entrenamiento de personal — 52046000 CURSO DE CAPACITACION  Y OTROS: Curso herramientas de Power BI en análisis de datos desarrollo NOVIEMBRE. Detalles y características del curso en documento adjunto.</li>
+            <li>1 × Software de gestión de licencias — Provisión de créditos prepagados para consumo de la API de OpenAI por un monto de USD 1.500. El saldo deberá habilitarse en una organización o cuenta institucional administrada por INIA, sin recarga automática ni cargos adicionales. Debe permitir crear y administrar claves API, consultar consumo y saldo, establecer límites de gasto y acceder a los modelos disponibles para API conforme a las condiciones oficiales vigentes. Vigencia mínima del saldo: 12 meses desde su activación.</li>
+            <li>1 × Software de gestión de licencias — Provisión de créditos prepagados para consumo de la API de Anthropic por un monto de USD 1.500. El saldo deberá habilitarse en una organización o cuenta institucional administrada por INIA, sin recarga automática ni cargos adicionales. Debe permitir crear y administrar claves API, consultar consumo y saldo, establecer límites de gasto y acceder a los modelos disponibles para API conforme a las condiciones oficiales vigentes. Vigencia mínima del saldo: 12 meses desde su activación.
+</li>
           </ul>
         </details>
         <details class="detalle-lista">
           <summary>1 documento(s) publicado(s) por el organismo</summary>
           <ul>
-            <li>Memo Nº96(03.08.26)HerramientaPB.pdf</li>
+            <li>Termino_de_referencia_creditos_IA.pdf</li>
           </ul>
-          <p class="hint">El portal los entrega sin login: el radar los deja en <code>data/1057503-2156-COT26/attachments/</code>. Son documentos del comprador, no se republican acá.</p>
+          <p class="hint">El portal los entrega sin login: el radar los deja en <code>data/1107279-199-COT26/attachments/</code>. Son documentos del comprador, no se republican acá.</p>
         </details>
         <div class="cta">
-          <span class="badge warn">Quedan 3 días para ofertar</span>
-          <a class="btn secondary" href="https://www.mercadopublico.cl/Portal/CompraAgil/DetalleCompra?codigo=1057503-2156-COT26">Ver en el portal y ofertar</a>
+          <span class="badge bad">Cierra mañana</span>
+          <a class="btn secondary" href="https://www.mercadopublico.cl/Portal/CompraAgil/DetalleCompra?codigo=1107279-199-COT26">Ver en el portal y ofertar</a>
         </div>
       </div>
 
-      <div class="opp-card" id="2672-18-COT26">
+      <div class="opp-card" id="4491-375-COT26">
         <span class="cat-tags"><span class="cat-tag">Cursos IA</span></span>
-        <span class="codigo">2672-18-COT26</span>
-        <span class="org">I MUNICIPALIDAD DE CONCEPCION</span>
-        <span class="nombre">SERVICIO DE FORMACIÓN Y CAPACITACIÓN EN INNOVACIÓN PÚBLICA Y HERRAMIENTAS DE INTELIGENCIA ARTIFICIAL PARA LA GESTIÓN MUNICIPAL</span>
-        <span class="unidad">DIRECCION ADMINISTRATIVA MUNICIPALIDAD DE CONCEPCIÓN</span>
-        <p class="descripcion">1.1.	La Municipalidad de Concepción requiere contratar un servicio de formación y capacitación orientado al fortalecimiento de competencias en Innovación Pública y Herramientas de Inteligencia Artificial para la Gestión Municipal, con el propósito de promover la transformación digital, la modernización de los procesos institucionales y la incorporación de herramientas tecnológicas que contribuyan a mejorar la eficiencia, productividad y calidad de los servicios entregados a la comunidad. Esta ne</p>
-        <div class="chips"><span>primer llamado · solo EMT</span><span>12 oferta(s) ya recibida(s)</span><span>entrega 5 día(s)</span><span>1 adjunto(s)</span></div>
+        <span class="codigo">4491-375-COT26</span>
+        <span class="org">Ilustre Municipalidad de Penco - Educación</span>
+        <span class="nombre">Capacitación &quot;Estrategias de Inteligencia Artificial &quot;para el aula, Escuela Vipla.-</span>
+        <span class="unidad">Ilustre Municipalidad de Penco</span>
+        <p class="descripcion">Se solicita la contratación de una capacitación para docentes de la Escuela Vipla en &quot;Estrategias de Inteligencia Artificial para el aula&quot;.-</p>
+        <div class="chips"><span>primer llamado · solo EMT</span><span>2 oferta(s) ya recibida(s)</span><span>entrega 10 día(s)</span><span>1 adjunto(s)</span></div>
         <dl>
-          <dt>Tope</dt><dd>$6.020.000 CLP</dd>
-          <dt>Cierre</dt><dd>2026-08-25 12:00 — cierra en 3 días</dd>
+          <dt>Tope</dt><dd>$1.200.000 CLP</dd>
+          <dt>Cierre</dt><dd>2026-08-28 17:00 — <strong>cierra mañana</strong></dd>
           <dt>Quién puede ofertar</dt><dd>Primer llamado — <strong>reservado a Empresas de Menor Tamaño</strong> (KeepSync es EMT)</dd>
-          <dt>Competencia</dt><dd>12 oferta(s) recibida(s)</dd>
-          <dt>Plazo de entrega</dt><dd>5 día(s) desde la orden de compra</dd>
-          <dt>Dirección de entrega</dt><dd>Avenida Bernardo O&quot;Higgins 525</dd>
+          <dt>Competencia</dt><dd>2 oferta(s) recibida(s)</dd>
+          <dt>Plazo de entrega</dt><dd>10 día(s) desde la orden de compra</dd>
+          <dt>Dirección de entrega</dt><dd>Calle Camilo Henríquez N° 6 Lirquén</dd>
           <dt>Región</dt><dd>Región del Biobío </dd>
         </dl>
         <details class="detalle-lista">
           <summary>1 producto(s) solicitado(s)</summary>
           <ul>
-            <li>70 × Capacitación a empleados — 1.5.	Cobertura La capacitación estará dirigida a 70 funcionarios y funcionarias municipales pertenecientes a distintas Direcciones Municipales, considerando una convocatoria de carácter transversal. La modalidad permitirá la participación simultánea de funcionarios de diversas unidades, optimizando la cobertura institucional.</li>
+            <li>1 × Formación, capacitación y entrenamiento de personal — Capacitación presencial en el establecimiento educacional, para el día 24 de septiembre en &quot;Estrategias de Inteligencia Artificial para Aulas&quot; para docentes, para 18 personas, 5 horas cronológicas, debe contar de dos módulos, (1 conociendo la IA) y (2 Herramientas para planificar y crear recursos docentes&quot;, Se adjunta anexo con el detalle de los módulos y el material de apoyo solicitado.
+Solo se evaluarán las ofertas que adjunten el detalle de su servicio, incluir coffee.</li>
           </ul>
         </details>
         <details class="detalle-lista">
           <summary>1 documento(s) publicado(s) por el organismo</summary>
           <ul>
-            <li>Bases_Tecnicas_Innovacion_Publica.V2.pdf</li>
+            <li>Capacitación IA Vipla.pdf</li>
           </ul>
-          <p class="hint">El portal los entrega sin login: el radar los deja en <code>data/2672-18-COT26/attachments/</code>. Son documentos del comprador, no se republican acá.</p>
+          <p class="hint">El portal los entrega sin login: el radar los deja en <code>data/4491-375-COT26/attachments/</code>. Son documentos del comprador, no se republican acá.</p>
         </details>
         <div class="cta">
-          <span class="badge warn">Quedan 3 días para ofertar</span>
-          <a class="btn secondary" href="https://www.mercadopublico.cl/Portal/CompraAgil/DetalleCompra?codigo=2672-18-COT26">Ver en el portal y ofertar</a>
+          <span class="badge bad">Cierra mañana</span>
+          <a class="btn secondary" href="https://www.mercadopublico.cl/Portal/CompraAgil/DetalleCompra?codigo=4491-375-COT26">Ver en el portal y ofertar</a>
         </div>
       </div>
 
-      <div class="opp-card" id="1618-68-COT26">
-        <span class="cat-tags"><span class="cat-tag">Cursos BI / datos</span></span>
-        <span class="codigo">1618-68-COT26</span>
-        <span class="org">DIRECCION DE PRESUPUESTOS MINISTERIO DE</span>
-        <span class="nombre">Curso herramientas de Power BI Nivel II para el análisis de datos de la Dipres</span>
-        <span class="unidad">Ministerio de Hacienda - Dipres</span>
-        <p class="descripcion">DIPRES requiere la contratación de capacitación del curso denominado “Herramientas básicas de Power BI para el análisis de datos Nivel II”, con el propósito de desarrollar competencias en los/as participantes para utilizar Power BI como herramienta de análisis y visualización de datos, aplicando técnicas de importación, transformación y modelamiento de información que permitan elaborar reportes dinámicos y tableros interactivos.
-Se adjuntan especificaciones técnicas.
-</p>
-        <div class="chips"><span>primer llamado · solo EMT</span><span>5 oferta(s) ya recibida(s)</span><span>entrega 5 día(s)</span><span>1 cláusula(s) excluyente(s)</span><span>3 adjunto(s)</span></div>
-        <dl>
-          <dt>Tope</dt><dd>$1.500.000 CLP</dd>
-          <dt>Cierre</dt><dd>2026-08-25 15:00 — cierra en 3 días</dd>
-          <dt>Quién puede ofertar</dt><dd>Primer llamado — <strong>reservado a Empresas de Menor Tamaño</strong> (KeepSync es EMT)</dd>
-          <dt>Competencia</dt><dd>5 oferta(s) recibida(s)</dd>
-          <dt>Plazo de entrega</dt><dd>5 día(s) desde la orden de compra</dd>
-          <dt>Dirección de entrega</dt><dd>Teatinos 120 8vo. piso</dd>
-          <dt>Este comprador, antes</dt><dd>2 compra(s) ágil(es) previa(s) · 5 oferta(s) en promedio</dd>
-          <dt>Región</dt><dd>Región Metropolitana de Santiago</dd>
-        </dl>
-        <details class="detalle-lista">
-          <summary>1 producto(s) solicitado(s)</summary>
-          <ul>
-            <li>1 × Formación, capacitación y entrenamiento de personal — DIPRES requiere la contratación del curso denominado “Herramientas básicas de Power BI Nivel II para el análisis de datos”, con el propósito de desarrollar competencias en los/as participantes para utilizar Power BI como herramienta de análisis y visualización de datos, aplicando técnicas de importación, transformación y modelamiento de información que permitan elaborar reportes dinámicos y tableros interactivos.
-Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio completar.</li>
-          </ul>
-        </details>
-        <details class="detalle-lista alerta">
-          <summary>Requisitos y causales de inadmisibilidad</summary>
-          <p><strong>Frases que dejan la oferta fuera</strong>, tal como las escribió el organismo:</p><ul><li>obligatorio completar.</li></ul>
-        </details>
-        <details class="detalle-lista">
-          <summary>3 documento(s) publicado(s) por el organismo</summary>
-          <ul>
-            <li>ANEXO N2.docx</li>
-            <li>TDR PowerBI Nivel II .pdf</li>
-            <li>ANEXO N1.docx</li>
-          </ul>
-          <p class="hint">El portal los entrega sin login: el radar los deja en <code>data/1618-68-COT26/attachments/</code>. Son documentos del comprador, no se republican acá.</p>
-        </details>
-        <div class="cta">
-          <span class="badge warn">Quedan 3 días para ofertar</span>
-          <a class="btn secondary" href="https://www.mercadopublico.cl/Portal/CompraAgil/DetalleCompra?codigo=1618-68-COT26">Ver en el portal y ofertar</a>
-        </div>
-      </div>
-
-      <div class="opp-card" id="1618-69-COT26">
+      <div class="opp-card" id="2306-700-COT26">
         <span class="cat-tags"><span class="cat-tag">Cursos IA</span></span>
-        <span class="codigo">1618-69-COT26</span>
-        <span class="org">DIRECCION DE PRESUPUESTOS MINISTERIO DE</span>
-        <span class="nombre">Contratación de curso IA generativa para el trabajo diario en DIPRES</span>
-        <span class="unidad">Ministerio de Hacienda - Dipres</span>
-        <p class="descripcion">DIPRES requiere la contratación de capacitación para la realización del curso denominado “IA Generativa para el Trabajo Diario en el Sector Público”, de tal forma que los participantes apliquen herramientas de inteligencia artificial generativa en sus tareas habituales, contribuyendo a mejorar la productividad, la eficiencia en el desarrollo de sus funciones y el análisis de información para su trabajo.
-
-Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio completar
-</p>
-        <div class="chips"><span>primer llamado · solo EMT</span><span>5 oferta(s) ya recibida(s)</span><span>entrega 5 día(s)</span><span>1 cláusula(s) excluyente(s)</span><span>3 adjunto(s)</span></div>
+        <span class="codigo">2306-700-COT26</span>
+        <span class="org">I MUNICIPALIDAD DE OSORNO</span>
+        <span class="nombre">Capacitación para docentes en la Temática &quot;Uso de nuevas tecnologías (Inteligencia Artificial)&quot;, Fondos SEP</span>
+        <span class="unidad">IMUNI_OSORNO DEPTO EDUCACION</span>
+        <div class="chips"><span>primer llamado · solo EMT</span><span>0 oferta(s) ya recibida(s)</span><span>1 adjunto(s)</span></div>
         <dl>
-          <dt>Tope</dt><dd>$3.000.000 CLP</dd>
-          <dt>Cierre</dt><dd>2026-08-25 16:30 — cierra en 3 días</dd>
+          <dt>Tope</dt><dd>$4.000.000 CLP</dd>
+          <dt>Cierre</dt><dd>2026-08-31 10:00 — cierra en 4 días</dd>
           <dt>Quién puede ofertar</dt><dd>Primer llamado — <strong>reservado a Empresas de Menor Tamaño</strong> (KeepSync es EMT)</dd>
-          <dt>Competencia</dt><dd>5 oferta(s) recibida(s)</dd>
-          <dt>Plazo de entrega</dt><dd>5 día(s) desde la orden de compra</dd>
-          <dt>Dirección de entrega</dt><dd>Teatinos 120 8vo piso</dd>
-          <dt>Este comprador, antes</dt><dd>2 compra(s) ágil(es) previa(s) · 5 oferta(s) en promedio</dd>
+          <dt>Competencia</dt><dd>0 oferta(s) recibida(s) <span class="sin-dato">(nadie ha ofertado aún)</span></dd>
+          <dt>Región</dt><dd>Región de los Lagos </dd>
+          <dt>Detalle</dt><dd><span class="sin-dato">ficha resumida: la cuota diaria de la API se agotó antes de poder leer la ficha completa. Falta la descripción, los productos pedidos y el plazo de entrega — están en la ficha del portal.</span></dd>
+        </dl>
+        <details class="detalle-lista">
+          <summary>1 documento(s) publicado(s) por el organismo</summary>
+          <ul>
+            <li>Términos Tec. de Referencia.pdf</li>
+          </ul>
+          <p class="hint">El portal los entrega sin login: el radar los deja en <code>data/2306-700-COT26/attachments/</code>. Son documentos del comprador, no se republican acá.</p>
+        </details>
+        <div class="cta">
+          <span class="badge ok">Quedan 4 días para ofertar</span>
+          <a class="btn secondary" href="https://www.mercadopublico.cl/Portal/CompraAgil/DetalleCompra?codigo=2306-700-COT26">Ver en el portal y ofertar</a>
+        </div>
+      </div>
+
+      <div class="opp-card" id="425-325-COT26">
+        <span class="cat-tags"><span class="cat-tag">Cursos BI / datos</span></span>
+        <span class="codigo">425-325-COT26</span>
+        <span class="org">CORP ADMINISTRATIVA DEL PODER JUDICIAL</span>
+        <span class="nombre">Capacitación Power BI en niveles básico e intermedio</span>
+        <span class="unidad">Servicios</span>
+        <p class="descripcion">La Corporación Administrativa del Poder Judicial requiere contratar, para el Departamento de Contraloría Interna, una capacitación sobre Power BI en niveles básico e intermedio, con la finalidad de optimizar sus procesos de fiscalización, evaluación de riesgos, seguimiento de hallazgos y control de gestión, según términos de referencia adjuntos al proceso de contratación.</p>
+        <div class="chips"><span>primer llamado · solo EMT</span><span>8 oferta(s) ya recibida(s)</span><span>entrega 7 día(s)</span><span>1 adjunto(s)</span></div>
+        <dl>
+          <dt>Tope</dt><dd>$2.100.000 CLP</dd>
+          <dt>Cierre</dt><dd>2026-09-09 12:00 — cierra en 13 días</dd>
+          <dt>Quién puede ofertar</dt><dd>Primer llamado — <strong>reservado a Empresas de Menor Tamaño</strong> (KeepSync es EMT)</dd>
+          <dt>Competencia</dt><dd>8 oferta(s) recibida(s)</dd>
+          <dt>Plazo de entrega</dt><dd>7 día(s) desde la orden de compra</dd>
+          <dt>Dirección de entrega</dt><dd>MARIO ALVO 1460, SANTIAGO</dd>
           <dt>Región</dt><dd>Región Metropolitana de Santiago</dd>
         </dl>
         <details class="detalle-lista">
           <summary>1 producto(s) solicitado(s)</summary>
           <ul>
-            <li>1 × Formación, capacitación y entrenamiento de personal — DIPRES requiere la contratación de capacitación para la realización del curso denominado “IA Generativa para el Trabajo Diario en el Sector Público”, de tal forma que los participantes apliquen herramientas de inteligencia artificial generativa en sus tareas habituales, contribuyendo a mejorar la productividad, la eficiencia en el desarrollo de sus funciones y el análisis de información para su trabajo.
-
-Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio completar</li>
+            <li>1 × Capacitación a empleados — capacitación sobre Power BI en niveles básico e intermedio,proporcionando a los participantes las competencias fundamentales e intermedias que les permitan extraer, transformar, modelar, analizar y visualizar datos que se encuentran dispersos en múltiples sistemas institucionales mediante Microsoft Power BI, según se detalla en los términos de referencia adjuntos.</li>
           </ul>
-        </details>
-        <details class="detalle-lista alerta">
-          <summary>Requisitos y causales de inadmisibilidad</summary>
-          <p><strong>Frases que dejan la oferta fuera</strong>, tal como las escribió el organismo:</p><ul><li>obligatorio completar DIPRES requiere la contratación de capacitación para la realización del curso denominado “IA Generativa para el Trabajo Diario en el Sector Público”, de tal forma que los participantes apliquen herramientas de inteligencia artificial generativa en sus tareas habituales, contribuyendo a mejorar la productividad, la eficiencia en el desarrollo de sus funciones y el análisis de información para su trabajo.</li></ul>
         </details>
         <details class="detalle-lista">
-          <summary>3 documento(s) publicado(s) por el organismo</summary>
+          <summary>1 documento(s) publicado(s) por el organismo</summary>
           <ul>
-            <li>TDR IA para el trabajo diario.pdf</li>
-            <li>ANEXO N2.docx</li>
-            <li>ANEXO N1.docx</li>
+            <li>TDR_Curso_Capacitación_Power_BI_(publicar).pdf</li>
           </ul>
-          <p class="hint">El portal los entrega sin login: el radar los deja en <code>data/1618-69-COT26/attachments/</code>. Son documentos del comprador, no se republican acá.</p>
+          <p class="hint">El portal los entrega sin login: el radar los deja en <code>data/425-325-COT26/attachments/</code>. Son documentos del comprador, no se republican acá.</p>
         </details>
         <div class="cta">
-          <span class="badge warn">Quedan 3 días para ofertar</span>
-          <a class="btn secondary" href="https://www.mercadopublico.cl/Portal/CompraAgil/DetalleCompra?codigo=1618-69-COT26">Ver en el portal y ofertar</a>
+          <span class="badge ok">Quedan 13 días para ofertar</span>
+          <a class="btn secondary" href="https://www.mercadopublico.cl/Portal/CompraAgil/DetalleCompra?codigo=425-325-COT26">Ver en el portal y ofertar</a>
         </div>
       </div>
     </div>
@@ -527,7 +477,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
       <strong>PRELIMINAR</strong>, y <strong>BORRADOR</strong> mientras la identidad del oferente no
       esté confirmada.
     </p>
-    <p class="meta-corrida">6 borrador(es) · generados el 2026-08-22 · ordenados por score de apertura</p>
+    <p class="meta-corrida">10 borrador(es) · generados el 2026-08-27 · ordenados por score de apertura</p>
     <div class="note" style="border-left-color: var(--accent); margin-bottom:1rem;">
       <strong>Score de apertura (0–100%).</strong> Mide qué tan libre está la cancha:
       <strong>100%</strong> sería una compra que no exige ninguna característica, capacidad o
@@ -540,20 +490,192 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
     </div>
     <div class="note" style="margin-bottom:1.25rem;">
       <strong>Ninguno está listo para presentar, y el bloqueo no es el precio.</strong>
-      Los 6 organismos exigen un/a relator/a con título, currículum y certificados
+      Los 10 organismos exigen un/a relator/a con título, currículum y certificados
       verificables, y una oferta sin esos antecedentes se descarta en admisibilidad antes de que
-      nadie mire el monto. 1 de estas 6 propuestas ya nombra relator/a con sus antecedentes (Cristian Molina Espinoza), aunque en 1 todavía falta adjuntar parte del respaldo documental que las bases exigen. Las otras 5 siguen sin nombrar a nadie: el agente no inventa credenciales. Sigue además sin confirmarse si KeepSync es <strong>OTEC registrada en
+      nadie mire el monto. 1 de estas 10 propuestas ya nombra relator/a con sus antecedentes (Cristian Molina Espinoza), aunque en 1 todavía falta adjuntar parte del respaldo documental que las bases exigen. Las otras 9 siguen sin nombrar a nadie: el agente no inventa credenciales. Sigue además sin confirmarse si KeepSync es <strong>OTEC registrada en
       SENCE</strong>, de lo que dependen tanto puntaje directo en algunas bases como la exención de
       IVA del artículo 13 N°4 con que varios presupuestaron el servicio.
       Y en 3 de estas compras el organismo <strong>adjudica al menor precio</strong>, así que
       fijar el valor como un porcentaje del tope es por construcción una posición débil frente a
       quien cotice más abajo.
-      En 2 el organismo <strong>no declara</strong> si el presupuesto es neto, con impuestos o
+      En 4 el organismo <strong>no declara</strong> si el presupuesto es neto, con impuestos o
       exento — hay que preguntarlo antes de ingresar el valor en el portal.
-      En total, 9 observación(es) distintas repartidas en las tarjetas.
+      En total, 12 observación(es) distintas repartidas en las tarjetas.
     </div>
     <div class="card-grid">
       <article class="opp-card">
+        <div class="score-row">
+          <div class="score warn">
+            <span class="score-n">70%</span>
+            <span class="score-l">apertura</span>
+          </div>
+          <div class="score-txt">
+            6 criterio(s) por resolver × −5%<br>
+            <span class="hint">2 de experiencia del relator, 1 de certificación, 1 de identidad del oferente, 1 de título o grado, 1 de régimen tributario</span>
+          </div>
+        </div>
+        <div class="codigo">425-325-COT26</div>
+        <div class="org">Corporación Administrativa del Poder Judicial</div>
+        <div class="nombre">Curso de capacitación en Power BI, niveles básico e intermedio</div>
+        <dl>
+          <dt>Presupuesto del organismo</dt><dd>$2.100.000</dd>
+          <dt>Valor ofertado</dt><dd><strong>$1.890.000</strong> · 10% bajo el tope</dd>
+          <dt>Cierre de ofertas</dt><dd>2026-09-09 12:00</dd>
+          <dt>Relator/a</dt><dd><span class="hint">Por designar — sin relator/a la oferta se descarta en admisibilidad</span></dd>
+          <dt>Requisitos por confirmar</dt><dd>3</dd>
+        </dl>
+        <div class="chips">
+          <span class="badge bad">Régimen sin declarar</span>
+          <span class="badge ok">Adjudica por puntaje</span>
+        </div>
+        <details class="detalle-lista">
+          <summary>Qué baja el score: criterios que dirigen la compra (6)</summary>
+          <ul><li><span class="crit pend">−5%</span> <strong>Título o grado</strong> — Título profesional de 8 semestres o más en Ciencias de la Administración, Ciencias de la Computación o Ingeniería, acreditado con certificado que permita verificarlo electrónicamente. Es requisito excluyente: sin él la oferta no se evalúa. <span class="hint">(TDR, apartado C — «El relator debe contar con título profesional (requisito excluyente) … de al menos 8 semestres. … La acreditación de la formación académica es un requisito excluyente.»)</span></li><li><span class="crit pend">−5%</span> <strong>Certificación</strong> — Certificado o acta de especialización en Power BI de al menos 16 horas cronológicas, emitido por la institución que la impartió. Requisito excluyente. <span class="hint">(TDR, apartado C — «La especialización en Power BI, debe tener a lo menos 16 hrs. cronológicas de duración y debe ser acreditada mediante un certificado o acta, emitido por la institución que efectuó dicha especialización como requisito excluyente.»)</span></li><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — «Certificado de Experiencia» firmado y timbrado por la empresa o institución que recibió una capacitación previa en Power BI de al menos 21 horas. Requisito excluyente y emitido por un tercero: no se puede producir, hay que pedirlo. <span class="hint">(TDR, apartado C — «adjuntando un “Certificado de Experiencia”, como requisito excluyente, el cual debe ser completado con los datos solicitados, firmado y timbrado por la empresa o institución que haya recibido la capacitación … con una cantidad de horas a lo menos igual a las solicitadas en el curso a contratar.»)</span></li><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Acreditar 3 o más cursos de Power BI impartidos para obtener los 100 puntos del factor Experiencia, que pesa el 60% de la evaluación. Con 1 o 2 cursos el puntaje cae a la mitad, una brecha de 30 puntos ponderados que el 40% de precio no alcanza a compensar. <span class="hint">(TDR, apartado H — «Criterio Experiencia del oferente … 1-2 cursos impartidos 50 puntos … 3 o más cursos impartidos 100 [puntos] … Ponderado 60%».)</span></li><li><span class="crit pend">−5%</span> <strong>Régimen tributario</strong> — Confirmar con la Corporación si el presupuesto estimado de $2.100.000 es neto, exento o con impuestos incluidos: el TDR solo pide «valores totales» y el régimen cambia el valor a ingresar en el portal. <span class="hint">(TDR, apartado I — «Presupuesto estimado $2.100.000 … Todos los precios que se incluyan en la cotización deberán expresarse en valores totales.»)</span></li><li><span class="crit pend">−5%</span> <strong>Identidad del oferente</strong> — Razón social, RUT, teléfono y correo electrónico ubicable del oferente para la propuesta económica y la eventual orden de compra. <span class="hint">(TDR, apartado L — «El proveedor que cotice deberá adjuntar copia simple de Título Profesional, Certificación, Certificado de Experiencia u otros documentos que acrediten tal condición (orden de compra y/o factura) y la Propuesta Económica, además, indicar número de teléfono y correo electrónico.»)</span></li></ul>
+        </details>
+        <details class="detalle-lista alerta">
+          <summary>Observaciones antes de presentar (4)</summary>
+          <ul><li>Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.</li><li>Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.</li><li>Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.</li><li>Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal.</li></ul>
+        </details>
+        <details class="detalle-lista">
+          <summary>De dónde salen los requisitos (1)</summary>
+          <ul><li>TDR_Curso_Capacitación_Power_BI_(publicar).pdf</li></ul>
+          <p>«Presupuesto estimado $2.100.000. La cotización deberá estar expresada en pesos chilenos. Todos los precios que se incluyan en la cotización deberán expresarse en valores totales» — TDR, apartado I. Propuesta económica. El TDR no declara si el monto es neto, exento o con impuestos incluidos: se presenta el valor como TOTAL y el tratamiento tributario queda por confirmar con la Corporación.</p>
+        </details>
+        <div class="cta">
+          <a class="btn" href="capacitaciones-cotizaciones/425-325-COT26/Q-20260827-CorporacionAdministrativaDelPoderJudicial.pdf">Ver borrador (PDF, 5 págs.)</a>
+          <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
+        </div>
+      </article>
+      <article class="opp-card">
+        <div class="score-row">
+          <div class="score warn">
+            <span class="score-n">65%</span>
+            <span class="score-l">apertura</span>
+          </div>
+          <div class="score-txt">
+            7 criterio(s) por resolver × −5%<br>
+            <span class="hint">3 de alcance por definir, 2 de infraestructura, 1 de experiencia del relator, 1 de identidad del oferente</span>
+          </div>
+        </div>
+        <div class="codigo">2735-1052-COT26</div>
+        <div class="org">I. Municipalidad de Lo Barnechea — Dirección de Desarrollo Comunitario, programa HUB Emprende 2026</div>
+        <div class="nombre">Programa de capacitación asincrónica para emprendedores en innovación, startups e inteligencia artificial (HUB Emprende 2026)</div>
+        <dl>
+          <dt>Presupuesto del organismo</dt><dd>$6.116.000</dd>
+          <dt>Valor ofertado</dt><dd><strong>$5.504.400</strong> · 10% bajo el tope</dd>
+          <dt>Cierre de ofertas</dt><dd>2026-08-28 09:30</dd>
+          <dt>Relator/a</dt><dd><span class="hint">Por designar — sin relator/a la oferta se descarta en admisibilidad</span></dd>
+          <dt>Requisitos por confirmar</dt><dd>5</dd>
+        </dl>
+        <div class="chips">
+          <span class="badge ok">Impuestos incluidos</span>
+          <span class="badge ok">Sin pauta publicada</span>
+        </div>
+        <details class="detalle-lista">
+          <summary>Qué baja el score: criterios que dirigen la compra (7)</summary>
+          <ul><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Acreditar al menos 2 capacitaciones digitales en emprendimiento, innovación, transformación digital o aceleración, ejecutadas entre el 01-01-2024 y el 31-07-2026, con facturas, órdenes de compra, contratos o certificados de conformidad de terceros. Es requisito de admisibilidad: sin él la oferta no pasa a evaluación, y la evidencia la emite el cliente, no el oferente. <span class="hint">(Especificaciones Técnicas, IV. Admisibilidad — «El oferente deberá acreditar haber ejecutado al menos 2 capacitaciones digitales enfocadas en programas de emprendimiento, innovación, transformación digital o aceleración, durante los últimos tres años … Las ofertas que no acrediten experiencia … serán declaradas inadmisibles y no continuarán en el proceso de evaluación.»)</span></li><li><span class="crit pend">−5%</span> <strong>Infraestructura</strong> — Disponer de una plataforma e-learning propia, personalizable con la identidad del Hub Lo Barnechea, integrable al sitio web municipal y operativa al menos 6 meses con ruta de aprendizaje, talleres, novedades y actualizaciones. Dirige la adjudicación hacia proveedores que ya operan una plataforma, no hacia relatores. <span class="hint">(Especificaciones Técnicas, VI. Requisitos de entrega — «Plataforma personalizada con la identidad del Hub Lo Barnechea durante al menos 6 meses, con acceso a diagnóstico, ruta de aprendizaje, cursos, talleres, novedades y demás contenidos disponibles.»)</span></li><li><span class="crit pend">−5%</span> <strong>Infraestructura</strong> — Contar con un instrumento de diagnóstico de emprendimiento y habilidades del emprendedor aplicable a hasta 100 personas, más un informe consolidado de resultados para el equipo del Hub. <span class="hint">(Especificaciones Técnicas, III — «Diagnóstico Emprendimiento + Habilidades Emprendedor (pack de hasta 100 diagnósticos). Informe detallado del pull de evaluación.»)</span></li><li><span class="crit pend">−5%</span> <strong>Alcance por definir</strong> — Tener producidas —o producir antes de la ejecución— once cápsulas asincrónicas con los contenidos exactos que lista el requerimiento, cada una con horas y minutos declarados. Es un catálogo audiovisual completo, no una relatoría. <span class="hint">(Especificaciones Técnicas, III — «Cursos en cápsulas asincrónicas con horas y minutos claramente descritos», seguido del listado de once contenidos formativos con sus objetivos.)</span></li><li><span class="crit pend">−5%</span> <strong>Alcance por definir</strong> — Definir con el ITS la carga horaria del programa: el requerimiento no la fija, pero el diploma debe declarar la duración en horas cronológicas. Las 44 horas de esta propuesta son un supuesto de KeepSync, no un dato del organismo. <span class="hint">(Especificaciones Técnicas, VI — «Este diploma debe contener lo siguiente: … d. Duración en horas cronológicas», sin que ninguna parte del requerimiento fije ese número.)</span></li><li><span class="crit pend">−5%</span> <strong>Alcance por definir</strong> — Ante empate en cumplimiento y precio, gana la oferta ingresada primero. Presentar tarde es perder el desempate, y la compra cierra el 28 de agosto de 2026 a las 09:30. <span class="hint">(Cláusula de Desempate en Compras Ágiles — «se seleccionará la propuesta del proveedor cuya oferta figure en primer lugar dentro del mencionado registro».)</span></li><li><span class="crit pend">−5%</span> <strong>Identidad del oferente</strong> — Razón social, RUT, representante legal y correo institucional del oferente para el documento de cotización, las comunicaciones con el ITS y la eventual orden de compra. <span class="hint">(Especificaciones Técnicas, VI — «el contratista deberá informar al ITS al inicio del contrato el correo electrónico que utilizará para efectuar las comunicaciones.»)</span></li></ul>
+        </details>
+        <details class="detalle-lista alerta">
+          <summary>Observaciones antes de presentar (5)</summary>
+          <ul><li>Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.</li><li>Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.</li><li>Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.</li><li>Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.</li><li>Aclarar la contradicción de modalidad en las bases mediante consulta formal. El requerimiento justifica expresamente la modalidad asincrónica («La elección de un programa formativo 100% asincrónico responde a criterios de eficiencia, cobertura y conciliación laboral») y la admisibilidad exige que la propuesta contemple la ejecución «en formato 100% asincrónico». Una propuesta sincrónica o presencial sería inadmisible.</li></ul>
+        </details>
+        <details class="detalle-lista">
+          <summary>De dónde salen los requisitos (4)</summary>
+          <ul><li>REQUERIMIENTO COMPRA AGIL PROGRAMA CAPACITACION INNOVA + IA.docx</li><li>01. Cláusula de desempate Compra Ágil.pdf</li><li>03. Reglamento de Pago.pdf</li><li>04. Condiciones y plazos para la aceptación de la orden de compra.pdf</li></ul>
+          <p>«El oferente deberá presentar documento de cotización que indique el valor total del servicio de capacitación, considerando impuestos incluidos» — Especificaciones Técnicas, apartado IV. Admisibilidad, Documento de cotización.</p>
+        </details>
+        <div class="cta">
+          <a class="btn" href="capacitaciones-cotizaciones/2735-1052-COT26/Q-20260827-IMunicipalidadDeLoBarnecheaDireccionDeDesarrolloCo.pdf">Ver borrador (PDF, 5 págs.)</a>
+          <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
+        </div>
+      </article>
+      <article class="opp-card">
+        <div class="score-row">
+          <div class="score warn">
+            <span class="score-n">60%</span>
+            <span class="score-l">apertura</span>
+          </div>
+          <div class="score-txt">
+            8 criterio(s) por resolver × −5%<br>
+            <span class="hint">2 de experiencia del relator, 2 de identidad del oferente, 1 de alcance por definir, 1 de historial en el portal, 1 de infraestructura, 1 de título o grado</span>
+          </div>
+        </div>
+        <div class="codigo">3616-123-COT26</div>
+        <div class="org">I. Municipalidad de Combarbalá — Departamento de Salud Municipal</div>
+        <div class="nombre">Curso de capacitación «Inteligencia artificial en salud»</div>
+        <dl>
+          <dt>Presupuesto del organismo</dt><dd>$1.600.000</dd>
+          <dt>Valor ofertado</dt><dd><strong>$1.440.000</strong> · 10% bajo el tope</dd>
+          <dt>Cierre de ofertas</dt><dd>2026-08-28 09:00</dd>
+          <dt>Relator/a</dt><dd><span class="hint">Por designar — sin relator/a la oferta se descarta en admisibilidad</span></dd>
+          <dt>Requisitos por confirmar</dt><dd>5</dd>
+        </dl>
+        <div class="chips">
+          <span class="badge ok">Impuestos incluidos</span>
+          <span class="badge ok">Sin pauta publicada</span>
+        </div>
+        <details class="detalle-lista">
+          <summary>Qué baja el score: criterios que dirigen la compra (8)</summary>
+          <ul><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Designar en la oferta al relator que efectivamente dictará el curso, con su documentación: no se aceptan suplentes y un cambio no notificado con 5 días hábiles habilita a suspender la capacitación y sancionar por incumplimiento. <span class="hint">(Bases técnicas — «En su oferta debe adjuntar documentación solicitada SOLO del relator que realizará la capacitación, no se aceptaran suplentes.»)</span></li><li><span class="crit pend">−5%</span> <strong>Título o grado</strong> — Título profesional del relator, adjunto a la oferta. Lo emite un tercero: solo puede recopilarse. <span class="hint">(Bases técnicas, Documentación Solicitada al momento de ofertar — «Título profesional del relator.»)</span></li><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Certificaciones del relator que acrediten haber participado como docente en cursos relacionados con IA en salud. Sin ellas el mandante se reserva el derecho de no revisar la oferta. <span class="hint">(Bases técnicas — «Certificaciones del relator de la capacitación, donde haya participado como docente en cursos relacionados al tema a tratar.»)</span></li><li><span class="crit pend">−5%</span> <strong>Infraestructura</strong> — Ejecutar dos jornadas presenciales para 80 funcionarios en Combarbalá (Región de Coquimbo) el 08 y 09 de septiembre de 2026, con coffee break o colación por día y certificados impresos. Es logística que dirige la adjudicación hacia un proveedor con presencia o capacidad de despliegue en la zona. <span class="hint">(Bases técnicas — «Destinatarios 80 Funcionarios del Departamento de Salud de Combarbalá … Se considera que el oferente pueda entregar un Coffe break o colación fría cada día de la capacitación … Los certificados deben ser entregados de forma física».)</span></li><li><span class="crit pend">−5%</span> <strong>Historial en el portal</strong> — No registrar reclamos en la plataforma de Mercado Público, de esta u otra institución: el mandante se reserva el derecho de no considerar esas ofertas. <span class="hint">(Bases técnicas, Selección de ofertas — «el mandante se reserva el derecho de no considerar ofertas de empresas que presenten reclamos en la plataforma de Mercado Público por contrataciones de esta u otra institución.»)</span></li><li><span class="crit pend">−5%</span> <strong>Identidad del oferente</strong> — Tener giro comercial referente al área materia de la contratación (capacitación) y no estar afecto a las inhabilidades de los artículos 4 y 35 quáter de la Ley 19.886. <span class="hint">(Bases técnicas, Selección de ofertas — «aceptándose las ofertas de las personas naturales y jurídicas que cumplan con los requisitos establecidos en el artículo 4 de la Ley 19.886 … y que tengan giros comerciales referentes al área materia de la contratación.»)</span></li><li><span class="crit pend">−5%</span> <strong>Alcance por definir</strong> — Disponibilidad del relator para el 08 y 09 de septiembre de 2026 y entrega de los contenidos digitales el 04 de septiembre: la compra cierra el 28 de agosto, dejando una ventana muy corta entre adjudicación y ejecución. <span class="hint">(Bases técnicas — «Fecha y Horarios 08 y 09 de septiembe de 2026 horario 8:30 a 16:00 hrs.» y «considerando el plazo de entrega el 04 de septiembre del 2026».)</span></li><li><span class="crit pend">−5%</span> <strong>Identidad del oferente</strong> — Razón social, RUT y representante legal del oferente para la carta de compromiso y la eventual orden de compra. <span class="hint">(Bases técnicas — «Carta de Compromiso que garantice la participación del relator que el oferente presenta en su propuesta.»)</span></li></ul>
+        </details>
+        <details class="detalle-lista alerta">
+          <summary>Observaciones antes de presentar (5)</summary>
+          <ul><li>Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.</li><li>Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.</li><li>Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.</li><li>Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.</li><li>Aclarar la contradicción de modalidad en las bases mediante consulta formal. Las bases no escriben la palabra «presencial», pero fijan la modalidad de hecho: entrega de coffee break o colación fría cada día en el lugar, certificados en formato físico, y talleres con dispositivos de los participantes. La propuesta se presenta como presencial en Combarbalá y se deja la confirmación como consulta al Departamento de Salud.</li></ul>
+        </details>
+        <details class="detalle-lista">
+          <summary>De dónde salen los requisitos (1)</summary>
+          <ul><li>Bases técnicas Inteligencia artificial en salud.pdf</li></ul>
+          <p>«El monto máximo disponible es de $1.600.000.- valor bruto» — Bases técnicas, apartado 3, Monto Disponible. El organismo declara el tope como valor bruto, es decir con impuestos incluidos.</p>
+        </details>
+        <div class="cta">
+          <a class="btn" href="capacitaciones-cotizaciones/3616-123-COT26/Q-20260827-IMunicipalidadDeCombarbalaDepartamentoDeSaludMunic.pdf">Ver borrador (PDF, 5 págs.)</a>
+          <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
+        </div>
+      </article>
+      <article class="opp-card">
+        <div class="score-row">
+          <div class="score bad">
+            <span class="score-n">55%</span>
+            <span class="score-l">apertura</span>
+          </div>
+          <div class="score-txt">
+            9 criterio(s) por resolver × −5%<br>
+            <span class="hint">3 de certificación, 2 de experiencia del relator, 1 de identidad del oferente, 1 de infraestructura, 1 de título o grado, 1 de régimen tributario</span>
+          </div>
+        </div>
+        <div class="codigo">2306-700-COT26</div>
+        <div class="org">I. Municipalidad de Osorno — Departamento de Administración de Educación Municipal (DAEM), Escuela Sociedad Socorro de Señoras</div>
+        <div class="nombre">Curso de perfeccionamiento docente «Uso de nuevas tecnologías (Inteligencia Artificial)»</div>
+        <dl>
+          <dt>Presupuesto del organismo</dt><dd>$4.000.000</dd>
+          <dt>Valor ofertado</dt><dd><strong>$3.600.000</strong> · 10% bajo el tope</dd>
+          <dt>Cierre de ofertas</dt><dd>2026-08-31 10:00</dd>
+          <dt>Relator/a</dt><dd><span class="hint">Por designar — sin relator/a la oferta se descarta en admisibilidad</span></dd>
+          <dt>Requisitos por confirmar</dt><dd>4</dd>
+        </dl>
+        <div class="chips">
+          <span class="badge bad">Régimen sin declarar</span>
+          <span class="badge ok">Sin pauta publicada</span>
+        </div>
+        <details class="detalle-lista">
+          <summary>Qué baja el score: criterios que dirigen la compra (9)</summary>
+          <ul><li><span class="crit pend">−5%</span> <strong>Certificación</strong> — Estar acreditada en el Registro Nacional de Asistencia Técnica Educativa (ATE) del Ministerio de Educación, con el servicio validado mediante certificado ATE. Es el filtro que decide quién puede ofertar: sin registro ATE la oferta no es admisible. <span class="hint">(TDR, apartado 6 — «Institución acreditada en el Registro Nacional de Asistencia Técnica Educativa (ATE) del Ministerio de Educación con el servicio validado mediante certificado ATE correspondiente».)</span></li><li><span class="crit pend">−5%</span> <strong>Certificación</strong> — Que el curso ofertado esté inscrito en el Registro ATE con nombre y temática similar al solicitado, demostrable con el certificado ATE, y que su propuesta técnico-pedagógica comprenda todos los contenidos requeridos. No basta con estar registrado como ATE: el curso mismo tiene que estarlo. <span class="hint">(TDR, apartado 6 — «El curso a licitar “USO DE NUEVAS TECNOLOGÍAS (INTELIGENCIA ARTIFICIAL)”, de la entidad ejecutora ATE debe estar inscrito en el registro ATE, lo cual debe ser demostrable mediante el certificado ATE correspondiente.»)</span></li><li><span class="crit pend">−5%</span> <strong>Certificación</strong> — Que el relator que dicte el curso esté inscrito en el Registro ATE como relator habilitado para este curso específico, adjuntando el respaldo que lo acredite. <span class="hint">(TDR, apartado 6 — «Los relatores que impartan el curso … deben estar inscritos en el Registro ATE como relatores habilitados para este curso, adjuntando el respaldo que los acredite.»)</span></li><li><span class="crit pend">−5%</span> <strong>Título o grado</strong> — Título de Profesor de Educación General Básica o Media, o Ingeniero en Informática, Civil Informática o en Computación, o profesional TI con formación complementaria en educación; más posgrado o especialización en Tecnología Educativa, Innovación Educativa, Competencias Digitales o IA aplicada a la educación, con su certificado. <span class="hint">(TDR, apartado 6 — «Poseer título profesional de Profesor(a) de Educación General Básica o de Enseñanza Media o ingeniero(a) en Informática … Profesional con posgrado o especialización en Tecnología Educativa, Innovación Educativa, Competencias Digitales o Inteligencia Artificial aplicada a la educación.»)</span></li><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Acreditar experiencia en capacitación docente, en uso pedagógico de IA y en el diseño e implementación de programas de formación para docentes o establecimientos, con antecedentes de capacitaciones similares de los últimos años. <span class="hint">(TDR, apartado 6 — «Acreditar experiencia en capacitación docente y en el uso pedagógico de herramientas de inteligencia artificial … Presentar antecedentes de capacitaciones similares realizadas en los últimos años.»)</span></li><li><span class="crit pend">−5%</span> <strong>Experiencia del relator</strong> — Manejo del currículo nacional, los Estándares de la Profesión Docente y el Marco para la Buena Enseñanza, que es lo que ordena los contenidos del curso y su producto final. <span class="hint">(TDR, apartado 6 — «Manejar el currículo nacional, los Estándares de la Profesión Docente y el Marco para la Buena Enseñanza.»)</span></li><li><span class="crit pend">−5%</span> <strong>Infraestructura</strong> — Proveer, en Osorno y dentro del establecimiento, un almuerzo con menú detallado (incluida opción vegetariana), dos coffee breaks con composición fijada al detalle, y un dossier impreso más lápiz por participante. Es logística de catering e impresión local que dirige la adjudicación hacia un proveedor con presencia en la zona. <span class="hint">(TDR, apartados 8 y 9 — «8 SERVICIOS ADICIONALES El curso debe considerar A) 1 servicio de almuerzo … b) 2 servicios de Coffe Break … c) El oferente debe contemplar que la alimentación será en el mismo establecimiento. 9 MATERIALES DE ENTREGA … Dossier con el material impreso para tomar apuntes. Lápiz de pasta azul.»)</span></li><li><span class="crit pend">−5%</span> <strong>Régimen tributario</strong> — Confirmar con el DAEM si los $4.000.000 de presupuesto SEP son netos, exentos o con impuestos incluidos: el TDR no lo declara y cambia el valor a ingresar en el portal. <span class="hint">(TDR, apartado 13 — «FUENTE DE FINANCIAMIENTO SEP — PRESUPUESTO DISPONIBLE 4.000.000.- TOTAL 4.000.000.-», sin mención al régimen tributario.)</span></li><li><span class="crit pend">−5%</span> <strong>Identidad del oferente</strong> — Razón social, RUT y representante legal del oferente, y su condición de entidad ATE, para la propuesta y la eventual orden de compra. <span class="hint">(TDR, apartado 15 — «El oferente deberá ofertar por la totalidad de los servicios solicitados, a través del portal de compras públicas www.mercadopublico.cl».)</span></li></ul>
+        </details>
+        <details class="detalle-lista alerta">
+          <summary>Observaciones antes de presentar (4)</summary>
+          <ul><li>Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.</li><li>Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.</li><li>Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.</li><li>Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal.</li></ul>
+        </details>
+        <details class="detalle-lista">
+          <summary>De dónde salen los requisitos (1)</summary>
+          <ul><li>Términos Tec. de Referencia.pdf</li></ul>
+          <p>«13. FINANCIAMIENTO — El curso se financiará con recursos provenientes de la Subvención Escolar Preferencial (SEP). FUENTE DE FINANCIAMIENTO SEP — PRESUPUESTO DISPONIBLE 4.000.000.- TOTAL 4.000.000.-» — TDR, apartado 13. El documento no declara si el monto es neto, exento o con impuestos incluidos: se presenta el valor como TOTAL y el régimen queda por confirmar con el DAEM.</p>
+        </details>
+        <div class="cta">
+          <a class="btn" href="capacitaciones-cotizaciones/2306-700-COT26/Q-20260827-IMunicipalidadDeOsornoDepartamentoDeAdministracion.pdf">Ver borrador (PDF, 5 págs.)</a>
+          <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
+        </div>
+      </article>
+      <article class="opp-card cerrada">
         <div class="score-row">
           <div class="score ok">
             <span class="score-n">85%</span>
@@ -570,7 +692,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
         <dl>
           <dt>Presupuesto del organismo</dt><dd>$3.000.000</dd>
           <dt>Valor ofertado</dt><dd><strong>$2.700.000</strong> · 10% bajo el tope</dd>
-          <dt>Cierre de ofertas</dt><dd>2026-08-25 16:30</dd>
+          <dt>Cierre de ofertas</dt><dd>2026-08-25 16:30 <span class="badge bad">Cerrada — ya no se puede ofertar</span></dd>
           <dt>Relator/a</dt><dd><strong>Cristian Molina Espinoza</strong> · Ingeniero Civil Industrial, Universidad de Chile<br><span class="hint">Faltan 2 antecedente(s) por adjuntar</span></dd>
           <dt>Requisitos por confirmar</dt><dd>1</dd>
         </dl>
@@ -596,7 +718,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
           <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
         </div>
       </article>
-      <article class="opp-card">
+      <article class="opp-card cerrada">
         <div class="score-row">
           <div class="score ok">
             <span class="score-n">75%</span>
@@ -613,7 +735,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
         <dl>
           <dt>Presupuesto del organismo</dt><dd>$1.500.000</dd>
           <dt>Valor ofertado</dt><dd><strong>$1.350.000</strong> · 10% bajo el tope</dd>
-          <dt>Cierre de ofertas</dt><dd>2026-08-25 11:00</dd>
+          <dt>Cierre de ofertas</dt><dd>2026-08-25 11:00 <span class="badge bad">Cerrada — ya no se puede ofertar</span></dd>
           <dt>Relator/a</dt><dd><span class="hint">Por designar — sin relator/a la oferta se descarta en admisibilidad</span></dd>
           <dt>Requisitos por confirmar</dt><dd>3</dd>
         </dl>
@@ -639,7 +761,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
           <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
         </div>
       </article>
-      <article class="opp-card">
+      <article class="opp-card cerrada">
         <div class="score-row">
           <div class="score ok">
             <span class="score-n">75%</span>
@@ -656,7 +778,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
         <dl>
           <dt>Presupuesto del organismo</dt><dd>$1.500.000</dd>
           <dt>Valor ofertado</dt><dd><strong>$1.350.000</strong> · 10% bajo el tope</dd>
-          <dt>Cierre de ofertas</dt><dd>2026-08-25 15:00</dd>
+          <dt>Cierre de ofertas</dt><dd>2026-08-25 15:00 <span class="badge bad">Cerrada — ya no se puede ofertar</span></dd>
           <dt>Relator/a</dt><dd><span class="hint">Por designar — sin relator/a la oferta se descarta en admisibilidad</span></dd>
           <dt>Requisitos por confirmar</dt><dd>3</dd>
         </dl>
@@ -682,7 +804,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
           <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
         </div>
       </article>
-      <article class="opp-card">
+      <article class="opp-card cerrada">
         <div class="score-row">
           <div class="score warn">
             <span class="score-n">65%</span>
@@ -699,7 +821,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
         <dl>
           <dt>Presupuesto del organismo</dt><dd>$1.000.000</dd>
           <dt>Valor ofertado</dt><dd><strong>$900.000</strong> · 10% bajo el tope</dd>
-          <dt>Cierre de ofertas</dt><dd>2026-08-25 11:00</dd>
+          <dt>Cierre de ofertas</dt><dd>2026-08-25 11:00 <span class="badge bad">Cerrada — ya no se puede ofertar</span></dd>
           <dt>Relator/a</dt><dd><span class="hint">Por designar — sin relator/a la oferta se descarta en admisibilidad</span></dd>
           <dt>Requisitos por confirmar</dt><dd>3</dd>
         </dl>
@@ -725,7 +847,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
           <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
         </div>
       </article>
-      <article class="opp-card">
+      <article class="opp-card cerrada">
         <div class="score-row">
           <div class="score warn">
             <span class="score-n">60%</span>
@@ -742,7 +864,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
         <dl>
           <dt>Presupuesto del organismo</dt><dd>$6.020.000</dd>
           <dt>Valor ofertado</dt><dd><strong>$5.418.000</strong> · 10% bajo el tope</dd>
-          <dt>Cierre de ofertas</dt><dd>2026-08-25 12:00</dd>
+          <dt>Cierre de ofertas</dt><dd>2026-08-25 12:00 <span class="badge bad">Cerrada — ya no se puede ofertar</span></dd>
           <dt>Relator/a</dt><dd><span class="hint">Por designar — sin relator/a la oferta se descarta en admisibilidad</span></dd>
           <dt>Requisitos por confirmar</dt><dd>4</dd>
         </dl>
@@ -768,7 +890,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
           <a class="btn secondary" href="https://www.mercadopublico.cl">Ficha en Mercado Público</a>
         </div>
       </article>
-      <article class="opp-card">
+      <article class="opp-card cerrada">
         <div class="score-row">
           <div class="score bad">
             <span class="score-n">45%</span>
@@ -785,7 +907,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
         <dl>
           <dt>Presupuesto del organismo</dt><dd>$4.320.000</dd>
           <dt>Valor ofertado</dt><dd><strong>$3.888.000</strong> · 10% bajo el tope</dd>
-          <dt>Cierre de ofertas</dt><dd>2026-08-25 12:00</dd>
+          <dt>Cierre de ofertas</dt><dd>2026-08-25 12:00 <span class="badge bad">Cerrada — ya no se puede ofertar</span></dd>
           <dt>Relator/a</dt><dd><span class="hint">Por designar — sin relator/a la oferta se descarta en admisibilidad</span></dd>
           <dt>Requisitos por confirmar</dt><dd>4</dd>
         </dl>
@@ -829,7 +951,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
     <div class="kw-grid">
       <div class="kw-card">
         <div class="kw-cat">Licencias Claude / Anthropic <span class="kw-id">claude</span></div>
-        <div class="kw-chips"><span class="kw">Claude</span><span class="kw">Anthropic</span><span class="kw">Cloude</span><span class="kw">Clude</span></div>
+        <div class="kw-chips"><span class="kw">Claude</span><span class="kw">Anthropic</span><span class="kw">Cloude</span><span class="kw">Clude</span><span class="kw agregada" title="Agregada a mano en config/categorias-extra.json">gpt</span></div>
         <details class="kw-patron">
           <summary>Cómo confirma que la compra es de este tipo</summary>
           <p>Se le piden esas palabras a la API y después se confirma sobre el texto de la compra con:</p>
@@ -868,7 +990,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
       </div>
       <div class="kw-card">
         <div class="kw-cat">Cursos y capacitación en inteligencia artificial <span class="kw-id">ia-capacitacion</span></div>
-        <div class="kw-chips"><span class="kw">inteligencia artificial</span></div>
+        <div class="kw-chips"><span class="kw">inteligencia artificial</span><span class="kw agregada" title="Agregada a mano en config/categorias-extra.json">artificial</span></div>
         <details class="kw-patron">
           <summary>Cómo confirma que la compra es de este tipo</summary>
           <p>Se le piden esas palabras a la API y después se confirma sobre el texto de la compra con:</p>
@@ -946,7 +1068,7 @@ Se adjuntan especificaciones técnicas y anexos los cuales es obligatorio comple
   <script>
   /* Términos ya guardados en el repo, embebidos por el radar: el JSON que se copia tiene que
      incluirlos, porque reemplaza el contenido completo del archivo. */
-  window.KW_GUARDADOS = [];
+  window.KW_GUARDADOS = [{"categoria":"claude","termino":"gpt"},{"categoria":"ia-capacitacion","termino":"artificial"}];
   window.KW_EDIT_URL = "https://github.com/keepsync-hub/ks-compra-agil/edit/claude/mercadopublico-agente-compras-pgyedf/config/categorias-extra.json";
   window.KW_COMANDO = "npm run keywords -- agregar";
   window.KW_ARCHIVO = "config/categorias-extra.json";
