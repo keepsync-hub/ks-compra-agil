@@ -1,0 +1,30 @@
+{
+  "codigo": "3616-123-COT26",
+  "curso": "Curso de capacitación «Inteligencia artificial en salud»",
+  "organismo": "I. Municipalidad de Combarbalá — Departamento de Salud Municipal",
+  "tope_clp": 1600000,
+  "total_clp": 1440000,
+  "descuento_pct": 10,
+  "regimen_tributario": "impuestos_incluidos",
+  "formula": "90% del presupuesto disponible — regla del usuario, no derivada de costos reales",
+  "criterio_evaluacion_organismo": "no_declarado",
+  "archivo_publicable": "Q-20260827-IMunicipalidadDeCombarbalaDepartamentoDeSaludMunic.pdf",
+  "fuente_documentos": [
+    "Bases técnicas Inteligencia artificial en salud.pdf"
+  ],
+  "requisitos_por_confirmar": 5,
+  "relator": null,
+  "score_apertura_pct": 60,
+  "score_criterios_sin_informacion": 8,
+  "score_criterios_cubiertos": 0,
+  "_score_nota": "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que falte revisar (config/capacitaciones.json → criterios_direccionadores).",
+  "pendientes": [
+    "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+    "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+    "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
+    "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
+    "Aclarar la contradicción de modalidad en las bases mediante consulta formal. Las bases no escriben la palabra «presencial», pero fijan la modalidad de hecho: entrega de coffee break o colación fría cada día en el lugar, certificados en formato físico, y talleres con dispositivos de los participantes. La propuesta se presenta como presencial en Combarbalá y se deja la confirmación como consulta al Departamento de Salud."
+  ],
+  "apto_para_enviar": false,
+  "_apto_nota": "Siempre false: falta designar relator/a con credenciales verificables, y el precio no sale de un costo real. El envío lo hace un humano, nunca este script."
+}

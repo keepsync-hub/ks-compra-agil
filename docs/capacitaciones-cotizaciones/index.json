@@ -636,5 +636,440 @@
       }
     ],
     "generado": "2026-08-22"
+  },
+  "425-325-COT26": {
+    "codigo": "425-325-COT26",
+    "curso": "Curso de capacitación en Power BI, niveles básico e intermedio",
+    "organismo": "Corporación Administrativa del Poder Judicial",
+    "topeClp": 2100000,
+    "totalClp": 1890000,
+    "descuentoPct": 10,
+    "regimenTributario": "no_declarado",
+    "citaTributaria": "«Presupuesto estimado $2.100.000. La cotización deberá estar expresada en pesos chilenos. Todos los precios que se incluyan en la cotización deberán expresarse en valores totales» — TDR, apartado I. Propuesta económica. El TDR no declara si el monto es neto, exento o con impuestos incluidos: se presenta el valor como TOTAL y el tratamiento tributario queda por confirmar con la Corporación.",
+    "criterioEvaluacion": "puntaje",
+    "fechaCierre": "2026-09-09 12:00",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/425-325-COT26/Q-20260827-CorporacionAdministrativaDelPoderJudicial.pdf",
+    "fuenteDocumentos": [
+      "TDR_Curso_Capacitación_Power_BI_(publicar).pdf"
+    ],
+    "requisitosPorConfirmar": 3,
+    "pendientes": [
+      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+      "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
+      "Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal."
+    ],
+    "score": {
+      "score": 70,
+      "sinInformacion": 6,
+      "cubiertos": 0,
+      "total": 6,
+      "porTipo": [
+        {
+          "tipo": "experiencia_relator",
+          "n": 2
+        },
+        {
+          "tipo": "certificacion",
+          "n": 1
+        },
+        {
+          "tipo": "identidad",
+          "n": 1
+        },
+        {
+          "tipo": "titulo_grado",
+          "n": 1
+        },
+        {
+          "tipo": "tributario",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "relator-titulo-8-semestres",
+        "exige": "Título profesional de 8 semestres o más en Ciencias de la Administración, Ciencias de la Computación o Ingeniería, acreditado con certificado que permita verificarlo electrónicamente. Es requisito excluyente: sin él la oferta no se evalúa.",
+        "cita": "TDR, apartado C — «El relator debe contar con título profesional (requisito excluyente) … de al menos 8 semestres. … La acreditación de la formación académica es un requisito excluyente.»",
+        "tipo": "titulo_grado",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-especializacion-powerbi-16h",
+        "exige": "Certificado o acta de especialización en Power BI de al menos 16 horas cronológicas, emitido por la institución que la impartió. Requisito excluyente.",
+        "cita": "TDR, apartado C — «La especialización en Power BI, debe tener a lo menos 16 hrs. cronológicas de duración y debe ser acreditada mediante un certificado o acta, emitido por la institución que efectuó dicha especialización como requisito excluyente.»",
+        "tipo": "certificacion",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "certificado-experiencia-timbrado",
+        "exige": "«Certificado de Experiencia» firmado y timbrado por la empresa o institución que recibió una capacitación previa en Power BI de al menos 21 horas. Requisito excluyente y emitido por un tercero: no se puede producir, hay que pedirlo.",
+        "cita": "TDR, apartado C — «adjuntando un “Certificado de Experiencia”, como requisito excluyente, el cual debe ser completado con los datos solicitados, firmado y timbrado por la empresa o institución que haya recibido la capacitación … con una cantidad de horas a lo menos igual a las solicitadas en el curso a contratar.»",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "experiencia-3-cursos-100-puntos",
+        "exige": "Acreditar 3 o más cursos de Power BI impartidos para obtener los 100 puntos del factor Experiencia, que pesa el 60% de la evaluación. Con 1 o 2 cursos el puntaje cae a la mitad, una brecha de 30 puntos ponderados que el 40% de precio no alcanza a compensar.",
+        "cita": "TDR, apartado H — «Criterio Experiencia del oferente … 1-2 cursos impartidos 50 puntos … 3 o más cursos impartidos 100 [puntos] … Ponderado 60%».",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "regimen-tributario",
+        "exige": "Confirmar con la Corporación si el presupuesto estimado de $2.100.000 es neto, exento o con impuestos incluidos: el TDR solo pide «valores totales» y el régimen cambia el valor a ingresar en el portal.",
+        "cita": "TDR, apartado I — «Presupuesto estimado $2.100.000 … Todos los precios que se incluyan en la cotización deberán expresarse en valores totales.»",
+        "tipo": "tributario",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "identidad-oferente",
+        "exige": "Razón social, RUT, teléfono y correo electrónico ubicable del oferente para la propuesta económica y la eventual orden de compra.",
+        "cita": "TDR, apartado L — «El proveedor que cotice deberá adjuntar copia simple de Título Profesional, Certificación, Certificado de Experiencia u otros documentos que acrediten tal condición (orden de compra y/o factura) y la Propuesta Económica, además, indicar número de teléfono y correo electrónico.»",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      }
+    ],
+    "generado": "2026-08-27"
+  },
+  "3616-123-COT26": {
+    "codigo": "3616-123-COT26",
+    "curso": "Curso de capacitación «Inteligencia artificial en salud»",
+    "organismo": "I. Municipalidad de Combarbalá — Departamento de Salud Municipal",
+    "topeClp": 1600000,
+    "totalClp": 1440000,
+    "descuentoPct": 10,
+    "regimenTributario": "impuestos_incluidos",
+    "citaTributaria": "«El monto máximo disponible es de $1.600.000.- valor bruto» — Bases técnicas, apartado 3, Monto Disponible. El organismo declara el tope como valor bruto, es decir con impuestos incluidos.",
+    "criterioEvaluacion": "no_declarado",
+    "fechaCierre": "2026-08-28 09:00",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/3616-123-COT26/Q-20260827-IMunicipalidadDeCombarbalaDepartamentoDeSaludMunic.pdf",
+    "fuenteDocumentos": [
+      "Bases técnicas Inteligencia artificial en salud.pdf"
+    ],
+    "requisitosPorConfirmar": 5,
+    "pendientes": [
+      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+      "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
+      "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
+      "Aclarar la contradicción de modalidad en las bases mediante consulta formal. Las bases no escriben la palabra «presencial», pero fijan la modalidad de hecho: entrega de coffee break o colación fría cada día en el lugar, certificados en formato físico, y talleres con dispositivos de los participantes. La propuesta se presenta como presencial en Combarbalá y se deja la confirmación como consulta al Departamento de Salud."
+    ],
+    "score": {
+      "score": 60,
+      "sinInformacion": 8,
+      "cubiertos": 0,
+      "total": 8,
+      "porTipo": [
+        {
+          "tipo": "experiencia_relator",
+          "n": 2
+        },
+        {
+          "tipo": "identidad",
+          "n": 2
+        },
+        {
+          "tipo": "alcance",
+          "n": 1
+        },
+        {
+          "tipo": "historial_portal",
+          "n": 1
+        },
+        {
+          "tipo": "infraestructura",
+          "n": 1
+        },
+        {
+          "tipo": "titulo_grado",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "relator-designado-sin-suplentes",
+        "exige": "Designar en la oferta al relator que efectivamente dictará el curso, con su documentación: no se aceptan suplentes y un cambio no notificado con 5 días hábiles habilita a suspender la capacitación y sancionar por incumplimiento.",
+        "cita": "Bases técnicas — «En su oferta debe adjuntar documentación solicitada SOLO del relator que realizará la capacitación, no se aceptaran suplentes.»",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-titulo-profesional",
+        "exige": "Título profesional del relator, adjunto a la oferta. Lo emite un tercero: solo puede recopilarse.",
+        "cita": "Bases técnicas, Documentación Solicitada al momento de ofertar — «Título profesional del relator.»",
+        "tipo": "titulo_grado",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-certificaciones-docencia",
+        "exige": "Certificaciones del relator que acrediten haber participado como docente en cursos relacionados con IA en salud. Sin ellas el mandante se reserva el derecho de no revisar la oferta.",
+        "cita": "Bases técnicas — «Certificaciones del relator de la capacitación, donde haya participado como docente en cursos relacionados al tema a tratar.»",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "logistica-presencial-combarbala",
+        "exige": "Ejecutar dos jornadas presenciales para 80 funcionarios en Combarbalá (Región de Coquimbo) el 08 y 09 de septiembre de 2026, con coffee break o colación por día y certificados impresos. Es logística que dirige la adjudicación hacia un proveedor con presencia o capacidad de despliegue en la zona.",
+        "cita": "Bases técnicas — «Destinatarios 80 Funcionarios del Departamento de Salud de Combarbalá … Se considera que el oferente pueda entregar un Coffe break o colación fría cada día de la capacitación … Los certificados deben ser entregados de forma física».",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "sin-reclamos-en-el-portal",
+        "exige": "No registrar reclamos en la plataforma de Mercado Público, de esta u otra institución: el mandante se reserva el derecho de no considerar esas ofertas.",
+        "cita": "Bases técnicas, Selección de ofertas — «el mandante se reserva el derecho de no considerar ofertas de empresas que presenten reclamos en la plataforma de Mercado Público por contrataciones de esta u otra institución.»",
+        "tipo": "historial_portal",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "giro-comercial-del-area",
+        "exige": "Tener giro comercial referente al área materia de la contratación (capacitación) y no estar afecto a las inhabilidades de los artículos 4 y 35 quáter de la Ley 19.886.",
+        "cita": "Bases técnicas, Selección de ofertas — «aceptándose las ofertas de las personas naturales y jurídicas que cumplan con los requisitos establecidos en el artículo 4 de la Ley 19.886 … y que tengan giros comerciales referentes al área materia de la contratación.»",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "fechas-fijas-de-ejecucion",
+        "exige": "Disponibilidad del relator para el 08 y 09 de septiembre de 2026 y entrega de los contenidos digitales el 04 de septiembre: la compra cierra el 28 de agosto, dejando una ventana muy corta entre adjudicación y ejecución.",
+        "cita": "Bases técnicas — «Fecha y Horarios 08 y 09 de septiembe de 2026 horario 8:30 a 16:00 hrs.» y «considerando el plazo de entrega el 04 de septiembre del 2026».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "identidad-oferente",
+        "exige": "Razón social, RUT y representante legal del oferente para la carta de compromiso y la eventual orden de compra.",
+        "cita": "Bases técnicas — «Carta de Compromiso que garantice la participación del relator que el oferente presenta en su propuesta.»",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      }
+    ],
+    "generado": "2026-08-27"
+  },
+  "2735-1052-COT26": {
+    "codigo": "2735-1052-COT26",
+    "curso": "Programa de capacitación asincrónica para emprendedores en innovación, startups e inteligencia artificial (HUB Emprende 2026)",
+    "organismo": "I. Municipalidad de Lo Barnechea — Dirección de Desarrollo Comunitario, programa HUB Emprende 2026",
+    "topeClp": 6116000,
+    "totalClp": 5504400,
+    "descuentoPct": 10,
+    "regimenTributario": "impuestos_incluidos",
+    "citaTributaria": "«El oferente deberá presentar documento de cotización que indique el valor total del servicio de capacitación, considerando impuestos incluidos» — Especificaciones Técnicas, apartado IV. Admisibilidad, Documento de cotización.",
+    "criterioEvaluacion": "no_declarado",
+    "fechaCierre": "2026-08-28 09:30",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/2735-1052-COT26/Q-20260827-IMunicipalidadDeLoBarnecheaDireccionDeDesarrolloCo.pdf",
+    "fuenteDocumentos": [
+      "REQUERIMIENTO COMPRA AGIL PROGRAMA CAPACITACION INNOVA + IA.docx",
+      "01. Cláusula de desempate Compra Ágil.pdf",
+      "03. Reglamento de Pago.pdf",
+      "04. Condiciones y plazos para la aceptación de la orden de compra.pdf"
+    ],
+    "requisitosPorConfirmar": 5,
+    "pendientes": [
+      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+      "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, y de ello depende además la exención de IVA del artículo 13 N°4.",
+      "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
+      "Aclarar la contradicción de modalidad en las bases mediante consulta formal. El requerimiento justifica expresamente la modalidad asincrónica («La elección de un programa formativo 100% asincrónico responde a criterios de eficiencia, cobertura y conciliación laboral») y la admisibilidad exige que la propuesta contemple la ejecución «en formato 100% asincrónico». Una propuesta sincrónica o presencial sería inadmisible."
+    ],
+    "score": {
+      "score": 65,
+      "sinInformacion": 7,
+      "cubiertos": 0,
+      "total": 7,
+      "porTipo": [
+        {
+          "tipo": "alcance",
+          "n": 3
+        },
+        {
+          "tipo": "infraestructura",
+          "n": 2
+        },
+        {
+          "tipo": "experiencia_relator",
+          "n": 1
+        },
+        {
+          "tipo": "identidad",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "experiencia-2-capacitaciones-digitales",
+        "exige": "Acreditar al menos 2 capacitaciones digitales en emprendimiento, innovación, transformación digital o aceleración, ejecutadas entre el 01-01-2024 y el 31-07-2026, con facturas, órdenes de compra, contratos o certificados de conformidad de terceros. Es requisito de admisibilidad: sin él la oferta no pasa a evaluación, y la evidencia la emite el cliente, no el oferente.",
+        "cita": "Especificaciones Técnicas, IV. Admisibilidad — «El oferente deberá acreditar haber ejecutado al menos 2 capacitaciones digitales enfocadas en programas de emprendimiento, innovación, transformación digital o aceleración, durante los últimos tres años … Las ofertas que no acrediten experiencia … serán declaradas inadmisibles y no continuarán en el proceso de evaluación.»",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "plataforma-personalizada-hub-6-meses",
+        "exige": "Disponer de una plataforma e-learning propia, personalizable con la identidad del Hub Lo Barnechea, integrable al sitio web municipal y operativa al menos 6 meses con ruta de aprendizaje, talleres, novedades y actualizaciones. Dirige la adjudicación hacia proveedores que ya operan una plataforma, no hacia relatores.",
+        "cita": "Especificaciones Técnicas, VI. Requisitos de entrega — «Plataforma personalizada con la identidad del Hub Lo Barnechea durante al menos 6 meses, con acceso a diagnóstico, ruta de aprendizaje, cursos, talleres, novedades y demás contenidos disponibles.»",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "instrumento-100-diagnosticos",
+        "exige": "Contar con un instrumento de diagnóstico de emprendimiento y habilidades del emprendedor aplicable a hasta 100 personas, más un informe consolidado de resultados para el equipo del Hub.",
+        "cita": "Especificaciones Técnicas, III — «Diagnóstico Emprendimiento + Habilidades Emprendedor (pack de hasta 100 diagnósticos). Informe detallado del pull de evaluación.»",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "catalogo-11-cursos-producidos",
+        "exige": "Tener producidas —o producir antes de la ejecución— once cápsulas asincrónicas con los contenidos exactos que lista el requerimiento, cada una con horas y minutos declarados. Es un catálogo audiovisual completo, no una relatoría.",
+        "cita": "Especificaciones Técnicas, III — «Cursos en cápsulas asincrónicas con horas y minutos claramente descritos», seguido del listado de once contenidos formativos con sus objetivos.",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "duracion-no-declarada",
+        "exige": "Definir con el ITS la carga horaria del programa: el requerimiento no la fija, pero el diploma debe declarar la duración en horas cronológicas. Las 44 horas de esta propuesta son un supuesto de KeepSync, no un dato del organismo.",
+        "cita": "Especificaciones Técnicas, VI — «Este diploma debe contener lo siguiente: … d. Duración en horas cronológicas», sin que ninguna parte del requerimiento fije ese número.",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "desempate-por-orden-de-ingreso",
+        "exige": "Ante empate en cumplimiento y precio, gana la oferta ingresada primero. Presentar tarde es perder el desempate, y la compra cierra el 28 de agosto de 2026 a las 09:30.",
+        "cita": "Cláusula de Desempate en Compras Ágiles — «se seleccionará la propuesta del proveedor cuya oferta figure en primer lugar dentro del mencionado registro».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "identidad-oferente",
+        "exige": "Razón social, RUT, representante legal y correo institucional del oferente para el documento de cotización, las comunicaciones con el ITS y la eventual orden de compra.",
+        "cita": "Especificaciones Técnicas, VI — «el contratista deberá informar al ITS al inicio del contrato el correo electrónico que utilizará para efectuar las comunicaciones.»",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      }
+    ],
+    "generado": "2026-08-27"
+  },
+  "2306-700-COT26": {
+    "codigo": "2306-700-COT26",
+    "curso": "Curso de perfeccionamiento docente «Uso de nuevas tecnologías (Inteligencia Artificial)»",
+    "organismo": "I. Municipalidad de Osorno — Departamento de Administración de Educación Municipal (DAEM), Escuela Sociedad Socorro de Señoras",
+    "topeClp": 4000000,
+    "totalClp": 3600000,
+    "descuentoPct": 10,
+    "regimenTributario": "no_declarado",
+    "citaTributaria": "«13. FINANCIAMIENTO — El curso se financiará con recursos provenientes de la Subvención Escolar Preferencial (SEP). FUENTE DE FINANCIAMIENTO SEP — PRESUPUESTO DISPONIBLE 4.000.000.- TOTAL 4.000.000.-» — TDR, apartado 13. El documento no declara si el monto es neto, exento o con impuestos incluidos: se presenta el valor como TOTAL y el régimen queda por confirmar con el DAEM.",
+    "criterioEvaluacion": "no_declarado",
+    "fechaCierre": "2026-08-31 10:00",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/2306-700-COT26/Q-20260827-IMunicipalidadDeOsornoDepartamentoDeAdministracion.pdf",
+    "fuenteDocumentos": [
+      "Términos Tec. de Referencia.pdf"
+    ],
+    "requisitosPorConfirmar": 4,
+    "pendientes": [
+      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+      "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
+      "Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal."
+    ],
+    "score": {
+      "score": 55,
+      "sinInformacion": 9,
+      "cubiertos": 0,
+      "total": 9,
+      "porTipo": [
+        {
+          "tipo": "certificacion",
+          "n": 3
+        },
+        {
+          "tipo": "experiencia_relator",
+          "n": 2
+        },
+        {
+          "tipo": "identidad",
+          "n": 1
+        },
+        {
+          "tipo": "infraestructura",
+          "n": 1
+        },
+        {
+          "tipo": "titulo_grado",
+          "n": 1
+        },
+        {
+          "tipo": "tributario",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "registro-ate-institucion",
+        "exige": "Estar acreditada en el Registro Nacional de Asistencia Técnica Educativa (ATE) del Ministerio de Educación, con el servicio validado mediante certificado ATE. Es el filtro que decide quién puede ofertar: sin registro ATE la oferta no es admisible.",
+        "cita": "TDR, apartado 6 — «Institución acreditada en el Registro Nacional de Asistencia Técnica Educativa (ATE) del Ministerio de Educación con el servicio validado mediante certificado ATE correspondiente».",
+        "tipo": "certificacion",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "curso-inscrito-en-registro-ate",
+        "exige": "Que el curso ofertado esté inscrito en el Registro ATE con nombre y temática similar al solicitado, demostrable con el certificado ATE, y que su propuesta técnico-pedagógica comprenda todos los contenidos requeridos. No basta con estar registrado como ATE: el curso mismo tiene que estarlo.",
+        "cita": "TDR, apartado 6 — «El curso a licitar “USO DE NUEVAS TECNOLOGÍAS (INTELIGENCIA ARTIFICIAL)”, de la entidad ejecutora ATE debe estar inscrito en el registro ATE, lo cual debe ser demostrable mediante el certificado ATE correspondiente.»",
+        "tipo": "certificacion",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-habilitado-en-registro-ate",
+        "exige": "Que el relator que dicte el curso esté inscrito en el Registro ATE como relator habilitado para este curso específico, adjuntando el respaldo que lo acredite.",
+        "cita": "TDR, apartado 6 — «Los relatores que impartan el curso … deben estar inscritos en el Registro ATE como relatores habilitados para este curso, adjuntando el respaldo que los acredite.»",
+        "tipo": "certificacion",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-titulo-y-posgrado",
+        "exige": "Título de Profesor de Educación General Básica o Media, o Ingeniero en Informática, Civil Informática o en Computación, o profesional TI con formación complementaria en educación; más posgrado o especialización en Tecnología Educativa, Innovación Educativa, Competencias Digitales o IA aplicada a la educación, con su certificado.",
+        "cita": "TDR, apartado 6 — «Poseer título profesional de Profesor(a) de Educación General Básica o de Enseñanza Media o ingeniero(a) en Informática … Profesional con posgrado o especialización en Tecnología Educativa, Innovación Educativa, Competencias Digitales o Inteligencia Artificial aplicada a la educación.»",
+        "tipo": "titulo_grado",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "experiencia-capacitacion-docente",
+        "exige": "Acreditar experiencia en capacitación docente, en uso pedagógico de IA y en el diseño e implementación de programas de formación para docentes o establecimientos, con antecedentes de capacitaciones similares de los últimos años.",
+        "cita": "TDR, apartado 6 — «Acreditar experiencia en capacitación docente y en el uso pedagógico de herramientas de inteligencia artificial … Presentar antecedentes de capacitaciones similares realizadas en los últimos años.»",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "dominio-marco-curricular-nacional",
+        "exige": "Manejo del currículo nacional, los Estándares de la Profesión Docente y el Marco para la Buena Enseñanza, que es lo que ordena los contenidos del curso y su producto final.",
+        "cita": "TDR, apartado 6 — «Manejar el currículo nacional, los Estándares de la Profesión Docente y el Marco para la Buena Enseñanza.»",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "logistica-alimentacion-y-materiales",
+        "exige": "Proveer, en Osorno y dentro del establecimiento, un almuerzo con menú detallado (incluida opción vegetariana), dos coffee breaks con composición fijada al detalle, y un dossier impreso más lápiz por participante. Es logística de catering e impresión local que dirige la adjudicación hacia un proveedor con presencia en la zona.",
+        "cita": "TDR, apartados 8 y 9 — «8 SERVICIOS ADICIONALES El curso debe considerar A) 1 servicio de almuerzo … b) 2 servicios de Coffe Break … c) El oferente debe contemplar que la alimentación será en el mismo establecimiento. 9 MATERIALES DE ENTREGA … Dossier con el material impreso para tomar apuntes. Lápiz de pasta azul.»",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "regimen-tributario",
+        "exige": "Confirmar con el DAEM si los $4.000.000 de presupuesto SEP son netos, exentos o con impuestos incluidos: el TDR no lo declara y cambia el valor a ingresar en el portal.",
+        "cita": "TDR, apartado 13 — «FUENTE DE FINANCIAMIENTO SEP — PRESUPUESTO DISPONIBLE 4.000.000.- TOTAL 4.000.000.-», sin mención al régimen tributario.",
+        "tipo": "tributario",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "identidad-oferente",
+        "exige": "Razón social, RUT y representante legal del oferente, y su condición de entidad ATE, para la propuesta y la eventual orden de compra.",
+        "cita": "TDR, apartado 15 — «El oferente deberá ofertar por la totalidad de los servicios solicitados, a través del portal de compras públicas www.mercadopublico.cl».",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      }
+    ],
+    "generado": "2026-08-27"
   }
 }

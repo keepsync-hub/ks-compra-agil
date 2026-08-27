@@ -69,15 +69,29 @@ Cada tarjeta encabeza con un **score de apertura (0–100%)** que ordena el foco
 que no exige ninguna característica, capacidad o certificación particular que dirija la
 adjudicación, y baja 5% por cada criterio que falte revisar (`criterios_direccionadores` en
 `config/capacitaciones.json`, cada uno con su cita; el cálculo, en `src/lib/scoring-capacitacion.ts`).
-Hoy: Dipres 75% las tres, Subtrans 65%, Concepción 60%, Hospital Padre Hurtado 45% — este último
-exige las últimas 12 órdenes de compra del mismo curso, que es el filtro más direccionador de las
-seis. **No es una probabilidad de adjudicación**: es cuánto de la admisibilidad está sin resolver.
+Hoy hay **diez borradores**, seis de la tanda del 2026-08-22 (Dipres 85% y 75% dos, Subtrans 65%,
+Concepción 60%, Hospital Padre Hurtado 45% — este último exige las últimas 12 órdenes de compra del
+mismo curso, el filtro más direccionador de todas) y cuatro del 2026-08-27: Poder Judicial (Power BI)
+70%, Lo Barnechea (emprendimiento + IA) 65%, Combarbalá (IA en salud) 60% y DAEM Osorno (IA para
+docentes) 55%. **No es una probabilidad de adjudicación**: es cuánto de la admisibilidad está sin
+resolver.
+
+Las seis primeras ya cerraron y siguen publicadas —el índice de cotizaciones se acumula y no borra,
+para que una corrida de un solo código no haga desaparecer a las demás—, así que la tarjeta las marca
+*Cerrada* y las manda al final de la grilla. Publicar un borrador de una compra en la que ya no se
+puede ofertar, sin decirlo, es el mismo defecto que la grilla de oportunidades corrigió.
 
 Dos cosas que condicionan todo el nicho y no las resuelve el cotizador: **ninguna oferta nombra
-relator/a** (los seis TDR exigen título, CV y certificados verificables, y sin eso la oferta se
+relator/a** (los TDR exigen título, CV y certificados verificables, y sin eso la oferta se
 descarta en admisibilidad), y **sigue sin confirmarse si KeepSync es OTEC registrada en SENCE** —
 de eso dependen tanto puntaje directo en algunas bases como la exención de IVA del art. 13 N°4 con
 que Dipres presupuesta. Ver el detalle en `.claude/skills/compra-agil-ofertar/SKILL.md`.
+
+Dos de las seis compras del barrido del 2026-08-27 quedaron **sin cotizar, y el archivo dice por
+qué** (`_no_cotizadas` en `config/capacitaciones.json`): la de Penco trae su único adjunto como PDF
+escaneado sin capa de texto —llenar la ficha exigiría OCR o inventar el curso—, y la del INIA no es
+capacitación sino créditos de API de Claude y ChatGPT, que van por `npm run cotizar` y siguen
+frenadas por el insumo bloqueante del nicho de licencias.
 
 ## Listado de leads: el único dato que la API no tiene
 

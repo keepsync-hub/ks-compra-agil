@@ -1,81 +1,84 @@
 # Radar Compra Ágil
 
-Corrida: 2026-08-22T19:29:43.520Z
+Corrida: 2026-08-27T21:43:32.559Z
 Categorías: Licencias Claude / Anthropic, Cursos y capacitación en Power BI, Tableau y visualización de datos, Cursos y capacitación en automatización no-code (n8n, Make, Zapier, Power Automate), Cursos y capacitación en inteligencia artificial, Asesoría, adopción e implementación de inteligencia artificial
-Consultas únicas a la API: 11 (unión de las variantes de todas las categorías)
+Consultas únicas a la API: 13 (unión de las variantes de todas las categorías)
+
+> ⚠ **La cuota de la API se agotó durante esta corrida** (429, Retry-After: no informado). Las compras que no alcanzaron a leerse en detalle se reportan con la **ficha reducida del listado** (tope, cierre, comprador, competencia y tipo de llamado); les falta la descripción, los productos solicitados y el plazo de entrega, y su mención está confirmada solo por el nombre. No entran al índice histórico: entrarían con ceros que parecen datos observados.
 
 ## Oportunidades abiertas (6)
 
-### Licencias Claude / Anthropic (0)
+### Licencias Claude / Anthropic (1)
 
-_Ninguna oportunidad abierta en esta corrida._
-### Cursos y capacitación en Power BI, Tableau y visualización de datos (3)
-
-### 1618-68-COT26 — DIRECCION DE PRESUPUESTOS MINISTERIO DE
-- Curso herramientas de Power BI Nivel II para el análisis de datos de la Dipres
-- Cierre: 2026-08-25 15:00 (primer llamado — EMT puede ofertar)
-- Tope: $1.500.000 CLP (moneda original: CLP)
-- Plan detectado: no identificado, 1 usuarios
-- Competencia: 5 oferta(s) recibida(s)
-- Plazo de entrega: 5 día(s)
-- Excluyentes detectados: obligatorio completar.
-
-### 1618-67-COT26 — DIRECCION DE PRESUPUESTOS MINISTERIO DE
-- Curso herramientas básicas de Power BI para el análisis de datos para un máximo de 20 funcionarios de la Dipres
-- Cierre: 2026-08-25 11:00 (primer llamado — EMT puede ofertar)
-- Tope: $1.500.000 CLP (moneda original: CLP)
-- Plan detectado: no identificado, 1 usuarios
-- Competencia: 5 oferta(s) recibida(s)
-- Plazo de entrega: 5 día(s)
-- Excluyentes detectados: obligatorio completar.
-
-### 1057503-2156-COT26 — HOSPITAL PADRE ALBERTO HURTADO
-- Memo Nº96(03.08.26) capacitación. Curso herramientas de Power BI en análisis de datos (octubre y noviembre)
-- Cierre: 2026-08-25 12:00 (primer llamado — EMT puede ofertar)
-- Tope: $4.320.000 CLP (moneda original: CLP)
+### 1107279-199-COT26 — INSTITUTO DE INVESTIGACIONES AGROPECUARIAS
+- OpenAI ChatGPT API Creditos  y Anthropic Claude API creditos SEGUN REQUISITOS EN DOCUMENTO ADJUNTO
+- Cierre: 2026-08-28 15:45 (primer llamado — EMT puede ofertar)
+- Tope: $4.195.671 CLP (moneda original: CLP)
 - Plan detectado: no identificado, 2 usuarios
 - Competencia: 2 oferta(s) recibida(s)
-- Plazo de entrega: 5 día(s)
+- Plazo de entrega: 1 día(s)
+- **NUEVO** desde la última corrida
+### Cursos y capacitación en Power BI, Tableau y visualización de datos (1)
+
+### 425-325-COT26 — CORP ADMINISTRATIVA DEL PODER JUDICIAL
+- Capacitación Power BI en niveles básico e intermedio
+- Cierre: 2026-09-09 12:00 (primer llamado — EMT puede ofertar)
+- Tope: $2.100.000 CLP (moneda original: CLP)
+- Plan detectado: no identificado, 1 usuarios
+- Competencia: 8 oferta(s) recibida(s)
+- Plazo de entrega: 7 día(s)
+- **NUEVO** desde la última corrida
 ### Cursos y capacitación en automatización no-code (n8n, Make, Zapier, Power Automate) (0)
 
 _Ninguna oportunidad abierta en esta corrida._
-### Cursos y capacitación en inteligencia artificial (3)
+### Cursos y capacitación en inteligencia artificial (4)
 
-### 577290-82-COT26 — Subsecretaria de Transportes 
-- ADQUISICIÓN DE CURSO AUTOMATIZACIÓN DEPROCESOS CON INTELIGENCIA ARTIFICIAL
-- Cierre: 2026-08-25 11:00 (primer llamado — EMT puede ofertar)
-- Tope: $1.000.000 CLP (moneda original: CLP)
+### 4491-375-COT26 — Ilustre Municipalidad de Penco - Educación
+- Capacitación "Estrategias de Inteligencia Artificial "para el aula, Escuela Vipla.-
+- Cierre: 2026-08-28 17:00 (primer llamado — EMT puede ofertar)
+- Tope: $1.200.000 CLP (moneda original: CLP)
 - Plan detectado: no identificado, 1 usuarios
 - Competencia: 2 oferta(s) recibida(s)
-- Plazo de entrega: 60 día(s)
+- Plazo de entrega: 10 día(s)
+- **NUEVO** desde la última corrida
 
-### 1618-69-COT26 — DIRECCION DE PRESUPUESTOS MINISTERIO DE
-- Contratación de curso IA generativa para el trabajo diario en DIPRES
-- Cierre: 2026-08-25 16:30 (primer llamado — EMT puede ofertar)
-- Tope: $3.000.000 CLP (moneda original: CLP)
-- Plan detectado: no identificado, 1 usuarios
-- Competencia: 5 oferta(s) recibida(s)
-- Plazo de entrega: 5 día(s)
-- Excluyentes detectados: obligatorio completar DIPRES requiere la contratación de capacitación para la realización del curso denominado “IA Generativa para el Trabajo Diario en el Sector Público”, de tal forma que los participantes apliquen herramientas de inteligencia artificial generativa en sus tareas habituales, contribuyendo a mejorar la productividad, la eficiencia en el desarrollo de sus funciones y el análisis de información para su trabajo.
+### 2306-700-COT26 — I MUNICIPALIDAD DE OSORNO
+- Capacitación para docentes en la Temática "Uso de nuevas tecnologías (Inteligencia Artificial)", Fondos SEP
+- Cierre: 2026-08-31 10:00 (primer llamado — EMT puede ofertar)
+- Tope: $4.000.000 CLP (moneda original: CLP)
+- Plan detectado: no identificado
+- Competencia: 0 oferta(s) recibida(s)
+- **NUEVO** desde la última corrida
 
-### 2672-18-COT26 — I MUNICIPALIDAD DE CONCEPCION
-- SERVICIO DE FORMACIÓN Y CAPACITACIÓN EN INNOVACIÓN PÚBLICA Y HERRAMIENTAS DE INTELIGENCIA ARTIFICIAL PARA LA GESTIÓN MUNICIPAL
-- Cierre: 2026-08-25 12:00 (primer llamado — EMT puede ofertar)
-- Tope: $6.020.000 CLP (moneda original: CLP)
-- Plan detectado: no identificado, 70 usuarios
-- Competencia: 12 oferta(s) recibida(s)
-- Plazo de entrega: 5 día(s)
+### 2735-1052-COT26 — I MUNICIPALIDAD LO BARNECHEA
+- CAPACITACIÓN PARA EMPRENDEDORES DE INNOVACIÓN, STARTUPS Y/O INTELIGENCIA ARTIFICIAL
+- Cierre: 2026-08-28 09:30 (primer llamado — EMT puede ofertar)
+- Tope: $6.116.000 CLP (moneda original: CLP)
+- Plan detectado: no identificado
+- Competencia: 0 oferta(s) recibida(s)
+- **NUEVO** desde la última corrida
+
+### 3616-123-COT26 — ILUSTRE MINICIPALIDAD DE COMBARBALA
+- Curso de Capacitación "Inteligencia artificial en salud"
+- Cierre: 2026-08-28 09:00 (primer llamado — EMT puede ofertar)
+- Tope: $1.600.000 CLP (moneda original: CLP)
+- Plan detectado: no identificado
+- Competencia: 0 oferta(s) recibida(s)
+- **NUEVO** desde la última corrida
 ### Asesoría, adopción e implementación de inteligencia artificial (0)
 
 _Ninguna oportunidad abierta en esta corrida._
 
-## Descartados por el filtro estricto (3)
+## Descartados por el filtro estricto (6)
 
 Compras que sí mencionaban la materia pero que no pasaron `patron_requerido` (no es el servicio que se busca) o que cayó en `patron_excluyente` (es otro rubro). Se listan a propósito: un patrón demasiado ancho, si no se publica, se ve como oportunidades que desaparecen sin explicación.
 
-- `577290-82-COT26` (ia-asesoria, falta-requerido): ADQUISICIÓN DE CURSO AUTOMATIZACIÓN DEPROCESOS CON INTELIGENCIA ARTIFICIAL
-- `1618-69-COT26` (ia-asesoria, falta-requerido): Contratación de curso IA generativa para el trabajo diario en DIPRES
-- `2672-18-COT26` (ia-asesoria, falta-requerido): SERVICIO DE FORMACIÓN Y CAPACITACIÓN EN INNOVACIÓN PÚBLICA Y HERRAMIENTAS DE INTELIGENCIA ARTIFICIAL PARA LA G
+- `1107279-199-COT26` (ia-capacitacion, falta-requerido): OpenAI ChatGPT API Creditos  y Anthropic Claude API creditos SEGUN REQUISITOS EN DOCUMENTO ADJUNTO
+- `1107279-199-COT26` (ia-asesoria, falta-requerido): OpenAI ChatGPT API Creditos  y Anthropic Claude API creditos SEGUN REQUISITOS EN DOCUMENTO ADJUNTO
+- `4491-375-COT26` (ia-asesoria, falta-requerido): Capacitación "Estrategias de Inteligencia Artificial "para el aula, Escuela Vipla.-
+- `2306-700-COT26` (ia-asesoria, falta-requerido): Capacitación para docentes en la Temática "Uso de nuevas tecnologías (Inteligencia Artificial)", Fondos SEP
+- `2735-1052-COT26` (ia-asesoria, falta-requerido): CAPACITACIÓN PARA EMPRENDEDORES DE INNOVACIÓN, STARTUPS Y/O INTELIGENCIA ARTIFICIAL
+- `3616-123-COT26` (ia-asesoria, falta-requerido): Curso de Capacitación "Inteligencia artificial en salud"
 
 ## Adjudicaciones (proveedor seleccionado) (0)
 
@@ -89,7 +92,7 @@ _Sin reintentos detectados en esta corrida._
 
 ## Cobertura
 
-Las 11 consultas de la corrida respondieron correctamente.
+Las 13 consultas de la corrida respondieron correctamente.
 
 
 

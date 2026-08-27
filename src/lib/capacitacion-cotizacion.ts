@@ -120,6 +120,26 @@ function bloqueOferente(o: IdentidadOferente): string {
   </div>`;
 }
 
+/**
+ * La lámina 3 es de alto fijo y sus dos columnas se llenan muy desparejo: la izquierda acumula
+ * modalidad + metodología + exigencias + coordinación, y la derecha solo relatoría + entregables.
+ * Cuando el organismo declara **las dos** listas (requisitos metodológicos y exigencias
+ * adicionales) la izquierda desborda mientras a la derecha le sobran ~200px — medido en
+ * 2735-1052-COT26, 2306-700-COT26 y 3616-123-COT26. En ese caso la tarjeta de coordinación pasa a
+ * la derecha. La alternativa era recortar el texto de las bases, que es justo lo que esta lámina
+ * no debe hacer.
+ */
+function coordinacionEnLaDerecha(r: RequisitosCapacitacion): boolean {
+  return (r.requisitos_metodologicos?.length ?? 0) > 0 && (r.exigencias_adicionales?.length ?? 0) > 0;
+}
+
+function tarjetaCoordinacion(r: RequisitosCapacitacion): string {
+  return `<div class="card" style="margin-top:9pt;">
+        <h3>Coordinación</h3>
+        <div style="font-size:9pt;color:${COLOR.gray};line-height:1.4;">${esc(r.logistica)}</div>
+      </div>`;
+}
+
 function bloqueModulos(r: RequisitosCapacitacion): string {
   return r.modulos
     .map(
@@ -320,7 +340,11 @@ export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionDa
     <h3 style="margin-bottom:3pt;">Objetivo de aprendizaje</h3>
     <div style="font-size:9.5pt;line-height:1.4;">${esc(r.objetivo)}</div>
   </div>
-  <div class="grid2">${bloqueModulos(r)}</div>
+  <!-- Tres columnas cuando el temario es largo: el requerimiento de Lo Barnechea (2735-1052-COT26)
+       lista once cursos y en dos columnas desbordaba la lámina, que es de alto fijo. El umbral es 8
+       porque los dos TDR de Dipres traen ocho módulos y sí caben en dos columnas: bajarlo les
+       cambiaría el diseño sin necesidad. Mismo criterio que el dos-col de las exigencias. -->
+  <div class="${r.modulos.length > 8 ? "grid3" : "grid2"}">${bloqueModulos(r)}</div>
   <div class="footer">${esc(r.modulos_nota)} Total: ${totalHoras} horas cronológicas.</div>
 </div>
 
@@ -342,7 +366,7 @@ export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionDa
       ${
         r.requisitos_metodologicos && r.requisitos_metodologicos.length > 0
           ? `<div class="card" style="margin-top:9pt;"><h3>Requisitos metodológicos exigidos</h3>
-             <ul class="tight">${r.requisitos_metodologicos.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`
+             <ul class="tight${r.requisitos_metodologicos.length > 5 ? " dos-col" : ""}" style="${r.requisitos_metodologicos.length > 5 ? "font-size:7.5pt;" : ""}">${r.requisitos_metodologicos.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`
           : ""
       }
       ${
@@ -351,10 +375,7 @@ export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionDa
              <ul class="tight${r.exigencias_adicionales.length > 5 ? " dos-col" : ""}" style="font-size:7.5pt;">${r.exigencias_adicionales.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`
           : ""
       }
-      <div class="card" style="margin-top:9pt;">
-        <h3>Coordinación</h3>
-        <div style="font-size:9pt;color:${COLOR.gray};line-height:1.4;">${esc(r.logistica)}</div>
-      </div>
+      ${coordinacionEnLaDerecha(r) ? "" : tarjetaCoordinacion(r)}
     </div>
     <div>
       ${bloqueRelator(r)}
@@ -362,6 +383,7 @@ export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionDa
         <h3>Entregables comprometidos</h3>
         <ul class="tight">${r.entregables.map((e) => `<li>${esc(e)}</li>`).join("")}</ul>
       </div>
+      ${coordinacionEnLaDerecha(r) ? tarjetaCoordinacion(r) : ""}
     </div>
   </div>
 </div>
