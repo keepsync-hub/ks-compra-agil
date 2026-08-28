@@ -93,6 +93,22 @@ escaneado sin capa de texto —llenar la ficha exigiría OCR o inventar el curso
 capacitación sino créditos de API de Claude y ChatGPT, que van por `npm run cotizar` y siguen
 frenadas por el insumo bloqueante del nicho de licencias.
 
+## Regla de cálculo para cotizaciones en USD (`cotizar-usd`)
+
+`npm run cotizar-usd -- <monto_usd> [tipo_cambio]` implementa una regla de precio para costos en
+USD fijada por el usuario el 2026-08-28, documentada en `.claude/skills/cotizar-usd/SKILL.md` e
+implementada en `src/lib/pricing-usd.ts` (`calcularCotizacionUsd`): (1) tipo de cambio observado +
+5,5% de recargo, (2) costo en CLP con ese tipo de cambio ajustado, (3) +19% de impuesto no
+recuperable (costo para KeepSync, no el IVA de venta), (4) +15% de markup sobre ese costo —el
+resultado es el precio a utilizar en la cotización—, (5) +19% de IVA de venta para el valor final
+a presentar. Es decir `valor_final = monto_usd × tc_observado × 1,055 × 1,19 × 1,15 × 1,19`.
+
+**No reemplaza (todavía) la fórmula ya en producción** de `cotizarLinea` (`src/lib/pricing.ts`,
+`npm run cotizar`, licencias Claude): esa usa el tipo de cambio observado sin recargo y
+`markup_pct` de `company.json` (hoy 10%, no 15%). Son lo bastante distintas como para no asumir
+que una reemplaza a la otra sin que el usuario lo confirme explícitamente — ver la tabla
+comparativa en el SKILL.md del skill.
+
 ## Listado de leads: el único dato que la API no tiene
 
 `npm run leads` barre las **mismas cinco categorías del radar en los cinco estados** —incluidas
