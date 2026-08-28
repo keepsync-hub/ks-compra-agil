@@ -1,35 +1,12 @@
-import { readFileSync } from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import type { CotizacionPptxData } from "./cotizacion-pptx.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const LOGO_PATH = path.join(__dirname, "..", "assets", "logo-keepsync-blanco.png");
-
-const COLOR = {
-  bg: "#0E0E17",
-  card: "#161527",
-  cardAlt: "#1D1B33",
-  border: "#2A2844",
-  accent: "#786CF0",
-  accentLight: "#B4AAFA",
-  white: "#FFFFFF",
-  gray: "#9A9FB0",
-  warn: "#FB7185",
-};
-
-function formatoClp(n: number): string {
-  return "$" + Math.round(n).toLocaleString("es-CL");
-}
-
-const MESES_ES = [
-  "enero", "febrero", "marzo", "abril", "mayo", "junio",
-  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
-];
-
-function esc(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
+import {
+  PALETA_KEEPSYNC as COLOR,
+  MESES_ES,
+  cssLaminasKeepsync,
+  formatoClp,
+  escaparHtml as esc,
+  logoKeepsyncBase64,
+} from "./estilo-keepsync.js";
 
 /**
  * Genera la misma cotización que cotizacion-pptx.ts pero como HTML para imprimir a PDF con
@@ -38,7 +15,7 @@ function esc(s: string): string {
  * Playwright en vez de convertir el .pptx.
  */
 export function generarCotizacionHtml(data: CotizacionPptxData): string {
-  const logoBase64 = readFileSync(LOGO_PATH).toString("base64");
+  const logoBase64 = logoKeepsyncBase64();
   const mesAno = `${MESES_ES[data.fecha.getMonth()]} de ${data.fecha.getFullYear()}`;
   const bajoTope = data.totalClp <= data.topeClp;
 
@@ -74,39 +51,7 @@ export function generarCotizacionHtml(data: CotizacionPptxData): string {
 <head>
 <meta charset="utf-8">
 <title>Cotización ${esc(data.codigo)}</title>
-<style>
-  @page { size: 11.69in 8.27in; margin: 0; }
-  * { box-sizing: border-box; }
-  body { margin: 0; font-family: Arial, "Segoe UI", sans-serif; background: ${COLOR.bg}; color: ${COLOR.white}; }
-  .slide { width: 11.69in; height: 8.27in; padding: 0.7in; position: relative; page-break-after: always; overflow: hidden; }
-  .slide:last-child { page-break-after: auto; }
-  .gray { color: ${COLOR.gray}; }
-  .accent { color: ${COLOR.accentLight}; }
-  h1 { font-size: 30pt; margin: 0 0 8pt; }
-  h2 { font-size: 20pt; margin: 0 0 8pt; }
-  .card { background: ${COLOR.card}; border: 1px solid ${COLOR.border}; border-radius: 10px; padding: 14pt 16pt; }
-  .badge {
-    position: absolute; top: 0.35in; right: 0.35in; background: ${COLOR.warn}; color: ${COLOR.white};
-    font-size: 9pt; font-weight: bold; padding: 6pt 12pt; border-radius: 20px;
-  }
-  table { width: 100%; border-collapse: collapse; font-size: 11pt; }
-  th, td { text-align: left; padding: 8pt 10pt; }
-  th { color: ${COLOR.gray}; font-size: 9pt; text-transform: uppercase; background: ${COLOR.cardAlt}; }
-  td.c, th.c { text-align: center; }
-  td.r, th.r { text-align: right; }
-  .info-row { display: flex; gap: 10pt; font-size: 11pt; padding: 4pt 0; }
-  .info-row .lbl { width: 140pt; color: ${COLOR.gray}; font-weight: bold; font-size: 9pt; }
-  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10pt; margin-top: 14pt; }
-  .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10pt; margin-top: 14pt; }
-  .num-badge { width: 26pt; height: 26pt; border-radius: 50%; background: ${COLOR.accent}; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 8pt; }
-  .check { color: ${COLOR.accent}; font-weight: bold; margin-right: 6pt; }
-  .totales { margin-top: 10pt; font-size: 12pt; }
-  .totales .fila { display: flex; justify-content: space-between; padding: 4pt 0; }
-  .totales .total { background: ${COLOR.accent}; border-radius: 8px; padding: 8pt 14pt; font-size: 15pt; font-weight: bold; margin-top: 6pt; }
-  .footer { position: absolute; bottom: 0.4in; left: 0.7in; right: 0.7in; font-size: 9pt; color: ${COLOR.gray}; }
-  ul.cond { margin: 8pt 0 0; padding-left: 16pt; font-size: 10.5pt; color: ${COLOR.gray}; }
-  ul.cond li { margin-bottom: 4pt; }
-</style>
+<style>${cssLaminasKeepsync()}</style>
 </head>
 <body>
 
