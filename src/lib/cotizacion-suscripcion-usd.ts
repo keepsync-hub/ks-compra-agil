@@ -204,7 +204,11 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
   const condiciones = [
     `Suscripciones nominativas: ${glosaLineas}, un usuario por suscripción, por ${glosaVigencia} corridos desde la activación.`,
     "Activación, administración de los asientos y soporte de primer nivel a cargo de KeepSync; facturación en pesos chilenos.",
-    "Cotización comercial directa: no constituye oferta ni respuesta a ningún proceso de compra pública.",
+    // Acá iba "Cotización comercial directa: no constituye oferta ni respuesta a ningún proceso de
+    // compra pública." El usuario la sacó el 2026-08-28: es una salvedad interna, no una condición
+    // comercial, y no aporta nada al cliente que recibe el documento. Que este cotizador no sirva
+    // para ofertar en Compra Ágil (no respeta tope ni admisibilidad) sigue dicho donde corresponde:
+    // el encabezado de este módulo, el de `src/scripts/cotizar-suscripcion.ts` y CLAUDE.md.
     "Válida por 30 días desde la fecha de emisión. El valor puede cambiar de acuerdo al tipo de cambio vigente al momento de la facturación.",
     ...(e.condicionesExtra ?? []),
   ];
