@@ -13,8 +13,7 @@
   },
   "pricing": {
     "moneda_lista": "USD",
-    "markup_pct": 10,
-    "_formula_nota": "Precio final = lista (USD→CLP) + IVA (costo de compra) + markup_pct (sobre el costo) + IVA (venta). Es decir total = lista × (1+iva) × (1+markup) × (1+iva). El IVA se aplica dos veces a propósito: una en el costo de adquisición y otra en la venta facturada.",
+    "_formula_nota": "Precio final = lista (USD→CLP con el tipo de cambio observado + 5,5% de recargo) + 19% de impuesto no recuperable (costo) + 15% de markup + 19% de IVA (venta). Es decir total = lista × 1,055 × 1,19 × 1,15 × 1,19. El recargo de tipo de cambio, el impuesto no recuperable, el markup y el IVA de venta son fijos (src/lib/pricing-usd.ts) — ya no se configuran por empresa. iva_pct abajo solo se usa para el rótulo de la cotización de Array (regla distinta, 80% del presupuesto).",
     "iva_pct": 19,
     "fx_fuente": "mindicador.cl (dólar observado, Banco Central de Chile) — consultado en vivo por src/lib/pricing.ts en cada cotización",
     "fx_fallback_clp_por_usd": 916,

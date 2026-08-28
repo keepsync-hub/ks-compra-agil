@@ -103,11 +103,11 @@ recuperable (costo para KeepSync, no el IVA de venta), (4) +15% de markup sobre 
 resultado es el precio a utilizar en la cotización—, (5) +19% de IVA de venta para el valor final
 a presentar. Es decir `valor_final = monto_usd × tc_observado × 1,055 × 1,19 × 1,15 × 1,19`.
 
-**No reemplaza (todavía) la fórmula ya en producción** de `cotizarLinea` (`src/lib/pricing.ts`,
-`npm run cotizar`, licencias Claude): esa usa el tipo de cambio observado sin recargo y
-`markup_pct` de `company.json` (hoy 10%, no 15%). Son lo bastante distintas como para no asumir
-que una reemplaza a la otra sin que el usuario lo confirme explícitamente — ver la tabla
-comparativa en el SKILL.md del skill.
+Desde el 2026-08-28 esta regla **es** la fórmula de producción para licencias Claude: el usuario
+confirmó la unificación y `cotizarLinea` (`src/lib/pricing.ts`, `npm run cotizar`) delega
+directamente en `calcularCotizacionUsd` en vez de duplicar la lógica. `markup_pct` e `iva_pct`
+dejaron de leerse de `company.json` para este cálculo — antes `markup_pct` era configurable (10%
+en el ejemplo), ahora es 15% fijo, igual que el resto de los porcentajes de la regla.
 
 ## Listado de leads: el único dato que la API no tiene
 

@@ -45,28 +45,14 @@ El tipo de cambio en vivo se obtiene con `obtenerTipoCambioUsdClp` (`src/lib/pri
 observado vía mindicador.cl, con fallback fijo si el servicio falla) — la misma función que ya usa
 el cotizador de licencias Claude, para no duplicar la fuente del tipo de cambio.
 
-## Relación con la fórmula ya en producción (`src/lib/pricing.ts`)
+## Relación con `cotizarLinea` (licencias Claude, `src/lib/pricing.ts`)
 
-**Esta regla no reemplazó, por ahora, la fórmula que ya usa `cotizarLinea` para licencias Claude**
-(`npm run cotizar`, `.claude/skills/compra-agil-ofertar/`). Esa fórmula existente es estructuralmente
-parecida pero no idéntica:
+Desde el 2026-08-28, esta regla **es** la fórmula de producción para licencias Claude: el usuario
+confirmó la unificación y `cotizarLinea` (`npm run cotizar`, `.claude/skills/compra-agil-ofertar/`)
+delega directamente en `calcularCotizacionUsd` en vez de duplicar la lógica. `markup_pct` e
+`iva_pct` dejaron de leerse de `company.json` para este cálculo — son parte fija de la regla, no un
+parámetro por empresa (antes `markup_pct` era configurable, con 10% como valor de ejemplo; ahora es
+15% fijo, igual que el resto de los porcentajes).
 
-| paso | `cotizarLinea` (licencias Claude, en producción) | esta regla (`cotizar-usd`) |
-|---|---|---|
-| tipo de cambio | observado, sin recargo | observado **+ 5,5%** |
-| impuesto de costo | +19% | +19% (igual) |
-| markup | `markup_pct` de `company.json` (hoy 10%) | **15%**, fijo |
-| IVA de venta | +19% | +19% (igual) |
-
-Las dos diferencias (recargo de tipo de cambio, y 15% vs. el `markup_pct` configurado) son
-suficientes para que **no se deba asumir que esta regla reemplaza silenciosamente** la fórmula de
-`cotizarLinea` sin que el usuario lo confirme explícitamente. Mientras esa confirmación no llegue:
-
-- `npm run cotizar` (licencias Claude) sigue usando `cotizarLinea` sin cambios.
-- Este skill queda como una regla de cálculo aparte, disponible para cuando el usuario pida
-  aplicarla — a una cotización de licencias Claude si decide unificarlas, o a cualquier otro costo
-  en USD que aparezca en un nicho nuevo.
-
-Si en algún momento el usuario confirma que `cotizar-usd` debe reemplazar a `cotizarLinea`, ese
-cambio se hace ahí (parametrizando el recargo de tipo de cambio y el markup en `company.json`), no
-duplicando lógica entre los dos archivos.
+Si aparece un costo en USD de otro nicho (fuera de licencias Claude), esta misma función sirve sin
+tocar nada: se llama con el monto en USD de ese nicho y el tipo de cambio observado.

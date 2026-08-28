@@ -34,12 +34,16 @@ Qué hace (`scripts/cotizar.ts`):
    `src/lib/tiempo.ts`).
 3. Detecta el plan (Pro/Max 5x/Max 20x/Team) y la cantidad de usuarios desde el texto. Si no
    puede determinarlos con confianza, **se detiene y pide revisión manual** — no adivina.
-4. Cotiza con `src/lib/pricing.ts`: precio público de Anthropic (USD) → CLP con el dólar
-   observado en vivo (mindicador.cl, con fallback fijo en `company.json`) → +19% IVA (costo) →
-   +10% markup → +19% IVA (venta). Es decir, total = lista × (1+IVA) × (1+markup) × (1+IVA) —
-   la fórmula exacta la definió el usuario, no está inventada. La oferta incluye siempre, sin
-   costo adicional, un taller de buenas prácticas de 3 horas y acceso a la comunidad de usuarios
-   de Claude en Chile.
+4. Cotiza con `src/lib/pricing.ts` (`cotizarLinea`, que delega en `calcularCotizacionUsd` de
+   `src/lib/pricing-usd.ts` — ver también el skill `cotizar-usd`): precio público de Anthropic
+   (USD) → CLP con el dólar observado en vivo (mindicador.cl, con fallback fijo en
+   `company.json`) **+5,5% de recargo de tipo de cambio** → +19% de impuesto no recuperable
+   (costo) → **+15% de markup** → +19% de IVA (venta). Es decir,
+   total = lista × 1,055 × 1,19 × 1,15 × 1,19 — la fórmula exacta la definió el usuario, no está
+   inventada, y desde el 2026-08-28 es la misma regla para cualquier costo en USD (recargo de
+   tipo de cambio y markup ya no se configuran por empresa en `company.json`, son fijos). La
+   oferta incluye siempre, sin costo adicional, un taller de buenas prácticas de 3 horas y acceso
+   a la comunidad de usuarios de Claude en Chile.
 5. **Si el total supera el tope presupuestario de la compra, no genera ninguna oferta** — lo
    reporta como inadmisible y se detiene. Esto no es negociable (ver `CLAUDE.md`).
 6. Si cabe bajo el tope, genera dos archivos en `output/<codigo>/`:

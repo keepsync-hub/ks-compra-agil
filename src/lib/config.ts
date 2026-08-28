@@ -36,7 +36,14 @@ export interface CompanyConfig {
   };
   pricing: {
     moneda_lista: "USD";
-    markup_pct: number;
+    /**
+     * Se usa hoy solo para mostrar el rótulo "IVA {iva_pct}%" en la cotización de Array
+     * (`array-cotizacion.ts`, regla del 80% del presupuesto, no la de licencias Claude). La
+     * fórmula de licencias Claude (`cotizarLinea`) ya no lee este campo ni `markup_pct`: son
+     * parte fija de la regla en `src/lib/pricing-usd.ts` (5,5% de recargo de tipo de cambio, 19%
+     * de impuesto no recuperable, 15% de markup, 19% de IVA de venta), no un parámetro por
+     * empresa.
+     */
     iva_pct: number;
     fx_fuente: string;
     fx_fallback_clp_por_usd: number;
