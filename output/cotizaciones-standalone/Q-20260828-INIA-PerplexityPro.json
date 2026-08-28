@@ -1,0 +1,66 @@
+{
+  "id": "Q-20260828-INIA",
+  "producto": "Perplexity Pro",
+  "cliente": "Instituto de Investigaciones Agropecuarias (INIA)",
+  "usuarios": 2,
+  "meses": 12,
+  "precio_lista_usd_mes": 20,
+  "fuente_precio_lista": "Precio público del plan Pro de Perplexity: USD 20 por usuario/mes (facturación mensual), verificado el 2026-08-28",
+  "monto_usd_anual": 480,
+  "fuente_tipo_cambio": "mindicador.cl (dólar observado, 2026-08-28)",
+  "neto_unitario_mensual_clp": 26717,
+  "neto_clp": 641206,
+  "iva_clp": 121829,
+  "total_clp": 763035,
+  "calculo": {
+    "monto_usd": 480,
+    "tipo_cambio_observado": 925.25,
+    "recargo_tipo_cambio_pct": 5.5,
+    "tipo_cambio_ajustado": 976.14,
+    "costo_clp": 468547,
+    "impuesto_no_recuperable_pct": 19,
+    "costo_con_impuesto_clp": 557570,
+    "markup_pct": 15,
+    "precio_cotizacion_clp": 641206,
+    "iva_venta_pct": 19,
+    "valor_final_clp": 763035,
+    "pasos": [
+      {
+        "paso": "1. Tipo de cambio ajustado",
+        "descripcion": "Tipo de cambio observado ($925.25) + 5.5%",
+        "valor_clp": 976.14
+      },
+      {
+        "paso": "2. Costo",
+        "descripcion": "USD 480 × tipo de cambio ajustado",
+        "valor_clp": 468547
+      },
+      {
+        "paso": "3. Costo con impuesto no recuperable",
+        "descripcion": "Costo + 19% (impuesto que KeepSync no puede recuperar, se trata como costo)",
+        "valor_clp": 557570
+      },
+      {
+        "paso": "4. Precio de cotización (neto)",
+        "descripcion": "Costo con impuesto + 15% de markup — este es el precio a utilizar en la cotización",
+        "valor_clp": 641206
+      },
+      {
+        "paso": "5. Valor final (con IVA de venta)",
+        "descripcion": "Precio de cotización + 19% de IVA — valor final a presentar",
+        "valor_clp": 763035
+      }
+    ]
+  },
+  "oferente": {
+    "razon_social": "KEEPSYNC SPA",
+    "rut": "78.441.121-4",
+    "contacto_email": "cristian.molina@keepsync.ai",
+    "campos_por_confirmar": [
+      "domicilio legal",
+      "representante legal (nombre completo y RUN)",
+      "giro declarado ante el SII"
+    ]
+  },
+  "emitida_en": "2026-08-28T15:59:54.942Z"
+}
