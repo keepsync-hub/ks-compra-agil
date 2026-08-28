@@ -96,7 +96,8 @@ frenadas por el insumo bloqueante del nicho de licencias.
 ## Regla de cálculo para cotizaciones en USD (`cotizar-usd`)
 
 `npm run cotizar-usd -- <monto_usd> [tipo_cambio]` implementa una regla de precio para costos en
-USD fijada por el usuario el 2026-08-28, documentada en `.claude/skills/cotizar-usd/SKILL.md` e
+USD fijada por el usuario el 2026-08-28, documentada en la skill `ks-comun:ks-skill-cotizar-usd` de
+la librería (`keepsync-hub/ks-skill-hub`) e
 implementada en `src/lib/pricing-usd.ts` (`calcularCotizacionUsd`): (1) tipo de cambio observado +
 5,5% de recargo, (2) costo en CLP con ese tipo de cambio ajustado, (3) +19% de impuesto no
 recuperable (costo para KeepSync, no el IVA de venta), (4) +15% de markup sobre ese costo —el
@@ -120,7 +121,8 @@ la copia de cursos). Ahora la única fuente es **`src/lib/estilo-keepsync.ts`**
 layout de 4 láminas, `conPaginaHtml`/`renderizarPdfDesdeHtml` para el renderizado), y los cuatro
 archivos (`src/lib/cotizacion-html.ts`, `src/lib/array-cotizacion.ts`,
 `src/lib/capacitacion-cotizacion.ts`, `licitaciones/src/lib/cotizacion-html.ts`) importan de ahí en
-vez de duplicar. Documentado como skill en `.claude/skills/keepsync-pdf/SKILL.md`: cualquier
+vez de duplicar. Documentado como skill en `ks-comun:ks-skill-keepsync-pdf` de la librería
+(`keepsync-hub/ks-skill-hub`): cualquier
 cotización de un nicho nuevo, sin cotizador propio todavía, debe construir su PDF importando de ese
 módulo — así el formato de entrega queda igual al de `/cotizar` sin copiar uno de los cuatro
 archivos existentes.

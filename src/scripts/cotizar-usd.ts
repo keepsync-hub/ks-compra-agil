@@ -1,5 +1,5 @@
-import { obtenerTipoCambioUsdClp } from "../../../../src/lib/pricing.js";
-import { calcularCotizacionUsd } from "../../../../src/lib/pricing-usd.js";
+import { obtenerTipoCambioUsdClp } from "../lib/pricing.js";
+import { calcularCotizacionUsd } from "../lib/pricing-usd.js";
 
 /**
  * CLI de apoyo para aplicar la regla de cotización en USD (ver SKILL.md de este skill y

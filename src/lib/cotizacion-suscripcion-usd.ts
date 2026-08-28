@@ -18,7 +18,8 @@ import type { IdentidadOferente } from "./capacitaciones.js";
  * Por qué existe como módulo y no como un script de una sola vez: la cotización de Perplexity Pro
  * para INIA se generó primero a mano y quedó solo como PDF en Drive — sin código en el repo, no se
  * podía regenerar ni auditar el cálculo. Acá el precio sale íntegro de `calcularCotizacionUsd`
- * (`.claude/skills/cotizar-usd/`) y el PDF de `estilo-keepsync.ts` (`.claude/skills/keepsync-pdf/`),
+ * (skill `ks-comun:ks-skill-cotizar-usd`) y el PDF de `estilo-keepsync.ts`
+ * (skill `ks-comun:ks-skill-keepsync-pdf`),
  * sin duplicar ni la fórmula ni la paleta.
  *
  * El monto en USD que se le pasa a la regla es el **anual de cada línea**: precio de lista mensual

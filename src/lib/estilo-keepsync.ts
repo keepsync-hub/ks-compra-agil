@@ -14,7 +14,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
  * cuatro archivos — cualquier retoque de marca (o bug del renderizador) había que aplicarlo cuatro
  * veces y ya se habían empezado a desalinear (`ok` solo existía en la de cursos). Este módulo es
  * ahora la única fuente: quien construya un PDF nuevo para KeepSync importa de acá en vez de
- * copiar un archivo existente. Ver `.claude/skills/keepsync-pdf/SKILL.md`.
+ * copiar un archivo existente. Ver la skill `ks-comun:ks-skill-keepsync-pdf` de la libreria
+ * (keepsync-hub/ks-skill-hub).
  */
 export const LOGO_KEEPSYNC_PATH = path.join(__dirname, "..", "assets", "logo-keepsync-blanco.png");
 
