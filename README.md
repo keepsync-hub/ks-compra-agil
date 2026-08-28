@@ -24,6 +24,20 @@ protección del entorno (así fallaron las corridas de `claude/array-agile-purch
 `claude/revisar-contexto-plan-ttaumn`). Para que un cambio en `docs/` llegue al sitio público hay
 que mergearlo a esa rama, o habilitar la rama nueva en Settings → Environments → `github-pages`.
 
+## La librería de skills
+
+Este repo tiene la librería de KeepSync instalada (`.claude/settings.json`): el plugin **`ks-comun`**
+de [`keepsync-hub/ks-skill-hub`](https://github.com/keepsync-hub/ks-skill-hub), con los patrones y
+reglas que sirven en cualquier repo.
+
+Dos skills que vivían acá se movieron ahí porque no son de este proyecto:
+`ks-comun:ks-skill-cotizar-usd` (la regla de precio USD → CLP) y `ks-comun:ks-skill-keepsync-pdf` (el
+estilo visual de las cotizaciones). El código de las dos sigue en este repo —`src/lib/pricing-usd.ts`,
+`src/lib/estilo-keepsync.ts`, `npm run cotizar-usd`—; lo que se movió es la skill.
+
+Los skills propios de este proyecto —los radares, los cotizadores, el expediente— siguen en
+`.claude/skills/`, que es donde corren.
+
 ## Setup
 
 ```bash

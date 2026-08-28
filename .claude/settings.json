@@ -1,0 +1,10 @@
+{
+  "extraKnownMarketplaces": {
+    "keepsync": {
+      "source": { "source": "github", "repo": "keepsync-hub/ks-skill-hub" }
+    }
+  },
+  "enabledPlugins": {
+    "ks-comun@keepsync": true
+  }
+}
