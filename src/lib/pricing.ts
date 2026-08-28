@@ -1,5 +1,6 @@
 import type { CompanyConfig } from "./config.js";
 import type { PlanClaude } from "./condiciones.js";
+import { calcularCotizacionUsd } from "./pricing-usd.js";
 
 /**
  * Mapeo del plan detectado en el texto de la compra a la clave de `company.pricing.planes`.
@@ -79,14 +80,18 @@ export interface LineaCotizada {
 }
 
 /**
- * Fórmula de precio (definida por el usuario):
- *   1. base = precio de lista publicado por Anthropic (USD × meses) → CLP con el dólar observado.
- *   2. costo = base + IVA (el precio incluye IVA porque KeepSync paga IVA al adquirir la licencia).
- *   3. neto de venta = costo + markup (markup_pct sobre el costo con IVA).
- *   4. oferta final (total) = neto de venta + IVA (el IVA que se factura al organismo).
- * Es decir, total = base × (1+iva) × (1+markup) × (1+iva). El IVA aparece dos veces a propósito:
- * una como parte del costo de adquisición y otra como el IVA de la venta que se declara en la
- * factura. En la cotización se muestra "Neto" (base imponible de la venta) + "IVA" = "Total".
+ * Fórmula de precio: delega en `calcularCotizacionUsd` (`src/lib/pricing-usd.ts`), la regla de
+ * cotización en USD que fijó el usuario el 2026-08-28 y que a partir de esta versión es también
+ * la fórmula de producción para licencias Claude (antes tenían fórmulas parecidas pero no
+ * idénticas — ver el historial de `cotizar-usd/SKILL.md`). Los cinco pasos, sobre el costo en USD
+ * de un tramo (precio de lista × meses):
+ *   1. tipo de cambio ajustado = tipo de cambio observado × (1 + 5,5%).
+ *   2. costo (CLP) = costo USD × tipo de cambio ajustado.
+ *   3. costo con impuesto = costo + 19% (impuesto no recuperable, costo para KeepSync).
+ *   4. neto de venta = costo con impuesto + 15% de markup — precio a usar en la cotización.
+ *   5. total = neto de venta + 19% de IVA de venta.
+ * markup_pct e iva_pct ya no se leen de `company.json`: son parte fija de la regla de negocio,
+ * no un parámetro por empresa (ver `pricing-usd.ts`).
  */
 export function cotizarLinea(
   planKey: string,
@@ -101,31 +106,26 @@ export function cotizarLinea(
       `Plan "${planKey}" no está en company.json (pricing.planes). Planes disponibles: ${Object.keys(company.pricing.planes).join(", ")}`,
     );
   }
-  const iva = company.pricing.iva_pct / 100;
-  const markup = company.pricing.markup_pct / 100;
 
   const costoUsdUnitario = plan.precio_lista_usd_mes * meses;
-  const listaClpUnitario = costoUsdUnitario * fxClpPorUsd; // base: precio de lista en CLP (neto)
-  const costoClpUnitario = listaClpUnitario * (1 + iva); // costo = lista + IVA de compra
-  const netoClpUnitario = costoClpUnitario * (1 + markup); // neto de venta = costo + markup
-  const totalClpUnitario = netoClpUnitario * (1 + iva); // total = neto de venta + IVA de venta
+  const calc = calcularCotizacionUsd(costoUsdUnitario, fxClpPorUsd);
 
-  const netoClpTotal = netoClpUnitario * cantidad;
-  const totalClpTotal = totalClpUnitario * cantidad;
+  const netoClpTotal = calc.precio_cotizacion_clp * cantidad;
+  const totalClpTotal = calc.valor_final_clp * cantidad;
 
   return {
     plan: plan.nombre,
     cantidad,
     precio_lista_usd_mes: plan.precio_lista_usd_mes,
     meses,
-    markup_pct: company.pricing.markup_pct,
+    markup_pct: calc.markup_pct,
     costo_usd_total: round2(costoUsdUnitario * cantidad),
-    lista_clp_total: round0(listaClpUnitario * cantidad),
-    costo_clp_total: round0(costoClpUnitario * cantidad),
-    neto_clp_unitario: round0(netoClpUnitario),
+    lista_clp_total: round0(calc.costo_clp * cantidad),
+    costo_clp_total: round0(calc.costo_con_impuesto_clp * cantidad),
+    neto_clp_unitario: round0(calc.precio_cotizacion_clp),
     neto_clp_total: round0(netoClpTotal),
     iva_clp_total: round0(totalClpTotal - netoClpTotal),
-    total_clp_unitario: round0(totalClpUnitario),
+    total_clp_unitario: round0(calc.valor_final_clp),
     total_clp_total: round0(totalClpTotal),
   };
 }
