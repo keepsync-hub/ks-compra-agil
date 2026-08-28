@@ -33,7 +33,8 @@
     "transformacion-digital": "tsx licitaciones/src/scripts/transformacion-digital.ts",
     "login-portal": "tsx licitaciones/src/scripts/login-portal.ts",
     "postear-n8n": "tsx src/scripts/postear-n8n.ts",
-    "generar-documento": "tsx src/scripts/generar-documento.ts"
+    "generar-documento": "tsx src/scripts/generar-documento.ts",
+    "subir-documento": "tsx .claude/skills/subir-documento-drive/scripts/subir-documento.ts"
   },
   "dependencies": {
     "docxtemplater": "^3.69.3",

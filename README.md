@@ -207,6 +207,11 @@ cabecera `X-KS-Clave` apuntada al webhook de ingesta, y habilitar esta rama en
 Settings → Environments → github-pages (si no, `docs/panel/*.css|js` no se sirve y el panel se ve sin
 estilo).
 
+Subir archivos a la carpeta del expediente también se puede hacer desde la terminal con
+`npm run subir-documento -- <codigo> --prefijo=<NN> <archivo…>` (skill `subir-documento-drive`),
+reutilizando los mismos `/mp/expediente` y `/mp/subir` de arriba en vez de una vía nueva — ver
+CLAUDE.md.
+
 ## Listado de leads: quién compra esto (`npm run leads` → `docs/leads.html`)
 
 El radar responde "¿conviene participar en esta compra?". Este barrido responde otra pregunta, y por
