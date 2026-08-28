@@ -219,6 +219,18 @@ de **revisión** y no de salida, y los dos bloqueos de admisibilidad del nicho �
 relator/a, y sigue sin confirmarse si KeepSync es OTEC en SENCE— aparecen ahora en el panel, en el
 expediente y **dentro del PDF generado**. Hacerlos visibles no es resolverlos.
 
+### Subir un documento al expediente desde la terminal (`subir-documento-drive`)
+
+Lo que hace `docs/panel/expediente.js` arrastrando un archivo a una zona de subida ahora también se
+puede hacer con `npm run subir-documento -- <codigo> --prefijo=<NN> <archivo…>` — el skill
+`subir-documento-drive`. No es una vía nueva: llama por HTTP a los mismos dos flujos de arriba
+(`GET /mp/expediente` para resolver el `folderId` por prefijo, `POST /mp/subir` para subir el
+archivo), reutilizando la cookie de una sesión del panel ya iniciada a mano (`N8N_PANEL_COOKIE`) en
+vez de automatizar o rodear el login de n8n — el mismo guardrail que el resto del panel: cada acción
+con efecto real la autoriza un humano. Útil para acopiar en Drive, sin abrir el navegador, los
+documentos que el skill **no puede generar** (CV y certificados del relator/a, órdenes de compra
+anteriores — ver la tabla de `TipoDocumento` más arriba).
+
 ## Insumo bloqueante (sigue condicionando el envío real de una oferta)
 
 **¿KeepSync tiene una vía real para proveer y facturar licencias Claude/Anthropic, y a qué
