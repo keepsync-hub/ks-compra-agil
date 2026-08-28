@@ -1,47 +1,14 @@
-import { readFileSync, mkdtempSync, writeFileSync, rmSync, existsSync } from "node:fs";
-import { tmpdir } from "node:os";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import { chromium } from "playwright";
 import type { IdentidadOferente } from "./capacitaciones.js";
 import type { RequisitosCapacitacion } from "./capacitaciones.js";
 import { normalizarDocumentos } from "./documentos-oferta.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const LOGO_PATH = path.join(__dirname, "..", "assets", "logo-keepsync-blanco.png");
-// Chromium: el entorno manda. En esta máquina vive en /opt/pw-browsers; en un runner de CI no
-// existe esa ruta y hay que dejar que Playwright use el que instaló. Misma convención que
-// licitaciones/src/scripts/login-portal.ts.
-const CHROMIUM_PATH =
-  process.env.CHROMIUM_EXECUTABLE_PATH ||
-  (existsSync("/opt/pw-browsers/chromium") ? "/opt/pw-browsers/chromium" : undefined);
-
-/** Mismo sistema de color que la cotización de Array y la de licencias Claude. */
-const COLOR = {
-  bg: "#0E0E17",
-  card: "#161527",
-  cardAlt: "#1D1B33",
-  border: "#2A2844",
-  accent: "#786CF0",
-  accentLight: "#B4AAFA",
-  white: "#FFFFFF",
-  gray: "#9A9FB0",
-  warn: "#FB7185",
-  ok: "#34D399",
-};
-
-const MESES_ES = [
-  "enero", "febrero", "marzo", "abril", "mayo", "junio",
-  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
-];
-
-function formatoClp(n: number): string {
-  return "$" + Math.round(n).toLocaleString("es-CL");
-}
-
-function esc(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
+import {
+  PALETA_KEEPSYNC as COLOR,
+  MESES_ES,
+  formatoClp,
+  escaparHtml as esc,
+  logoKeepsyncBase64,
+  conPaginaHtml,
+} from "./estilo-keepsync.js";
 
 /**
  * Una fila del cuadro de cumplimiento (el que el Anexo N°1 de Dipres pide marcar con "X").
@@ -212,7 +179,7 @@ function bloqueRelator(r: RequisitosCapacitacion): string {
 }
 
 export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionData): string {
-  const logoBase64 = readFileSync(LOGO_PATH).toString("base64");
+  const logoBase64 = logoKeepsyncBase64();
   const r = data.requisitos;
   const mesAno = `${MESES_ES[data.fecha.getMonth()]} de ${data.fecha.getFullYear()}`;
   const totalHoras = r.modulos.reduce((s, m) => s + m.horas, 0);
@@ -486,15 +453,7 @@ export async function generarCotizacionCapacitacionPdf(
   outputPdfPath: string,
 ): Promise<{ laminasDesbordadas: { indice: number; excesoPx: number }[] }> {
   const html = generarCotizacionCapacitacionHtml(data);
-  const tmpDir = mkdtempSync(path.join(tmpdir(), "cotizacion-capacitacion-"));
-  const tmpHtmlPath = path.join(tmpDir, "cotizacion.html");
-  writeFileSync(tmpHtmlPath, html, "utf-8");
-
-  const browser = await chromium.launch({ headless: true, executablePath: CHROMIUM_PATH });
-  try {
-    const page = await browser.newPage();
-    await page.goto(`file://${tmpHtmlPath}`, { waitUntil: "networkidle" });
-
+  return conPaginaHtml(html, "cotizacion-capacitacion-", async (page) => {
     const laminasDesbordadas = await page.evaluate(() => {
       // `document` se tipea acá y no con "DOM" en tsconfig.lib a propósito: este repo corre en
       // Node y agregar los tipos del navegador al proyecto entero dejaría pasar globales de
@@ -523,8 +482,5 @@ export async function generarCotizacionCapacitacionPdf(
     });
 
     return { laminasDesbordadas };
-  } finally {
-    await browser.close();
-    rmSync(tmpDir, { recursive: true, force: true });
-  }
+  });
 }

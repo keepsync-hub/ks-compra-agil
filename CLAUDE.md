@@ -109,6 +109,22 @@ directamente en `calcularCotizacionUsd` en vez de duplicar la lógica. `markup_p
 dejaron de leerse de `company.json` para este cálculo — antes `markup_pct` era configurable (10%
 en el ejemplo), ahora es 15% fijo, igual que el resto de los porcentajes de la regla.
 
+## Estilo KeepSync único para PDF de cotización (`keepsync-pdf`)
+
+Los cuatro cotizadores (licencias Claude, cursos, Array, licitaciones) generan su PDF final
+renderizando HTML con Chromium/Playwright, no convirtiendo un `.pptx` con LibreOffice (`soffice` no
+funciona en este entorno). Hasta el 2026-08-28 cada uno traía su propia copia de la paleta de
+colores, el logo y el arranque de Chromium — ya se habían desalineado (el verde `ok` solo existía en
+la copia de cursos). Ahora la única fuente es **`src/lib/estilo-keepsync.ts`**
+(`PALETA_KEEPSYNC`, `logoKeepsyncBase64`, `formatoClp`, `escaparHtml`, `cssLaminasKeepsync` para el
+layout de 4 láminas, `conPaginaHtml`/`renderizarPdfDesdeHtml` para el renderizado), y los cuatro
+archivos (`src/lib/cotizacion-html.ts`, `src/lib/array-cotizacion.ts`,
+`src/lib/capacitacion-cotizacion.ts`, `licitaciones/src/lib/cotizacion-html.ts`) importan de ahí en
+vez de duplicar. Documentado como skill en `.claude/skills/keepsync-pdf/SKILL.md`: cualquier
+cotización de un nicho nuevo, sin cotizador propio todavía, debe construir su PDF importando de ese
+módulo — así el formato de entrega queda igual al de `/cotizar` sin copiar uno de los cuatro
+archivos existentes.
+
 ## Listado de leads: el único dato que la API no tiene
 
 `npm run leads` barre las **mismas cinco categorías del radar en los cinco estados** —incluidas
