@@ -23,7 +23,8 @@ import {
  *     --id=Q-20260828-INIA --producto="Perplexity Pro" --usd-mes=20 --usuarios=2 --meses=12 \
  *     --cliente="Instituto de Investigaciones Agropecuarias (INIA)" \
  *     --fuente-precio="Precio público del plan Pro publicado por Perplexity: USD 20/usuario/mes" \
- *     [--tc=925.25] [--slug=PerplexityPro] [--salida=output/cotizaciones-standalone]
+ *     [--tc=925.25] [--tc-fuente="dólar observado, mindicador.cl, 28-08-2026"] \
+ *     [--slug=PerplexityPro] [--salida=output/cotizaciones-standalone]
  */
 function args(): Map<string, string> {
   const m = new Map<string, string>();
@@ -86,7 +87,11 @@ async function main() {
       console.error(`--tc inválido: "${tcManual}"`);
       process.exit(1);
     }
-    fuenteTipoCambio = "manual (argumento --tc)";
+    // `--tc-fuente` existe porque "manual" a secas borra la procedencia del número, y este repo no
+    // afirma nada sin cita. Se usa cuando el fetch en vivo no está disponible (acá el proxy del
+    // entorno tumba el fetch de Node aunque curl sí llegue a mindicador.cl) pero el dólar observado
+    // del día sí se verificó por otra vía.
+    fuenteTipoCambio = m.get("tc-fuente")?.trim() || "manual (argumento --tc)";
   } else {
     const fx = await obtenerTipoCambioUsdClp(916);
     tipoCambioObservado = fx.valor;
