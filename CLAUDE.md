@@ -512,3 +512,45 @@ de arriba aplican tal cual a ese dominio. Lo que hay que saber para operarlo:
   --con-login`) da score 0 contra umbral 0.5, igual que anónimo. Correrlo desde la máquina del
   usuario es lo único que queda por probar. Ver "Acceso a los antecedentes" en
   `licitaciones/PLAN.md`. El cotizador sigue bloqueado por falta de catálogo de costos reales.
+
+## Cotización comercial directa de una suscripción en USD (`cotizar-suscripcion`)
+
+`npm run cotizar-suscripcion` cubre un caso que ninguno de los cuatro cotizadores tenía: una
+cotización **fuera de un proceso de compra pública** —sin código de Compra Ágil, sin tope
+presupuestario que respetar— para una suscripción SaaS cuyo precio de lista está en USD por usuario
+y por mes. Nació de la cotización de Perplexity Pro para INIA (`Q-20260828-INIA`), que se había
+generado a mano y quedó solo como PDF en Drive: sin código en el repo no se podía regenerar ni
+auditar el cálculo.
+
+No inventa nada propio. El precio sale íntegro de la regla `cotizar-usd`
+(`src/lib/pricing-usd.ts`) y el PDF del estilo único (`src/lib/estilo-keepsync.ts`, tres láminas:
+carátula, alcance, cotización formal). El monto que entra a la regla es el **anual de cada línea**
+—lista mensual × usuarios × meses—: se multiplica primero y se convierte después, que es como lo
+pidió el usuario y además evita arrastrar el redondeo doce veces. Se aplica **por línea** y no sobre
+el total para que el subtotal de cada fila de la tabla sea el que sale de la regla y no un prorrateo;
+como la regla es una cadena de multiplicaciones, las dos vías solo pueden diferir en el redondeo al
+peso.
+
+Una cotización puede tener **varias líneas con tarifas distintas** (1 Claude Max 5x a USD 100/mes +
+1 Max 20x a USD 200/mes, por ejemplo): `--linea` se repite, con cinco campos separados por `|` —
+`producto|usd_mes|usuarios|meses|fuente`. Si el parseo no encuentra exactamente cinco campos falla
+en voz alta en vez de repartirlos mal: cotizar con el número equivocado en silencio es el peor
+desenlace posible acá. El precio de lista se pasa a mano junto con su fuente en el quinto campo: el
+script no lo adivina ni lo consulta, igual que el resto del repo.
+
+`--tc` fija el tipo de cambio a mano y `--tc-fuente` dice de dónde salió. Hace falta porque
+`obtenerTipoCambioUsdClp` **cambia al fallback de `company.json` en silencio** cuando el fetch en
+vivo falla (en el entorno de los agentes en la nube el proxy tumba el `fetch` de Node aunque `curl`
+sí llegue a mindicador.cl), y una cotización del mismo día al mismo cliente saldría con otro tipo de
+cambio. El script imprime siempre la fuente del tipo de cambio: revisarla antes de dar el PDF por
+bueno.
+
+**El PDF no muestra el tipo de cambio, el impuesto no recuperable ni el markup**, por la misma razón
+por la que se sacaron de la cotización de licencias Claude el 2026-08-28 (commit a84c1bf): es un
+documento de cliente final. El desglose de los cinco pasos queda en el `.json` que se escribe al
+lado del PDF, en `output/cotizaciones-standalone/`.
+
+El sello de BORRADOR acá **no** se rige por `identidad_confirmada`: ese flag es falso mientras
+falten domicilio, giro SII y representante legal, que son datos para firmar anexos de una compra
+pública y no aparecen en esta cotización. Se sella cuando falta lo que el documento sí afirma —razón
+social, RUT o correo—, que es el defecto real.
