@@ -127,6 +127,66 @@ cotización de un nicho nuevo, sin cotizador propio todavía, debe construir su 
 módulo — así el formato de entrega queda igual al de `/cotizar` sin copiar uno de los cuatro
 archivos existentes.
 
+## Quinto frente: hardware TI para Kompu (`docs/kompu.html`)
+
+`npm run kompu` barre Compras Ágiles de los rubros que vende [Kompu.cl](https://kompu.cl) —cliente
+e-commerce de KeepSync, ver `config/keepsync-oferta.json`—: tóner e insumos de impresión,
+impresoras/multifuncionales/escáneres/plotters, notebooks, UPS y CCTV. Publica una página **nueva y
+separada**, sin marcadores: no toca `docs/index.html` (salvo un enlace en el footer, fuera de los
+tres pares) ni `docs/leads.html`. Es **solo lectura**: no cotiza, porque no existe catálogo de costos
+de Kompu con el que fijar precio bajo el tope.
+
+Lo medido en la primera corrida completa (2026-08-30), que es lo que hay que saber antes de tocarlo:
+
+- **Para medir el mercado no se pagina: se cuenta.** `buscarCompraAgilPagina` devuelve
+  `paginacion.total_resultados` en la PRIMERA página, así que un request por `(variante × estado)`
+  entrega el tamaño de la familia más 25 filas de muestra. Solo `publicada` se pagina, porque es el
+  único estado donde se puede ofertar. **72 requests** para los 5 estados completos; paginarlos
+  todos habría costado ~140 para refinar números que ya se tenían.
+- **La tasa NO se calcula sobre la muestra.** Se intentó primero y daba 28–36%; el número correcto
+  es **10–15%**. El sesgo era de ~2,5×: la muestra lee ~25 filas por estado tenga ese estado 2.208
+  compras o 55, así que su mezcla de estados es un artefacto del muestreo. La tasa sale de los
+  `total_resultados` corregidos por `precisionEnNombre`, donde el solape entre variantes de un mismo
+  rubro infla numerador y denominador por igual y se cancela al dividir. El volumen por estado se
+  publica como **rango** (piso = la variante más grande sola; techo = la suma, que sí cuenta solapes)
+  en vez de fingir un conteo.
+- **El veredicto: hay mercado, y es normal.** 123 compras abiertas al cierre de la corrida y ~10.000
+  resueltas estimadas en los cinco rubros. Las tasas de 10–15% quedan apenas sobre el 7–10%
+  transversal de `output/estudio-mercado.md` — o sea, el rubro no es peor que el instrumento, pero
+  tampoco es un atajo. El volumen es lo que lo hace interesante: `equipos-impresion` solo tiene 65
+  compras abiertas, contra las 47 históricas del nicho Claude entero.
+- **Las variantes `q` se miden antes de comprarlas** (`--sondeo`, 1 request c/u, escribe
+  `output/kompu-sondeo.md`), en vez de elegirlas a dedo — el método que `PLAN-VOLUMEN.md:271-272`
+  culpa del 79% de fracaso del nicho Claude. Así se sacó `camara`, que midió **0 de 4** (`SESION
+  CAMARA HIPERBARICA`, `CAMARA ENDOSCOPICA ORAL`); `CCTV` y `videovigilancia` cubren el rubro.
+  Todas las variantes son de **un solo token**: está medido que el `q` hace OR, así que
+  `"camara seguridad"` traería todo lo que diga «seguridad».
+- **Dos bugs de plural castellano, del mismo tipo que el `\bsobres?\b` de más arriba.**
+  `computacionales?` significa «computacionale» más una ese opcional y **no matchea «EQUIPO
+  COMPUTACIONAL»**; va `computacional(?:es)?`. El mismo bug estaba en `multifuncionales?`,
+  enmascarado porque casi toda multifuncional se nombra junto a «impresora». En castellano el plural
+  de `-al` es `-ales`, y `s?` no puede expresarlo.
+- **Se clasifica producto/servicio/arriendo en vez de excluir.** Kompu vende producto; mantención y
+  arriendo del mismo equipo son otro negocio. Excluirlos borraría filas en silencio: se rotulan y la
+  página los muestra. El guard `kit de mantención` existe por un caso real —`COMPRA DE TONER Y KIT
+  DE MANTENCION`, que es producto— y la regex de servicio se amplió por otro —`MANTENCION PRESENCIAL
+  IMPRESORAS ZEBRA`, que quedaba mal rotulado—.
+- **Cada excluyente cita su caso real**, como exige `src/lib/categorias.ts`: `CARTUCHO PEROXIDO DE
+  HIDROGENO`, `FILTRO … CITOQUINAS / Equivalente a Cartucho`, `RESINAS PARA IMPRESIÓN 3D … prótesis`,
+  `SONDA ASPIRACION CIRCUITO CERRADO`, `Perfiles Domo`, `ROPA PARA NEUROCIRUGIA (PC)`. Y tres
+  términos quedaron **prohibidos** en las regex de mención por lo mismo: `\bpc\b`, `port[aá]til` y
+  `domo` sueltos.
+
+El índice se acumula en `historico/kompu.jsonl` y el censo de la última corrida en
+`historico/kompu-censo.json`, los dos versionados porque `data/` es efímero. Van separados a
+propósito y `--solo-indice` los junta al republicar (mismo reparto que transformación digital): sin
+el censo, republicar dejaría la sección «¿hay mercado?» en blanco. Verificado: `--solo-indice`
+reproduce la página idéntica con **0 requests**.
+
+Banderas: `--sondeo`, `--solo-indice`, `--rubros=`, `--estados=`, `--max-paginas=` (default 3, solo
+aplica a `publicada`), `--presupuesto=` (default 110). Una corrida parcial (`--rubros`/`--estados`)
+**no pisa** `historico/kompu-censo.json`.
+
 ## Listado de leads: el único dato que la API no tiene
 
 `npm run leads` barre las **mismas cinco categorías del radar en los cinco estados** —incluidas
@@ -290,6 +350,10 @@ que el límite diario era ridículamente bajo, y no había ninguna cota inferior
 contrastarla: era `null` estructuralmente. El 20-08-2026 se midió de nuevo: **83 requests en un día,
 0 códigos 429**. El 429 del 19-08 fue un episodio, no el límite. `cerrarDiasPendientes()`
 (`src/lib/cuota.ts`) ahora cierra también los días sin 429, así que `npm run cuota` puede converger.
+
+El 30-08-2026 el radar de Kompu volvió a medirla sin buscarla: **303 requests en un día, 0 códigos
+429** (15 de sondeo + 288 de dos barridos completos de los cinco estados). La cota inferior conocida
+del límite diario pasa de 234 a 303.
 
 Aun así, la corrida ya no depende de que la cuota alcance: los errores de cuota no se confunden con
 una variante rota, y **las categorías que no se alcanzaron a barrer se arrastran del índice** hacia

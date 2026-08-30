@@ -1,0 +1,756 @@
+{
+  "corrida": "2026-08-30T01:03:48.037Z",
+  "estados": [
+    "publicada",
+    "proveedor_seleccionado",
+    "cerrada",
+    "desierta",
+    "cancelada"
+  ],
+  "celdas": [
+    {
+      "variante": "toner",
+      "estado": "publicada",
+      "total_resultados": 24,
+      "topeado": false,
+      "precision": 0.9166666666666666,
+      "filas_muestra": 24,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "tonner",
+      "estado": "publicada",
+      "total_resultados": 1,
+      "topeado": false,
+      "precision": 0,
+      "filas_muestra": 1,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "cartucho",
+      "estado": "publicada",
+      "total_resultados": 4,
+      "topeado": false,
+      "precision": 0.75,
+      "filas_muestra": 4,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "tinta",
+      "estado": "publicada",
+      "total_resultados": 15,
+      "topeado": false,
+      "precision": 0.5333333333333333,
+      "filas_muestra": 15,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "impresora",
+      "estado": "publicada",
+      "total_resultados": 55,
+      "topeado": false,
+      "precision": 0.8909090909090909,
+      "filas_muestra": 55,
+      "paginas_leidas": 3,
+      "truncado": false
+    },
+    {
+      "variante": "multifuncional",
+      "estado": "publicada",
+      "total_resultados": 11,
+      "topeado": false,
+      "precision": 0.8181818181818182,
+      "filas_muestra": 11,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "escaner",
+      "estado": "publicada",
+      "total_resultados": 5,
+      "topeado": false,
+      "precision": 1,
+      "filas_muestra": 5,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "fotocopiadora",
+      "estado": "publicada",
+      "total_resultados": 1,
+      "topeado": false,
+      "precision": 1,
+      "filas_muestra": 1,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "plotter",
+      "estado": "publicada",
+      "total_resultados": 8,
+      "topeado": false,
+      "precision": 0.875,
+      "filas_muestra": 8,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "notebook",
+      "estado": "publicada",
+      "total_resultados": 16,
+      "topeado": false,
+      "precision": 0.9375,
+      "filas_muestra": 16,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "computador",
+      "estado": "publicada",
+      "total_resultados": 11,
+      "topeado": false,
+      "precision": 0.6363636363636364,
+      "filas_muestra": 11,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "UPS",
+      "estado": "publicada",
+      "total_resultados": 12,
+      "topeado": false,
+      "precision": 0.9166666666666666,
+      "filas_muestra": 12,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "CCTV",
+      "estado": "publicada",
+      "total_resultados": 5,
+      "topeado": false,
+      "precision": 0.8,
+      "filas_muestra": 5,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "videovigilancia",
+      "estado": "publicada",
+      "total_resultados": 3,
+      "topeado": false,
+      "precision": 0.3333333333333333,
+      "filas_muestra": 3,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "toner",
+      "estado": "proveedor_seleccionado",
+      "total_resultados": 0,
+      "topeado": false,
+      "precision": null,
+      "filas_muestra": 0,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "tonner",
+      "estado": "proveedor_seleccionado",
+      "total_resultados": 0,
+      "topeado": false,
+      "precision": null,
+      "filas_muestra": 0,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "cartucho",
+      "estado": "proveedor_seleccionado",
+      "total_resultados": 0,
+      "topeado": false,
+      "precision": null,
+      "filas_muestra": 0,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "tinta",
+      "estado": "proveedor_seleccionado",
+      "total_resultados": 0,
+      "topeado": false,
+      "precision": null,
+      "filas_muestra": 0,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "impresora",
+      "estado": "proveedor_seleccionado",
+      "total_resultados": 0,
+      "topeado": false,
+      "precision": null,
+      "filas_muestra": 0,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "multifuncional",
+      "estado": "proveedor_seleccionado",
+      "total_resultados": 0,
+      "topeado": false,
+      "precision": null,
+      "filas_muestra": 0,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "escaner",
+      "estado": "proveedor_seleccionado",
+      "total_resultados": 0,
+      "topeado": false,
+      "precision": null,
+      "filas_muestra": 0,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "fotocopiadora",
+      "estado": "proveedor_seleccionado",
+      "total_resultados": 0,
+      "topeado": false,
+      "precision": null,
+      "filas_muestra": 0,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "plotter",
+      "estado": "proveedor_seleccionado",
+      "total_resultados": 0,
+      "topeado": false,
+      "precision": null,
+      "filas_muestra": 0,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "notebook",
+      "estado": "proveedor_seleccionado",
+      "total_resultados": 0,
+      "topeado": false,
+      "precision": null,
+      "filas_muestra": 0,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "computador",
+      "estado": "proveedor_seleccionado",
+      "total_resultados": 0,
+      "topeado": false,
+      "precision": null,
+      "filas_muestra": 0,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "UPS",
+      "estado": "proveedor_seleccionado",
+      "total_resultados": 0,
+      "topeado": false,
+      "precision": null,
+      "filas_muestra": 0,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "CCTV",
+      "estado": "proveedor_seleccionado",
+      "total_resultados": 0,
+      "topeado": false,
+      "precision": null,
+      "filas_muestra": 0,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "videovigilancia",
+      "estado": "proveedor_seleccionado",
+      "total_resultados": 0,
+      "topeado": false,
+      "precision": null,
+      "filas_muestra": 0,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "toner",
+      "estado": "cerrada",
+      "total_resultados": 160,
+      "topeado": false,
+      "precision": 0.92,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "tonner",
+      "estado": "cerrada",
+      "total_resultados": 1,
+      "topeado": false,
+      "precision": 1,
+      "filas_muestra": 1,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "cartucho",
+      "estado": "cerrada",
+      "total_resultados": 58,
+      "topeado": false,
+      "precision": 0.72,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "tinta",
+      "estado": "cerrada",
+      "total_resultados": 103,
+      "topeado": false,
+      "precision": 0.8,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "impresora",
+      "estado": "cerrada",
+      "total_resultados": 452,
+      "topeado": false,
+      "precision": 0.88,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "multifuncional",
+      "estado": "cerrada",
+      "total_resultados": 102,
+      "topeado": false,
+      "precision": 0.76,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "escaner",
+      "estado": "cerrada",
+      "total_resultados": 40,
+      "topeado": false,
+      "precision": 0.88,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "fotocopiadora",
+      "estado": "cerrada",
+      "total_resultados": 14,
+      "topeado": false,
+      "precision": 1,
+      "filas_muestra": 14,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "plotter",
+      "estado": "cerrada",
+      "total_resultados": 70,
+      "topeado": false,
+      "precision": 0.96,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "notebook",
+      "estado": "cerrada",
+      "total_resultados": 161,
+      "topeado": false,
+      "precision": 0.92,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "computador",
+      "estado": "cerrada",
+      "total_resultados": 117,
+      "topeado": false,
+      "precision": 0.68,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "UPS",
+      "estado": "cerrada",
+      "total_resultados": 70,
+      "topeado": false,
+      "precision": 0.88,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "CCTV",
+      "estado": "cerrada",
+      "total_resultados": 23,
+      "topeado": false,
+      "precision": 0.782608695652174,
+      "filas_muestra": 23,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "videovigilancia",
+      "estado": "cerrada",
+      "total_resultados": 7,
+      "topeado": false,
+      "precision": 0.42857142857142855,
+      "filas_muestra": 7,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "toner",
+      "estado": "desierta",
+      "total_resultados": 552,
+      "topeado": false,
+      "precision": 0.76,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "tonner",
+      "estado": "desierta",
+      "total_resultados": 16,
+      "topeado": false,
+      "precision": 0.75,
+      "filas_muestra": 16,
+      "paginas_leidas": 1,
+      "truncado": false
+    },
+    {
+      "variante": "cartucho",
+      "estado": "desierta",
+      "total_resultados": 104,
+      "topeado": false,
+      "precision": 0.68,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "tinta",
+      "estado": "desierta",
+      "total_resultados": 380,
+      "topeado": false,
+      "precision": 0.64,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "impresora",
+      "estado": "desierta",
+      "total_resultados": 1499,
+      "topeado": false,
+      "precision": 0.8,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "multifuncional",
+      "estado": "desierta",
+      "total_resultados": 302,
+      "topeado": false,
+      "precision": 0.84,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "escaner",
+      "estado": "desierta",
+      "total_resultados": 101,
+      "topeado": false,
+      "precision": 0.96,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "fotocopiadora",
+      "estado": "desierta",
+      "total_resultados": 62,
+      "topeado": false,
+      "precision": 0.92,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "plotter",
+      "estado": "desierta",
+      "total_resultados": 213,
+      "topeado": false,
+      "precision": 0.92,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "notebook",
+      "estado": "desierta",
+      "total_resultados": 581,
+      "topeado": false,
+      "precision": 0.88,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "computador",
+      "estado": "desierta",
+      "total_resultados": 344,
+      "topeado": false,
+      "precision": 0.84,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "UPS",
+      "estado": "desierta",
+      "total_resultados": 192,
+      "topeado": false,
+      "precision": 0.84,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "CCTV",
+      "estado": "desierta",
+      "total_resultados": 81,
+      "topeado": false,
+      "precision": 0.88,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "videovigilancia",
+      "estado": "desierta",
+      "total_resultados": 30,
+      "topeado": false,
+      "precision": 0.72,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "toner",
+      "estado": "cancelada",
+      "total_resultados": 974,
+      "topeado": false,
+      "precision": 0.88,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "tonner",
+      "estado": "cancelada",
+      "total_resultados": 33,
+      "topeado": false,
+      "precision": 0.8,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "cartucho",
+      "estado": "cancelada",
+      "total_resultados": 142,
+      "topeado": false,
+      "precision": 0.84,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "tinta",
+      "estado": "cancelada",
+      "total_resultados": 500,
+      "topeado": false,
+      "precision": 0.72,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "impresora",
+      "estado": "cancelada",
+      "total_resultados": 2208,
+      "topeado": false,
+      "precision": 0.76,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "multifuncional",
+      "estado": "cancelada",
+      "total_resultados": 563,
+      "topeado": false,
+      "precision": 0.6,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "escaner",
+      "estado": "cancelada",
+      "total_resultados": 159,
+      "topeado": false,
+      "precision": 0.88,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "fotocopiadora",
+      "estado": "cancelada",
+      "total_resultados": 119,
+      "topeado": false,
+      "precision": 0.88,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "plotter",
+      "estado": "cancelada",
+      "total_resultados": 334,
+      "topeado": false,
+      "precision": 0.92,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "notebook",
+      "estado": "cancelada",
+      "total_resultados": 874,
+      "topeado": false,
+      "precision": 0.96,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "computador",
+      "estado": "cancelada",
+      "total_resultados": 488,
+      "topeado": false,
+      "precision": 0.88,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "UPS",
+      "estado": "cancelada",
+      "total_resultados": 306,
+      "topeado": false,
+      "precision": 0.8,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "CCTV",
+      "estado": "cancelada",
+      "total_resultados": 121,
+      "topeado": false,
+      "precision": 0.64,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    },
+    {
+      "variante": "videovigilancia",
+      "estado": "cancelada",
+      "total_resultados": 31,
+      "topeado": false,
+      "precision": 0.76,
+      "filas_muestra": 25,
+      "paginas_leidas": 1,
+      "truncado": true
+    }
+  ],
+  "descartados": [
+    {
+      "codigo": "1101892-175-COT26",
+      "nombre": "Impresora 3D resina e insumos para generación de prototipos",
+      "rubros": [
+        "Impresoras, multifuncionales, escáneres y plotters"
+      ]
+    },
+    {
+      "codigo": "507428-324-COT26",
+      "nombre": "IMPRESORA 3D PARA UNIDAD DE REHABILITACIÓN RURAL",
+      "rubros": [
+        "Impresoras, multifuncionales, escáneres y plotters"
+      ]
+    },
+    {
+      "codigo": "4291-1082-COT26",
+      "nombre": "FILAMENTOS IMPRESORA 3D",
+      "rubros": [
+        "Impresoras, multifuncionales, escáneres y plotters"
+      ]
+    },
+    {
+      "codigo": "1233615-571-COT26",
+      "nombre": "PHA/SOL 1387/ADQUISICIÓN DE INSUMOS IMPRESORA 3D (FABLAB)/ESC. VICTOR DOMINGO SILVA",
+      "rubros": [
+        "Impresoras, multifuncionales, escáneres y plotters"
+      ]
+    },
+    {
+      "codigo": "2409-1086-COT26",
+      "nombre": "ADQUISICION DE IMPRESORA 3D E INSUMOS PARA ESCUELA 11 DE SEPTIEMBRE F-929",
+      "rubros": [
+        "Impresoras, multifuncionales, escáneres y plotters"
+      ]
+    },
+    {
+      "codigo": "1531376-9-COT26",
+      "nombre": "ADQUISICION DE IMPRESORA 3D, ESCANER 3D E INSUMOS ",
+      "rubros": [
+        "Impresoras, multifuncionales, escáneres y plotters"
+      ]
+    }
+  ]
+}
