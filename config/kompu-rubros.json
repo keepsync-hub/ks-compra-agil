@@ -1,0 +1,76 @@
+{
+  "_que_es": "Rubros de hardware TI que vende Kompu.cl (cliente e-commerce de KeepSync, ver config/keepsync-oferta.json): tóner e insumos de impresión, impresoras y multifuncionales, notebooks, UPS y CCTV. Los consume `npm run kompu`, que publica docs/kompu.html. Archivo SEPARADO de config/categorias.json a propósito: meter estos rubros ahí los metería en `npm run radar`, `npm run leads` y en la grilla de docs/index.html, que son de otros nichos.",
+  "_contrato": "Mismo embudo de tres puertas que config/categorias.json — verificacion_regex (¿menciona la materia?), patron_requerido (¿es del rubro y no otra cosa?), patron_excluyente (¿el contexto la desmiente?). Se compilan con `compilarPatrones()` de src/lib/categorias.ts, que ya valida lo mismo para config/familias-mercado.json: prohibición de los flags \"g\"/\"y\" incluida.",
+  "_el_filtro_corre_sobre_el_nombre": "Este radar NO pide el detalle de ninguna compra (`obtenerDetalleCompraAgil` no se llama nunca). Todo lo que necesita — monto, estado, organismo, región, ofertas recibidas, motivo de fracaso — ya viene en el listado. El precio es que el embudo evalúa solo `nombre`, no la descripción ni los productos solicitados. La página lo declara.",
+  "_como_se_eligieron_las_variantes": "NO a dedo — ese es el método que PLAN-VOLUMEN.md:271-272 culpa del 79% de fracaso del nicho Claude. Cada variante se mide antes con `npm run kompu -- --sondeo` (1 request c/u, sin paginar) y su resultado queda anotado en su campo `_sondeo`. Las variantes son de UN SOLO TOKEN distintivo: está medido (CLAUDE.md, estudio de mercado del 2026-08-20) que el `q` de /v2/compra-agil hace OR de los tokens, así que \"camara seguridad\" traería todo lo que diga \"seguridad\" — miles de filas de seguridad ciudadana, guardias y zapatos de seguridad, pagadas a razón de una request por página.",
+  "_sin_de_suelto": "Ninguna variante puede contener la palabra suelta \"de\": quirk verificado del endpoint, que responde 500 ERROR_INTERNO. El loader lo valida.",
+
+  "naturaleza": {
+    "_que_es": "Kompu vende PRODUCTO. Mantención, reparación y arriendo del mismo equipo son otro negocio. Excluirlos borraría filas en silencio; en vez de eso se ROTULAN y la página los deja filtrar. Cuesta 0 requests y responde algo que igual hay que saber: cuánto del mercado es venta y cuánto es servicio.",
+    "arriendo": "\\b(arriendos?|arrendamiento|leasing|alquiler|comodato)\\b",
+    "servicio": "\\b(mantenci[oó]n|mantenimiento|reparaci[oó]n|reparaciones|servicio\\s+t[eé]cnico|soporte\\s+t[eé]cnico|recargas?)\\b",
+    "_servicio_amplio_nota": "Empezó pidiendo \"mantención de/y\" y dejaba pasar un caso real: \"EX. 15369 MANTENCION PRESENCIAL IMPRESORAS DE CREDENCIALES ZEBRA\" quedaba rotulado producto. Se amplió a la palabra suelta, que el guard de abajo hace segura.",
+    "_servicio_falso_positivo": "El guard de abajo existe por un caso real: \"COMPRA DE TONER Y KIT DE MANTENCION EQUIPOS TECNOLOGICOS - JUZGADO DE GARANTIA DE CALAMA\" es una compra de PRODUCTO (un kit de mantención es un repuesto consumible), y sin el guard la palabra \"MANTENCION\" la habría rotulado como servicio.",
+    "guard_producto": "kits?\\s+de\\s+mantenci"
+  },
+
+  "rubros": [
+    {
+      "id": "insumos-impresion",
+      "nombre": "Insumos de impresión (tóner, cartuchos, tinta)",
+      "nombre_corto": "Tóner e insumos",
+      "activo": true,
+      "variantes_q": ["toner", "tonner", "cartucho", "tinta"],
+      "verificacion_regex": "\\b(t[oó]nn?er|tonn?er|cartuchos?|cartridges?|tintas?|kits?\\s+de\\s+mantenci[oó]n|cintas?\\s+para\\s+impresora)\\b",
+      "patron_requerido": "\\b(t[oó]nn?er|tonn?er|impresor\\w*|impresi[oó]n|multifuncional\\w*|fotocopiador\\w*|plotter|inkjet|l[aá]ser|ricoh|kyocera|epson|canon|brother|lexmark|xerox|zebra|datacard)\\b",
+      "_patron_requerido_nota": "\"cartucho\" y \"tinta\" sueltos no son de este rubro. Casos reales medidos contra historico/mercado.jsonl: \"SHV 245-0302 CARTRIDGE PARA TEST DIAGNÓSTICO DE COAGULACIÓN EN TIEMPO REAL, CON HEPARINASA\" es un reactivo clínico, y \"tinta\" trae tinta china, de tatuaje y de serigrafía. Se exige que el texto nombre además el contexto de impresión. \"Tóner\" se satisface a sí mismo porque es inequívoco. Va con la variante \"tonn?er\" por un caso real medido: \"TONNER Y TINTAS PARA STOCK DE BODEGA MUNICIPAL\" (historico/mercado.jsonl) — mismo tratamiento que las variantes \"Cloude\"/\"Clude\" de la categoría claude.",
+      "patron_excluyente": "\\b(reactivos?|diagn[oó]stic\\w*|coagulaci[oó]n|heparinasa|hemogram\\w*|per[oó]xido|citoquinas?|esterilizador\\w*|tatuaj\\w*|serigraf\\w*|tinta\\s+china|sellos?\\s+de\\s+goma)\\b",
+      "_patron_excluyente_nota": "Caso real: \"SHV 245-0302 CARTRIDGE PARA TEST DIAGNÓSTICO DE COAGULACIÓN EN TIEMPO REAL, CON HEPARINASA\" (historico/mercado.jsonl, universo abierto del 2026-08-20). Ya lo mata el patron_requerido, pero el excluyente lo REPORTA en vez de dejarlo caer como ruido silencioso."
+    },
+    {
+      "id": "equipos-impresion",
+      "nombre": "Impresoras, multifuncionales, escáneres y plotters",
+      "nombre_corto": "Equipos de impresión",
+      "activo": true,
+      "variantes_q": ["impresora", "multifuncional", "escaner", "fotocopiadora", "plotter"],
+      "verificacion_regex": "\\b(impresoras?|multifuncional(?:es)?|multifunci[oó]n|fotocopiadoras?|esc[aá]ner(?:es)?|scanners?|plotters?)\\b",
+      "_sin_impresion_a_secas": "La regex nombra APARATOS, no el acto de imprimir. Dos casos reales lo obligan: \"Servicio de impresión para difusión Fiesta de las Tradiciones y Fonda Familiar\" (imprenta gráfica) y \"254-0535 RESINAS PARA IMPRESIÓN 3D para base de prótesis removibles\" (insumo dental). Con \"impresi[oó]n\" en la mención, ambos entraban.",
+      "patron_excluyente": "\\b(impresoras?\\s*3\\s*d|impresi[oó]n\\s*3\\s*d|pr[oó]tesis|filamentos?\\s+pla)\\b",
+      "_patron_excluyente_nota": "Motivado por \"254-0535 RESINAS PARA IMPRESIÓN 3D para base de prótesis removibles litro\" (historico/mercado.jsonl). La impresión 3D es otro mercado: quien la compra no compra multifuncionales."
+    },
+    {
+      "id": "computacion",
+      "nombre": "Notebooks y equipos computacionales",
+      "nombre_corto": "Notebooks",
+      "activo": true,
+      "variantes_q": ["notebook", "computador"],
+      "verificacion_regex": "\\b(notebooks?|laptops?|ultrabooks?|all\\s*[- ]?in\\s*[- ]?one|comp[iu]?utador(?:es|as?)?|equipos?\\s+computacional(?:es)?)\\b",
+      "_plural_de_al_es_ales": "\"computacionales?\" significa \"computacionale\" más una ese opcional: NO matchea \"EQUIPO COMPUTACIONAL\". Lo destapó el sondeo del 2026-08-30, que dejaba caer 3268-600-COT26 \"006 001 GS 20/2026 ADQ. EQUIPO COMPUTACIONAL\". Va \"computacional(?:es)?\". El mismo bug estaba en \"multifuncionales?\" del rubro equipos-impresion, enmascarado porque casi toda multifuncional se nombra junto a \"impresora\".",
+      "_typo_compiutador": "\"comp[iu]?utador\" tolera un error de tipeo real: 2450-777-COT26 \"ADQUISICIÓN DE COMPIUTADOR Y LICENCIAS. I. MUNICIPALIDAD DE LA SERENA\" (sondeo del 2026-08-30). Mismo criterio que las variantes \"Cloude\"/\"Clude\" de la categoría claude.",
+      "_sin_pc_ni_portatil_sueltos": "Tres casos reales prohíben las dos abreviaturas obvias. \"\\bpc\\b\": \"DNF/PAQUETE DE ROPA PARA NEUROCIRUGIA (PC)\" — ahí PC es otra cosa. \"port[aá]til\": \"PARLANTES PORTATILES PARA SALAS CLASES ESCUELA BASICA FRESIA\", \"CONTRATACIÓN DE CURSO DE CAPACITACIÓN «USO Y MANEJO DE EXTINTORES PORTÁTILES»\" y \"SERVIU … requiere adquirir 1 compresor de aire portátil\". Un notebook siempre se nombra notebook, laptop o computador, así que dejarlas fuera no cuesta cobertura. (Todos de historico/mercado.jsonl, universo abierto del 2026-08-20.)",
+      "_sin_monitores": "\"monitor\" quedó fuera del rubro a propósito: en este universo, lleno de compras de salud, \"monitor\" es sobre todo monitor de signos vitales. El usuario tampoco los pidió."
+    },
+    {
+      "id": "energia",
+      "nombre": "UPS y respaldo de energía",
+      "nombre_corto": "UPS",
+      "activo": true,
+      "variantes_q": ["UPS"],
+      "verificacion_regex": "\\bups\\b|\\bsai\\b|energ[ií]a\\s+ininterrumpid\\w*|no\\s*[- ]?break|nobreak|respaldo\\s+de\\s+energ[ií]a|bancos?\\s+de\\s+bater[ií]as",
+      "patron_excluyente": "\\b(couriers?|encomiendas?|paqueter[ií]a|dhl|fedex|chilexpress|correos\\s+de\\s+chile)\\b",
+      "_patron_excluyente_nota": "\"UPS\" es también la empresa de courier. Es la misma clase de trampa ya documentada en CLAUDE.md para \"\\\\bsobres?\\\\b\", que matcheaba la preposición «sobre» y estaba matando 4371-26-LE26. No hay caso observado todavía en Compra Ágil, pero el choque de siglas es un hecho del idioma, no una conjetura sobre el corpus."
+    },
+    {
+      "id": "seguridad-electronica",
+      "nombre": "CCTV, cámaras de seguridad y videovigilancia",
+      "nombre_corto": "CCTV",
+      "activo": true,
+      "variantes_q": ["CCTV", "videovigilancia"],
+      "_variantes_nota": "\"camara\" se sondeó el 2026-08-30 y midió 0 de 4: SESION CAMARA HIPERBARICA, EXAMEN DE ENDOSCOPIO ORAL /CAMARA ENDOSCOPICA ORAL, y dos compras que ni nombran cámaras. Se sacó — costaba una request por corrida y no aportó un solo acierto. \"videovigilancia\" midió 1 de 3 y SE MANTIENE: su único acierto (4066-334-COT26, sistema de videovigilancia IP) no lo encuentra \"CCTV\", y las otras dos filas las descarta el filtro local gratis.",
+      "verificacion_regex": "\\bcctv\\b|video\\s*vigilancia|circuitos?\\s+cerrados?\\s+de\\s+(?:televisi[oó]n|tv)|c[aá]maras?\\s+(?:de\\s+)?(?:seguridad|vigilancia|ip\\b|domo|corporal|lectora|t[eé]rmica)|\\bnvr\\b|\\bdvr\\b|domos?\\s+ip",
+      "_sin_circuito_cerrado_ni_domo_ni_camara_sueltos": "Tres términos que parecían obvios y están prohibidos por casos reales de historico/mercado.jsonl: \"circuito cerrado\" a secas mata en \"SONDA ASPIRACION CIRCUITO CERRADO 12 FR X 56CM\" (insumo clínico), \"domo\" a secas en \"Perfiles Domo\" (construcción), y \"cámara\" a secas traería cámaras de frío, sépticas, fotográficas y de comercio. Cada uno se pide acompañado.",
+      "patron_excluyente": "\\b(sondas?|aspiraci[oó]n|c[aá]maras?\\s+(?:de\\s+)?(?:fr[ií]o|s[eé]ptica|hiperb[aá]rica|comercio|fotogr[aá]fica|de\\s+aire))\\b",
+      "_patron_excluyente_nota": "Motivado por \"SONDA ASPIRACION CIRCUITO CERRADO 12 FR X 56CM\" (historico/mercado.jsonl). Ya lo mata la mención acompañada, pero el excluyente lo REPORTA en vez de dejarlo caer en silencio."
+    }
+  ]
+}

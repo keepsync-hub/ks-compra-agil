@@ -1,0 +1,1793 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kompu — hardware TI en Compra Ágil</title>
+<meta name="description" content="Compras Ágiles de tóner, impresoras, multifuncionales, notebooks, UPS y CCTV en mercadopublico.cl: qué está abierto ahora y si el rubro tiene mercado, medido sobre los cinco estados.">
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root {
+    --bg: #0E0E17; --bg-alt: #09090B; --card: #161527; --card-alt: #1D1B33; --border: #2A2844;
+    --accent: #786CF0; --accent-light: #B4AAFA; --white: #FFFFFF; --gray: #9A9FB0; --gray-dim: #6E7284;
+    --ok: #4ADE80; --warn: #FBBF24; --bad: #FB7185;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--white); font-family: -apple-system, "Segoe UI", Arial, sans-serif; line-height: 1.55; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+  header.hero { background: linear-gradient(180deg, var(--bg-alt) 0%, var(--bg) 100%); border-bottom: 1px solid var(--border); padding: 2.5rem 0 2rem; }
+  h1 { font-size: clamp(1.6rem, 4vw, 2.3rem); margin: 0 0 0.5rem; }
+  .subtitle { color: var(--gray); font-size: 1.02rem; max-width: 72ch; }
+  .meta { color: var(--gray-dim); font-size: 0.85rem; margin-top: 1rem; }
+  main { padding: 2.5rem 0 4rem; }
+  section { margin-bottom: 2.8rem; }
+  h2 { font-size: 1.35rem; margin: 0 0 0.3rem; }
+  h3 { font-size: 1.05rem; margin: 0 0 0.35rem; }
+  h4 { font-size: 0.82rem; color: var(--gray-dim); font-weight: 500; margin: 0 0 0.4rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .section-sub { color: var(--gray); font-size: 0.92rem; margin: 0 0 1.1rem; max-width: 74ch; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.7rem; margin: 0.9rem 0; }
+  .stat { background: var(--card-alt); border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem 1rem; }
+  .stat .num { font-size: 1.45rem; font-weight: 700; color: var(--accent-light); line-height: 1.15; }
+  .stat .label { color: var(--gray); font-size: 0.78rem; margin-top: 0.3rem; }
+  .rubro { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem 1.3rem; margin-bottom: 1rem; }
+  .rubro.vacio { opacity: 0.72; }
+  .veredicto { font-size: 0.92rem; color: var(--gray); margin: 0.5rem 0 0.9rem; }
+  .veredicto.ok strong { color: var(--ok); }
+  .veredicto.bad strong { color: var(--bad); }
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; margin-bottom: 0.9rem; }
+  ul.pills { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  ul.pills li { background: var(--card-alt); border: 1px solid var(--border); border-radius: 999px; padding: 0.15rem 0.65rem; font-size: 0.8rem; color: var(--gray); }
+  .est-publicada { color: var(--ok); } .est-desierta, .est-cancelada { color: var(--bad); }
+  .nat-producto { color: var(--ok); } .nat-servicio { color: var(--warn); } .nat-arriendo { color: var(--gray-dim); }
+  .recomp summary { cursor: pointer; color: var(--accent-light); font-size: 0.88rem; }
+  .recomp ul { margin: 0.5rem 0 0; padding-left: 1.1rem; color: var(--gray); font-size: 0.85rem; }
+  .cobertura { color: var(--gray-dim); font-size: 0.8rem; margin: 0.8rem 0 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 1rem; }
+  .compra { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; }
+  .compra h3 a { text-decoration: none; }
+  .org { color: var(--gray); font-size: 0.86rem; margin: 0 0 0.6rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.7rem; }
+  .chip { font-size: 0.72rem; padding: 0.12rem 0.55rem; border-radius: 999px; border: 1px solid var(--border); color: var(--gray); background: var(--card-alt); }
+  .chip.emt { border-color: var(--ok); color: var(--ok); }
+  .urgente { color: var(--warn); font-weight: 600; }
+  .cota { color: var(--warn); font-weight: 700; }
+  .aviso { color: var(--gray-dim); font-size: 0.8rem; }
+  .note { background: var(--card-alt); border: 1px solid var(--border); border-left: 3px solid var(--warn); border-radius: 8px; padding: 0.85rem 1rem; font-size: 0.87rem; color: var(--gray); margin-bottom: 1.2rem; }
+  .note.info { border-left-color: var(--accent); }
+  .note.ok { border-left-color: var(--ok); }
+  .note strong { color: var(--white); }
+  table.detalle { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  table.detalle th, table.detalle td { text-align: left; padding: 0.4rem 0.55rem; border-bottom: 1px solid var(--border); }
+  table.detalle th { color: var(--gray-dim); font-weight: 500; white-space: nowrap; }
+  table.detalle.vol td:first-of-type { font-variant-numeric: tabular-nums; }
+  code, .mono { font-family: ui-monospace, Menlo, monospace; }
+  a { color: var(--accent-light); } a:hover { color: var(--white); }
+  ul.simple { color: var(--gray); font-size: 0.86rem; }
+  footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--gray-dim); font-size: 0.85rem; }
+  .links-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Hardware TI en Compra Ágil</h1>
+    <p class="subtitle">
+      Compras Ágiles de <strong>tóner e insumos de impresión, impresoras y multifuncionales,
+      notebooks, UPS y CCTV</strong> en <code>mercadopublico.cl</code> — los rubros que vende
+      Kompu.cl. Mira los <strong>cinco estados</strong>, no solo las abiertas: para saber si un rubro
+      tiene mercado, las cerradas, desiertas y canceladas dicen más que las vivas.
+    </p>
+    <p class="meta">
+      Generado 2026-08-30 01:03 UTC ·
+      72 request(s) a la API en esta corrida ·
+      <a href="index.html">← radar de los otros nichos</a>
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  
+
+  <section>
+    <h2>¿Hay mercado?</h2>
+    <p class="section-sub">
+      Dos cosas distintas, y conviene no confundirlas. El <strong>volumen y la tasa</strong> salen del
+      conteo que la API devuelve para cada consulta —un censo, no una muestra—, corregido por la
+      contaminación medida. Lo demás (monto mediano, qué se compra, recompradores) sale de las
+      <strong>~25 filas por consulta y estado</strong> que se leyeron: es una muestra, y se rotula como
+      tal. Una tasa sacada de esa muestra no diría nada, porque lee las mismas 25 filas tenga el estado
+      2.208 compras o 55.
+    </p>
+    <p class="section-sub">
+      Todo sale del <strong>listado</strong>: este radar no pide la ficha completa de ninguna compra.
+      Alcanza para monto, estado, comprador, región, ofertas recibidas y motivo de fracaso, y significa
+      que el filtro corrió sobre el <strong>nombre</strong>, nada más.
+    </p>
+    <article class="rubro">
+    <h3>Insumos de impresión (tóner, cartuchos, tinta)</h3>
+    <div class="stat-grid">
+      <div class="stat"><div class="num">42</div><div class="label">abiertas ahora</div></div>
+      <div class="stat"><div class="num">11%</div><div class="label">termina en compra</div></div>
+      <div class="stat"><div class="num">$800.000</div><div class="label">monto mediano (muestra)</div></div>
+      <div class="stat"><div class="num">7</div><div class="label">ofertas por compra (muestra)</div></div>
+    </div>
+    <p class="veredicto ok">Termina en compra el <strong>11%</strong> de las
+      ~2.380 ya resueltas: algo por encima del 7%–10%
+      que rinde Compra Ágil en todos los rubros medidos (<strong>1.1×</strong> el techo de esa referencia).</p>
+    <div class="cols">
+      <div>
+        <h4>Volumen por estado</h4>
+        <table class="detalle vol"><tbody><tr><th><span class="est est-publicada">abierta</span></th>
+        <td>22 – 33</td><td class="aviso">—</td></tr><tr><th><span class="est est-proveedor_seleccionado">con proveedor</span></th>
+        <td>0</td><td class="aviso">—</td></tr><tr><th><span class="est est-cerrada">cerrada</span></th>
+        <td>147 – 272</td><td class="aviso">muestra parcial</td></tr><tr><th><span class="est est-desierta">desierta</span></th>
+        <td>420 – 746</td><td class="aviso">muestra parcial</td></tr><tr><th><span class="est est-cancelada">cancelada</span></th>
+        <td>857 – 1.362</td><td class="aviso">muestra parcial</td></tr></tbody></table>
+        <p class="cobertura">Estimado desde <code>total_resultados</code> corregido por la precisión medida.
+        El rango va del <strong>piso</strong> (la variante más grande sola, sin contar dos veces) al
+        <strong>techo</strong> (la suma de las variantes, que sí cuenta los solapes).</p>
+      </div>
+      <div>
+        <h4>Qué se compra <span class="aviso">(muestra: 229)</span></h4>
+        <ul class="pills"><li><span class="nat nat-producto">producto</span> 225</li><li><span class="nat nat-servicio">servicio</span> 4</li></ul>
+        <details class="recomp"><summary>44 organismo(s) compraron esto más de una vez</summary>
+         <ul><li>I MUNICIPALIDAD DE VINA DEL MAR — <strong>8</strong> compras, $14.296.000 en total</li><li>UNIVERSIDAD DE CHILE — <strong>6</strong> compras, $2.848.930 en total</li><li>MINISTERIO DE OBRAS PUBLICAS DIREC CION GRAL DE OO PP DCYF — <strong>5</strong> compras, $4.300.000 en total</li><li>ILUSTRE MUNICIPALIDAD DE POZO ALMONTE — <strong>4</strong> compras, $3.761.264 en total</li><li>I MUNICIPALIDAD DE PALMILLA — <strong>4</strong> compras, $3.675.000 en total</li><li>SERVICIO DE SALUD DEL MAULE HOSPITAL DE CURICO — <strong>4</strong> compras, $3.330.000 en total</li><li>I MUNICIPALIDAD DE EL MONTE — <strong>4</strong> compras, $2.900.000 en total</li><li>Ilustre Municipalidad de San Juan de la Costa — <strong>4</strong> compras, $650.000 en total</li><li>I MUNICIPALIDAD DE TALCA — <strong>3</strong> compras, $7.280.000 en total</li><li>I MUNICIPALIDAD DE ANCUD — <strong>3</strong> compras, $4.200.000 en total</li><li>Educación — <strong>3</strong> compras, $3.553.567 en total</li><li>I MUNICIPALIDAD DE CURICO — <strong>3</strong> compras, $2.340.000 en total</li><li>SUBSECRETARIA DE MARINA HOSP NAVAL ALMIR — <strong>3</strong> compras, $1.700.000 en total</li><li>I MUNICIPALIDAD DE COYHAIQUE — <strong>3</strong> compras, $1.600.000 en total</li><li>I MUNICIPALIDAD PUERTO OCTAY — <strong>3</strong> compras, $465.000 en total</li></ul>
+         <p class="cobertura">Contado sobre la muestra, así que es un <strong>piso</strong>: un organismo
+         que compró diez veces y del que la muestra vio dos, aparece con dos.</p>
+       </details>
+      </div>
+    </div>
+    <p class="cobertura">Publicaciones de la muestra entre <strong>2025-03-18</strong> y
+      <strong>2026-08-29</strong>. Es el rango que alcanzó este barrido, no la historia completa
+      del rubro.</p>
+  </article>
+<article class="rubro">
+    <h3>Impresoras, multifuncionales, escáneres y plotters</h3>
+    <div class="stat-grid">
+      <div class="stat"><div class="num">65</div><div class="label">abiertas ahora</div></div>
+      <div class="stat"><div class="num">12%</div><div class="label">termina en compra</div></div>
+      <div class="stat"><div class="num">$770.000</div><div class="label">monto mediano (muestra)</div></div>
+      <div class="stat"><div class="num">7</div><div class="label">ofertas por compra (muestra)</div></div>
+    </div>
+    <p class="veredicto ok">Termina en compra el <strong>12%</strong> de las
+      ~4.963 ya resueltas: algo por encima del 7%–10%
+      que rinde Compra Ágil en todos los rubros medidos (<strong>1.2×</strong> el techo de esa referencia).</p>
+    <div class="cols">
+      <div>
+        <h4>Volumen por estado</h4>
+        <table class="detalle vol"><tbody><tr><th><span class="est est-publicada">abierta</span></th>
+        <td>49 – 71</td><td class="aviso">—</td></tr><tr><th><span class="est est-proveedor_seleccionado">con proveedor</span></th>
+        <td>0</td><td class="aviso">—</td></tr><tr><th><span class="est est-cerrada">cerrada</span></th>
+        <td>398 – 592</td><td class="aviso">muestra parcial</td></tr><tr><th><span class="est est-desierta">desierta</span></th>
+        <td>1.199 – 1.803</td><td class="aviso">muestra parcial</td></tr><tr><th><span class="est est-cancelada">cancelada</span></th>
+        <td>1.678 – 2.568</td><td class="aviso">muestra parcial</td></tr></tbody></table>
+        <p class="cobertura">Estimado desde <code>total_resultados</code> corregido por la precisión medida.
+        El rango va del <strong>piso</strong> (la variante más grande sola, sin contar dos veces) al
+        <strong>techo</strong> (la suma de las variantes, que sí cuenta los solapes).</p>
+      </div>
+      <div>
+        <h4>Qué se compra <span class="aviso">(muestra: 443)</span></h4>
+        <ul class="pills"><li><span class="nat nat-producto">producto</span> 373</li><li><span class="nat nat-servicio">servicio</span> 51</li><li><span class="nat nat-arriendo">arriendo</span> 19</li></ul>
+        <details class="recomp"><summary>87 organismo(s) compraron esto más de una vez</summary>
+         <ul><li>UNIVERSIDAD DE CHILE — <strong>15</strong> compras, $18.392.960 en total</li><li>I MUNICIPALIDAD DE LOS ANGELES DEPTO DE — <strong>10</strong> compras, $45.141.988 en total</li><li>I MUNICIPALIDAD DE VINA DEL MAR — <strong>9</strong> compras, $15.296.000 en total</li><li>MINISTERIO DE OBRAS PUBLICAS DIREC CION GRAL DE OO PP DCYF — <strong>9</strong> compras, $5.900.000 en total</li><li>I MUNICIPALIDAD DE SAN ROSENDO — <strong>7</strong> compras, $3.590.000 en total</li><li>I MUNICIPALIDAD DE MONTEPATRIA — <strong>6</strong> compras, $13.200.000 en total</li><li>ILUSTRE MUNICIPALIDAD DE POZO ALMONTE — <strong>6</strong> compras, $6.568.161 en total</li><li>I MUNICIPALIDAD DE RENGO — <strong>6</strong> compras, $5.315.000 en total</li><li>I MUNICIPALIDAD DE TALCA — <strong>5</strong> compras, $9.841.010 en total</li><li>I MUNICIPALIDAD DE LOS VILOS — <strong>5</strong> compras, $8.872.000 en total</li><li>I MUNICIPALIDAD DE TENO — <strong>5</strong> compras, $4.250.000 en total</li><li>ILUSTRE MUNICIPALIDAD DE TORRES DEL PAIN — <strong>4</strong> compras, $4.600.000 en total</li><li>I MUNICIPALIDAD DE OLMUE — <strong>4</strong> compras, $4.600.000 en total</li><li>I MUNICIPALIDAD VALDIVIA — <strong>4</strong> compras, $4.300.000 en total</li><li>I MUNICIPALIDAD DE PUERTO MONTT — <strong>4</strong> compras, $3.994.686 en total</li></ul>
+         <p class="cobertura">Contado sobre la muestra, así que es un <strong>piso</strong>: un organismo
+         que compró diez veces y del que la muestra vio dos, aparece con dos.</p>
+       </details>
+      </div>
+    </div>
+    <p class="cobertura">Publicaciones de la muestra entre <strong>2025-01-23</strong> y
+      <strong>2026-08-29</strong>. Es el rango que alcanzó este barrido, no la historia completa
+      del rubro.</p>
+  </article>
+<article class="rubro">
+    <h3>Notebooks y equipos computacionales</h3>
+    <div class="stat-grid">
+      <div class="stat"><div class="num">25</div><div class="label">abiertas ahora</div></div>
+      <div class="stat"><div class="num">10%</div><div class="label">termina en compra</div></div>
+      <div class="stat"><div class="num">$1.347.935</div><div class="label">monto mediano (muestra)</div></div>
+      <div class="stat"><div class="num">18</div><div class="label">ofertas por compra (muestra)</div></div>
+    </div>
+    <p class="veredicto ">Termina en compra el <strong>10%</strong> de las
+      ~2.296 ya resueltas: dentro del 7%–10%
+      que rinde Compra Ágil en todos los rubros medidos.</p>
+    <div class="cols">
+      <div>
+        <h4>Volumen por estado</h4>
+        <table class="detalle vol"><tbody><tr><th><span class="est est-publicada">abierta</span></th>
+        <td>15 – 22</td><td class="aviso">—</td></tr><tr><th><span class="est est-proveedor_seleccionado">con proveedor</span></th>
+        <td>0</td><td class="aviso">—</td></tr><tr><th><span class="est est-cerrada">cerrada</span></th>
+        <td>148 – 228</td><td class="aviso">muestra parcial</td></tr><tr><th><span class="est est-desierta">desierta</span></th>
+        <td>511 – 800</td><td class="aviso">muestra parcial</td></tr><tr><th><span class="est est-cancelada">cancelada</span></th>
+        <td>839 – 1.268</td><td class="aviso">muestra parcial</td></tr></tbody></table>
+        <p class="cobertura">Estimado desde <code>total_resultados</code> corregido por la precisión medida.
+        El rango va del <strong>piso</strong> (la variante más grande sola, sin contar dos veces) al
+        <strong>techo</strong> (la suma de las variantes, que sí cuenta los solapes).</p>
+      </div>
+      <div>
+        <h4>Qué se compra <span class="aviso">(muestra: 172)</span></h4>
+        <ul class="pills"><li><span class="nat nat-producto">producto</span> 166</li><li><span class="nat nat-servicio">servicio</span> 4</li><li><span class="nat nat-arriendo">arriendo</span> 2</li></ul>
+        <details class="recomp"><summary>34 organismo(s) compraron esto más de una vez</summary>
+         <ul><li>I MUNICIPALIDAD DE VINA DEL MAR — <strong>10</strong> compras, $13.307.548 en total</li><li>UNIVERSIDAD DE CHILE — <strong>6</strong> compras, $22.610.000 en total</li><li>UNIVERSIDAD DE SANTIAGO DE CHILE — <strong>5</strong> compras, $20.204.880 en total</li><li>UNIVERSIDAD DE LA FRONTERA — <strong>5</strong> compras, $6.540.000 en total</li><li>UNIVERSIDAD DE TARAPACA — <strong>4</strong> compras, $8.100.000 en total</li><li>I MUNICIPALIDAD VALDIVIA — <strong>4</strong> compras, $7.900.000 en total</li><li>I MUNICIPALIDAD DE LA CALERA — <strong>4</strong> compras, $5.830.000 en total</li><li>I MUNICIPALIDAD DE VILLARRICA — <strong>3</strong> compras, $18.000.000 en total</li><li>UNIVERSIDAD DE ATACAMA — <strong>3</strong> compras, $9.400.000 en total</li><li>UNIVERSIDAD ARTURO PRAT — <strong>3</strong> compras, $5.448.000 en total</li><li>ILUSTRE MUNICIPALIDAD DE NATALES — <strong>3</strong> compras, $4.751.938 en total</li><li>I MUNICIPALIDAD DE CHIMBARONGO — <strong>3</strong> compras, $4.150.000 en total</li><li>CORP MUNICIPAL DE SERVICIOS PUBLICOS TRASPASADOS DE RANCAGUA — <strong>3</strong> compras, $3.799.000 en total</li><li>I MUNICIPALIDAD DE LLANQUIHUE — <strong>3</strong> compras, $2.100.000 en total</li><li>I MUNICIPALIDAD DE QUINTERO — <strong>2</strong> compras, $8.000.000 en total</li></ul>
+         <p class="cobertura">Contado sobre la muestra, así que es un <strong>piso</strong>: un organismo
+         que compró diez veces y del que la muestra vio dos, aparece con dos.</p>
+       </details>
+      </div>
+    </div>
+    <p class="cobertura">Publicaciones de la muestra entre <strong>2025-07-10</strong> y
+      <strong>2026-08-29</strong>. Es el rango que alcanzó este barrido, no la historia completa
+      del rubro.</p>
+  </article>
+<article class="rubro">
+    <h3>UPS y respaldo de energía</h3>
+    <div class="stat-grid">
+      <div class="stat"><div class="num">11</div><div class="label">abiertas ahora</div></div>
+      <div class="stat"><div class="num">13%</div><div class="label">termina en compra</div></div>
+      <div class="stat"><div class="num">$1.030.000</div><div class="label">monto mediano (muestra)</div></div>
+      <div class="stat"><div class="num">8</div><div class="label">ofertas por compra (muestra)</div></div>
+    </div>
+    <p class="veredicto ok">Termina en compra el <strong>13%</strong> de las
+      ~468 ya resueltas: algo por encima del 7%–10%
+      que rinde Compra Ágil en todos los rubros medidos (<strong>1.3×</strong> el techo de esa referencia).</p>
+    <div class="cols">
+      <div>
+        <h4>Volumen por estado</h4>
+        <table class="detalle vol"><tbody><tr><th><span class="est est-publicada">abierta</span></th>
+        <td>11</td><td class="aviso">—</td></tr><tr><th><span class="est est-proveedor_seleccionado">con proveedor</span></th>
+        <td>0</td><td class="aviso">—</td></tr><tr><th><span class="est est-cerrada">cerrada</span></th>
+        <td>62</td><td class="aviso">muestra parcial</td></tr><tr><th><span class="est est-desierta">desierta</span></th>
+        <td>161</td><td class="aviso">muestra parcial</td></tr><tr><th><span class="est est-cancelada">cancelada</span></th>
+        <td>245</td><td class="aviso">muestra parcial</td></tr></tbody></table>
+        <p class="cobertura">Estimado desde <code>total_resultados</code> corregido por la precisión medida.
+        El rango va del <strong>piso</strong> (la variante más grande sola, sin contar dos veces) al
+        <strong>techo</strong> (la suma de las variantes, que sí cuenta los solapes).</p>
+      </div>
+      <div>
+        <h4>Qué se compra <span class="aviso">(muestra: 75)</span></h4>
+        <ul class="pills"><li><span class="nat nat-producto">producto</span> 65</li><li><span class="nat nat-servicio">servicio</span> 10</li></ul>
+        <details class="recomp"><summary>16 organismo(s) compraron esto más de una vez</summary>
+         <ul><li>CORP DE ASISTENCIA JUDICIAL DE LAS REG T — <strong>3</strong> compras, $16.274.000 en total</li><li>CORP ADMINISTRATIVA DEL PODER JUDICIAL — <strong>3</strong> compras, $4.754.000 en total</li><li>UNIVERSIDAD DE CHILE — <strong>3</strong> compras, $4.320.000 en total</li><li>UNIVERSIDAD DE SANTIAGO DE CHILE — <strong>3</strong> compras, $3.060.000 en total</li><li>ILUSTRE MUNICIPALIDAD DE HUARA — <strong>3</strong> compras, $1.610.000 en total</li><li>SUPERINTENDENCIA DE PENSIONES — <strong>2</strong> compras, $13.000.000 en total</li><li>Ejercito de Chile — <strong>2</strong> compras, $7.097.265 en total</li><li>I MUNICIPALIDAD DE LEBU — <strong>2</strong> compras, $4.997.548 en total</li><li>POLICIA DE INVESTIGACIONES DE CHILE — <strong>2</strong> compras, $4.200.000 en total</li><li>I MUNICIPALIDAD DE SANTA JUANA — <strong>2</strong> compras, $3.900.000 en total</li><li>SERVICIO DE SALUD DEL MAULE HOSPITAL DE LINARES — <strong>2</strong> compras, $3.000.000 en total</li><li>MINISTERIO PUBLICO — <strong>2</strong> compras, $2.900.000 en total</li><li>GOBERNACION MARITIMA DE HANGA ROA — <strong>2</strong> compras, $2.400.000 en total</li><li>I MUNICIPALIDAD DE HUALQUI DEPARTAMENTO DE SALUD — <strong>2</strong> compras, $1.920.000 en total</li><li>I.Municipalidad de El Carmen — <strong>2</strong> compras, $894.690 en total</li></ul>
+         <p class="cobertura">Contado sobre la muestra, así que es un <strong>piso</strong>: un organismo
+         que compró diez veces y del que la muestra vio dos, aparece con dos.</p>
+       </details>
+      </div>
+    </div>
+    <p class="cobertura">Publicaciones de la muestra entre <strong>2026-06-16</strong> y
+      <strong>2026-08-28</strong>. Es el rango que alcanzó este barrido, no la historia completa
+      del rubro.</p>
+  </article>
+<article class="rubro">
+    <h3>CCTV, cámaras de seguridad y videovigilancia</h3>
+    <div class="stat-grid">
+      <div class="stat"><div class="num">5</div><div class="label">abiertas ahora</div></div>
+      <div class="stat"><div class="num">10%</div><div class="label">termina en compra</div></div>
+      <div class="stat"><div class="num">$1.700.000</div><div class="label">monto mediano (muestra)</div></div>
+      <div class="stat"><div class="num">3</div><div class="label">ofertas por compra (muestra)</div></div>
+    </div>
+    <p class="veredicto ">Termina en compra el <strong>10%</strong> de las
+      ~215 ya resueltas: dentro del 7%–10%
+      que rinde Compra Ágil en todos los rubros medidos.</p>
+    <div class="cols">
+      <div>
+        <h4>Volumen por estado</h4>
+        <table class="detalle vol"><tbody><tr><th><span class="est est-publicada">abierta</span></th>
+        <td>4 – 5</td><td class="aviso">—</td></tr><tr><th><span class="est est-proveedor_seleccionado">con proveedor</span></th>
+        <td>0</td><td class="aviso">—</td></tr><tr><th><span class="est est-cerrada">cerrada</span></th>
+        <td>18 – 21</td><td class="aviso">—</td></tr><tr><th><span class="est est-desierta">desierta</span></th>
+        <td>71 – 93</td><td class="aviso">muestra parcial</td></tr><tr><th><span class="est est-cancelada">cancelada</span></th>
+        <td>77 – 101</td><td class="aviso">muestra parcial</td></tr></tbody></table>
+        <p class="cobertura">Estimado desde <code>total_resultados</code> corregido por la precisión medida.
+        El rango va del <strong>piso</strong> (la variante más grande sola, sin contar dos veces) al
+        <strong>techo</strong> (la suma de las variantes, que sí cuenta los solapes).</p>
+      </div>
+      <div>
+        <h4>Qué se compra <span class="aviso">(muestra: 109)</span></h4>
+        <ul class="pills"><li><span class="nat nat-producto">producto</span> 87</li><li><span class="nat nat-servicio">servicio</span> 21</li><li><span class="nat nat-arriendo">arriendo</span> 1</li></ul>
+        <details class="recomp"><summary>24 organismo(s) compraron esto más de una vez</summary>
+         <ul><li>CORP ADMINISTRATIVA DEL PODER JUDICIAL — <strong>8</strong> compras, $11.934.002 en total</li><li>SUPERINTENDENCIA DE PENSIONES — <strong>4</strong> compras, $27.340.000 en total</li><li>MINISTERIO PUBLICO — <strong>4</strong> compras, $20.320.000 en total</li><li>Ejercito de Chile — <strong>4</strong> compras, $6.625.686 en total</li><li>I MUNICIPALIDAD RIO IBANEZ — <strong>4</strong> compras, $4.000.000 en total</li><li>I MUNICIPALIDAD DE MAULE — <strong>4</strong> compras, $3.140.000 en total</li><li>SERVICIO DE SALUD COQUIMBO HOSPITAL DE COQUIMBO — <strong>3</strong> compras, $20.700.000 en total</li><li>I MUNICIPALIDAD DE VILCUN — <strong>3</strong> compras, $8.377.552 en total</li><li>HOSPITAL CLINICO DE MAGALLANES DR. LAUTARO NAVARRO AVARIA — <strong>3</strong> compras, $7.215.000 en total</li><li>SECCIÓN COMPRAS IX ZONA — <strong>3</strong> compras, $5.518.228 en total</li><li>SECCIÓN COMPRAS ZONA SANTIAGO OESTE — <strong>3</strong> compras, $518.970 en total</li><li>I MUNICIPALIDAD DE NUNOA — <strong>2</strong> compras, $11.600.000 en total</li><li>SUBSECRETARIA DE ECONOMIA Y EMPRESAS DE MENOR TAMA — <strong>2</strong> compras, $11.000.000 en total</li><li>CORP MUNICIPAL DE DESARROLLO SOCIAL DE IQUIQUE — <strong>2</strong> compras, $7.600.000 en total</li><li>UNIVERSIDAD DE VALPARAISO — <strong>2</strong> compras, $6.500.000 en total</li></ul>
+         <p class="cobertura">Contado sobre la muestra, así que es un <strong>piso</strong>: un organismo
+         que compró diez veces y del que la muestra vio dos, aparece con dos.</p>
+       </details>
+      </div>
+    </div>
+    <p class="cobertura">Publicaciones de la muestra entre <strong>2025-02-06</strong> y
+      <strong>2026-08-28</strong>. Es el rango que alcanzó este barrido, no la historia completa
+      del rubro.</p>
+  </article>
+  </section>
+
+  <section>
+    <h2>Abiertas ahora <span class="cota">(123)</span></h2>
+    <p class="section-sub">
+      Las únicas donde todavía se puede ofertar. El chip <strong>primer llamado</strong> importa:
+      esa ventana está reservada a Empresas de Menor Tamaño.
+    </p>
+    <div class="grid"><article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">IMPRESORA DE ETIQUETAS  - CONVENIO MAIS</a></h3>
+    <p class="org">Iluste Municipalidad de Huechuraba · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2792-732-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$351.980</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-30 08:00 (1 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="servicio">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Servicio de reparación / cambio de imagen de Unidad de imagen de fotocopiadora multifunción, según SPI 712/2026.</a></h3>
+    <p class="org">I MUNICIPALIDAD DE FUTRONO · Región de Los Ríos</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-servicio">servicio</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2909-441-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$600.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-30 08:14 (1 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>2</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICION DE UN (01) COMPUTADOR PARA LA UNIDAD DE PRESUPUESTO DE LA ILUSTRE MUNICIPALIDAD DE OLMUE </a></h3>
+    <p class="org">I MUNICIPALIDAD DE OLMUE · Región de Valparaíso </p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3333-203-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$520.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-30 09:01 (1 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>24</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquisición de escaner para dirección de salud de San Antonio</a></h3>
+    <p class="org">I MUNICIPALIDAD DE SAN ANTONIO · Región de Valparaíso </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2757-398-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$220.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-30 09:21 (1 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>18</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">TONER KYOCERA TK-1278</a></h3>
+    <p class="org">I MUNICIPALIDAD DE QUELLON · Región de los Lagos </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2927-297-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$400.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-30 13:37 (1 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>10</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">TONER  Y TINTAS</a></h3>
+    <p class="org">I MUNICIPALIDAD DE ANTOFAGASTA · Región de Antofagasta </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2429-958-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$5.259.800</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-30 15:30 (1 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">UDEL - SCANER E IMPRESORA </a></h3>
+    <p class="org">I MUNICIPALIDAD DE TOLTEN · Región de la Araucanía </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3836-254-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$900.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-30 16:00 (1 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="servicio">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Servicio de mantención y reparación impresora multifuncional </a></h3>
+    <p class="org">V ZONA CARABINEROS VALPARAISO · Región de Valparaíso </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-servicio">servicio</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4077-113-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-30 18:00 (1 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">TINTAS DE IMPRESORA</a></h3>
+    <p class="org">I MUNICIPALIDAD DE COYHAIQUE · Región Aysén del General Carlos Ibáñez del Campo</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1195-450-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$300.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 07:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">TINTAS Y TONER PÁRA IMPRESORAS</a></h3>
+    <p class="org">I MUNICIPALIDAD DE ANCUD · Región de los Lagos </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2658-1080-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$2.000.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 08:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPRA DE TONER Y TAMBORES PARA CAJ BIOBIO REGION DE ÑUBLE</a></h3>
+    <p class="org">corporacion de Asistencia Judicial  del Biobío · Región del Ñuble</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1480160-11-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.600.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 08:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">TONER BROTHER</a></h3>
+    <p class="org">I MUNICIPALIDAD DE ANCUD · Región de los Lagos </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2658-1077-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$200.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 08:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Filamentos para la impresora y pack de 100 laminas termolaminar </a></h3>
+    <p class="org">CORPORACIÓN MUNICIPAL DE EDUCACIÓN, SALUD Y ATENCIÓN DE MENORES CHONCHI · Región de los Lagos </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1274907-125-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$109.940</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 08:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICION DE 1 PACK DE TINTAS PARA IMPRESORA  (detalles en los TdR) PARA APOYAR LABORES DE LA EMR TORRES DEL PAINE, dependiente de la Ilustre Municipalidad de Torres del Paine.</a></h3>
+    <p class="org">ILUSTRE MUNICIPALIDAD DE TORRES DEL PAIN · Región de Magallanes y de la Antártica</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4589-254-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.000.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 08:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICIÓN DE COMPIUTADOR Y LICENCIAS. I. MUNICIPALIDAD DE LA SERENA </a></h3>
+    <p class="org">I MUNICIPALIDAD DE LA SERENA · Región de Coquimbo </p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2450-777-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$2.539.413</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 08:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICION COMPUTADOR</a></h3>
+    <p class="org">IMPRENTA DE LA ARMADA · Región de Valparaíso </p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3167-137-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$280.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 08:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="energia" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">SC 5409 UPS</a></h3>
+    <p class="org">UNIVERSIDAD DEL BIO BIO · Región del Biobío </p>
+    <div class="chips"><span class="chip">UPS</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2704-1541-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$490.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 08:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPRA DE TONER HP 105A ORIGINALES</a></h3>
+    <p class="org">CONSULTORIO GENERAL URBANO VIOLETA PARRA · Región del Ñuble</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1062448-265-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$850.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 08:30 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Compra de tóner de Tinta de Colores para Programa MAIS FC y Mas Salud en Comunidad </a></h3>
+    <p class="org">I MUNICIPALIDAD DE CODEGUA · Región del Libertador General Bernardo O´Higgins</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4738-160-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.247.280</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 08:30 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquisición de Cintas para Impresora de Credenciales HID Fargo DTC1500</a></h3>
+    <p class="org">I MUNICIPALIDAD DE ANTUCO · Región del Biobío </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4027-265-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$450.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 08:30 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquisicion de toner para el Departamento de Salud de Rio Bueno - Stock de Bodega</a></h3>
+    <p class="org">I MUNICIPALIDAD DE RIO BUENO · Región de Los Ríos</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3853-467-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.200.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Toner originales marca HP, Brother y Epson para el DII</a></h3>
+    <p class="org">UNIVERSIDAD DE CHILE · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">5531-139-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.000.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQ. TINTA Y TONER ORD. N°3890, DIDECO, IMA. MMR</a></h3>
+    <p class="org">I MUNICIPALIDAD DE ARICA · Región de Arica y Parinacota</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2585-1093-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$828.700</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Botellas de tinta original Epson para Escuela La Obra de Curicó</a></h3>
+    <p class="org">I MUNICIPALIDAD DE CURICO · Región del Maule </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2440-1415-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$700.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICIÓN DE IMPRESORA LASER PARA OFICINA DE PARTES.-</a></h3>
+    <p class="org">I MUNICIPALIDAD DE SAN ROSENDO · Región del Biobío </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4377-429-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$70.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquisición de impresora para Escuela el Quelón.</a></h3>
+    <p class="org">I MUNICIPALIDAD DE LOS VILOS · Región de Coquimbo </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3714-298-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$300.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">TINTAS PARA IMPRESORA DE OFICINA ORGANIZACIONES COMUNITARIAS </a></h3>
+    <p class="org">I MUNICIPALIDAD DE SANTA JUANA · Región del Biobío </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3947-532-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$550.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">REPUESTO DE IMPRESORA HP LASER</a></h3>
+    <p class="org">SERVICIO DE SALUD ANTOFAGASTA HOSP C CIS · Región de Antofagasta </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2215-683-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$6.000.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICION DE IMPRESORA Y TINTAS / PROY. DE MEMORIA ACTIVA / SOL. 934.</a></h3>
+    <p class="org">I MUNICIPALIDAD PEDRO AGUIRRE CERDA · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2395-785-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$341.960</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPRA DE 1 IMPRESORA TERMICA</a></h3>
+    <p class="org">I MUNICIPALIDAD DE CHEPICA · Región del Libertador General Bernardo O´Higgins</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2565-321-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$85.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion,computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPRA NOTEBOOK E IMPRESORA PARA OFICINA DE LA NIÑEZ. SOLICITUD DE COMPRA N°511/DIDECO </a></h3>
+    <p class="org">I MUNICIPALIDAD DE CORONEL · Región del Biobío </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2759-534-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>18</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICIÓN DE ESCANER DOCUMENTAL PARA OFICINA DE SECRETARÍA MUNICIPAL.-</a></h3>
+    <p class="org">I MUNICIPALIDAD DE SAN ROSENDO · Región del Biobío </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4377-428-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="servicio">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">SC-51489/31065-4/SUBV. GENERAL/SERV. REPARACION DE PLOTTER /DMG</a></h3>
+    <p class="org">Educación · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-servicio">servicio</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1393495-722-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$154.700</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPUTADORES Y NOTEBOOK MAIS</a></h3>
+    <p class="org">I MUNICIPALIDAD DE VILLARRICA · Región de la Araucanía </p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3921-318-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$6.500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPUTADOR - SAR </a></h3>
+    <p class="org">CORP MUNICIP ANCUD PARA LA EDUCAC SALUD · Región de los Lagos </p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1224953-382-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$600.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="energia" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener"> SERVICIO INTEGRAL DE CAMBIO DE BATERIAS DE RESPALDO PARA UPS</a></h3>
+    <p class="org">I MUNICIPALIDAD DE SANTA JUANA · Región del Biobío </p>
+    <div class="chips"><span class="chip">UPS</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3947-534-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.950.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">PLOTTER DE CORTE - COMUNICACIONES N° 26 </a></h3>
+    <p class="org">I MUNICIPALIDAD DE SAN MIGUEL · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1741-506-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$3.500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:30 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">S.P. N°172977, ADMINISTRACIÓN MUNICIPAL. COMPRA DE 01 NOTEBOOK PARA CAMBIO POR FALLA DE EQUIPO ANTERIOR, EL CUAL SE UTILIZA PARA REALIZAR LABORES PROPIAS DE LA UNIDAD, SEGÚN LO ESTABLECIDO EN LOS TERM</a></h3>
+    <p class="org">I MUNICIPALIDAD DE RENGO · Región del Libertador General Bernardo O´Higgins</p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2776-674-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 09:30 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">TINTAS Y CARTUCHOS TONER - ABASTECIMIENTO GRAL CESFAM VICTOR MANUEL FERNANDEZ</a></h3>
+    <p class="org">SERVICIO DE SALUD CONCEPCION ARAUCO CONS · Región del Biobío </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1057434-455-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$753.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="servicio">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPRA DE CAJA DE MANTENIMIENTO, TINTAS,TONER,GUILLOTINA Y TERMOLAMINADORA( PROG SALUD MENTAL</a></h3>
+    <p class="org">SERVICIO DE SALUD ANTOFAGASTA HOSPITAL 21 DE MAYO TALTAL · Región de Antofagasta </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-servicio">servicio</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1057385-117-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$514.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>7</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Hospital Metropolitano: Insumos para impresora</a></h3>
+    <p class="org">HOSPITAL METROPOLITANO DE SANTIAGO · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">538598-634-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.000.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPRA DE TINTAS PARA IMPRESORA LICEO BICENTENARIO CLAUDIO ARRAU LEON</a></h3>
+    <p class="org">SERVICIO LOCAL DE EDUCACION COSTA ARAUCANIA · Región de la Araucanía </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1028897-518-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$2.519.227</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">TINTAS IMPRESORA- DESAM</a></h3>
+    <p class="org">CORP MUNICIP ANCUD PARA LA EDUCAC SALUD · Región de los Lagos </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1224953-383-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Papel térmico impresora 80mm x 80 mt  y  Cinta de transferencia térmica 110 x 74 Resina negra </a></h3>
+    <p class="org">SERVICIO DE SALUD DEL MAULE HOSPITAL DE CUREPTO · Región del Maule </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2045-101-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$300.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">IMPRESORA - SECPLA N° 12</a></h3>
+    <p class="org">I MUNICIPALIDAD DE SAN MIGUEL · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1741-503-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPRA DE CABEZAL PARA IMPRESORA - OLN</a></h3>
+    <p class="org">I MUNICIPALIDAD DE CALLE LARGA · Región de Valparaíso </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4105-509-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$200.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">TINTAS PARA MULTIFUNCIONAL DEL COLEGIO ROBERTO WHITE GESELL</a></h3>
+    <p class="org">I MUNICIPALIDAD DE PALENA · Región de los Lagos </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2930-114-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$360.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">SC 11596, Multifuncional, Promoción de Salud </a></h3>
+    <p class="org">I MUNICIPALIDAD DE TALAGANTE · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2703-197-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$400.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="servicio">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">SERVICIO DE REPARACIÓN DE NOTEBOOK/PED95-3251/VDV</a></h3>
+    <p class="org">I MUNICIPALIDAD DE VINA DEL MAR · Región de Valparaíso </p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-servicio">servicio</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2424-1497-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$150.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquisición de equipo computacional para Departamento de Metalurgia</a></h3>
+    <p class="org">UNIVERSIDAD DE ATACAMA · Región de Atacama </p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2859-839-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$6.000.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">TRANSFORMADOR MAS CONECTOR PARA  NOTEBOOK/SP 1067300/JL</a></h3>
+    <p class="org">UNIVERSIDAD DE CHILE · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">5178-4478-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$100.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>1</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Fundación Integra requiere adquirir Discos de Estado Sólido (SSD) nuevos y Cargadores para Notebook tipo USB-C.</a></h3>
+    <p class="org">FUNDACION EDUCACIONAL PARA EL DESAROLLO INTEGRAL DE LA NIÑEZ · Región de Los Ríos</p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">707424-25-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.486.600</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="servicio">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquisición caja de mantenimiento (nueva y original) para impresora Epson</a></h3>
+    <p class="org">I MUNICIPALIDAD DE OSORNO · Región de los Lagos </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-servicio">servicio</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2306-712-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$120.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:01 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Tóner impresora</a></h3>
+    <p class="org">CORP CULTURAL BALMACEDA DOCE QUINCE · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1447929-34-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$450.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 10:15 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Toner HP 105A Laserjet y 151A, Sol.N°1396 Adquisiciones</a></h3>
+    <p class="org">I MUNICIPALIDAD PEDRO AGUIRRE CERDA · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2393-1205-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$420.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 11:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,energia" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPRA DE INSUMOS COMPUTACIONALES toner ups y webcam</a></h3>
+    <p class="org">Tribunal de Juicio Oral en lo Penal de Puente Alto · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">UPS</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">732488-19-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 11:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICIÓN TINTAS PARA IMPRESORA DEPORTES</a></h3>
+    <p class="org">I MUNICIPALIDAD DE PIRQUE · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2719-302-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$261.800</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 11:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">FOLIO N°9_ TINTAS PARA IMPRESORA TESORERIA</a></h3>
+    <p class="org">I MUNICIPALIDAD DE LA CRUZ · Región de Valparaíso </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3035-349-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$200.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 11:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ESCANER SECRETARIA MUNICIPAL</a></h3>
+    <p class="org">I MUNICIPALIDAD DE GRANEROS · Región del Libertador General Bernardo O´Higgins</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4562-397-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$450.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 11:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Tintas Impresoras para Plotter Subdirección de Inversiones del DSSVQP</a></h3>
+    <p class="org">SERVICIO SALUD VINA DEL MAR QUILLOTA · Región de Valparaíso </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2026-453-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$600.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 11:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="energia" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICION DE 02 UPS DE 1kVA DE DOBLE CONVERSION</a></h3>
+    <p class="org">SERVICIO DE SALUD DEL MAULE HOSPITAL DE LINARES · Región del Maule </p>
+    <div class="chips"><span class="chip">UPS</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1681-171-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 11:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="energia" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">UPS</a></h3>
+    <p class="org">Departamento de Salud · Región de los Lagos </p>
+    <div class="chips"><span class="chip">UPS</span><span class="chip nat nat-producto">producto</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3507-513-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$3.400.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 11:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>12</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPUTADOR ALL-IN-ONE (AIO)				</a></h3>
+    <p class="org">CORPORACION MUNICIPAL DE DEPORTES DE RANCAGUA · Región del Libertador General Bernardo O´Higgins</p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1223542-194-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.200.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 11:30 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>1</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="arriendo">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Arriendo Notebook (01) por 06 meses para Depto. Comunicaciones SC 402</a></h3>
+    <p class="org">SUBSECRETARIA DE SALUD PUBLICA · Región del Biobío </p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-arriendo">arriendo</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2078-367-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.100.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 11:45 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>1</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICION DE TONER, CARTUCHO E INSUMOS COMPUTACIONALES</a></h3>
+    <p class="org">Ejercito de Chile · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3524-60-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$2.999.990</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 12:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICIÓN DE TONER JI-SC FUND. INTEGRA, LOS LAGOS</a></h3>
+    <p class="org">FUNDACION EDUCACIONAL PARA EL DESAROLLO INTEGRAL DE LA NIÑEZ · Región de los Lagos </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">707425-93-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$2.045.744</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 12:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">HAAV COMPRA DE TONER</a></h3>
+    <p class="org">SERV NAC SALUD HOSPITAL DE LOS ANDES · Región de Valparaíso </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">617807-1953-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$789.327</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 12:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>6</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">impresora multifuncional y tinta </a></h3>
+    <p class="org">ASOCIACION NACIONAL DE GOBERNADORES Y GOBERNADORAS REGIONALES DE CHILE · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1425523-34-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 12:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>1</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Insumos plotter 24</a></h3>
+    <p class="org">UNIVERSIDAD DE CHILE · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">5529-83-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$450.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 12:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COTISACIONES IMPRESORA-OF PARTES </a></h3>
+    <p class="org">ILUSTRE MUNICIPALIDAD DE HUARA · Región de Tarapacá  </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">5907-182-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.150.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 12:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquisición de carpetas y etiquetas para impresora para el SLEP Valle Cachapoal</a></h3>
+    <p class="org">SERVICIO LOCAL DE EDUCACIÓN PÚBLICA VALLE CACHAPOAL · Región del Libertador General Bernardo O´Higgins</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1375760-67-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$910.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 12:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Impresora multifuncional para CECOSF, Programa MAIS</a></h3>
+    <p class="org">ILUSTRE MINICIPALIDAD DE COMBARBALA · Región de Coquimbo </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3616-125-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$412.759</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 12:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener"> Se requiere la adquisición de bolso de transporte, para el transporte de impresora - SC N° 993-2026 (Ítem 2202001)</a></h3>
+    <p class="org">SERVICIO SALUD DEL RELONCAVI · Región de los Lagos </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1057536-974-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$127.449</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 12:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Se requiere la adquisición de insumos tecnológicos para el funcionamiento de impresora - SC N° 993-2026 (ÍTEM 2204009)</a></h3>
+    <p class="org">SERVICIO SALUD DEL RELONCAVI · Región de los Lagos </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1057536-972-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$428.400</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 12:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICION DE NOTEBOOK</a></h3>
+    <p class="org">I MUNICIPALIDAD DE CHIMBARONGO · Región del Libertador General Bernardo O´Higgins</p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3730-198-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$600.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 12:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>49</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">006 001 GS 20/2026 ADQ. EQUIPO COMPUTACIONAL</a></h3>
+    <p class="org">IVª Brigada Aérea · Región de Magallanes y de la Antártica</p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3268-600-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$2.800.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 12:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>8</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="seguridad-electronica" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">CURSO PARA OPERADOR DE CIRCUITO CERRADO DE TELEVISION (CCTV) Y CERTIFICACIÓN ANTE OS-10</a></h3>
+    <p class="org">HOSPITAL BASE OSORNO · Región de los Lagos </p>
+    <div class="chips"><span class="chip">CCTV</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1063538-1886-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$2.000.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 12:30 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICIÓN DE PLOTTER MULTIFUNCIÓN,  INSUMOS Y REPUESTOS PARA SERVICIO LOCAL DE EDUCACION</a></h3>
+    <p class="org">SERVICIO LOCAL DE EDUCACIÓN PÚBLICA DEL ELQUI · Región de Coquimbo </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1305532-71-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$7.000.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 13:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="seguridad-electronica" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICION DE ESPECIES CCTV PARA SECCION CRIMINALISTICA CAUTIN</a></h3>
+    <p class="org">SECCIÓN COMPRAS IX ZONA · Región de la Araucanía </p>
+    <div class="chips"><span class="chip">CCTV</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1078177-732-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$2.000.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 13:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPRA DE TONER Y RESMA HOJAS OFICIO PARA IMPRESORA DEL C.A.I.S. DE TEMUCO, GENDARMERIA DE CHILE</a></h3>
+    <p class="org">Dirección Regional de Gendarmeria - Temuco · Región de la Araucanía </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1968-438-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.400.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 14:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Tinta para Impresora </a></h3>
+    <p class="org">I MUNICIPALIDAD PUERTO OCTAY · Región de los Lagos </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">739231-12-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$135.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 14:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="servicio">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">CET METROPOLITANO - SERVICIO DE MANTENCIÓN, PIEZAS Y PARTES DE IMPRESORA RICOH</a></h3>
+    <p class="org">Centro de Educación y Trabajo de Gendarmería · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-servicio">servicio</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1173445-37-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.000.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 14:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">IMPRESORA COLOR - DEPTO. INFORMATICA</a></h3>
+    <p class="org">I MUNICIPALIDAD DE PAINE · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2788-379-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 15:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>13</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="energia" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPRA DE UPS PARA ECÓGRAFO DEL CESFAM HUARA</a></h3>
+    <p class="org">ILUSTRE MUNICIPALIDAD DE HUARA · Región de Tarapacá  </p>
+    <div class="chips"><span class="chip">UPS</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">5905-155-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$250.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 15:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="seguridad-electronica" data-naturaleza="servicio">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Servicio de mantenimiento preventivo, correctivo integral y configuración lógica de CCTV y CCAA</a></h3>
+    <p class="org">SUBSECRETARIA DE ECONOMIA Y EMPRESAS DE MENOR TAMA · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">CCTV</span><span class="chip nat nat-servicio">servicio</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">756-109-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$5.500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 15:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Tintas para impresora Epson WorkForce Pro WF 6590 de DIDECO</a></h3>
+    <p class="org">I MUNICIPALIDAD PUERTO OCTAY · Región de los Lagos </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4950-60-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$230.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 17:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">IMPRESORA TERMICA (P001143/PBL)</a></h3>
+    <p class="org">I MUNICIPALIDAD DE TALCA · Región del Maule </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2292-682-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 17:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>1</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquririr un computador all in one</a></h3>
+    <p class="org">Ilustre Municipalidad de Cabo de Hornos · Región de Magallanes y de la Antártica</p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3704-163-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 17:15 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICIÓN DE IMPRESORA MULTIFUNCIONAL DE TANQUE DE TINTA</a></h3>
+    <p class="org">INSTITUTO DE INVESTIGACIONES AGROPECUARIAS · Región de la Araucanía </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1107281-186-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$187.291</strong></td></tr>
+      <tr><th>Cierra</th><td class="urgente">2026-08-31 23:00 (2 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">MEMO 651/ TINTAS Y TONER/ EDUCACION / ESC. SANTA SARA</a></h3>
+    <p class="org">Corporación Municipal de Desarrollo Social Lampa · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1271357-70-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$6.000.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 08:00 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">MEMO 547/ CABEZALES IMPRESORA/ EDUCACION/ ESC. NORMA GONZALEZ</a></h3>
+    <p class="org">Corporación Municipal de Desarrollo Social Lampa · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1271357-71-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$400.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 08:00 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquisicion de notebook 14 pulgadas segun especificaciones tecnicas adjunto solicitud 1384 quiero mi barrio</a></h3>
+    <p class="org">I MUNICIPALIDAD PEDRO AGUIRRE CERDA · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2393-1195-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.300.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 08:00 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>27</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPRA DE ESCANER</a></h3>
+    <p class="org">I MUNICIPALIDAD DE CALERA DE TANGO · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3658-400-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 08:30 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Tóner para Impresora de Tesorería Municipal. </a></h3>
+    <p class="org">I MUNICIPALIDAD DE LOS VILOS · Región de Coquimbo </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3712-446-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$600.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 09:00 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Impresora multifuncional, Sol. N° 204, Jaime Rojas - Maria Jose Maureira.</a></h3>
+    <p class="org">Municipalidad de Yerbas Buenas-Depto. Salud · Región del Maule </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3780-182-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$350.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 09:00 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ROLLOS DE NUMEROS ATENCION PUBLICO (3.000 Números), ROLLOS DE PAPEL PARA IMPRESORA TERMICA 80x80mm BOLETAS EN BLANCO (Adjuntar Cotización detallada con Ficha Técnica)</a></h3>
+    <p class="org">HOSPITAL DE MEJILLONES · Región de Antofagasta </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1747-118-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$800.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 09:00 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPUTADOR ALL IN ONE</a></h3>
+    <p class="org">I MUNICIPALIDAD DE PUTAENDO · Región de Valparaíso </p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2626-453-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$700.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 09:00 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquisición de Notebook</a></h3>
+    <p class="org">UNIVERSIDAD DE ATACAMA · Región de Atacama </p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2859-828-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.800.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 09:30 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="seguridad-electronica" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquisición, instalación y puesta en marcha de sistema de videovigilancia IP para ELEAM Río Ibáñez </a></h3>
+    <p class="org">I MUNICIPALIDAD RIO IBANEZ · Región Aysén del General Carlos Ibáñez del Campo</p>
+    <div class="chips"><span class="chip">CCTV</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4066-334-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.000.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 09:30 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">SE REQUIERE TAMBOR DE IMPRESORA.</a></h3>
+    <p class="org">ILUSTRE MUNICIPALIDAD DE ALTO BIOBIO · Región del Biobío </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4829-299-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$150.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 10:00 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener"> ADQUISICIÓN DE INSUMOS Y MATERIALES (TINTAS, ROLLO PAPEL PLOTTER, TABLA APRIETA PAPEL, HUINCHA, REPUESTO CARTONERO)</a></h3>
+    <p class="org">I MUNICIPALIDAD DE PALMILLA · Región del Libertador General Bernardo O´Higgins</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">757818-92-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$975.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 10:00 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquisición de Notebook</a></h3>
+    <p class="org">GOBIERNO REGIONAL DE ANTOFAGASTA · Región de Antofagasta </p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1782-15-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$5.649.436</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 12:00 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquisición de 6 (seis) bolsos para notebook para el IGM</a></h3>
+    <p class="org">INSTITUTO GEOGRAFICO MILITAR · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3384-144-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$128.520</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 12:00 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COTIZACION DE 2 NOTEBOOK PARA CECOSF ELICURA-DEPTO DE SALUD</a></h3>
+    <p class="org">Ilustre Municipalidad de Contulmo - Salud · Región del Biobío </p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4478-83-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$2.500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 14:00 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Impresora multifuncional y disco duro SSD</a></h3>
+    <p class="org">ILUSTRE MUNICIPALIDAD DE COLBUN · Región del Maule </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4172-189-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$360.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 14:30 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">TONER Y MATERIAL DE ESCRITORIO</a></h3>
+    <p class="org">I.MUNICIPALIDAD DE VALLENAR  · Región de Atacama </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1411825-12-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 15:00 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquisición de toner para impresoras de oficina regional DGA</a></h3>
+    <p class="org">MINISTERIO DE OBRAS PUBLICAS DIREC CION GRAL DE OO PP DCYF · Región de Magallanes y de la Antártica</p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">889-27-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$300.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 15:00 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>9</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="servicio">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">MANTENCIÓN DEL EQUIPO PLOTTER HP 729, DE CARGO DE LA SUBCOM I.A.T OSORNO </a></h3>
+    <p class="org">SECCIÓN COMPRAS X ZONA  · Región de los Lagos </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-servicio">servicio</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1079639-871-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$725.900</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-01 16:42 (3 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>1</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">MEMO N° 411- ADQUISICION DE NOTEBOOK PARA PROGRAMA MAS SALUD EN COMUNIDAD DEL CESFAM DE LA COMUNA DE FREIRINA </a></h3>
+    <p class="org">I MUNICIPALIDAD DE FREIRINA · Región de Atacama </p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4357-214-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$600.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-02 08:00 (4 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ESCANER OFICINA DE PERSONAL</a></h3>
+    <p class="org">I MUNICIPALIDAD DE PUTAENDO · Región de Valparaíso </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">2626-455-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$340.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-02 09:00 (4 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="energia" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">MEMORANDUM Nº 03369/2026 Solicitud de compras Refrigeradores clínicos (vitrinas) y UPS</a></h3>
+    <p class="org">CORPORACION MUNICIPAL DE DESARROLLO SOCIAL DE MACUL · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">UPS</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1271178-166-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$4.600.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-02 09:00 (4 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="seguridad-electronica" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">REPUESTO PARA EL SISTEMA CCTV DE LA COMANDANCIA BASE NAVAL</a></h3>
+    <p class="org">Comandancia Base Naval Iquique · Región de Tarapacá  </p>
+    <div class="chips"><span class="chip">CCTV</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3061-191-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.700.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-02 09:00 (4 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICIÓN DE 01 BOLSO PARA NOTEBOOK PARA PAIHUANO</a></h3>
+    <p class="org">DIRECCION DE LOGISTICA DE CARABINEROS · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4928-52-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$29.738</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-02 12:00 (4 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="energia" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICIÓN DE UPS PARA LA TENENCIA PAIHUANO.</a></h3>
+    <p class="org">DIRECCION DE LOGISTICA DE CARABINEROS · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">UPS</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4928-53-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$4.208.697</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-02 12:00 (4 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="computacion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Adquisición de computador de altas prestaciones (51131) </a></h3>
+    <p class="org">Proyecto ING2530001 DECANAT FACULTAD DE INGENIERÍA · Región de Coquimbo </p>
+    <div class="chips"><span class="chip">Notebooks</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1491370-65-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$950.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-02 15:00 (4 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="energia" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">ADQUISICION DE 06 UPS DE 3KVA DOBLE CONVERSION ONLINE PARA LOS EQUIPOS DE RAYOS X DEL MINISTERIO PUBLICO</a></h3>
+    <p class="org">MINISTERIO PUBLICO · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">UPS</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">5148-150-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$2.500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-02 15:00 (4 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="servicio">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Servicio de diagnóstico, reparación y puesta en marcha de impresora. UVA 2493</a></h3>
+    <p class="org">UNIVERSIDAD DE VALPARAISO · Región de Valparaíso </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-servicio">servicio</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">859378-347-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$750.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-02 17:00 (4 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">SE REQUIERE LA ADQUISICION DE UN EQUIPO MENOR (MULTIFUNCIONAL) PARA LA DPP DE ISLA DE PASCUA</a></h3>
+    <p class="org">DELEGACIÓN PRESIDENCIAL PROVINCIAL DE ISLA DE PASCUA · Región de Valparaíso </p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip">segundo llamado — abierto a todos</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">4373-41-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$200.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-02 20:46 (4 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>3</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">TONER PARA IMPRESORA HP LASER JET PRO M12W</a></h3>
+    <p class="org">SERVICIO DE SALUD ARAUCANIA NORTE · Región de la Araucanía </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">1057390-208-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$670.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-03 10:00 (5 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="insumos-impresion,equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">COMPRA DE TONER IMPRESORA LEXMARK Y OKI 430DN</a></h3>
+    <p class="org">Tribunal Oral en Lo Penal Antofagasta · Región de Antofagasta </p>
+    <div class="chips"><span class="chip">Tóner e insumos</span><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">662457-15-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$100.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-03 12:00 (5 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="energia" data-naturaleza="servicio">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">SERVICIO DE MANTENCIÓN UPS 180 KVA + BANCO DE BATERÍAS </a></h3>
+    <p class="org">POLICIA DE INVESTIGACIONES DE CHILE · Región de Valparaíso </p>
+    <div class="chips"><span class="chip">UPS</span><span class="chip nat nat-servicio">servicio</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">3275-99-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$1.500.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-04 10:00 (6 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="energia" data-naturaleza="servicio">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">MANTENIMIENTO DE EQUIPO DE CLIMATIZACIÓN PRECISA PARA SALA DE UPS</a></h3>
+    <p class="org">Ejercito de Chile · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">UPS</span><span class="chip nat nat-servicio">servicio</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">622134-100-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$7.011.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-04 14:00 (6 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article>
+<article class="compra" data-rubros="equipos-impresion" data-naturaleza="producto">
+    <h3><a href="https://www.mercadopublico.cl" rel="noopener">Compra impresora y otros insumos</a></h3>
+    <p class="org">UNIVERSIDAD DE CHILE · Región Metropolitana de Santiago</p>
+    <div class="chips"><span class="chip">Equipos de impresión</span><span class="chip nat nat-producto">producto</span><span class="chip emt">primer llamado — solo EMT</span></div>
+    <table class="detalle">
+      <tr><th>Código</th><td class="mono">5522-54-COT26</td></tr>
+      <tr><th>Tope disponible</th><td><strong>$2.250.000</strong></td></tr>
+      <tr><th>Cierra</th><td class="">2026-09-09 10:00 (11 día(s))</td></tr>
+      <tr><th>Ofertas recibidas</th><td>0</td></tr>
+    </table>
+  </article></div>
+  </section>
+
+  <section>
+    <h2>Por verificar <span class="cota">(74)</span></h2>
+    <p class="section-sub">
+      El nombre menciona la materia pero <strong>no confirma el rubro</strong> — «Tintas Escuela Rural
+      Peñasmo» no dice si son de impresora. Se publican aparte y rotuladas en vez de mezclarlas con las
+      confirmadas: resolverlas exige leer los adjuntos o la ficha, que este radar no baja.
+    </p>
+    <ul class="simple"><li><span class="mono">1704-2989-COT26</span> — [CodInt:224P558|200,0] CARTUCHO PEROXIDO DE HIDROGENO (COMPATIBLE CON ESTERILIZADOR RENOSEM RENO S130-D REF: RENO-SA110) <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">800-6132-COT26</span> — 190227 FILTRO ABSORVENTE DE CITOQUINAS DURACION 8 HRS / Equivalente a Cartucho de hemoadsorción de citoquinas y mediadores inflamatorios. Incluye tubuladuras. <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">4284-120-COT26</span> — ADQUISICIÓN DE TINTAS OLN, MUNICIPALIDAD DE CUNCO <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">1107279-197-COT26</span> — Se solicita la adquisición de Tableta de tinta electrónica (503370-12) <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">4079-280-COT26</span> — TINTAS - PRLAC  <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">817-4-COT26</span> — TINTAS PARA PLOTER <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">1549-3706-COT26</span> — SE REQUIERE  COD. 103-2020	CARTUCHO 1/4 KG BLANCO, PARA EL HOSPITAL SAN JOSE/PAC 2026 <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">2211-969-COT26</span> — Sol. 91 Cartucho de mantenimiento ÁREA OPERATIVA  <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">1058102-387-COT26</span> — MEPIVACAINA CARTUCHO 3% DENTAL <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">608-5281-COT26</span> — (NPS) INSUMOS AGOSTO - CARTUCHO DE PÂ° DESECH C/ CONECTOR LUERLOCK PARA TRANSDUCTOR CATETER DE PÂ° ABD. ESTERIL 9FR X 47CM DOBLE LUMEN C/B (LABOR <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">608-5165-COT26</span> — PLC BODEGA ESTERILIZACION - CARTUCHO DE PEROXIDO DE HIDROGENO 2CC <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">608-4990-COT26</span> — (TTV) CARTUCHO HEMOABSORBIBLE DE CITOQUINAS C/ TUBULADURAS <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">5363-55-COT26</span> — 45/2026 Adquisición de cortinas  y filtro cartucho sedimento <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">1057539-2377-COT26</span> — insumos de pabellon-segun solicitud 2026-634-cartucho gem5000 <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">557639-1244-COT26</span> — CARTUCHO DE GAS Y MEMBRANA - ITEMBO <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">608-7364-COT25</span> — (DGC) INSUMO BIOSEGURIDAD FORMALDEYDE FILTER, VAPOR FILTER, CARTUCHO CONTRA FORMALDEHIDO Y VAPORES ORGANICOS <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">418-1120-COT25</span> — KCR-INSULINA ASPARTA 300 UI/3 mL cartucho inyectable <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">1057417-3058-COT25</span> —  gvsm CARTUCHO POLIPROPILENO 1U CORTO <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">1057417-2998-COT25</span> — gvsm CARTUCHO POLIPROPILENO 1U CORTO <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">5067-2070-COT26</span> — Sol. 92809. cc 111, Depto. de Admisión, Cartuchos de tinta  y Papel Bond   <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">1661-143-COT26</span> — COMPRA TINTA  <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">3947-529-COT26</span> — ADQUISICION DE TINTA PARA DEPTO. DE BODEGA E INVENTARIO <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">1298355-964-COT26</span> — COMPRA DE TINTA PARA TORRE DE GRABADO - IMAGENES DIAGNOSTICAS 2026 <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">362-305-COT26</span> — TINTA  ORIGINAL SIMILAR A HP 950 NEGRO 951 MAGENTA,951 CIAN,951 YELLOW <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">5586-2166-COT26</span> — B/S Cuaderno digital y lector de e-books de tinta electrónica a color de 11 pulgadas <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">5052-351-COT26</span> — CARTUCHOS DE TINTA <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">2328-982-COT26</span> — ADQUISICIÓN DE RESMAS Y TINTAS PARA MATERIAL PEDAGÓGICO - LICEO BICENTENARIO ESCUELA DE CULTURA Y DIFUSIÓN ARTÍSTICA / 24206 <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">2078-369-COT26</span> — Materiales de Oficina opalinas y lápices tinta SC 414 <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">1431841-956-COT26</span> — MUNICIPALIDAD-SECPLA-PACK CARTUCHOS DE TINTA DESINGJET HP 738, 300 ML, NEGRO, AMARILLO MAGENTA Y CYAN- QUE INCLUYA DESPACHO-SMN 44897 <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">608-5210-COT26</span> — (NPS) INSUMOS AGOSTO - CARTUCHO DE PÂ° DESECH C/ CONECTOR LUERLOCK PARA TRANSDUCTOR CATETER DE PÂ° ABD. ESTERIL 9FR X 47CM DOBLE LUMEN C/B (LABOR <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">5349-388-COT26</span> — ADQUISICIÓN DE CARTUCHO DE LIMPIEZA PARA HORNO  <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">608-4836-COT26</span> — PLC BODEGA CETRAL AGOSTO - CARTUCHO DE PÂ° DESECH C/ CONECTOR LUERLOCK PARA TRAN/CATETER DE PÂ° ABD. ESTERIL 9FR X 47CM DOBLE LUMEN C/B (LABORSDUCTOR  <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">2335-258-COT26</span> — CARTUCHO DE GAS OP.384 <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">1549-2959-COT26</span> — 216-5702 INSULINA ASPARTA CON NICOTINAMIDA 100 UI/ML CARTUCHO 3 ML  UN 51181506 <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">2045-79-COT26</span> — Membrana Asfáltica, Llave temporizada lavamanos y Cartucho de gas butano <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">2766-110-COT26</span> — INSUMOS MEDICOS CARTUCHO DE PRUEBAS RAPIDAS POB 5-150 <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">3888-547-COT26</span> — Cartucho Registro Social de Hogares <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">608-3490-COT26</span> — MVE CARTUCHO DE PÂ° DESECH C/ CONECTOR  CATETER DE PÂ° ABD. ESTERIL 9FR X 47CM <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">3508-332-COT26</span> — CARTUCHO DE TINTA 954 XL PROGRAMA EXTRA-PDTI <span class="aviso">(insumos-impresion)</span></li><li><span class="mono">812030-581-COT26</span> — A10AE0401	INSULINA GLARGINA 100 U.I./ML CARTUCHO SOLUCIÓN INYECTABLE JERINGA PRELLENADA 3 ML <span class="aviso">(insumos-impresion)</span></li></ul>
+  </section>
+
+  <section>
+    <h2>Cobertura y método</h2>
+    <p class="section-sub">
+      Cada consulta <code>q</code> se mide antes de usarla. <strong>El número de resultados es una cota
+      superior contaminada</strong>: el buscador de la API hace OR de los tokens y busca también en la
+      descripción, así que <code>q=camara</code> trae cámaras de frío y sépticas. La columna de precisión
+      mide qué fracción de la muestra menciona el término en el <em>nombre</em> — sin gastar un request
+      más. Un <span class="cota">≥</span> marca conteos topeados en 10.000 por la API o truncados por el
+      límite de páginas: son cotas inferiores, no conteos.
+    </p>
+    <table class="detalle">
+    <thead><tr><th>Consulta <code>q</code></th><th>Resultados (cota superior)</th><th>Precisión en el nombre</th><th>Avisos</th></tr></thead>
+    <tbody><tr>
+        <td class="mono">toner</td>
+        <td>1.710 <span class="cota">≥</span></td>
+        <td>87%</td>
+        <td class="aviso">3 truncada(s)</td>
+      </tr><tr>
+        <td class="mono">tonner</td>
+        <td>51 <span class="cota">≥</span></td>
+        <td>64%</td>
+        <td class="aviso">1 truncada(s)</td>
+      </tr><tr>
+        <td class="mono">cartucho</td>
+        <td>308 <span class="cota">≥</span></td>
+        <td>75%</td>
+        <td class="aviso">3 truncada(s)</td>
+      </tr><tr>
+        <td class="mono">tinta</td>
+        <td>998 <span class="cota">≥</span></td>
+        <td>67%</td>
+        <td class="aviso">3 truncada(s)</td>
+      </tr><tr>
+        <td class="mono">impresora</td>
+        <td>4.214 <span class="cota">≥</span></td>
+        <td>83%</td>
+        <td class="aviso">3 truncada(s)</td>
+      </tr><tr>
+        <td class="mono">multifuncional</td>
+        <td>978 <span class="cota">≥</span></td>
+        <td>75%</td>
+        <td class="aviso">3 truncada(s)</td>
+      </tr><tr>
+        <td class="mono">escaner</td>
+        <td>305 <span class="cota">≥</span></td>
+        <td>93%</td>
+        <td class="aviso">3 truncada(s)</td>
+      </tr><tr>
+        <td class="mono">fotocopiadora</td>
+        <td>196 <span class="cota">≥</span></td>
+        <td>95%</td>
+        <td class="aviso">2 truncada(s)</td>
+      </tr><tr>
+        <td class="mono">plotter</td>
+        <td>625 <span class="cota">≥</span></td>
+        <td>92%</td>
+        <td class="aviso">3 truncada(s)</td>
+      </tr><tr>
+        <td class="mono">notebook</td>
+        <td>1.632 <span class="cota">≥</span></td>
+        <td>92%</td>
+        <td class="aviso">3 truncada(s)</td>
+      </tr><tr>
+        <td class="mono">computador</td>
+        <td>960 <span class="cota">≥</span></td>
+        <td>76%</td>
+        <td class="aviso">3 truncada(s)</td>
+      </tr><tr>
+        <td class="mono">UPS</td>
+        <td>580 <span class="cota">≥</span></td>
+        <td>86%</td>
+        <td class="aviso">3 truncada(s)</td>
+      </tr><tr>
+        <td class="mono">CCTV</td>
+        <td>230 <span class="cota">≥</span></td>
+        <td>78%</td>
+        <td class="aviso">2 truncada(s)</td>
+      </tr><tr>
+        <td class="mono">videovigilancia</td>
+        <td>71 <span class="cota">≥</span></td>
+        <td>56%</td>
+        <td class="aviso">2 truncada(s)</td>
+      </tr></tbody>
+  </table>
+    <div class="stat-grid">
+      <div class="stat"><div class="num">72</div><div class="label">requests gastados</div></div>
+      <div class="stat"><div class="num">943</div><div class="label">compras en el índice</div></div>
+      <div class="stat"><div class="num">5</div><div class="label">estados barridos</div></div>
+      <div class="stat"><div class="num">6</div><div class="label">descartadas por contexto</div></div>
+    </div>
+    <details class="recomp"><summary>Qué descartó el filtro por contexto, y de qué rubro</summary>
+             <ul><li><span class="mono">1101892-175-COT26</span> Impresora 3D resina e insumos para generación de prototipos — descartada de Impresoras, multifuncionales, escáneres y plotters</li><li><span class="mono">507428-324-COT26</span> IMPRESORA 3D PARA UNIDAD DE REHABILITACIÓN RURAL — descartada de Impresoras, multifuncionales, escáneres y plotters</li><li><span class="mono">4291-1082-COT26</span> FILAMENTOS IMPRESORA 3D — descartada de Impresoras, multifuncionales, escáneres y plotters</li><li><span class="mono">1233615-571-COT26</span> PHA/SOL 1387/ADQUISICIÓN DE INSUMOS IMPRESORA 3D (FABLAB)/ESC. VICTOR DOMINGO SILVA — descartada de Impresoras, multifuncionales, escáneres y plotters</li><li><span class="mono">2409-1086-COT26</span> ADQUISICION DE IMPRESORA 3D E INSUMOS PARA ESCUELA 11 DE SEPTIEMBRE F-929 — descartada de Impresoras, multifuncionales, escáneres y plotters</li><li><span class="mono">1531376-9-COT26</span> ADQUISICION DE IMPRESORA 3D, ESCANER 3D E INSUMOS  — descartada de Impresoras, multifuncionales, escáneres y plotters</li></ul>
+             <p class="cobertura">Se publica porque un patrón excluyente demasiado ancho, si no se
+             muestra, se ve como oportunidades que desaparecen sin explicación.</p>
+           </details>
+    <p class="cobertura">
+      Referencia: Compra Ágil rinde entre 7% y 10% de compras efectivas en
+      <em>todos</em> los rubros medidos, incluidos los que nada tienen que ver con tecnología
+      (<code>output/estudio-mercado.md</code>). Un rubro que rinde eso no es malo: es normal.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>
+      Los datos salen de la ficha oficial de cada Compra Ágil publicada por el propio organismo
+      comprador, vía <code>api2.mercadopublico.cl</code>. Esta página es de <strong>lectura</strong>:
+      no cotiza ni prepara ofertas — no existe todavía un catálogo de costos de Kompu con el que fijar
+      precio bajo el tope. La oferta se presenta en
+      <a href="https://www.mercadopublico.cl">mercadopublico.cl</a>, siempre por una persona.
+    </p>
+    <div class="links-row">
+      <a href="index.html">Compras Ágiles — IA, BI y capacitación</a>
+      <a href="leads.html">Quién compra esto en el Estado</a>
+      <a href="estudio-mercado.html">Estudio de mercado: qué se demanda en Compra Ágil</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
