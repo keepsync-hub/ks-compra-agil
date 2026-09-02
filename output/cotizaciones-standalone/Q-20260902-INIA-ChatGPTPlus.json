@@ -1,0 +1,76 @@
+{
+  "id": "Q-20260902-INIA",
+  "titulo": "Suscripciones ChatGPT Plus",
+  "cliente": "Instituto de Investigaciones Agropecuarias (INIA)",
+  "fuente_tipo_cambio": "mindicador.cl (dólar observado, 2026-09-02) — verificado con curl; el fetch de Node no sale por el proxy de este entorno",
+  "tipo_cambio_observado": 936.86,
+  "monto_usd_total": 480,
+  "neto_clp": 649252,
+  "iva_clp": 123358,
+  "total_clp": 772610,
+  "lineas": [
+    {
+      "producto": "ChatGPT Plus",
+      "usuarios": 2,
+      "meses": 12,
+      "precio_lista_usd_mes": 20,
+      "fuente_precio_lista": "Precio público del plan ChatGPT Plus de OpenAI: USD 20 por usuario/mes, solo facturación mensual (sin tarifa anual con descuento), verificado el 2026-08-28",
+      "monto_usd": 480,
+      "neto_unitario_mensual_clp": 27052,
+      "neto_clp": 649252,
+      "iva_clp": 123358,
+      "total_clp": 772610,
+      "calculo": {
+        "monto_usd": 480,
+        "tipo_cambio_observado": 936.86,
+        "recargo_tipo_cambio_pct": 5.5,
+        "tipo_cambio_ajustado": 988.39,
+        "costo_clp": 474426,
+        "impuesto_no_recuperable_pct": 19,
+        "costo_con_impuesto_clp": 564567,
+        "markup_pct": 15,
+        "precio_cotizacion_clp": 649252,
+        "iva_venta_pct": 19,
+        "valor_final_clp": 772610,
+        "pasos": [
+          {
+            "paso": "1. Tipo de cambio ajustado",
+            "descripcion": "Tipo de cambio observado ($936.86) + 5.5%",
+            "valor_clp": 988.39
+          },
+          {
+            "paso": "2. Costo",
+            "descripcion": "USD 480 × tipo de cambio ajustado",
+            "valor_clp": 474426
+          },
+          {
+            "paso": "3. Costo con impuesto no recuperable",
+            "descripcion": "Costo + 19% (impuesto que KeepSync no puede recuperar, se trata como costo)",
+            "valor_clp": 564567
+          },
+          {
+            "paso": "4. Precio de cotización (neto)",
+            "descripcion": "Costo con impuesto + 15% de markup — este es el precio a utilizar en la cotización",
+            "valor_clp": 649252
+          },
+          {
+            "paso": "5. Valor final (con IVA de venta)",
+            "descripcion": "Precio de cotización + 19% de IVA — valor final a presentar",
+            "valor_clp": 772610
+          }
+        ]
+      }
+    }
+  ],
+  "oferente": {
+    "razon_social": "KEEPSYNC SPA",
+    "rut": "78.441.121-4",
+    "contacto_email": "cristian.molina@keepsync.ai",
+    "campos_por_confirmar": [
+      "domicilio legal",
+      "representante legal (nombre completo y RUN)",
+      "giro declarado ante el SII"
+    ]
+  },
+  "emitida_en": "2026-09-02T19:52:30.659Z"
+}

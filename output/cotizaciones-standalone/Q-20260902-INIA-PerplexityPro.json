@@ -1,0 +1,76 @@
+{
+  "id": "Q-20260902-INIA",
+  "titulo": "Suscripción Perplexity Pro",
+  "cliente": "Instituto de Investigaciones Agropecuarias (INIA)",
+  "fuente_tipo_cambio": "mindicador.cl (dólar observado, 2026-09-02) — verificado con curl; el fetch de Node no sale por el proxy de este entorno",
+  "tipo_cambio_observado": 936.86,
+  "monto_usd_total": 240,
+  "neto_clp": 324626,
+  "iva_clp": 61679,
+  "total_clp": 386305,
+  "lineas": [
+    {
+      "producto": "Perplexity Pro",
+      "usuarios": 1,
+      "meses": 12,
+      "precio_lista_usd_mes": 20,
+      "fuente_precio_lista": "Precio público del plan Pro de Perplexity: USD 20 por usuario/mes, verificado el 2026-08-28",
+      "monto_usd": 240,
+      "neto_unitario_mensual_clp": 27052,
+      "neto_clp": 324626,
+      "iva_clp": 61679,
+      "total_clp": 386305,
+      "calculo": {
+        "monto_usd": 240,
+        "tipo_cambio_observado": 936.86,
+        "recargo_tipo_cambio_pct": 5.5,
+        "tipo_cambio_ajustado": 988.39,
+        "costo_clp": 237213,
+        "impuesto_no_recuperable_pct": 19,
+        "costo_con_impuesto_clp": 282283,
+        "markup_pct": 15,
+        "precio_cotizacion_clp": 324626,
+        "iva_venta_pct": 19,
+        "valor_final_clp": 386305,
+        "pasos": [
+          {
+            "paso": "1. Tipo de cambio ajustado",
+            "descripcion": "Tipo de cambio observado ($936.86) + 5.5%",
+            "valor_clp": 988.39
+          },
+          {
+            "paso": "2. Costo",
+            "descripcion": "USD 240 × tipo de cambio ajustado",
+            "valor_clp": 237213
+          },
+          {
+            "paso": "3. Costo con impuesto no recuperable",
+            "descripcion": "Costo + 19% (impuesto que KeepSync no puede recuperar, se trata como costo)",
+            "valor_clp": 282283
+          },
+          {
+            "paso": "4. Precio de cotización (neto)",
+            "descripcion": "Costo con impuesto + 15% de markup — este es el precio a utilizar en la cotización",
+            "valor_clp": 324626
+          },
+          {
+            "paso": "5. Valor final (con IVA de venta)",
+            "descripcion": "Precio de cotización + 19% de IVA — valor final a presentar",
+            "valor_clp": 386305
+          }
+        ]
+      }
+    }
+  ],
+  "oferente": {
+    "razon_social": "KEEPSYNC SPA",
+    "rut": "78.441.121-4",
+    "contacto_email": "cristian.molina@keepsync.ai",
+    "campos_por_confirmar": [
+      "domicilio legal",
+      "representante legal (nombre completo y RUN)",
+      "giro declarado ante el SII"
+    ]
+  },
+  "emitida_en": "2026-09-02T19:52:28.766Z"
+}
