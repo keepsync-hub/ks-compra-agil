@@ -112,6 +112,19 @@ Tres cosas que este cotizador hace a propósito y conviene no "arreglar":
    *en silencio*. `generarCotizacionCapacitacionPdf` mide `scrollHeight` vs `clientHeight` en el
    mismo Chromium que imprime y devuelve las láminas desbordadas; el script trata eso como error y
    no da por buena la cotización. Al ajustar la plantilla, correr y mirar esa salida — no la vista.
+   La que desborda primero es la **lámina 4**, el cuadro de cumplimiento, porque crece con las filas
+   que agreguen las bases (una por bloque de exigencias adicionales): por eso su tabla lleva la
+   clase `cumpl`, un punto más compacta que el resto. La de la oferta económica tiene una sola fila
+   y no necesita apretarse. Cuando aun así desborda, lo que hay que acortar son los tres campos
+   variables que alimentan ese cuadro —`participantes.glosa`, `duracion.glosa` y
+   `fechas_ejecucion`—, no el criterio ni su cita.
+4. **No afirma nada de la compra desde el código.** `modalidad_observacion` es texto libre por
+   oportunidad, y durante un tiempo la fila "Modalidad" del cuadro de cumplimiento respondía con una
+   frase fija —"las bases se contradicen entre modalidad e-learning y ejecución presencial"— escrita
+   para 2672-18-COT26. Era falsa en las otras tres que declaran esa observación: la de Lo Barnechea
+   justifica una modalidad asincrónica y la de Puerto Montt fija fechas inamovibles, ninguna se
+   contradice. Ahora la fila dice que hay una observación y remite a la lámina 5, donde va el texto
+   literal. Regla general: la plantilla nunca describe el contenido de un campo de config.
 
 ### Score de apertura (0–100%)
 
@@ -124,11 +137,24 @@ Los criterios viven en `criterios_direccionadores` de `config/capacitaciones.jso
 exigencia, cada uno con su **cita** al documento del organismo. `src/lib/scoring-capacitacion.ts`
 solo cuenta: `score = 100 − 5 × (criterios en estado "sin_informacion")`, con piso en 0.
 
-Medido hoy: Dipres 75% las tres, Subtrans 65%, Concepción 60%, Hospital Padre Hurtado 45%. El
-orden no es casual — el Hospital exige las **últimas 12 órdenes de compra del mismo curso** en
-Mercado Público, que excluye a cualquiera que no lo haya vendido ya varias veces; Concepción da 35
-de 100 puntos por un magíster; Subtrans reserva 10% del puntaje a ser OTEC. Dipres, en cambio, solo
-pide credenciales del relator/a, que es un dato averiguable.
+De las diecisiete fichadas hasta hoy, el rango va de 85% a 45%. El orden no es casual — el Hospital
+Padre Hurtado (45%) exige las **últimas 12 órdenes de compra del mismo curso** en Mercado Público,
+que excluye a cualquiera que no lo haya vendido ya varias veces; Cochilco (50%) reparte 55% del
+puntaje entre experiencia del relator, satisfacción acreditada por terceros y 6 o más servicios
+similares del oferente, y deja el precio en 10%; Puerto Montt (55%) exige que el relator/a sea
+Ingeniero en Informática o en Información y Control de Gestión **con** postítulo en IA; Concepción
+(60%) da 35 de 100 puntos por un magíster; Subtrans (65%) reserva 10% del puntaje a ser OTEC. En el
+otro extremo, Dipres (85% y 75%) y el MOP (70%) solo piden credenciales del relator/a, que es un
+dato averiguable.
+
+Dos formas recurrentes de criterio que aparecieron en la tanda del 2026-09-03 y conviene reconocer:
+**la contradicción interna de las bases** —CONASET pondera 80/20 en el texto y 70/30 en la fórmula,
+la Defensoría exige 20 y 24 horas en dos párrafos distintos, Puerto Montt pide 12 horas en tres
+jornadas que dan 9— y **la pauta de evaluación que no existe**: los dos TDR de DICREP no publican
+ninguna, y el del MOP la anuncia («A continuación, se detallan los criterios de evaluación») y a
+continuación solo informa presupuesto, plazo y contacto. Ambas se registran como criterio con su
+cita, en vez de resolverse a dedo: no saber cuánto pesa el precio es exactamente admisibilidad sin
+resolver.
 
 Qué **no** es: una probabilidad de adjudicación. No pondera monto, competencia ni precio. Es cuánto
 de la admisibilidad está sin resolver hoy.

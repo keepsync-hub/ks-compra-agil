@@ -394,8 +394,11 @@ export function derivarCumplimiento(r: RequisitosCapacitacion): FilaCumplimiento
     {
       requisito: "Modalidad y sede de la actividad",
       estado: r.modalidad_observacion ? "por-confirmar" : "cumple",
+      // No se afirma *qué* dice la observación: no siempre es una contradicción de las bases
+      // (a veces es una restricción, como fechas fijas o una modalidad justificada), y el texto
+      // literal ya va íntegro en los pendientes de la lámina 5 y en la propuesta técnica.
       respuesta: r.modalidad_observacion
-        ? "Las bases se contradicen entre modalidad e-learning y ejecución presencial; la propuesta cubre ambas lecturas y se consulta formalmente (ver lámina 5)."
+        ? `${r.modalidad.tipo}. Hay una observación sobre la modalidad que la propuesta recoge y consulta formalmente (ver lámina 5).`
         : `${r.modalidad.tipo}. ${r.modalidad.plataforma}`,
     },
     {
@@ -519,7 +522,7 @@ export function derivarPendientes(
   }
 
   if (r.modalidad_observacion) {
-    p.push(`Aclarar la contradicción de modalidad en las bases mediante consulta formal. ${r.modalidad_observacion}`);
+    p.push(`Confirmar la modalidad con el organismo mediante consulta formal. ${r.modalidad_observacion}`);
   }
 
   return p;
