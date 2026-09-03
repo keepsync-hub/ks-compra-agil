@@ -6,7 +6,8 @@
   "_no_cotizadas_y_por_que": "Compras Ágiles que el radar sí encontró en el nicho y que este archivo NO cubre, con el motivo. Se anota acá para que la ausencia se lea como una decisión y no como un olvido.",
   "_no_cotizadas": {
     "4491-375-COT26": "Ilustre Municipalidad de Penco - Educación, «Capacitación Estrategias de Inteligencia Artificial para el aula, Escuela Vipla». Tope $1.200.000, cierre 2026-08-28 17:00. Su único adjunto (Capacitación IA Vipla.pdf) es un PDF escaneado SIN capa de texto: no se pudo leer un solo requisito. Llenar esta ficha exigiría OCR o inventar el contenido del curso, y el cotizador no inventa. Queda sin cotizar y publicada solo en la grilla de oportunidades del radar.",
-    "1107279-199-COT26": "Instituto de Investigaciones Agropecuarias, «OpenAI ChatGPT API Créditos y Anthropic Claude API créditos». Tope $4.195.671, cierre 2026-08-28 15:45. No es capacitación: es el nicho de licencias, que se cotiza con npm run cotizar (fórmula de precio de lista + IVA + markup), no con la regla tope × 0,9 de este archivo. Hoy no se puede: config/company.json no está en el repo (es gitignored) y el cotizador de licencias se detiene antes de calcular. Sigue además pendiente el insumo bloqueante del nicho — la vía real de fulfillment y facturación de licencias Claude (ver CLAUDE.md)."
+    "1107279-199-COT26": "Instituto de Investigaciones Agropecuarias, «OpenAI ChatGPT API Créditos y Anthropic Claude API créditos». Tope $4.195.671, cierre 2026-08-28 15:45. No es capacitación: es el nicho de licencias, que se cotiza con npm run cotizar (fórmula de precio de lista + IVA + markup), no con la regla tope × 0,9 de este archivo. Hoy no se puede: config/company.json no está en el repo (es gitignored) y el cotizador de licencias se detiene antes de calcular. Sigue además pendiente el insumo bloqueante del nicho — la vía real de fulfillment y facturación de licencias Claude (ver CLAUDE.md).",
+    "1121-56-COT26": "Comisión Chilena del Cobre (Cochilco), «Curso: Inteligencia Artificial: fundamentos, aplicaciones e impacto». Tope $1.000.000, cierre 2026-09-03 12:00. Los adjuntos se leyeron y son cotizables —es el gemelo administrativo de 1121-57-COT26: mismo requerimiento de compra, mismos tres anexos, misma pauta de evaluación; cambian el temario, las horas mínimas (32 en vez de 75) y el tope—. Quedó sin cotizar por tiempo: la corrida del radar terminó a las 11:40 hora de Chile y el cierre era a las 12:00, sin margen para la revisión humana y el envío manual que este flujo exige. Si Cochilco lo republica, la ficha de 1121-57-COT26 sirve de base y solo hay que cambiar contenidos, horas y monto."
   },
   "cotizaciones": {
     "1618-67-COT26": {
@@ -2012,6 +2013,1473 @@
           "exige": "Razón social, RUT, representante legal y correo institucional del oferente para el documento de cotización, las comunicaciones con el ITS y la eventual orden de compra.",
           "cita": "Especificaciones Técnicas, VI — «el contratista deberá informar al ITS al inicio del contrato el correo electrónico que utilizará para efectuar las comunicaciones.»",
           "tipo": "identidad",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "2324-885-COT26": {
+      "curso": "Herramientas de Inteligencia Artificial para la Productividad en el Municipio",
+      "organismo_corto": "Municipalidad de Puerto Montt",
+      "organismo_nombre": "I. Municipalidad de Puerto Montt — Dirección de Administración y Finanzas, Subdirección de Personal",
+      "fuente_documentos": [
+        "BASES TECNICAS CAPACITACION IA.pdf",
+        "ANEXO N°1    COMPRA AGIL 2324-885-COT26.docx"
+      ],
+      "tributacion": {
+        "regimen": "no_declarado",
+        "cita": "Las bases no declaran si el monto ofertado se presenta neto, exento o con impuestos incluidos. Lo único que dicen del precio es «Pago contra presentación de factura a 30 días. Factura debe ser emitida después de haber entregado el servicio (adjuntando certificados y/o diplomas)» — Bases técnicas, HONORARIOS Y ESTADO DE PAGO —, y las multas se calculan sobre el «valor neto total de la inscripción del curso»."
+      },
+      "objetivo": "Desarrollar en veinte funcionarios de la Subdirección de Personal las capacidades para adoptar herramientas de inteligencia artificial que aumenten la productividad y el análisis de información en el municipio, con un sello de responsabilidad en su uso.",
+      "participantes": {
+        "maximo": 20,
+        "glosa": "20 funcionarios de la Subdirección de Personal, como curso cerrado («01 CURSO (20 FUNCIONARIOS)»)."
+      },
+      "duracion": {
+        "horas_cronologicas": 12,
+        "sesiones": 3,
+        "horas_por_sesion": 4,
+        "glosa": "12 horas cronológicas en 3 jornadas. El horario que fijan las bases (15:00 a 18:00) da 9 horas y no 12: se consulta."
+      },
+      "modalidad": {
+        "tipo": "A distancia, clases sincrónicas",
+        "plataforma": "Plataforma e-learning del proveedor, con material audiovisual (videos, PPT, PPT con audio) y clase grabada disponible.",
+        "horario": "7, 9 y 10 de septiembre de 2026, de 15:00 a 18:00 horas."
+      },
+      "modalidad_observacion": "Las bases fijan la modalidad («Modalidad a distancia, Clases Sincrónicas») y también las fechas y el horario exactos. No hay margen para proponer un calendario distinto: la primera jornada es el 7 de septiembre de 2026, cuatro días después del cierre de la compra.",
+      "fechas_ejecucion": "7, 9 y 10 de septiembre de 2026, de 15:00 a 18:00.",
+      "modulos": [
+        {
+          "titulo": "Fundamentos de la inteligencia artificial",
+          "horas": 2,
+          "temas": [
+            "Fundamentos de la inteligencia artificial y elementos necesarios para desarrollar soluciones de IA",
+            "Tipos de sistema de IA: IA tradicional, Machine Learning y Deep Learning",
+            "Introducción a la IA generativa"
+          ]
+        },
+        {
+          "titulo": "IA en el contexto municipal y herramientas disponibles",
+          "horas": 2,
+          "temas": [
+            "Uso de IA en los municipios y ejemplos de usos municipales",
+            "Ejemplos de herramientas: ChatGPT, NotebookLM, Codex, Claude, Copilot u otras",
+            "Inteligencia artificial local con LM Studio"
+          ]
+        },
+        {
+          "titulo": "Prompts efectivos y contextualización",
+          "horas": 3,
+          "temas": [
+            "Introducción al uso de prompts efectivos",
+            "Estrategias de prompting y contextualización",
+            "Taller guiado de construcción y refinamiento de prompts sobre tareas de la Subdirección de Personal"
+          ]
+        },
+        {
+          "titulo": "Gobernanza, controles y cumplimiento",
+          "horas": 2,
+          "temas": [
+            "Gobernanza y controles; roles y responsabilidades",
+            "Transparencia y explicabilidad",
+            "Regulación y cumplimiento; contratación y responsabilidad institucional",
+            "Auditoría y supervisión humana"
+          ]
+        },
+        {
+          "titulo": "Aplicaciones prácticas en entornos laborales y evaluación",
+          "horas": 3,
+          "temas": [
+            "Identificación de oportunidades de uso de IA en el trabajo",
+            "Integración de herramientas en procesos laborales y optimización de flujos de trabajo",
+            "Casos reales aplicados al contexto municipal",
+            "Evaluación final con nota (escala 1 a 7) por evaluación escrita, trabajo individual o grupal"
+          ]
+        }
+      ],
+      "modulos_nota": "Los diecisiete puntos del temario mínimo son los que fija el TTR de especificaciones técnicas, y están todos cubiertos. La agrupación en cinco módulos y la asignación de horas por módulo son propuesta de KeepSync: las bases fijan el total (12 horas cronológicas) y no la distribución. Ese total, además, no cuadra con el horario que ellas mismas fijan (tres jornadas de 15:00 a 18:00 = 9 horas): la propuesta declara las 12 horas exigidas y deja la diferencia como punto a resolver con la contraparte.",
+      "requisitos_metodologicos": [
+        "Clases sincrónicas a distancia, con material audiovisual: videos, PPT, PPT con audio y clase grabada.",
+        "Plataforma e-learning y material de estudio para cada funcionario.",
+        "Evaluación de aprendizaje final con nota en escala 1 a 7 (escrita, individual o grupal).",
+        "Aprobación con 80% de asistencia (la clase grabada cuenta hasta un tope de 40%) y nota mínima 4,0."
+      ],
+      "exigencias_adicionales": [
+        "Certificados y/o diplomas por participante dentro de 7 días corridos del término, en PDF, con nombre del curso, del alumno, horas pedagógicas y firma y timbre del oferente.",
+        "Informe de actividad con participantes, resultados de evaluaciones, calificaciones y porcentaje de asistencia.",
+        "Anexo N°1 firmado, con descripción técnica y plazo de entrega: sin eso la oferta no se evalúa."
+      ],
+      "relator_exigido": {
+        "formacion": "Ingeniero/a en Informática y/o en Información y Control de Gestión, con diplomados y/o postítulos vinculados obligatoriamente a inteligencia artificial, acreditados con CV y copias de título, diplomados y postítulos.",
+        "experiencia_laboral": "Las bases no fijan años de experiencia laboral: exigen la formación de pregrado y el postgrado vinculado a IA.",
+        "experiencia_relatoria": "Experiencias comprobables en inteligencia artificial en municipios, acreditadas con un mínimo de 1 y un máximo de 5 certificados."
+      },
+      "entregables": [
+        "Curso de 12 horas cronológicas en las fechas y el horario fijados por el municipio.",
+        "Plataforma e-learning con material de estudio y material audiovisual.",
+        "Evaluación final con nota en escala 1 a 7.",
+        "Certificados y/o diplomas por participante dentro de 7 días corridos.",
+        "Informe de actividad con calificaciones y porcentaje de asistencia."
+      ],
+      "logistica": "Servicio a distancia con clases sincrónicas sobre la plataforma del proveedor. La recepción conforme corresponde a la Subdirección de Personal; la contraparte es el responsable indicado en el TTR.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Anexo N°1 — Identificación del oferente y oferta económica, firmado, con descripción técnica de la oferta y plazo de entrega",
+          "tipo": "formulario"
+        },
+        {
+          "documento": "Programa de capacitación con temario, forma y metodología de evaluación",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Currículum vitae del relator/a con copia del título profesional y de los diplomados y/o postítulos vinculados a inteligencia artificial",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Entre 1 y 5 certificados que acrediten experiencias comprobables en inteligencia artificial en municipios",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificado de vigencia como Organismo Técnico de Capacitación (SENCE), en caso de estar acreditado",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "no_declarado",
+        "detalle": [
+          "Las bases no publican pauta ponderada de evaluación de ofertas. Lo que sí fijan son causales de inadmisibilidad, que operan como el filtro real.",
+          "«Las ofertas que sobrepasen el monto disponible de presupuesto NO serán evaluadas.»",
+          "«El proveedor debe tener el giro comercial asociado al producto o servicio a adquirir, no corresponde al giro su oferta no será evaluada y se dejará inadmisible.»",
+          "«Las ofertas que adjunten el Anexo N°1 Obligatorio, sin firma no serán evaluadas» y «Las ofertas que no presenten descripción técnica en el anexo N°1 no serán evaluadas.»",
+          "«Las ofertas que superen el plazo máximo establecido en las Especificaciones Técnicas, no serán aceptadas.»"
+        ]
+      },
+      "multas": "8% del valor neto total de la inscripción del curso por cada día de incumplimiento; 8% adicional por no cumplir con el mínimo de horas solicitadas; 4% por no entregar material de estudio para cada funcionario. La multa se descuenta del valor total de la factura. Se exceptúan las causas de fuerza mayor ajenas a la voluntad de la empresa.",
+      "pago": "Pago contra presentación de factura a 30 días. La factura se emite después de entregado el servicio, adjuntando certificados y/o diplomas. La recepción conforme corresponde a la Subdirección de Personal.",
+      "criterios_direccionadores": [
+        {
+          "id": "relator-ingeniero-con-postgrado-en-ia",
+          "exige": "Que el relator/a sea Ingeniero/a en Informática y/o Ingeniero/a en Información y Control de Gestión Y además tenga diplomados o postítulos vinculados obligatoriamente a inteligencia artificial, acreditados con copia del título y de los certificados. Es la exigencia más direccionadora de esta compra: excluye a cualquier relator/a de otra disciplina, por experta que sea.",
+          "cita": "Bases técnicas, LOGISTICA DEL CURSO — «El relator deberá ser Ingeniero en Informática y/o Ingeniero en Información y control de Gestión, tener diplomados y/o postítulos vinculados obligatoriamente a Inteligencia Artificial, para acreditar este requisito, deberá adjuntar currículum vitae y copias de: título profesional, diplomados y/o postítulos.»",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "certificados-ia-en-municipios",
+          "exige": "Presentar entre 1 y 5 certificados de experiencias comprobables en inteligencia artificial específicamente en municipios. La evidencia la emite un tercero (el municipio cliente), no el oferente.",
+          "cita": "Bases técnicas, TEMARIO MINIMO A EVALUAR — «Curriculum del relator, acreditando a través de certificados, experiencias comprobables relacionadas con Inteligencia Artificial en municipios (debiendo presentar un mínimo de 1 y un máximo de 5 certificados).»",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "otec-sence-vigente",
+          "exige": "Certificado de vigencia como Organismo Técnico de Capacitación (SENCE), si el oferente está acreditado. Sigue sin confirmarse si KeepSync lo es.",
+          "cita": "Bases técnicas, TEMARIO MINIMO A EVALUAR — «Forma y metodología de evaluación, en caso de estar acreditado por el Organismo Técnico de Capacitación, presentar certificado Vigencia del Organismo Técnico de Capacitación (SENCE).»",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "giro-sii-asociado-al-servicio",
+          "exige": "Que el giro del SII del oferente corresponda al servicio comprado. No es una formalidad: el anexo lo declara causal de inadmisibilidad directa y pide declarar el giro en la oferta.",
+          "cita": "Anexo N°1, Notas — «El proveedor debe tener el giro comercial asociado al producto o servicio a adquirir, no corresponde al giro su oferta no será evaluada y se dejará inadmisible.»",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "anexo-1-firmado-con-descripcion-tecnica",
+          "exige": "Presentar el Anexo N°1 del municipio, firmado, con RUT, datos de facturación, descripción técnica de la oferta y plazo de entrega. Es un formulario del organismo: hay que llenarlo y firmarlo, no reemplazarlo por un documento propio.",
+          "cita": "Anexo N°1, Notas — «La oferta que NO presente el anexo N°1 obligatorio, no serán evaluadas», «Las ofertas que adjunten el Anexo N°1 Obligatorio, sin firma no serán evaluadas» y «Las ofertas que no presenten descripción técnica en el anexo N°1 no serán evaluadas.»",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "horas-declaradas-no-cuadran-con-el-horario",
+          "exige": "Resolver con la contraparte cuántas horas se dictan: las bases exigen 12 horas cronológicas y al mismo tiempo fijan tres jornadas de 15:00 a 18:00 los días 7, 9 y 10 de septiembre, que suman 9. Ofertar cualquiera de las dos cifras sin aclararlo expone a la multa por «no cumplir con el mínimo de horas solicitadas».",
+          "cita": "Bases técnicas, FECHA Y HORARIO REQUERIMIENTO — «El curso debe contar con 12 horas cronológicas, a realizarse los días 07, 09 y 10 de septiembre de 2026, en horario de 15:00 a 18:00 horas.»",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "fechas-fijas-inamovibles",
+          "exige": "Ejecutar en las fechas exactas que fija el municipio, la primera de ellas cuatro días después del cierre de la compra. No hay calendario a convenir: quien no tenga relator/a disponible esos tres días no puede ofertar.",
+          "cita": "Bases técnicas, FECHA Y HORARIO REQUERIMIENTO — «a realizarse los días 07, 09 y 10 de septiembre de 2026, en horario de 15:00 a 18:00 horas.»",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "plataforma-elearning-y-material-audiovisual",
+          "exige": "Disponer de plataforma e-learning propia con material de estudio y material audiovisual producido (videos, PPT con audio, clases grabadas). Dirige hacia proveedores con plataforma, no hacia relatores individuales.",
+          "cita": "Bases técnicas, LOGISTICA DEL CURSO — «Material audiovisual: videos, PPT, PPT con audio, clase grabada, etc. Plataforma E-Learning, Material de estudio.»",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "regimen-tributario-no-declarado",
+          "exige": "Confirmar con la contraparte si el monto se presenta neto, exento o con impuestos incluidos. Las bases no lo declaran y las multas se calculan sobre el «valor neto», lo que sugiere un precio afecto, pero eso es inferencia y no dato.",
+          "cita": "Bases técnicas, MULTAS — «8% del valor neto total de la inscripción del curso por cada día de incumplimiento», sin que ninguna sección declare el régimen tributario del monto ofertado.",
+          "tipo": "tributario",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "1751-29-COT26": {
+      "curso": "Inteligencia Artificial Aplicada a Herramientas de Ofimática",
+      "organismo_corto": "CONASET",
+      "organismo_nombre": "Subsecretaría de Transportes — Comisión Nacional de Seguridad de Tránsito (CONASET), Programa Seguridad y Centro de Control Vehicular",
+      "fuente_documentos": [
+        "REQUERIMIENTO TÉCNICO.pdf"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«cuenta con un presupuesto máximo disponible de $240.000, impuestos incluidos. Este monto incluye todos los costos asociados a la contratación» — Requerimiento técnico, numeral 3. El criterio económico se evalúa además «dividiendo el precio, impuestos incluidos, de la oferta de menor monto, entre el precio total del oferente evaluado»."
+      },
+      "objetivo": "Fortalecer las competencias teóricas y prácticas del funcionario para utilizar herramientas de inteligencia artificial generativa (ChatGPT Plus, Gemini u otras) en la elaboración y revisión de documentos, el análisis de planillas, la creación de presentaciones y la gestión de correos, optimizando tiempos de respuesta y productividad administrativa con criterios de confidencialidad y seguridad de la información propios del sector público.",
+      "participantes": {
+        "maximo": 1,
+        "glosa": "1 participante de CONASET."
+      },
+      "duracion": {
+        "horas_cronologicas": 18,
+        "sesiones": 6,
+        "horas_por_sesion": 3,
+        "glosa": "18 horas cronológicas, el mínimo que exige el requerimiento. La distribución en 6 sesiones de 3 horas es propuesta del oferente."
+      },
+      "modalidad": {
+        "tipo": "Online sincrónica",
+        "plataforma": "Plataforma educativa virtual (Zoom u otra) con acceso a las sesiones grabadas de cada clase, material de apoyo y foros de discusión.",
+        "horario": "A convenir con la contraparte técnica, dentro del período habilitado."
+      },
+      "fechas_ejecucion": "El curso debe estar dictado íntegramente a más tardar el 31 de octubre de 2026.",
+      "modulos": [
+        {
+          "titulo": "Fundamentos y uso de los LLM",
+          "horas": 3,
+          "temas": [
+            "Qué son y cómo funcionan los modelos de lenguaje: capacidades y limitaciones",
+            "Criterios para seleccionar la herramienta según la tarea; comparación general entre ChatGPT Plus, Gemini y Copilot",
+            "Reconocimiento de errores, alucinaciones y necesidad de validación humana"
+          ]
+        },
+        {
+          "titulo": "Diseño de prompts",
+          "horas": 3,
+          "temas": [
+            "Definición de objetivo, contexto, fuentes, restricciones, formato y tono",
+            "Refinamiento iterativo y encadenamiento de instrucciones",
+            "Prompts reutilizables y criterios para verificar la calidad de las respuestas"
+          ]
+        },
+        {
+          "titulo": "IA aplicada a herramientas de texto (Word / Docs)",
+          "horas": 2,
+          "temas": [
+            "Generación y mejora de borradores de documentos",
+            "Resumen y comparación de documentos manteniendo la revisión humana del contenido",
+            "Caso práctico de redacción y revisión documental"
+          ]
+        },
+        {
+          "titulo": "IA aplicada a hojas de cálculo (Excel / Sheets)",
+          "horas": 3,
+          "temas": [
+            "Análisis de datos básicos y automatización de fórmulas mediante lenguaje natural",
+            "Detección de tendencias y generación de gráficos",
+            "Caso práctico sobre una planilla de gestión"
+          ]
+        },
+        {
+          "titulo": "IA aplicada a presentaciones",
+          "horas": 2,
+          "temas": [
+            "Creación de diapositivas a partir de documentos o planillas y síntesis de información",
+            "Generación de notas para la exposición",
+            "Revisión de coherencia, legibilidad y respaldo de los datos utilizados"
+          ]
+        },
+        {
+          "titulo": "IA aplicada a la gestión de correos (Gmail)",
+          "horas": 2,
+          "temas": [
+            "Priorización y síntesis de correos; resúmenes de cadenas de mensajes",
+            "Redacción de respuestas, asuntos y plantillas",
+            "Adaptación del tono al contexto institucional"
+          ]
+        },
+        {
+          "titulo": "Taller práctico integrado",
+          "horas": 3,
+          "temas": [
+            "Caso final que articula documentos, planillas, presentaciones y comunicaciones",
+            "Aplicación transversal de los contenidos de LLM y diseño de prompts",
+            "Criterios de confidencialidad y seguridad de la información en el sector público"
+          ]
+        }
+      ],
+      "modulos_nota": "Los siete módulos son los siete contenidos mínimos que lista el requerimiento en el numeral 2, en el mismo orden, incluido el taller práctico integrado y el caso práctico por materia que exige expresamente. El requerimiento fija el mínimo de 18 horas cronológicas y no su distribución: el reparto por módulo es propuesta de KeepSync.",
+      "requisitos_metodologicos": [
+        "Online sincrónica sobre plataforma educativa virtual, con enfoque teórico-práctico.",
+        "La plataforma debe dar acceso a las sesiones grabadas, material de apoyo y foros de discusión.",
+        "Al menos un caso práctico por cada materia del temario, más un caso final integrador.",
+        "Si por fuerza mayor no se completan las 18 horas, se agendan sesiones adicionales hasta cubrirlas."
+      ],
+      "exigencias_adicionales": [
+        "El curso debe dictarse íntegramente a más tardar el 31 de octubre de 2026.",
+        "Reunión de coordinación previa al inicio y reuniones de retroalimentación si se requieren mejoras.",
+        "Al término: certificado o informe de asistencia, certificado de aprobación y diploma en PDF o impreso."
+      ],
+      "relator_exigido": {
+        "formacion": "Título profesional del área de ingeniería, administración, educación u otra disciplina afín al objeto de la capacitación. Es requisito de admisibilidad.",
+        "experiencia_laboral": "Al menos 2 años dictando capacitaciones en materias tecnológicas asociadas a IA, productividad digital en ofimática, office o similar.",
+        "experiencia_relatoria": "Cursos similares de los últimos 3 años, acreditados con certificados, contratos, órdenes de compra o cartas de clientes: 4 o más dan el puntaje máximo del criterio."
+      },
+      "entregables": [
+        "Curso online sincrónico de 18 horas cronológicas.",
+        "Acceso a las sesiones grabadas, material de apoyo y foros en la plataforma.",
+        "Certificado o informe de asistencia del participante.",
+        "Certificado de aprobación (o reprobación, si corresponde).",
+        "Diploma impreso o en PDF."
+      ],
+      "logistica": "Servicio íntegramente online sobre la plataforma educativa del proveedor. Coordina y recibe conforme la contraparte técnica designada por CONASET.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Propuesta técnica con objetivos, especificaciones y modalidad del curso, y el detalle de contenidos, herramientas y actividades",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Oferta económica dentro del presupuesto máximo, impuestos incluidos",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Antecedentes del docente que acrediten el título profesional y el grado académico exigidos",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Currículum vitae, carta de recomendación y/o enlace institucional oficial que acrediten la experiencia del o los docentes",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "puntaje",
+        "detalle": [
+          "Criterio técnico 80% y criterio económico 20% (numeral 5). La fórmula de evaluación final del mismo documento, en cambio, dice «PF = Criterio Técnico*70% + Criterio Económico*30%»: las bases se contradicen y hay que consultarlo.",
+          "Técnico (100 puntos): contenidos del curso hasta 60 puntos —60 solo si además de cumplir los numerales 2.1 y 2.2 se «incorpora contenidos adicionales que se ajustan a los objetivos del curso»—, y experiencia del relator o equipo docente hasta 40 puntos (20 por 2 o 3 cursos similares en 3 años; 40 por 4 o más).",
+          "Solo las ofertas con 60 o más puntos técnicos pasan a la evaluación económica. Económico: (precio mínimo ofertado / precio del oferente) × 100.",
+          "Desempate: mayor número de horas ofertadas y, luego, menor precio.",
+          "Admisibilidad: la oferta económica no puede exceder los $240.000; la propuesta técnica debe contemplar los numerales 2, 2.1 y 2.2; y el docente debe contar con título de ingeniería, administración, educación u otra disciplina afín."
+        ]
+      },
+      "multas": "El requerimiento técnico no fija multas ni su procedimiento. Sí fija la obligación de dictar el curso completo a más tardar el 31 de octubre de 2026 y de reagendar sesiones cuando por fuerza mayor no se completen las 18 horas.",
+      "pago": "Orden de compra por el precio total. La factura se emite dentro de los 8 días corridos siguientes al término del curso, una vez certificada la conformidad por la contraparte técnica, a nombre de Fiscalización y Control, RUT 61.975.600-2, Amunátegui N° 139, Santiago, giro Administración Pública, y se envía a fcrecepcion@custodium.com. El pago se realiza dentro de los 30 días corridos siguientes a la recepción de la factura, por transferencia electrónica.",
+      "criterios_direccionadores": [
+        {
+          "id": "titulo-profesional-del-docente",
+          "exige": "Que el o los docentes tengan título profesional de ingeniería, administración, educación u otra disciplina afín. Es causal de admisibilidad, no un criterio de puntaje: sin el título acreditado la oferta no se evalúa.",
+          "cita": "Requerimiento técnico, numeral 4 Admisibilidad — «c) Los docentes deberán contar con un título de ingeniería, administración, educación u otra disciplina afín al objeto de la capacitación.»",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "dos-anios-dictando-capacitaciones",
+          "exige": "Acreditar al menos 2 años de experiencia dictando capacitaciones en materias tecnológicas asociadas a IA, productividad digital en ofimática u office, con certificados, contratos, órdenes de compra o cartas de clientes.",
+          "cita": "Requerimiento técnico, numeral 2.2 — «b) Acreditar al menos 2 años de experiencia dictando capacitaciones en materias tecnológicas asociadas a inteligencia artificial, productividad digital en ofimática, office o similar.»",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "cuatro-cursos-similares-en-tres-anios",
+          "exige": "Acreditar 4 o más cursos similares en los últimos 3 años para obtener los 40 puntos del criterio de experiencia. Con menos de 2 cursos acreditados el criterio da 0, y sin esos 40 puntos es imposible alcanzar el umbral técnico de 60 salvo obteniendo el máximo en contenidos.",
+          "cita": "Requerimiento técnico, numeral 5 a) — «Acredita la realización de 4 o más cursos similares durante los últimos 3 años. 40 pts.» y «Acredita menos de 2 cursos similares o no acompaña antecedentes suficientes para verificarlos, durante los últimos 3 años. 0 Pts.»",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "umbral-tecnico-60-puntos",
+          "exige": "Alcanzar 60 puntos técnicos o más para siquiera ser evaluado en precio. Cumplir lo pedido sin agregar contenidos adicionales da 30 puntos en contenidos: el umbral obliga a superar el temario mínimo o a acreditar la experiencia de relatoría.",
+          "cita": "Requerimiento técnico, numeral 5 b) — «Para que la oferta sea evaluada económicamente, deberá tener un puntaje igual o superior a 60 puntos en la evaluación técnica.»",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "ponderacion-contradictoria-80-20-vs-70-30",
+          "exige": "Consultar cuál es la ponderación real. El numeral 5 anuncia técnico 80% y económico 20%, y la fórmula de evaluación final del mismo numeral usa 70% y 30%. Cambia qué tanto pesa el precio de la oferta.",
+          "cita": "Requerimiento técnico, numeral 5 — «Las ofertas admisibles serán evaluadas de acuerdo con un criterio técnico con una ponderación de 80% y un criterio económico con una ponderación de 20%», frente a numeral 5 c) — «PF= Criterio Técnico*70% +Criterio Económico*30%».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "certificaciones-especializadas-valoradas",
+          "exige": "Certificaciones o formación especializada en IA, productividad digital, Microsoft o Google. El requerimiento dice expresamente que su ausencia no es causal de inadmisibilidad, pero las valora al evaluar la experiencia del docente.",
+          "cita": "Requerimiento técnico, numeral 2.2 — «Se valorará la presentación de certificaciones o formación especializada en inteligencia artificial, herramientas de productividad digital, Microsoft, Google u otras relacionadas. Su ausencia no constituirá causal de inadmisibilidad.»",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "plataforma-con-grabaciones-y-foros",
+          "exige": "Disponer de una plataforma educativa virtual que además de dictar las clases dé acceso a las grabaciones de cada sesión, al material de apoyo y a foros de discusión. Es más que una sala de videoconferencia.",
+          "cita": "Requerimiento técnico, numeral 2.1 — «a través de una plataforma educativa virtual como zoom u otro… Además, la plataforma educativa virtual debe otorgar acceso a las sesiones grabadas de cada clase, material de apoyo y foros de discusión.»",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "1561-66-COT26": {
+      "curso": "Power BI y SQL: Análisis, Modelamiento y Visualización de Datos para la Gestión Institucional",
+      "organismo_corto": "DICREP",
+      "organismo_nombre": "Dirección General del Crédito Prendario (DICREP) — Unidad de Planificación y Control de Gestión",
+      "fuente_documentos": [
+        "TDR - POWER BI Y SQL .pdf"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«DICREP hará el pago una vez se haya realizado el curso, de conformidad al valor, impuestos incluidos, que el proveedor hubiera ofertado en el proceso de compra ágil» — TDR, numeral 3, Del precio y forma de pago. El mismo numeral exige que «el precio ofertado deberá incluir todos los costos asociados, materiales y cualquier otro gasto necesario»."
+      },
+      "objetivo": "Fortalecer las competencias técnicas de cuatro funcionarios de la Unidad de Planificación y Control de Gestión en el manejo de Power BI y SQL, para desarrollar modelos de datos, construir tableros de control interactivos, consultar bases de datos relacionales y aplicar buenas prácticas de análisis y visualización orientadas a la gestión institucional.",
+      "participantes": {
+        "maximo": 4,
+        "glosa": "4 funcionarios de la Unidad de Planificación y Control de Gestión."
+      },
+      "duracion": {
+        "horas_cronologicas": 24,
+        "sesiones": null,
+        "horas_por_sesion": null,
+        "glosa": "24 horas cronológicas: al menos 16 sincrónicas en jornadas AM y hasta 8 asincrónicas de práctica guiada."
+      },
+      "modalidad": {
+        "tipo": "Online mixta: clases sincrónicas en vivo más actividades asincrónicas de apoyo",
+        "plataforma": "Videoconferencia del proveedor con enlace seguro, compartir pantalla, herramientas de interacción y registro de asistencia por sesión, más plataforma e-learning para las horas asincrónicas.",
+        "horario": "Jornadas AM, distribuidas según propuesta del proveedor y validadas por la contraparte técnica."
+      },
+      "fechas_ejecucion": "Plazo de ejecución de 5 días hábiles desde la aceptación de la orden de compra, prorrogable de común acuerdo.",
+      "modulos": [
+        {
+          "titulo": "Fundamentos de bases de datos relacionales y SQL",
+          "horas": 4,
+          "temas": [
+            "Fundamentos de bases de datos relacionales y lenguaje SQL",
+            "Sentencias SELECT y consultas básicas",
+            "Aplicación de filtros mediante cláusulas WHERE y ordenamiento de resultados"
+          ]
+        },
+        {
+          "titulo": "Agregación, agrupación y combinación de datos en SQL",
+          "horas": 4,
+          "temas": [
+            "Funciones de agregación: COUNT, SUM, AVG, MIN y MAX",
+            "Agrupación de datos mediante GROUP BY",
+            "Combinación de tablas utilizando JOIN",
+            "Consultas SQL para extraer información desde bases de datos institucionales"
+          ]
+        },
+        {
+          "titulo": "Conexión, transformación y modelamiento en Power BI",
+          "horas": 5,
+          "temas": [
+            "Conexión e importación de datos en Power BI Desktop desde distintas fuentes",
+            "Transformación y preparación de datos",
+            "Modelamiento de datos mediante relaciones entre tablas"
+          ]
+        },
+        {
+          "titulo": "Medidas y columnas calculadas con DAX",
+          "horas": 4,
+          "temas": [
+            "Creación de medidas y columnas calculadas con lenguaje DAX",
+            "Funciones DAX básicas e intermedias",
+            "Ejercicios guiados sobre indicadores de gestión institucional"
+          ]
+        },
+        {
+          "titulo": "Reportes y dashboards interactivos",
+          "horas": 4,
+          "temas": [
+            "Diseño y construcción de reportes interactivos",
+            "Dashboards con gráficos, tablas, tarjetas, segmentadores y filtros interactivos",
+            "Resolución de casos sobre reportes de gestión"
+          ]
+        },
+        {
+          "titulo": "Publicación, actualización y buenas prácticas para la gestión pública",
+          "horas": 3,
+          "temas": [
+            "Publicación y actualización de reportes en Power BI Service",
+            "Buenas prácticas de diseño de tableros de control e informes orientados a la gestión pública",
+            "Evaluación final de conocimientos con criterios de aprobación"
+          ]
+        }
+      ],
+      "modulos_nota": "Los seis módulos cubren uno a uno los diecisiete contenidos mínimos obligatorios del numeral 2.1 del TDR, en el mismo orden (primero el bloque SQL, después el bloque Power BI). El TDR fija el total —24 horas cronológicas, al menos 16 sincrónicas— y no la distribución por módulo: ese reparto es propuesta de KeepSync y se ajusta con la contraparte técnica.",
+      "requisitos_metodologicos": [
+        "Modalidad mixta: clases sincrónicas en vivo más actividades asincrónicas de refuerzo.",
+        "Metodología práctica: ejercicios guiados, resolución de casos, consultas SQL y construcción de dashboards.",
+        "Plataforma con enlace seguro, compartir pantalla y registro de asistencia por sesión; si la interrupción es del proveedor, se reprograma sin costo.",
+        "Evaluación final de conocimientos con porcentaje mínimo de logro previo al certificado."
+      ],
+      "exigencias_adicionales": [
+        "Grabación íntegra de cada sesión dentro de 48 horas y registro de asistencia detallado por sesión.",
+        "Certificados de aprobación a capacitacion@dicrep.gob.cl dentro de 48 horas de la evaluación final.",
+        "Acceso a contenidos y material disponible durante todo el período de ejecución."
+      ],
+      "relator_exigido": {
+        "formacion": "Copia simple del título profesional y/o técnico de nivel superior del relator/a (formación de pregrado).",
+        "experiencia_laboral": "Currículum vitae actualizado que acredite experiencia profesional en materias relacionadas con el objeto de la contratación.",
+        "experiencia_relatoria": "Certificados o acreditaciones que respalden experiencia comprobable en relatorías, asesorías o instancias formativas de la materia."
+      },
+      "entregables": [
+        "24 horas cronológicas de capacitación en modalidad mixta.",
+        "Material digital completo del curso: presentaciones, documentos de apoyo y casos prácticos.",
+        "Grabación íntegra de cada sesión dentro de 48 horas.",
+        "Registro de asistencia detallado por sesión.",
+        "Certificado de aprobación con curso, horas, participante, fechas y resultado."
+      ],
+      "logistica": "Servicio íntegramente online sobre la plataforma del proveedor. La recepción conforme la efectúan la contraparte técnica y la unidad de capacitación de DICREP.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Ficha técnica o programa detallado del curso, con cronograma, propuesta metodológica, plataforma, mecanismo de evaluación y designación de relator(es)",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Cotización económica con el valor total impuestos incluidos, dentro del tope",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Currículum vitae actualizado del relator/a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Copia simple del título profesional y/o técnico de nivel superior del relator/a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados o acreditaciones de experiencia comprobable del relator/a en la materia",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Órdenes de compra y/o contratos de los últimos 5 años que acrediten experiencia del proveedor en la materia",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "no_declarado",
+        "detalle": [
+          "El TDR no publica pauta ponderada de evaluación ni criterios con puntaje. Fija requisitos de admisibilidad y una lista cerrada de antecedentes obligatorios cuya omisión deja la oferta fuera.",
+          "«El proveedor deberá encontrarse hábil al momento de la adjudicación, de lo contrario queda inadmisible inmediatamente del proceso» — numeral 2.4.",
+          "Los antecedentes del relator/a y la experiencia del proveedor de los últimos 5 años son de presentación obligatoria, no un criterio de puntaje.",
+          "El cambio de relator/a requiere autorización previa de DICREP y acreditar competencias equivalentes o superiores; hacerlo sin autorización habilita multas o término anticipado."
+        ]
+      },
+      "multas": "1% del valor total por cada día hábil de atraso, con tope de 20% (20 días); si el atraso supera 10 días hábiles, DICREP puede además poner término anticipado. Hasta 10% del monto total por cumplimiento defectuoso o parcial de los requerimientos técnicos, sin perjuicio de exigir corrección en 3 días hábiles. El proveedor tiene 5 días hábiles para formular descargos y la multa puede descontarse del pago pendiente.",
+      "pago": "Pago posterior a la ejecución, contra recepción conforme. La contraparte técnica tiene 5 días hábiles para emitir el certificado de conformidad; la factura se emite dentro de los 10 días corridos posteriores a la ejecución y se remite a dicreprecepcion@custodium.com a nombre de la Dirección General del Crédito Prendario, RUT 61.504.000-2, indicando en la glosa los servicios y el número de orden de compra. El pago es dentro de 30 días corridos desde la recepción de la factura en el SII.",
+      "criterios_direccionadores": [
+        {
+          "id": "titulo-profesional-del-relator",
+          "exige": "Copia simple del título profesional y/o técnico de nivel superior del relator/a. Es un antecedente de presentación obligatoria: la lista del numeral 2.4 no admite omisiones.",
+          "cita": "TDR, numeral 2.4 Requisitos del Proveedor — «ii. Copia simple del título profesional y/o técnico de nivel superior del relator/a, correspondiente a su formación de pregrado.»",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "certificados-experiencia-relatoria",
+          "exige": "Certificados, acreditaciones u otros antecedentes que respalden experiencia comprobable del relator/a en relatorías, asesorías o instancias formativas de la materia. Los emite un tercero, no el oferente.",
+          "cita": "TDR, numeral 2.4 — «iii. Certificados, acreditaciones u otros antecedentes que respalden experiencia comprobable del relator/a de contenidos en materias relacionadas con el objeto de la capacitación, tales como relatorías, asesorías o participación en instancias formativas.»",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "experiencia-proveedor-5-anios",
+          "exige": "Órdenes de compra y/o contratos de los últimos 5 años que acrediten experiencia del oferente en Power BI y SQL. Excluye a quien no haya vendido ya este servicio: la evidencia son documentos de operaciones pasadas.",
+          "cita": "TDR, numeral 2.4 — «c. Experiencia comprobable del proveedor mediante órdenes de compra y/o contratos de los últimos 5 años en materias del objeto de contratación.»",
+          "tipo": "historial_portal",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "plataforma-videoconferencia-con-registro",
+          "exige": "Plataforma de videoconferencia propia con enlace seguro, estabilidad y calidad audiovisual, herramientas de interacción, compartir pantalla y registro automático o manual de asistencia por sesión, más reprogramación sin costo ante fallas del proveedor.",
+          "cita": "TDR, numeral 2.2 — «El proveedor deberá garantizar que la plataforma utilizada cumpla, como mínimo, con las siguientes funcionalidades: acceso mediante enlace seguro, estabilidad de conexión y calidad audiovisual adecuada, herramientas de interacción, posibilidad de compartir pantalla, documentos y presentaciones en tiempo real, y registro automático o manual de asistencia por sesión.»",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "plataforma-elearning-para-horas-asincronicas",
+          "exige": "Plataforma e-learning para las hasta 8 horas asincrónicas, con material complementario, actividades y evaluaciones en línea. No basta la sala de videoconferencia.",
+          "cita": "TDR, numeral 2.3 — «las horas asincrónicas estarán destinadas a la revisión de material complementario, análisis de contenidos normativos y desarrollo de actividades y evaluaciones, a realizar a través de plataforma e-learning.»",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "plazo-5-dias-habiles-para-24-horas",
+          "exige": "Ejecutar 24 horas cronológicas dentro de 5 días hábiles desde la aceptación de la orden de compra, en jornadas AM. Es un calendario muy comprimido: exige disponibilidad completa del relator/a esa semana.",
+          "cita": "TDR, numeral 2.3 — «El plazo de ejecución será de 5 días hábiles, contados desde la aceptación de la orden de compra, pudiendo ser prorrogado previo acuerdo entre las partes.»",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "sin-pauta-de-evaluacion-publicada",
+          "exige": "Consultar cómo se compararán las ofertas. El TDR no publica criterios de evaluación ni ponderaciones: solo admisibilidad y antecedentes obligatorios, así que no se puede saber cuánto pesa el precio frente a la propuesta técnica.",
+          "cita": "El TDR desarrolla requerimientos técnicos (2), requisitos del proveedor (2.4), recepción conforme (2.5), precio y pago (3), incumplimiento (4), confidencialidad (5) y multas (6), sin ninguna sección de criterios de evaluación ni de ponderaciones.",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "1561-67-COT26": {
+      "curso": "Comunicación Institucional Digital Integrada: Diseño, Producción Multimedia, Experiencia Usuaria e Inteligencia Artificial",
+      "organismo_corto": "DICREP",
+      "organismo_nombre": "Dirección General del Crédito Prendario (DICREP) — Oficina de Comunicaciones",
+      "fuente_documentos": [
+        "TDR - Comunicación institucional.pdf"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«DICREP hará el pago una vez se haya realizado el curso, de conformidad al valor, impuestos incluidos, que el proveedor hubiera ofertado en el proceso de compra ágil» — TDR, numeral 3, Del precio y forma de pago."
+      },
+      "objetivo": "Actualizar las competencias técnicas de cuatro funcionarios de la oficina de comunicaciones —periodismo, comunicación audiovisual y diseño— generando un lenguaje técnico y creativo común, profundizando en postproducción, animación, herramientas 3D, WordPress e inteligencia artificial aplicada a procesos creativos, y fortaleciendo la experiencia usuaria, el marketing institucional y los procedimientos de trabajo comunicacional.",
+      "participantes": {
+        "maximo": 4,
+        "glosa": "4 funcionarios de la oficina de comunicaciones (periodismo, audiovisual y diseño)."
+      },
+      "duracion": {
+        "horas_cronologicas": 24,
+        "sesiones": 6,
+        "horas_por_sesion": 4,
+        "glosa": "24 horas cronológicas en 6 jornadas dentro de 09:00 a 13:00, una o dos por semana."
+      },
+      "modalidad": {
+        "tipo": "Online sincrónica con actividades asincrónicas de apoyo",
+        "plataforma": "Videoconferencia del proveedor con enlace seguro, compartir pantalla, herramientas de interacción y registro de asistencia por sesión.",
+        "horario": "Jornadas AM entre 09:00 y 13:00, una o dos por semana, según propuesta validada por la contraparte técnica."
+      },
+      "modalidad_observacion": "El TDR anuncia «modalidad sincrónica, combinando clases sincrónicas (en vivo) con actividades asincrónicas de apoyo» y a la vez fija «6 jornadas de hasta 5 horas diarias dentro de 09:00 a 13:00 horas», ventana que solo permite 4 horas. Con 6 jornadas de 4 horas se llegan a las 24 horas exigidas; la propuesta adopta esa lectura y la consulta formalmente.",
+      "fechas_ejecucion": "Plazo de ejecución de 5 días hábiles desde la aceptación de la orden de compra, prorrogable de común acuerdo.",
+      "modulos": [
+        {
+          "titulo": "Comunicación visual y cultura audiovisual",
+          "horas": 4,
+          "temas": [
+            "Composición, jerarquía visual, color, tipografía y diagramación",
+            "Criterios para evaluar la calidad y pertinencia de una pieza gráfica o audiovisual",
+            "Etapas de una pieza comunicacional y elaboración de requerimientos y briefs creativos",
+            "Articulación entre contenidos periodísticos, gráficos, audiovisuales y digitales"
+          ]
+        },
+        {
+          "titulo": "Postproducción, animación y herramientas creativas",
+          "horas": 4,
+          "temas": [
+            "Flujos de postproducción de imágenes, audio y video; optimización para plataformas digitales",
+            "Motion graphics e introducción a herramientas tridimensionales",
+            "Integración entre programas de Adobe Creative Cloud o plataformas equivalentes",
+            "Estandarización de formatos, resoluciones, exportaciones, respaldos y trabajo colaborativo"
+          ]
+        },
+        {
+          "titulo": "Inteligencia artificial aplicada a las comunicaciones",
+          "horas": 5,
+          "temas": [
+            "IA como apoyo para redacción, diseño, edición, planificación y producción de contenidos",
+            "Elaboración y optimización de prompts; automatización de tareas repetitivas",
+            "Aplicaciones de IA para imagen, audio, video y animación, integradas con Adobe Creative Cloud",
+            "Revisión y control de calidad de contenidos asistidos por IA; ética, datos personales, propiedad intelectual y uso responsable en el sector público"
+          ]
+        },
+        {
+          "titulo": "WordPress y gestión de plataformas digitales",
+          "horas": 3,
+          "temas": [
+            "Administración de contenidos: páginas, entradas, menús, categorías, archivos y multimedia",
+            "Seguridad, respaldos, actualización y optimización de imágenes para web",
+            "Identificación y resolución de problemas frecuentes; coordinación con el equipo técnico"
+          ]
+        },
+        {
+          "titulo": "Comunicación, atención usuaria y entrega de información",
+          "horas": 3,
+          "temas": [
+            "Lenguaje claro y comunicación centrada en las personas; arquitectura de información y accesibilidad",
+            "Contenidos para preguntas frecuentes, tutoriales, instructivos y material de apoyo",
+            "Coherencia entre web, redes sociales, material gráfico y atención presencial"
+          ]
+        },
+        {
+          "titulo": "Marketing institucional y diseño de campañas",
+          "horas": 3,
+          "temas": [
+            "Segmentación de públicos, objetivos comunicacionales y líneas creativas",
+            "Planificación de campañas, calendarios editoriales y planes de difusión",
+            "Métricas de sitios web y redes sociales, indicadores y propuestas de mejora"
+          ]
+        },
+        {
+          "titulo": "Procedimientos y gestión del trabajo comunicacional",
+          "horas": 2,
+          "temas": [
+            "Flujos de solicitud, producción, revisión, aprobación y publicación; roles y responsabilidades",
+            "Protocolos, pautas, listas de verificación, control de versiones y priorización de solicitudes",
+            "Aplicación práctica mediante el desarrollo de un caso o campaña institucional"
+          ]
+        }
+      ],
+      "modulos_nota": "Los siete módulos corresponden uno a uno a los siete bloques de contenido mínimo obligatorio del numeral 2.1 del TDR, en el mismo orden. El TDR fija el total (24 horas cronológicas) y no la distribución por módulo: ese reparto es propuesta de KeepSync y se ajusta con la contraparte técnica.",
+      "requisitos_metodologicos": [
+        "Online sincrónica con actividades asincrónicas de apoyo, en jornadas AM.",
+        "Exposición teórica, demostraciones de herramientas, análisis de casos institucionales y ejercicios prácticos.",
+        "Plataforma con enlace seguro, compartir pantalla y registro de asistencia; si la interrupción es del proveedor, se reprograma sin costo.",
+        "Evaluación final de conocimientos con porcentaje mínimo de logro previo al certificado."
+      ],
+      "exigencias_adicionales": [
+        "Grabación íntegra de cada sesión dentro de 48 horas y registro de asistencia detallado por sesión.",
+        "Certificados de aprobación a capacitacion@dicrep.gob.cl dentro de 48 horas de la evaluación final.",
+        "Acceso a contenidos y material disponible durante todo el período de ejecución."
+      ],
+      "relator_exigido": {
+        "formacion": "Copia simple del título profesional y/o técnico de nivel superior del relator/a (formación de pregrado).",
+        "experiencia_laboral": "Currículum vitae actualizado que acredite experiencia profesional en materias relacionadas con el objeto de la contratación.",
+        "experiencia_relatoria": "Certificados o acreditaciones que respalden experiencia comprobable en relatorías, asesorías o instancias formativas de la materia."
+      },
+      "entregables": [
+        "24 horas cronológicas de capacitación online sincrónica.",
+        "Material digital completo del curso: presentaciones, documentos de apoyo y casos prácticos.",
+        "Grabación íntegra de cada sesión dentro de 48 horas.",
+        "Registro de asistencia detallado por sesión.",
+        "Certificado de aprobación con curso, horas, participante, fechas y resultado."
+      ],
+      "logistica": "Servicio íntegramente online sobre la plataforma del proveedor. La recepción conforme la efectúan la contraparte técnica y la unidad de capacitación de DICREP.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Ficha técnica o programa detallado del curso, con cronograma, propuesta metodológica, plataforma, mecanismo de evaluación y designación de relator(es)",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Cotización económica con el valor total impuestos incluidos, dentro del tope",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Currículum vitae actualizado del relator/a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Copia simple del título profesional y/o técnico de nivel superior del relator/a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados o acreditaciones de experiencia comprobable del relator/a en la materia",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Órdenes de compra y/o contratos de los últimos 5 años que acrediten experiencia del proveedor en la materia",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "no_declarado",
+        "detalle": [
+          "El TDR no publica pauta ponderada de evaluación ni criterios con puntaje: fija admisibilidad y una lista cerrada de antecedentes obligatorios cuya omisión deja la oferta fuera.",
+          "«El proveedor deberá encontrarse hábil al momento de la adjudicación, de lo contrario queda inadmisible inmediatamente del proceso» — numeral 2.4.",
+          "El cambio de relator/a requiere autorización previa de DICREP y acreditar competencias equivalentes o superiores."
+        ]
+      },
+      "multas": "1% del valor total por cada día hábil de atraso, con tope de 20% (20 días); si el atraso supera 10 días hábiles, DICREP puede además poner término anticipado. Hasta 10% del monto total por cumplimiento defectuoso o parcial de los requerimientos técnicos, con corrección en 3 días hábiles. El proveedor tiene 5 días hábiles para formular descargos y la multa puede descontarse del pago pendiente.",
+      "pago": "Pago posterior a la ejecución, contra recepción conforme. La contraparte técnica tiene 5 días hábiles para emitir el certificado de conformidad; la factura se emite dentro de los 10 días corridos posteriores a la ejecución y se remite a dicreprecepcion@custodium.com a nombre de la Dirección General del Crédito Prendario, RUT 61.504.000-2. El pago es dentro de 30 días corridos desde la recepción de la factura en el SII.",
+      "criterios_direccionadores": [
+        {
+          "id": "titulo-profesional-del-relator",
+          "exige": "Copia simple del título profesional y/o técnico de nivel superior del relator/a. Antecedente de presentación obligatoria.",
+          "cita": "TDR, numeral 2.4 Requisitos del Proveedor — «ii. Copia simple del título profesional y/o técnico de nivel superior del relator/a, correspondiente a su formación de pregrado.»",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "certificados-experiencia-relatoria",
+          "exige": "Certificados o acreditaciones que respalden experiencia comprobable del relator/a en relatorías, asesorías o instancias formativas de la materia. Los emite un tercero.",
+          "cita": "TDR, numeral 2.4 — «iii. Certificados, acreditaciones u otros antecedentes que respalden experiencia comprobable del relator/a de contenidos en materias relacionadas con el objeto de la capacitación, tales como relatorías, asesorías o participación en instancias formativas.»",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "experiencia-proveedor-5-anios",
+          "exige": "Órdenes de compra y/o contratos de los últimos 5 años en la materia del objeto de contratación.",
+          "cita": "TDR, numeral 2.4 — «c. Experiencia comprobable del proveedor mediante órdenes de compra y/o contratos de los últimos 5 años en materias del objeto de contratación.»",
+          "tipo": "historial_portal",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "alcance-de-siete-especialidades",
+          "exige": "Cubrir en un solo curso diseño gráfico, producción audiovisual y 3D, Adobe Creative Cloud, inteligencia artificial generativa, administración de WordPress, experiencia usuaria, marketing institucional y gestión de procesos comunicacionales. Difícilmente lo cubre un relator/a: el TDR contempla expresamente «relator(es)», y armar el equipo multiplica el costo dentro del mismo tope.",
+          "cita": "TDR, numeral 2.1, que lista siete bloques de contenido mínimo obligatorio, desde «Principios básicos de composición, jerarquía visual, color, tipografía y diagramación» hasta «Diseño de flujos de solicitud, producción, revisión, aprobación y publicación de contenidos»; y numeral 2.3, «Designación de relator(es)».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "adobe-creative-cloud-y-herramientas-3d",
+          "exige": "Enseñar sobre Adobe Creative Cloud —o plataformas equivalentes— y herramientas tridimensionales, con las licencias y el ambiente que eso requiere para prácticas de postproducción y animación.",
+          "cita": "TDR, numeral 2.1 — «Integración entre programas de Adobe Creative Cloud o plataformas equivalentes» e «Introducción al uso de herramientas tridimensionales y su aplicación en piezas gráficas y audiovisuales».",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "plataforma-videoconferencia-con-registro",
+          "exige": "Plataforma de videoconferencia propia con enlace seguro, estabilidad y calidad audiovisual, herramientas de interacción, compartir pantalla y registro de asistencia por sesión, más reprogramación sin costo ante fallas del proveedor.",
+          "cita": "TDR, numeral 2.2 — «El proveedor deberá garantizar que la plataforma utilizada cumpla, como mínimo, con las siguientes funcionalidades: acceso mediante enlace seguro, estabilidad de conexión y calidad audiovisual adecuada, herramientas de interacción, posibilidad de compartir pantalla, documentos y presentaciones en tiempo real, y registro automático o manual de asistencia por sesión.»",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "jornadas-contradictorias-4-o-5-horas",
+          "exige": "Confirmar la carga por jornada: el TDR fija «6 jornadas de hasta 5 horas diarias dentro de 09:00 a 13:00 horas», ventana que solo permite 4. Con 4 horas se llegan a las 24 exigidas; con 5 se excederían.",
+          "cita": "TDR, numeral 2.3 — «La capacitación tendrá una duración total de 24 horas cronológicas, distribuidas en modalidad sincrónica y online, considerando 6 jornadas de hasta 5 horas diarias dentro de 09:00 a 13:00 horas, distribuidas en una o dos jornadas por semana.»",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "sin-pauta-de-evaluacion-publicada",
+          "exige": "Consultar cómo se compararán las ofertas. El TDR no publica criterios de evaluación ni ponderaciones, así que no se puede saber cuánto pesa el precio frente a la propuesta técnica.",
+          "cita": "El TDR desarrolla requerimientos técnicos (2), requisitos del proveedor (2.4), recepción conforme (2.5), precio y pago (3), incumplimiento (4), confidencialidad (5) y multas (6), sin ninguna sección de criterios de evaluación ni de ponderaciones.",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "976-60-COT26": {
+      "curso": "Herramientas Digitales para la Gestión de Proyectos: Microsoft Project y Power BI",
+      "organismo_corto": "Dirección de Aeropuertos MOP",
+      "organismo_nombre": "Ministerio de Obras Públicas — Dirección de Aeropuertos (DAP), Dirección Regional Metropolitana",
+      "fuente_documentos": [
+        "Términos de Referencia.pdf",
+        "Especifícaciones técnicas y administrativas.pdf",
+        "Formulario Impacto Ambiental.docx",
+        "3. Informativo proceso de facturación UDP 2280 DAP-ADM..pdf"
+      ],
+      "tributacion": {
+        "regimen": "no_declarado",
+        "cita": "Ni el TDR ni las especificaciones administrativas declaran si el monto se presenta neto, exento o con impuestos incluidos. Sobre el precio solo dicen «Presupuesto estimado: $1.000.000.- presupuesto regular, Dirección de Aeropuertos, nivel central» y «Se debe considerar pago con crédito a 30 días» — Especificaciones administrativas y técnicas."
+      },
+      "objetivo": "Desarrollar competencias para planificar, programar, controlar y hacer seguimiento de proyectos con Microsoft Project, y analizar y visualizar su información mediante Power BI, apoyando la elaboración de reportes y la toma de decisiones de la Dirección Regional Metropolitana.",
+      "participantes": {
+        "maximo": 4,
+        "glosa": "4 funcionarias/funcionarios de la Dirección Regional Metropolitana."
+      },
+      "duracion": {
+        "horas_cronologicas": 20,
+        "sesiones": 5,
+        "horas_por_sesion": 4,
+        "glosa": "20 horas cronológicas: 10 de Microsoft Project y 10 de Power BI, en 5 sesiones de 4 horas."
+      },
+      "modalidad": {
+        "tipo": "Sincrónico",
+        "plataforma": "Plataforma de videoconferencia del proveedor para las sesiones en vivo, con material y archivos de ejercicios.",
+        "horario": "Martes y jueves de 9:00 a 13:00, entre octubre y diciembre de 2026, o a convenir según requerimiento de la DAP."
+      },
+      "fechas_ejecucion": "Entre octubre y diciembre de 2026, martes y jueves de 9:00 a 13:00, previa coordinación con la Unidad de Gestión y Desarrollo de Personas.",
+      "modulos": [
+        {
+          "titulo": "Microsoft Project: planificación, tareas y recursos",
+          "horas": 5,
+          "temas": [
+            "Introducción a MS Project: interfaz y configuración",
+            "Asignación de tareas y duración",
+            "Asignación de recursos y costos"
+          ]
+        },
+        {
+          "titulo": "Microsoft Project: control, ruta crítica e informes",
+          "horas": 5,
+          "temas": [
+            "Control de avances físico y financiero",
+            "Seguimiento y control de la ruta crítica",
+            "Emisión de informes de avance de proyectos"
+          ]
+        },
+        {
+          "titulo": "Power BI: importación y transformación de datos",
+          "horas": 4,
+          "temas": [
+            "Introducción y componentes básicos de Power BI",
+            "Importación de datos desde Excel, sitios web y otras fuentes",
+            "Transformación de datos: limpieza, filtros, formatos, combinación de tablas, eliminación de errores y lenguaje M"
+          ]
+        },
+        {
+          "titulo": "Power BI: modelado, DAX y visualización",
+          "horas": 4,
+          "temas": [
+            "Modelado de datos: relaciones, esquemas en estrella y optimización del modelo",
+            "Lenguaje DAX: columnas calculadas, medidas y fórmulas para análisis",
+            "Visualización y reportes: gráficos, tablas, mapas y tarjetas"
+          ]
+        },
+        {
+          "titulo": "Publicación, automatización y aplicación integrada",
+          "horas": 2,
+          "temas": [
+            "Informes interactivos con hojas de cálculo de Google y Excel; automatización con OneDrive",
+            "Publicación y distribución de informes",
+            "Uso complementario de Project y Power BI para seguimiento, análisis y presentación del avance de proyectos"
+          ]
+        }
+      ],
+      "modulos_nota": "Los cinco módulos cubren los dos módulos de contenidos mínimos del TDR (Microsoft Project y Power BI) más la «Aplicación integrada» que exige, respetando el reparto que fija el TDR: 10 horas de Project y 10 de Power BI. La subdivisión interna y el reparto entre los tres módulos de Power BI son propuesta de KeepSync.",
+      "requisitos_metodologicos": [
+        "Modalidad sincrónica, con ejercicios prácticos ajustados a la Dirección Regional Metropolitana.",
+        "Reunión online previa al curso para validar el programa detallado y ajustar los aprendizajes al rol de la Dirección.",
+        "Uso complementario de Microsoft Project y Power BI en la aplicación integrada final.",
+        "Calendario de martes y jueves de 9:00 a 13:00 entre octubre y diciembre, o a convenir con la DAP."
+      ],
+      "exigencias_adicionales": [
+        "Formulario de Impacto Ambiental completado y firmado por el representante legal, incluso si el oferente no realiza actividades de impacto ambiental.",
+        "Datos de cuenta bancaria ingresados en el portal de trámites del MOP una vez adjudicada la oferta.",
+        "Factura con la Unidad de Pago «UDP 2280 DAP/ADM» en el enunciado, cuerpo o contacto del documento —no en las observaciones—, enviada en XML a mop_dte@paperless.cl."
+      ],
+      "relator_exigido": {
+        "formacion": "Certificados de título u otros documentos que acrediten la formación de los relatores.",
+        "experiencia_laboral": "Currículum vitae de los relatores que realizarán la capacitación.",
+        "experiencia_relatoria": "Documentos que acrediten la experiencia de los relatores en la materia. El TDR no fija años ni número de cursos previos."
+      },
+      "entregables": [
+        "20 horas cronológicas de capacitación sincrónica.",
+        "Programa detallado validado en la reunión online previa.",
+        "Material y archivos de ejercicios de Microsoft Project y Power BI.",
+        "Ejercicios prácticos ajustados a la Dirección Regional Metropolitana.",
+        "Aplicación integrada de seguimiento de proyectos con Project y Power BI."
+      ],
+      "logistica": "Servicio sincrónico coordinado con la Unidad de Gestión y Desarrollo de Personas de la DAP. Contacto de la unidad de adquisiciones: Yasna Arbunic Cáceres, yasna.arbunic@mop.gov.cl, fono 224493405.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Cotización con el valor del curso, dentro del presupuesto estimado",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Programa del curso conforme a los términos de referencia",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Formulario de Impacto Ambiental completado y firmado por el representante legal",
+          "tipo": "formulario"
+        },
+        {
+          "documento": "Currículum vitae de los relatores que realizarán la capacitación",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados de título u otros documentos que acrediten la experiencia de los relatores",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "no_declarado",
+        "detalle": [
+          "Las especificaciones anuncian criterios de evaluación y no los publican: tras la frase «A continuación, se detallan los criterios de evaluación para la presente capacitación» solo siguen presupuesto, plazo de entrega, modalidad y contacto. No hay ponderaciones ni escalas.",
+          "«Es importante señalar, que los oferentes deberán incluir información de los relatores que realizarán la capacitación, incluyendo CV, certificados de títulos u otros documentos que acrediten su experiencia.»",
+          "«Se requiere un mínimo de 3 cotizaciones, en caso de que, se reciba sólo una o dos cotizaciones, igualmente se podrá realizar el proceso de Compra Ágil con la emisión de la Orden de Compra.»"
+        ]
+      },
+      "multas": "1% del precio total final por cada día hábil de atraso imputable al adjudicatario, con tope de 20 días, descontado de la factura. El atraso no puede exceder 5 días hábiles: si ocurre, se puede cancelar la orden de compra. El proveedor tiene 5 días hábiles para presentar descargos y 5 días hábiles para recurrir contra la resolución que aplique la multa. No procede la multa por caso fortuito o fuerza mayor, comunicado por escrito dentro de 5 días hábiles.",
+      "pago": "Pago con crédito a 30 días. El adjudicatario debe ingresar sus datos bancarios en el portal de trámites del MOP. La factura debe indicar la Unidad de Pago «UDP 2280 DAP/ADM» en el enunciado, cuerpo o contacto —no en las observaciones del DTE, bajo riesgo de que la factura sea reclamada en el SII y haya que emitir nota de crédito— y enviarse en XML a mop_dte@paperless.cl. Dirección de facturación: Morandé 59, piso 12, oficina 1212, Santiago Centro.",
+      "criterios_direccionadores": [
+        {
+          "id": "cv-y-certificados-de-titulo-de-relatores",
+          "exige": "Individualizar a los relatores y adjuntar CV y certificados de título u otros documentos que acrediten su experiencia. Es exigencia expresa de las especificaciones administrativas.",
+          "cita": "Especificaciones administrativas y técnicas — «Es importante señalar, que los oferentes deberán incluir información de los relatores que realizarán la capacitación, incluyendo CV, certificados de títulos u otros documentos que acrediten su experiencia.»",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "dos-herramientas-en-un-mismo-curso",
+          "exige": "Cubrir Microsoft Project y Power BI con la misma profundidad (10 horas cada uno) y además su uso complementario. Son dos especialidades distintas: quien solo domine una queda fuera del contenido mínimo.",
+          "cita": "TDR, Contenidos a Desarrollar — «Módulo 1: Microsoft Project… Módulo 2: Power BI… Aplicación integrada: Uso complementario de Microsoft Project y Power BI para seguimiento, análisis y presentación del avance de proyectos», con «10 horas de Microsoft Project y 10 horas de Power BI».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "formulario-impacto-ambiental-firmado",
+          "exige": "Completar y firmar el Formulario de Impacto Ambiental del MOP con el representante legal, incluso declarando que no se realizan actividades de impacto ambiental. Es un anexo del organismo, no un documento propio.",
+          "cita": "Especificaciones administrativas — «Se debe completar el formulario de Impacto Ambiental, incluso aquellos que no tengan actividades relacionadas, deberá ser firmado e indicar que no realiza actividades de impacto ambiental.»",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "horario-fijo-martes-y-jueves-am",
+          "exige": "Disponer del relator los martes y jueves de 9:00 a 13:00 entre octubre y diciembre. El TDR admite convenir otra fecha, pero el horario publicado es el que ordena la propuesta.",
+          "cita": "TDR — «Horario del curso: Martes y jueves de 9:00 a 13:00, 5 sesiones», y Especificaciones administrativas — «durante los meses de Octubre a Diciembre, martes y jueves de 9:00 a 13:00, según TDR o a convenir según requerimiento DAP».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "criterios-de-evaluacion-anunciados-y-no-publicados",
+          "exige": "Consultar los criterios de evaluación: las especificaciones los anuncian («A continuación, se detallan los criterios de evaluación para la presente capacitación») y a continuación solo informan presupuesto, plazo, modalidad y contacto. No hay ponderaciones publicadas.",
+          "cita": "Especificaciones administrativas y técnicas, Detalle del requerimiento — «A continuación, se detallan los criterios de evaluación para la presente capacitación: Presupuesto estimado: $1.000.000.- … Plazo de entrega … Modalidad: Sincrónico … Contacto: Yasna Arbunic Caceres».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "regimen-tributario-no-declarado",
+          "exige": "Confirmar si el monto se presenta neto, exento o con impuestos incluidos: los documentos no lo declaran y eso cambia el valor a ingresar en el portal.",
+          "cita": "Especificaciones administrativas y técnicas — «Presupuesto estimado: $1.000.000.- presupuesto regular, Dirección de Aeropuertos, nivel central» y «Se debe considerar pago con crédito a 30 días», sin ninguna mención al régimen tributario del monto ofertado.",
+          "tipo": "tributario",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "1219102-48-COT26": {
+      "curso": "Capacitación técnica en Microsoft Power Apps y Power Automate",
+      "organismo_corto": "Defensoría del Contribuyente",
+      "organismo_nombre": "Defensoría del Contribuyente (DEDECON) — Departamento de Tecnologías de la Información",
+      "fuente_documentos": [
+        "TDRPowerApps vb.pdf"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«PRESUPUESTO (estimado) $700.000.-. impuestos incluidos» — TDR, numeral 1; y numeral 3, Listado de requisitos técnicos mínimos — «Monto total y desglosado del servicio, impuestos incluidos, expresado como valor total por el grupo y no por participante.»"
+      },
+      "objetivo": "Desarrollar capacidades internas en el Departamento de Tecnologías de la Información para construir aplicaciones de bajo código y automatizar flujos de trabajo sobre Microsoft 365, dejando a los participantes habilitados para diseñar, construir, publicar y mantener aplicaciones de lienzo y flujos automatizados de complejidad baja a media, con buenas prácticas de gobernanza y seguridad.",
+      "participantes": {
+        "maximo": 5,
+        "glosa": "Hasta 5 funcionarios, en curso cerrado y exclusivo para la institución."
+      },
+      "duracion": {
+        "horas_cronologicas": 24,
+        "sesiones": 8,
+        "horas_por_sesion": 3,
+        "glosa": "24 horas cronológicas con relator en vivo, en sesiones de máximo 3 horas, al menos 70% práctico."
+      },
+      "modalidad": {
+        "tipo": "Curso cerrado con relator en vivo: e-learning sincrónico por videoconferencia",
+        "plataforma": "Videoconferencia más ambiente de laboratorio propio del proveedor, con acceso individual y licencias premium habilitadas para cada participante.",
+        "horario": "Días hábiles, dentro de la jornada institucional, a convenir con la contraparte técnica."
+      },
+      "modalidad_observacion": "El TDR rechaza expresamente los cupos en cursos de calendario abierto y las modalidades autoinstruccionales o exclusivamente asincrónicas: son causal de inadmisibilidad automática. La modalidad admitida es e-learning sincrónico o presencial en dependencias institucionales, a propuesta del oferente; esta propuesta ofrece la primera.",
+      "fechas_ejecucion": "Inicio dentro de 15 días hábiles desde el envío de la orden de compra; ejecución en un máximo de 8 semanas corridas. Material y grabaciones vigentes 90 días corridos desde la última sesión.",
+      "modulos": [
+        {
+          "titulo": "Fundamentos de Power Platform, entornos y licenciamiento",
+          "horas": 2,
+          "temas": [
+            "Componentes de Power Platform y criterios de selección de herramienta",
+            "Entornos: separación de desarrollo y producción; roles, permisos y administración del tenant",
+            "Licenciamiento Microsoft 365 frente a Dataverse, conectores premium y Power Automate premium"
+          ]
+        },
+        {
+          "titulo": "Modelamiento y orígenes de datos",
+          "horas": 3,
+          "temas": [
+            "Listas de SharePoint Online como origen de datos y límites de delegación",
+            "Microsoft Dataverse: tablas, columnas, relaciones y roles de seguridad",
+            "Conectores estándar y premium; selección según volumen, criticidad y licenciamiento"
+          ]
+        },
+        {
+          "titulo": "Power Apps: aplicaciones de lienzo",
+          "horas": 6,
+          "temas": [
+            "Power Apps Studio, pantallas, controles, navegación y diseño responsivo",
+            "Variables, colecciones, funciones, galerías, formularios, validación y manejo de errores",
+            "Escritura sobre el origen (Patch, SubmitForm), publicación, versionado y uso compartido",
+            "Incorporación de aplicaciones en SharePoint Online y Microsoft Teams"
+          ]
+        },
+        {
+          "titulo": "Power Automate: flujos de nube",
+          "horas": 5,
+          "temas": [
+            "Tipos de flujo, desencadenadores, acciones, condiciones y controles",
+            "Variables, expresiones, bucles, ámbito y ejecución paralela",
+            "Errores, reintentos, notificación de fallas y monitoreo del historial",
+            "Conectores institucionales: SharePoint, Outlook, Teams, Excel y OneDrive"
+          ]
+        },
+        {
+          "titulo": "Integración Power Apps y Power Automate; flujos de aprobación",
+          "horas": 3,
+          "temas": [
+            "Invocación de flujos desde una aplicación de lienzo y retorno de resultados",
+            "Flujos de aprobación de una y de múltiples etapas; notificaciones y generación de documentos",
+            "Patrón completo: formulario, aprobación, registro en el origen y notificación al solicitante"
+          ]
+        },
+        {
+          "titulo": "Gobernanza, seguridad y ciclo de vida",
+          "horas": 2,
+          "temas": [
+            "Estrategia de entornos y políticas de prevención de pérdida de datos (DLP)",
+            "Compartición segura, cuentas de servicio y administración de conexiones",
+            "Soluciones: creación, exportación e importación; datos personales, trazabilidad y documentación"
+          ]
+        },
+        {
+          "titulo": "Ejercicio integrador sobre caso de uso institucional",
+          "horas": 3,
+          "temas": [
+            "Desarrollo guiado de una solución completa sobre el caso de uso que defina la Defensoría",
+            "Integra al menos una aplicación de lienzo, un flujo automatizado y un origen de datos",
+            "La solución queda operativa al término del curso en el ambiente de laboratorio"
+          ]
+        }
+      ],
+      "modulos_nota": "Los siete módulos y sus horas son exactamente los siete módulos y la distribución referencial que fija el TDR en el numeral 3 (2+3+6+5+3+2+3 = 24 horas). El TDR permite proponer otra distribución horaria e incorporar contenidos adicionales «siempre que se cubran íntegramente las materias exigidas»: esta propuesta conserva la referencial del organismo.",
+      "requisitos_metodologicos": [
+        "Curso cerrado y exclusivo con relator en vivo: no se aceptan cupos de calendario abierto ni cursos solo asincrónicos.",
+        "Al menos 70% del tiempo en ejercicios prácticos desarrollados por los participantes.",
+        "Sesiones de máximo 3 horas, en días hábiles y dentro de la jornada institucional.",
+        "Sesiones y material íntegramente en español; no se exige experiencia previa en Power Platform."
+      ],
+      "exigencias_adicionales": [
+        "Ambiente de laboratorio propio con licencias premium, sin usar el tenant institucional.",
+        "Calendario, relator asignado y accesos dentro de 5 días hábiles desde la orden de compra.",
+        "Canal de consultas técnicas hasta 30 días después, con respuesta en 48 horas hábiles."
+      ],
+      "relator_exigido": {
+        "formacion": "Certificación Microsoft vigente en Power Platform (PL-100, PL-200, PL-400, PL-600 o Microsoft Certified Trainer) para el puntaje máximo del criterio de relator.",
+        "experiencia_laboral": "Experiencia demostrable en implementaciones reales sobre Microsoft Power Platform; 3 o más años para el puntaje máximo.",
+        "experiencia_relatoria": "Currículum vitae del relator asignado, con certificaciones vigentes y experiencia en relatoría e implementación."
+      },
+      "entregables": [
+        "24 horas cronológicas de instrucción efectiva con relator en vivo.",
+        "Ambiente de laboratorio con acceso individual y licencias premium.",
+        "Material didáctico digital en español, archivos de ejercicios y datos de prueba.",
+        "Grabación de cada sesión, disponible 90 días corridos.",
+        "Certificado individual e informe final de ejecución."
+      ],
+      "logistica": "Curso cerrado en modalidad e-learning sincrónica o presencial en dependencias institucionales. La contraparte técnica es el Jefe del Departamento de Tecnologías de la Información o quien designe.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Propuesta técnica con programa detallado por módulo y horas, modalidad, distribución de sesiones, descripción del ambiente de laboratorio y licencias, y descripción del material y entregables",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Detalle económico con el monto total y desglosado, impuestos incluidos, expresado por el grupo y no por participante",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Currículum vitae del relator asignado, con certificaciones Microsoft vigentes y experiencia en relatoría e implementación",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Antecedentes de experiencia del oferente en servicios de capacitación de similar naturaleza",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Acreditación de sustentabilidad e inclusión (sello Empresa Mujer, Huella Chile, Energy Star, FSC u otros) — deseable",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "puntaje",
+        "detalle": [
+          "Criterio Técnico – Programa y contenidos 30%; Criterio Técnico – Experiencia del relator 20%; Criterio Económico 40%; Criterio Sustentable e Inclusión 10%.",
+          "Programa y contenidos: 100 puntos por incorporar dos o más contenidos deseables (AI Builder, Copilot Studio, Power Pages, Power Automate Desktop o Power BI integrado), 50 por uno, 0 por ninguno.",
+          "Experiencia del relator: 100 puntos con certificación Microsoft vigente en Power Platform Y 3 o más años de implementaciones; 50 con una de las dos; 0 con solo experiencia en relatoría.",
+          "Económico: (precio mínimo ofertado / precio de la oferta evaluada) × 40. Con el 40% de peso, cotizar al 90% del tope es una posición débil frente a quien cotice más abajo.",
+          "Desempate en orden: programa y contenidos, experiencia del relator, criterio económico, sustentabilidad.",
+          "Inadmisibilidad automática: diferencia sustancial entre la propuesta económica adjunta y el monto del formulario electrónico; incumplir los requisitos técnicos mínimos; omitir documentación obligatoria; ofertar cupos de calendario abierto o modalidades solo asincrónicas."
+        ]
+      },
+      "multas": "El TDR no fija multas propias: «En caso de incumplimiento se aplicará el procedimiento de Multas, sanciones y procedimientos de Chilecompra Mercado Público del Módulo de Compra Ágil».",
+      "pago": "Pago dentro de los 30 días siguientes a la emisión del DTE, previa recepción conforme de la totalidad del servicio por la contraparte técnica, que verifica la ejecución completa de las sesiones y la entrega de certificados e informes. Factura a nombre de la Defensoría del Contribuyente, RUT 62.000.930-K, XML a dipresrecepcion@custodium.com indicando la orden de compra en el campo 801. La orden de compra debe aceptarse en un plazo no superior a 2 días hábiles desde su envío.",
+      "criterios_direccionadores": [
+        {
+          "id": "ambiente-laboratorio-con-licencias-premium",
+          "exige": "Disponer y administrar un ambiente de laboratorio propio, con acceso individual por participante y licencias que cubran las capacidades premium (Dataverse, conectores premium, Power Automate premium). No se puede usar el tenant institucional ni pedirle licencias a la Defensoría. Es requisito técnico mínimo de admisibilidad y el filtro más exigente en infraestructura.",
+          "cita": "TDR, numeral 3, Ambiente de laboratorio — «El ambiente deberá contar con las licencias necesarias para desarrollar la totalidad de los ejercicios contemplados en los contenidos mínimos, incluyendo aquellos que requieran capacidades premium… No se aceptarán propuestas que condicionen la ejecución de los ejercicios a la utilización del tenant institucional de la Defensoría del Contribuyente ni a la adquisición de licencias adicionales por parte de la institución.»",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "certificacion-microsoft-power-platform",
+          "exige": "Certificación Microsoft vigente en Power Platform (PL-100, PL-200, PL-400, PL-600 o Microsoft Certified Trainer) del relator asignado. Sin ella se pierde la mitad o la totalidad del 20% del criterio de relator.",
+          "cita": "TDR, numeral 6.2 — «Acredita certificación Microsoft vigente en Power Platform (PL-100, PL-200, PL-400, PL-600 o Microsoft Certified Trainer) y 3 o más años de experiencia en implementaciones: 100.»",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "tres-anios-de-implementaciones-reales",
+          "exige": "Relator con experiencia demostrable en implementaciones reales sobre Power Platform, 3 o más años para el puntaje máximo. Es experiencia de implementación, no solo de relatoría: acreditar solo relatoría da 0 puntos en ese criterio.",
+          "cita": "TDR, numeral 6.2 — «Acredita experiencia en relatoría en la materia, sin certificación vigente ni la experiencia señalada: 0», y numeral 3, Relator — «El servicio deberá ser impartido por un relator con experiencia demostrable en implementaciones reales sobre Microsoft Power Platform.»",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "dos-contenidos-deseables-para-el-30-por-ciento",
+          "exige": "Incorporar dos o más contenidos deseables —AI Builder, Copilot Studio, Power Pages, Power Automate Desktop/RPA o integración con Power BI— para obtener los 30 puntos del criterio de programa. Con uno se obtienen 15 y con ninguno, 0.",
+          "cita": "TDR, numeral 6.1 — «Incorpora dos o más contenidos deseables adicionales a los contenidos mínimos exigidos: 100 … No incorpora contenidos deseables adicionales a los contenidos mínimos exigidos: 0.»",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "sellos-sustentabilidad-e-inclusion",
+          "exige": "Sello Empresa Mujer en el Registro de Proveedores y/o registro en Huella Chile, Energy Star, FSC u otra certificación sustentable verificable en la ficha de proveedor. Vale 10% del puntaje y se verifica en plataforma, no por declaración.",
+          "cita": "TDR, numeral 6.4 — «Empresa liderada por mujeres: Registro del Sello \"Empresa Mujer\" en el Registro de Proveedores de Mercado Público. (Verificación en plataforma) 50 puntos» y «Empresas con prácticas ambientales sustentables comprobables … 50 puntos».",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "duracion-contradictoria-20-vs-24-horas",
+          "exige": "Confirmar la duración: las condiciones generales del servicio hablan de «Duración mínima: 20 horas cronológicas» y el listado de requisitos técnicos mínimos —el que decide la admisibilidad— exige 24. La suma de las horas referenciales de los siete módulos también da 24, y esta propuesta oferta 24.",
+          "cita": "TDR, numeral 3, Condiciones generales del servicio — «Duración mínima: 20 horas cronológicas de instrucción efectiva con relator en vivo», frente a numeral 3, Listado de requisitos técnicos mínimos — «Duración mínima de 24 horas cronológicas con relator en vivo».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "precio-pesa-40-por-ciento",
+          "exige": "Asumir que el precio vale 40% del puntaje con fórmula proporcional al menor valor ofertado. Cotizar al 90% del tope (la regla de este cotizador) deja el criterio más pesado en manos de quien cotice más bajo.",
+          "cita": "TDR, numeral 6.3 — «Se evaluará el precio total ofertado, asignándose el máximo puntaje a la oferta de menor valor económico. Puntaje = (Precio mínimo ofertado / Precio de la oferta evaluada) × 40.»",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "1121-57-COT26": {
+      "curso": "Inteligencia Artificial: del concepto al impacto",
+      "organismo_corto": "Cochilco",
+      "organismo_nombre": "Comisión Chilena del Cobre (Cochilco) — Departamento de Informática",
+      "fuente_documentos": [
+        "Requerimiento de compra - Curso Inteligencia Artificial del conce.pdf",
+        "Anexo N°1 - Datos del Oferente.docx",
+        "Anexo N°2 - Declaración Relativa a Programa de Integridad.docx",
+        "Anexo N°3 - Sustentabilidad.docx"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«El presupuesto máximo disponible para la actividad de capacitación es de $1.550.000.- impuestos incluidos» — Requerimiento de compra N° FSS04770/2026, numeral IV. La admisibilidad exige además «Presentar cotización económica con impuestos incluidos, la cual se encuentre dentro del presupuesto disponible»."
+      },
+      "objetivo": "Fortalecer las capacidades de los participantes para comprender los conceptos y usos clave de la inteligencia artificial, desde el concepto hasta el impacto en el día a día de sus funciones en el Departamento de Informática de Cochilco.",
+      "participantes": {
+        "maximo": 2,
+        "glosa": "2 cupos para profesionales del Departamento de Informática de Cochilco."
+      },
+      "duracion": {
+        "horas_cronologicas": 75,
+        "sesiones": null,
+        "horas_por_sesion": null,
+        "glosa": "75 horas cronológicas, el mínimo que exige el requerimiento. La distribución por módulo es propuesta del oferente."
+      },
+      "modalidad": {
+        "tipo": "Sincrónica en línea, con componente asincrónico de práctica",
+        "plataforma": "Teams u otra plataforma de videoconferencia, más aula virtual con material y ejercicios para las horas asincrónicas.",
+        "horario": "A convenir entre Cochilco y el proveedor."
+      },
+      "modalidad_observacion": "El requerimiento deja la modalidad abierta —«Presencial, streaming, asincrónico, sincrónico, ya sea Teams u otra plataforma, o híbrido»— y no la evalúa: no hay criterio de modalidad en la pauta. La propuesta ofrece sincrónico en línea con práctica asincrónica y la ajusta con Cochilco en la coordinación inicial.",
+      "fechas_ejecucion": "En las fechas que acuerden Cochilco y el proveedor.",
+      "modulos": [
+        {
+          "titulo": "Fundamentos de la inteligencia artificial",
+          "horas": 10,
+          "temas": [
+            "Fundamentos de la inteligencia artificial",
+            "Evolución histórica de la inteligencia artificial",
+            "Tipos de aprendizaje automático"
+          ]
+        },
+        {
+          "titulo": "Inteligencia artificial generativa: fundamentos, patrones y aplicaciones",
+          "horas": 12,
+          "temas": [
+            "Fundamentos de la inteligencia artificial generativa",
+            "Patrones de la inteligencia artificial generativa",
+            "Aplicaciones de la inteligencia artificial generativa"
+          ]
+        },
+        {
+          "titulo": "Aplicaciones en la industria productiva y en el sector público",
+          "horas": 10,
+          "temas": [
+            "Aplicaciones en la industria productiva",
+            "Aplicaciones en el sector público",
+            "Casos de uso pertinentes al contexto institucional de Cochilco"
+          ]
+        },
+        {
+          "titulo": "Contexto, centros de excelencia y ciclo de vida de los proyectos",
+          "horas": 10,
+          "temas": [
+            "Contexto de la inteligencia artificial",
+            "Centros de excelencia en inteligencia artificial",
+            "Ciclo de vida de los proyectos de IA generativa"
+          ]
+        },
+        {
+          "titulo": "Gobierno de datos y analítica",
+          "horas": 8,
+          "temas": [
+            "Gobierno de datos y analítica",
+            "Roles en la gobernanza de datos",
+            "Evolución desde la analítica tradicional hacia la IA generativa"
+          ]
+        },
+        {
+          "titulo": "Adopción de IA: lecciones aprendidas y horizontes estratégicos",
+          "horas": 10,
+          "temas": [
+            "Adopción de inteligencia artificial y lecciones aprendidas",
+            "Horizontes de adopción estratégica de la inteligencia artificial",
+            "Capacidades de la inteligencia artificial"
+          ]
+        },
+        {
+          "titulo": "Escenarios futuros y Futures Thinking",
+          "horas": 9,
+          "temas": [
+            "Escenarios futuros y foresight",
+            "Fundamentos del Futures Thinking",
+            "Ejercicio aplicado de construcción de escenarios"
+          ]
+        },
+        {
+          "titulo": "Inteligencia artificial responsable y regulación",
+          "horas": 6,
+          "temas": [
+            "Principios de inteligencia artificial responsable",
+            "Regulación de la inteligencia artificial",
+            "Evaluación final con nota y cierre"
+          ]
+        }
+      ],
+      "modulos_nota": "Los ocho módulos cubren los veinte contenidos mínimos que lista el requerimiento en el numeral II, en el mismo orden. El requerimiento fija el mínimo de 75 horas cronológicas y no su distribución: el reparto por módulo es propuesta de KeepSync y se ajusta con el Encargado de Capacitación.",
+      "requisitos_metodologicos": [
+        "Guion metodológico que describa el desarrollo de la capacitación de forma clara y secuencial, con actividades, metodología, recursos y tiempos.",
+        "Objetivos de aprendizaje definidos, actividades prácticas y sistema de evaluación del aprendizaje.",
+        "Adaptación explícita al contexto institucional de Cochilco: reproducir el requerimiento da 0 puntos en el criterio de mayor peso.",
+        "Certificado de participación con asistencia y nota."
+      ],
+      "exigencias_adicionales": [
+        "Anexo N°1 con datos del oferente y datos bancarios.",
+        "Anexo N°2 con la declaración de programa de integridad, adjuntando el programa que la respalda.",
+        "Anexo N°3 de sustentabilidad con el respaldo de la medida declarada."
+      ],
+      "relator_exigido": {
+        "formacion": "El requerimiento no fija título ni disciplina del relator/a: exige el currículum y los medios de verificación de su experiencia.",
+        "experiencia_laboral": "Currículum del relator, relatora o equipo formador, presentado como requisito de admisibilidad.",
+        "experiencia_relatoria": "4 o más cursos de la temática acreditados con documentos verificables para el puntaje máximo del criterio (25%); entre 2 y 3 dan la mitad; 1 o ninguno, cero."
+      },
+      "entregables": [
+        "75 horas cronológicas de capacitación para 2 participantes.",
+        "Guion metodológico y programa de contenidos con objetivos de aprendizaje.",
+        "Material y actividades prácticas del curso.",
+        "Sistema de evaluación del aprendizaje aplicado.",
+        "Certificado de participación con asistencia y nota."
+      ],
+      "logistica": "Actividad coordinada con el Encargado de Capacitación de Cochilco, que administra el servicio, valida la ejecución y otorga la recepción conforme. No se contemplan garantías.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Cotización económica con impuestos incluidos, dentro del presupuesto disponible",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Propuesta técnica del curso, incluido el guion metodológico",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Programa de contenidos con objetivos de aprendizaje y duración, modalidad, metodología y sistema de evaluación",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Anexo N°1 — Formulario Datos del Oferente, con datos bancarios",
+          "tipo": "formulario"
+        },
+        {
+          "documento": "Anexo N°2 — Declaración relativa a programa de integridad, con el programa adjunto",
+          "tipo": "formulario"
+        },
+        {
+          "documento": "Anexo N°3 — Sustentabilidad, con el respaldo de la medida declarada",
+          "tipo": "formulario"
+        },
+        {
+          "documento": "Currículum del relator, relatora o equipo formador",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Medios de verificación de la experiencia del relator o equipo formador: certificados de ejecución, órdenes de compra, contratos, facturas o cartas de conformidad",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Medios de verificación de satisfacción de servicios previos: certificados de satisfacción, cartas de conformidad, informes de evaluación o actas de recepción conforme",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Medios de verificación de la experiencia del oferente: órdenes de compra, facturas, contratos o certificados de ejecución de servicios similares",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "puntaje",
+        "detalle": [
+          "Pertinencia y calidad técnica/metodológica 25%; experiencia del relator o equipo formador 25%; satisfacción acreditada de servicios previos 15%; experiencia acreditada del oferente 15%; precio 10%; enfoque de género 5%; programa de integridad 3%; sustentabilidad 2%.",
+          "El precio pesa solo 10%: la pauta premia la propuesta técnica y la evidencia documental muy por sobre el valor ofertado.",
+          "La oferta adjudicada debe obtener al menos 50 puntos ponderados en el subtotal técnico (los cuatro primeros criterios, que suman 80 puntos).",
+          "«una oferta que obtenga 0 puntos en a) pertinencia y calidad técnica/metodológica o, 0 puntos en b) experiencia del relator/equipo formador no será adjudicada, aunque tenga el menor precio».",
+          "Reproducir total o mayoritariamente el contenido del Requerimiento de Compra, sin aportar una propuesta técnica propia, da 0 puntos en el criterio de mayor peso.",
+          "Desempate en orden: calidad técnica, experiencia del relator, satisfacción acreditada, experiencia del oferente, precio y, por último, oferta ingresada primero."
+        ]
+      },
+      "multas": "1% del total (IVA incluido) por cada día de atraso, incluidos días inhábiles, con tope de 20 días. 5% del total por incumplimiento de las especificaciones técnicas, con obligación de corregir en 3 días hábiles y 1% diario adicional si se atrasa la nueva entrega. El tope global de multas es 20% del monto total; superarlo habilita el término anticipado. El proveedor tiene 5 días hábiles para descargos y 5 días hábiles para reposición.",
+      "pago": "Pago posterior a la actividad, previa recepción conforme y envío de factura o boleta de honorarios. Dentro de 30 días desde recibida y aprobada la factura, por transferencia electrónica de la Tesorería General de la República. La factura electrónica debe referir en el campo 801 el número de orden de compra, que debe estar aceptada en el portal. No se contemplan garantías.",
+      "criterios_direccionadores": [
+        {
+          "id": "cuatro-experiencias-del-relator",
+          "exige": "Acreditar 4 o más cursos de la temática ejecutados por el relator o equipo formador, con documentos verificables (certificados de ejecución, órdenes de compra, contratos, facturas o cartas de conformidad). Vale 25% del puntaje y obtener 0 acá impide la adjudicación cualquiera sea el precio.",
+          "cita": "Requerimiento, numeral VII b) — «100: Acredita 4 o más experiencias en la ejecución de cursos o actividades de capacitación directamente relacionadas con la temática del curso… La sola declaración de experiencia en el currículum no será suficiente si no se acompaña de antecedentes verificables.»",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "tres-medios-de-satisfaccion-acreditada",
+          "exige": "Presentar 3 o más certificados de satisfacción, cartas de conformidad, informes de evaluación o actas de recepción conforme emitidos por otros organismos. Vale 15% y la evidencia la emite el cliente anterior, no el oferente; Cochilco además puede verificarla llamando a las referencias.",
+          "cita": "Requerimiento, numeral VII c) — «100: Presenta 3 o más medios de verificación que acrediten una evaluación satisfactoria… La Comisión Chilena del Cobre podrá verificar la información… mediante comunicación telefónica o correo electrónico con las referencias remitidas en el anexo respectivo.»",
+          "tipo": "historial_portal",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "seis-servicios-similares-del-oferente",
+          "exige": "Acreditar la ejecución de 6 o más servicios de capacitación similares con documentos verificables. Vale 15% y menos de 3 da cero: excluye a quien no haya vendido ya capacitación varias veces.",
+          "cita": "Requerimiento, numeral VII d) — «100: Acredita la ejecución de 6 o más servicios de capacitación similares, mediante documentos verificables… 0: Acredita la ejecución de menos de 3 servicios de capacitación similares.»",
+          "tipo": "historial_portal",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "umbral-50-puntos-tecnicos",
+          "exige": "Obtener al menos 50 puntos ponderados en el subtotal técnico (calidad técnica, experiencia del relator, satisfacción acreditada y experiencia del oferente, 80 puntos en conjunto). Sin evidencia documental de las tres últimas, ese umbral es prácticamente inalcanzable.",
+          "cita": "Requerimiento, numeral VIII — «La oferta adjudicada deberá obtener, como mínimo 50 puntos ponderados en el subtotal técnico… Estos criterios representan, en conjunto, un máximo de 80 puntos ponderados.»",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "guion-metodologico-propio",
+          "exige": "Entregar un guion metodológico que describa el desarrollo de la capacitación de forma clara y secuencial, con actividades, metodología, recursos y tiempos, adaptado al contexto de Cochilco. Reproducir el requerimiento da 0 puntos en el criterio de 25%, lo que impide la adjudicación.",
+          "cita": "Requerimiento, numeral VII a) — «0: La propuesta no desarrolla adecuadamente los contenidos solicitados, omite o describe insuficientemente la metodología o el guion metodológico… o reproduce total o mayoritariamente el contenido del Requerimiento de Compra, sin aportar una propuesta técnica propia.»",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "sello-empresa-mujer",
+          "exige": "Sello Empresa Mujer de ChileProveedores. Vale 5% del puntaje y se acredita solo con el sello: no hay puntaje parcial.",
+          "cita": "Requerimiento, numeral VII f) — «Para acreditar este criterio, los oferentes deberán presentar el sello Empresa Mujer de ChileProveedores. 100: El oferente presenta sello Empresa Mujer… 0: El oferente no presenta sello Empresa Mujer.»",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "programa-de-integridad-documentado",
+          "exige": "Declarar en el Anexo N°2 que se tiene un programa de integridad conocido y difundido entre los colaboradores, y adjuntar el documento que lo contiene. Vale 3%: sin el documento, la declaración no puntúa.",
+          "cita": "Requerimiento, numeral VII g) — «100: El oferente presenta Anexo N°2 y adjunta Programa de Integridad vigente, declarando su existencia y difusión entre sus colaboradores.» Anexo N°2 — «A fin de comprobar su declaración se deberá adjuntar a la oferta el referido programa de integridad.»",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "anexo-3-sustentabilidad-con-respaldo",
+          "exige": "Anexo N°3 con procedimiento de gestión de residuos, política de sustentabilidad o sello, y su respaldo: certificado de residuos con antigüedad no superior a 6 meses, copia del procedimiento o sello vigente en la ficha de proveedor (Huella Chile, APL, ProPyme). Vale 2%.",
+          "cita": "Anexo N°3 Sustentabilidad — «El oferente deberá presentar el Anexo Sustentabilidad así como el respaldo de la medida declarada en el mencionado anexo», con los medios de verificación detallados por tipo de medida.",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "anexo-1-datos-y-cuenta-bancaria",
+          "exige": "Completar el Anexo N°1 del organismo con razón social, RUT, dirección, ciudad, teléfono, correo y los datos bancarios del oferente. Es un formulario del organismo, no un documento propio.",
+          "cita": "Anexo N°1 — «FORMULARIO DATOS DEL OFERENTE. A) DATOS DEL OFERENTE… B) DATOS BANCARIOS DEL OFERENTE: Banco, Número de Cuenta, Tipo de Cuenta, E-mail.»",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "carga-de-75-horas-para-2-cupos",
+          "exige": "Confirmar el alcance: el requerimiento pide un mínimo de 75 horas cronológicas para solo 2 cupos, dentro de un tope de $1.550.000. Es una carga inusualmente alta para el presupuesto, y define si conviene ofertar un curso cerrado o cupos en un programa existente.",
+          "cita": "Requerimiento, numeral II — «Cupos: 2. Horas Cronológicas: 75 horas mínimo», y numeral IV — «El presupuesto máximo disponible para la actividad de capacitación es de $1.550.000.- impuestos incluidos.»",
+          "tipo": "alcance",
           "estado": "sin_informacion"
         }
       ]

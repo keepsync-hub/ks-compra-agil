@@ -69,17 +69,27 @@ Cada tarjeta encabeza con un **score de apertura (0–100%)** que ordena el foco
 que no exige ninguna característica, capacidad o certificación particular que dirija la
 adjudicación, y baja 5% por cada criterio que falte revisar (`criterios_direccionadores` en
 `config/capacitaciones.json`, cada uno con su cita; el cálculo, en `src/lib/scoring-capacitacion.ts`).
-Hoy hay **diez borradores**, seis de la tanda del 2026-08-22 (Dipres 85% y 75% dos, Subtrans 65%,
-Concepción 60%, Hospital Padre Hurtado 45% — este último exige las últimas 12 órdenes de compra del
-mismo curso, el filtro más direccionador de todas) y cuatro del 2026-08-27: Poder Judicial (Power BI)
-70%, Lo Barnechea (emprendimiento + IA) 65%, Combarbalá (IA en salud) 60% y DAEM Osorno (IA para
-docentes) 55%. **No es una probabilidad de adjudicación**: es cuánto de la admisibilidad está sin
-resolver.
+Hoy hay **diecisiete borradores**: seis de la tanda del 2026-08-22 (Dipres 85% y 75% dos,
+Subtrans 65%, Concepción 60%, Hospital Padre Hurtado 45% — este último exige las últimas 12 órdenes
+de compra del mismo curso, el filtro más direccionador de todas), cuatro del 2026-08-27 (Poder
+Judicial 70%, Lo Barnechea 65%, Combarbalá 60%, DAEM Osorno 55%) y siete del 2026-09-03: MOP
+Dirección de Aeropuertos (Project + Power BI) 70%, DICREP (Power BI y SQL) 65%, Defensoría del
+Contribuyente (Power Apps y Power Automate) 65%, CONASET (IA en ofimática) 65%, DICREP (comunicación
+digital + IA) 60%, Puerto Montt (IA municipal) 55% y Cochilco (IA del concepto al impacto) 50%.
+**No es una probabilidad de adjudicación**: es cuánto de la admisibilidad está sin resolver.
 
-Las seis primeras ya cerraron y siguen publicadas —el índice de cotizaciones se acumula y no borra,
-para que una corrida de un solo código no haga desaparecer a las demás—, así que la tarjeta las marca
-*Cerrada* y las manda al final de la grilla. Publicar un borrador de una compra en la que ya no se
-puede ofertar, sin decirlo, es el mismo defecto que la grilla de oportunidades corrigió.
+Las nueve más antiguas ya cerraron y siguen publicadas —el índice de cotizaciones se acumula y no
+borra, para que una corrida de un solo código no haga desaparecer a las demás—, así que la tarjeta
+las marca *Cerrada* y las manda al final de la grilla. Publicar un borrador de una compra en la que
+ya no se puede ofertar, sin decirlo, es el mismo defecto que la grilla de oportunidades corrigió.
+
+Dos hallazgos de la tanda del 2026-09-03 que conviene tener presentes al leer un TDR de este nicho:
+**las bases se contradicen seguido** —CONASET pondera 80/20 en el texto y 70/30 en la fórmula; la
+Defensoría exige 20 horas en las condiciones generales y 24 en los requisitos mínimos; Puerto Montt
+pide 12 horas cronológicas en tres jornadas de 15:00 a 18:00, que dan 9— y esas contradicciones se
+registran como criterio con su cita en vez de resolverse a dedo. Y **tres de los siete organismos no
+publican pauta de evaluación** (los dos TDR de DICREP y el del MOP, que además la anuncia y luego no
+la escribe), así que no se puede saber cuánto pesa el precio: eso también baja el score.
 
 Dos cosas que condicionan todo el nicho y no las resuelve el cotizador: **ninguna oferta nombra
 relator/a** (los TDR exigen título, CV y certificados verificables, y sin eso la oferta se
@@ -87,11 +97,15 @@ descarta en admisibilidad), y **sigue sin confirmarse si KeepSync es OTEC regist
 de eso dependen tanto puntaje directo en algunas bases como la exención de IVA del art. 13 N°4 con
 que Dipres presupuesta. Ver el detalle en `.claude/skills/compra-agil-ofertar/SKILL.md`.
 
-Dos de las seis compras del barrido del 2026-08-27 quedaron **sin cotizar, y el archivo dice por
-qué** (`_no_cotizadas` en `config/capacitaciones.json`): la de Penco trae su único adjunto como PDF
-escaneado sin capa de texto —llenar la ficha exigiría OCR o inventar el curso—, y la del INIA no es
-capacitación sino créditos de API de Claude y ChatGPT, que van por `npm run cotizar` y siguen
-frenadas por el insumo bloqueante del nicho de licencias.
+Tres compras que el radar sí encontró quedaron **sin cotizar, y el archivo dice por qué**
+(`_no_cotizadas` en `config/capacitaciones.json`): la de Penco (2026-08-27) trae su único adjunto
+como PDF escaneado sin capa de texto —llenar la ficha exigiría OCR o inventar el curso—; la del INIA
+(2026-08-27) no es capacitación sino créditos de API de Claude y ChatGPT, que van por
+`npm run cotizar` y siguen frenadas por el insumo bloqueante del nicho de licencias; y la de Cochilco
+`1121-56-COT26` (2026-09-03) cerraba veinte minutos después de que terminara la corrida del radar,
+sin margen para la revisión humana y el envío manual que este flujo exige. Esta última sí es
+cotizable: es el gemelo administrativo de `1121-57-COT26` —mismo requerimiento, mismos tres anexos,
+misma pauta— y su ficha sirve de base si Cochilco la republica.
 
 ## Regla de cálculo para cotizaciones en USD (`cotizar-usd`)
 

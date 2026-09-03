@@ -220,6 +220,11 @@ export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionDa
   th, td { text-align: left; padding: 5pt 8pt; vertical-align: top; }
   th { color: ${COLOR.gray}; font-size: 8.5pt; text-transform: uppercase; background: ${COLOR.cardAlt}; }
   tbody tr { border-top: 1px solid ${COLOR.border}; }
+  /* El cuadro de cumplimiento crece con las filas que agreguen las bases (una por exigencia
+     adicional) y es la lámina que primero desborda. Va un punto más compacto que el resto de las
+     tablas: la de la oferta económica tiene una sola fila y no necesita apretarse. */
+  table.cumpl { font-size: 9.4pt; }
+  table.cumpl th, table.cumpl td { padding: 4pt 8pt; }
   td.c, th.c { text-align: center; }
   td.r, th.r { text-align: right; }
   .info-row { display: flex; gap: 10pt; font-size: 10.5pt; padding: 3pt 0; }
@@ -360,7 +365,7 @@ export function generarCotizacionCapacitacionHtml(data: CotizacionCapacitacionDa
   ${badges(data.oferente)}
   <div class="eyebrow">Admisibilidad</div>
   <h2 style="margin-top:5pt;">Cumplimiento de las especificaciones</h2>
-  <table class="card" style="padding:0;overflow:hidden;">
+  <table class="card cumpl" style="padding:0;overflow:hidden;">
     <thead><tr><th style="width:31%;">Requisito de las bases</th><th style="width:12%;">Estado</th><th>Cómo lo cubre esta propuesta</th></tr></thead>
     <tbody>
       ${data.cumplimiento
