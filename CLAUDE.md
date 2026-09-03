@@ -69,19 +69,27 @@ Cada tarjeta encabeza con un **score de apertura (0–100%)** que ordena el foco
 que no exige ninguna característica, capacidad o certificación particular que dirija la
 adjudicación, y baja 5% por cada criterio que falte revisar (`criterios_direccionadores` en
 `config/capacitaciones.json`, cada uno con su cita; el cálculo, en `src/lib/scoring-capacitacion.ts`).
-Hoy hay **diecisiete borradores**: seis de la tanda del 2026-08-22 (Dipres 85% y 75% dos,
+Hoy hay **dieciocho borradores**: seis de la tanda del 2026-08-22 (Dipres 85% y 75% dos,
 Subtrans 65%, Concepción 60%, Hospital Padre Hurtado 45% — este último exige las últimas 12 órdenes
 de compra del mismo curso, el filtro más direccionador de todas), cuatro del 2026-08-27 (Poder
-Judicial 70%, Lo Barnechea 65%, Combarbalá 60%, DAEM Osorno 55%) y siete del 2026-09-03: MOP
+Judicial 70%, Lo Barnechea 65%, Combarbalá 60%, DAEM Osorno 55%) y ocho del 2026-09-03: MOP
 Dirección de Aeropuertos (Project + Power BI) 70%, DICREP (Power BI y SQL) 65%, Defensoría del
-Contribuyente (Power Apps y Power Automate) 65%, CONASET (IA en ofimática) 65%, DICREP (comunicación
-digital + IA) 60%, Puerto Montt (IA municipal) 55% y Cochilco (IA del concepto al impacto) 50%.
-**No es una probabilidad de adjudicación**: es cuánto de la admisibilidad está sin resolver.
+Contribuyente (Power Apps y Power Automate) 65%, CONASET (IA en ofimática) 65%, SLEP Santa Corina
+(IA para la educación) 65%, DICREP (comunicación digital + IA) 60%, Puerto Montt (IA municipal) 55%
+y Cochilco (IA del concepto al impacto) 50%. **No es una probabilidad de adjudicación**: es cuánto
+de la admisibilidad está sin resolver.
 
-Las nueve más antiguas ya cerraron y siguen publicadas —el índice de cotizaciones se acumula y no
+Las once más antiguas ya cerraron y siguen publicadas —el índice de cotizaciones se acumula y no
 borra, para que una corrida de un solo código no haga desaparecer a las demás—, así que la tarjeta
 las marca *Cerrada* y las manda al final de la grilla. Publicar un borrador de una compra en la que
 ya no se puede ofertar, sin decirlo, es el mismo defecto que la grilla de oportunidades corrigió.
+
+**El radar se puede correr más de una vez al día y conviene hacerlo.** La segunda corrida del
+2026-09-03 (17:32, seis horas después de la primera) encontró cuatro compras que a las 11:40 no
+existían: tres de licencias Claude —INIA con dos, Servicio de Salud Araucanía Sur con Claude Team
+para 12 usuarios— y la de capacitación más grande fichada hasta hoy, el SLEP Santa Corina con tope
+$7.164.900 para hasta 800 participantes, publicada a las 15:31 del mismo día. Las Compras Ágiles se
+publican durante todo el día hábil y varias cierran en 24-48 horas.
 
 Dos hallazgos de la tanda del 2026-09-03 que conviene tener presentes al leer un TDR de este nicho:
 **las bases se contradicen seguido** —CONASET pondera 80/20 en el texto y 70/30 en la fórmula; la
