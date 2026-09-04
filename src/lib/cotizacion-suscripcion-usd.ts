@@ -199,7 +199,7 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
   // "2 suscripciones Claude Max 5x" cuando hay varias del mismo producto; "1 suscripción X y 1
   // suscripción Y" cuando son distintas. Es la misma frase que encabeza la lámina de alcance.
   const glosaLinea = (l: { usuarios: number; producto: string }) =>
-    `${l.usuarios} suscripción${l.usuarios === 1 ? "" : "es"} ${l.producto}`;
+    `${l.usuarios} ${l.usuarios === 1 ? "suscripción" : "suscripciones"} ${l.producto}`;
   const glosaLineas = r.lineas.map(glosaLinea).join(" y ");
 
   const condiciones = [
@@ -267,7 +267,7 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
   <h2>Alcance de la suscripción</h2>
   <p class="gray" style="font-size:11pt;max-width:9in;">${esc(glosaLineas)}, un usuario por suscripción, por ${esc(glosaVigencia)}, contratadas y administradas por KeepSync para ${esc(e.cliente)}.</p>
   <div class="grid3">
-    <div class="card"><div class="num-badge">${usuariosTotal}</div><strong>Suscripciones</strong><p class="gray" style="font-size:9.5pt;">Un asiento nominativo por usuario, sin compartir credenciales.</p></div>
+    <div class="card"><div class="num-badge">${usuariosTotal}</div><strong>${usuariosTotal === 1 ? "Suscripción" : "Suscripciones"}</strong><p class="gray" style="font-size:9.5pt;">Un asiento nominativo por usuario, sin compartir credenciales.</p></div>
     <div class="card"><div class="num-badge">${meses ?? "—"}</div><strong>Meses de vigencia</strong><p class="gray" style="font-size:9.5pt;">Período completo cotizado por adelantado, a precio cerrado en pesos.</p></div>
     <div class="card"><div class="num-badge">✓</div><strong>Gestión KeepSync</strong><p class="gray" style="font-size:9.5pt;">Alta, soporte, renovación y facturación en CLP a cargo del oferente.</p></div>
   </div>
