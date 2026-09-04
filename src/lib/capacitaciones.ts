@@ -83,6 +83,16 @@ export interface RequisitosCapacitacion {
   fechas_ejecucion: string;
   modulos: ModuloCapacitacion[];
   modulos_nota: string;
+  /**
+   * Si el organismo listó los contenidos del curso o solo su estructura. Por defecto `true`: casi
+   * todas estas bases traen un temario sugerido y el cuadro de cumplimiento declara que la
+   * propuesta lo cubre "uno a uno, en el mismo orden". Cuando el TDR fija la estructura y no las
+   * materias —1393495-768-COT26: dos niveles, seis módulos por curso, 90 minutos, y ni un
+   * contenido— esa declaración le atribuye al organismo un temario que nunca escribió, dentro del
+   * documento que se le presenta. Declararlo `false` cambia la fila por lo que de verdad pasa: los
+   * módulos son propuesta de KeepSync sobre la estructura exigida.
+   */
+  contenidos_sugeridos_por_el_organismo?: boolean;
   requisitos_metodologicos?: string[];
   exigencias_adicionales?: string[];
   relator_exigido: {
@@ -367,6 +377,7 @@ export function cargarIdentidadOferente(): IdentidadOferente {
 export function derivarCumplimiento(r: RequisitosCapacitacion): FilaCumplimiento[] {
   const totalHoras = r.modulos.reduce((s, m) => s + m.horas, 0);
   const rel = r.relator;
+  const sugiereContenidos = r.contenidos_sugeridos_por_el_organismo !== false;
   // Las respuestas son deliberadamente breves: el detalle completo ya está en las láminas de
   // programa y metodología, y esta tabla existe para la declaración cumple / no cumple que el
   // organismo revisa en admisibilidad. Repetir ahí los párrafos largos desbordaba la lámina.
@@ -377,9 +388,13 @@ export function derivarCumplimiento(r: RequisitosCapacitacion): FilaCumplimiento
       respuesta: "El programa se estructura sobre el objetivo de aprendizaje declarado por el organismo (lámina 2).",
     },
     {
-      requisito: "Contenidos de la capacitación, considerando los contenidos sugeridos",
+      requisito: sugiereContenidos
+        ? "Contenidos de la capacitación, considerando los contenidos sugeridos"
+        : "Contenidos de la capacitación",
       estado: "cumple",
-      respuesta: `${r.modulos.length} módulos que cubren uno a uno los contenidos sugeridos, en el mismo orden (lámina 2).`,
+      respuesta: sugiereContenidos
+        ? `${r.modulos.length} módulos que cubren uno a uno los contenidos sugeridos, en el mismo orden (lámina 2).`
+        : `${r.modulos.length} módulos propuestos por KeepSync sobre la estructura que fijan las bases, que no listan contenidos (lámina 2).`,
     },
     {
       requisito: "Cantidad de participantes solicitada",
@@ -494,8 +509,13 @@ export function derivarPendientes(
     );
   }
 
+  // Con `includes("otec")` esto se disparaba con **protección** —pr-otec-ción—, que aparece en
+  // cualquier base que hable de datos personales: cinco de las dieciocho oportunidades llevaban el
+  // pendiente afirmando que «estas bases lo puntúan o lo exigen» sin que sus bases nombraran nunca
+  // a SENCE. Es la peor clase de defecto de este repo: una afirmación sobre las bases del organismo
+  // que las bases no hacen, dentro de un PDF que se le presenta a ese organismo.
   const textoOtec = JSON.stringify(r).toLowerCase();
-  if (textoOtec.includes("otec") || textoOtec.includes("sence")) {
+  if (/\botec\b|\bsence\b/.test(textoOtec)) {
     p.push(
       "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, " +
         "y de ello depende además la exención de IVA del artículo 13 N°4.",
