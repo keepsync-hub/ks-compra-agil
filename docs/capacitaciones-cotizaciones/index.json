@@ -1834,5 +1834,104 @@
       }
     ],
     "generado": "2026-09-03"
+  },
+  "1393495-768-COT26": {
+    "codigo": "1393495-768-COT26",
+    "curso": "Formación en Inteligencia Artificial para la Educación: Nivel Básico y Avanzado",
+    "organismo": "Servicio Local de Educación Pública Santa Corina — Unidad de Formación y Desarrollo Profesional",
+    "topeClp": 7164900,
+    "totalClp": 6448410,
+    "descuentoPct": 10,
+    "regimenTributario": "no_declarado",
+    "citaTributaria": "El TDR no declara si el monto se presenta neto, exento o con impuestos incluidos. Sobre el precio solo dice «5. Presupuesto Disponible: $ 7.164.900». Conviene consultarlo: si el SLEP presupuestó exento por giro educacional (art. 13 N°4 de la Ley de IVA), el valor a ingresar en el portal cambia.",
+    "criterioEvaluacion": "puntaje",
+    "fechaCierre": "2026-09-07 07:55",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/1393495-768-COT26/Q-20260903-ServicioLocalDeEducacionPublicaSantaCorinaUnidadDe.pdf",
+    "fuenteDocumentos": [
+      "TERMINOS DE REFERENCIA FORMACIÓN IA.pdf"
+    ],
+    "requisitosPorConfirmar": 4,
+    "pendientes": [
+      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+      "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
+      "Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal."
+    ],
+    "score": {
+      "score": 65,
+      "sinInformacion": 7,
+      "cubiertos": 0,
+      "total": 7,
+      "porTipo": [
+        {
+          "tipo": "infraestructura",
+          "n": 3
+        },
+        {
+          "tipo": "alcance",
+          "n": 2
+        },
+        {
+          "tipo": "experiencia_relator",
+          "n": 1
+        },
+        {
+          "tipo": "tributario",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "demo-de-la-plataforma-de-aprendizaje",
+        "exige": "Acompañar a la oferta una demo de la plataforma de aprendizaje. Es causal de inadmisibilidad declarada, y dirige la adjudicación hacia proveedores que ya operan un LMS propio: no hay demo que mostrar de una plataforma que se construiría después de adjudicar.",
+        "cita": "Descripción de la Compra Ágil 1393495-768-COT26 — «Será inadmisible la oferta que no acompañe cotización y demo de la plataforma de aprendizaje.»",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "plataforma-para-800-participantes",
+        "exige": "Plataforma accesible por internet con capacidad para hasta 800 participantes, sistema de seguimiento y trazabilidad de participación, y emisión de certificados digitales verificables. Es infraestructura de escala, no una sala de clases virtual.",
+        "cita": "TDR, numeral 6, Requisitos técnicos — «Plataforma digital accesible mediante internet. Disponibilidad de acceso para un universo estimado de hasta 800 participantes. Sistema de seguimiento y trazabilidad de participación. Soporte técnico durante la vigencia del programa. Emisión de certificados digitales verificables.»",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "mesa-de-ayuda-y-tutorias-sincronicas",
+        "exige": "Mesa de ayuda o soporte técnico durante toda la ejecución y tutorías virtuales sincrónicas, para un universo de hasta 800 personas. Es un compromiso de operación continua, no solo de relatoría.",
+        "cita": "TDR, numeral 3 — «Tutorías virtuales sincrónicas… Mesa de ayuda o soporte técnico durante la ejecución», y numeral 9 — «Soporte técnico durante toda la ejecución. Resolución de incidencias asociadas al acceso o funcionamiento de la plataforma.»",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "experiencia-del-equipo-relator-en-ia-y-educacion",
+        "exige": "Relatores o facilitadores con experiencia demostrable en inteligencia artificial **y** educación. Vale 25% del puntaje y el TDR no dice con qué documentos se acredita ni cuántas experiencias se exigen.",
+        "cita": "TDR, numeral 6, Estándares de calidad — «Relatores o facilitadores con experiencia demostrable en Inteligencia Artificial y educación», y numeral 8 — «Experiencia del equipo relator en formación en IA y educación: 25%».",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "contenido-de-los-modulos-no-definido",
+        "exige": "Definir el contenido de los doce módulos: el TDR fija la estructura (dos niveles, seis módulos por curso, 90 minutos mínimo) y no las materias. El criterio de mayor peso —calidad técnica, 40%— se juega ahí, y el TDR no publica escala ni puntajes por tramo para ninguno de sus cuatro criterios.",
+        "cita": "TDR, numeral 3 — «Programa formativo compuesto por nivel básico y nivel avanzado. Seis módulos de aprendizaje por curso. Duración mínima de 90 minutos por módulo», sin ningún listado de contenidos; y numeral 8, que publica las cuatro ponderaciones sin escalas de puntaje.",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "multas-sin-porcentaje-definido",
+        "exige": "Conocer el monto y la forma de cálculo de las multas antes de comprometer el precio: el TDR enumera las causales y remite el porcentaje a «la normativa institucional vigente», que no acompaña.",
+        "cita": "TDR, numeral 10, Multas — «Incumplimiento de los plazos comprometidos. No entrega de productos comprometidos. Suspensión injustificada del servicio. Incumplimiento de niveles mínimos de calidad… El porcentaje y forma de cálculo deberán ajustarse a la normativa institucional vigente.»",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "regimen-tributario-no-declarado",
+        "exige": "Confirmar si el presupuesto es neto, exento o con impuestos incluidos. El TDR no lo declara y el comprador es un servicio de educación pública, donde la exención del art. 13 N°4 sí puede aplicar: la diferencia es de 19% sobre $7.164.900.",
+        "cita": "TDR, numeral 5 — «Presupuesto Disponible: $ 7.164.900», sin ninguna mención al régimen tributario del monto ofertado.",
+        "tipo": "tributario",
+        "estado": "sin_informacion"
+      }
+    ],
+    "generado": "2026-09-03"
   }
 }

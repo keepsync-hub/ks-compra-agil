@@ -137,7 +137,7 @@ Los criterios viven en `criterios_direccionadores` de `config/capacitaciones.jso
 exigencia, cada uno con su **cita** al documento del organismo. `src/lib/scoring-capacitacion.ts`
 solo cuenta: `score = 100 − 5 × (criterios en estado "sin_informacion")`, con piso en 0.
 
-De las diecisiete fichadas hasta hoy, el rango va de 85% a 45%. El orden no es casual — el Hospital
+De las dieciocho fichadas hasta hoy, el rango va de 85% a 45%. El orden no es casual — el Hospital
 Padre Hurtado (45%) exige las **últimas 12 órdenes de compra del mismo curso** en Mercado Público,
 que excluye a cualquiera que no lo haya vendido ya varias veces; Cochilco (50%) reparte 55% del
 puntaje entre experiencia del relator, satisfacción acreditada por terceros y 6 o más servicios
@@ -146,6 +146,12 @@ Ingeniero en Informática o en Información y Control de Gestión **con** postí
 (60%) da 35 de 100 puntos por un magíster; Subtrans (65%) reserva 10% del puntaje a ser OTEC. En el
 otro extremo, Dipres (85% y 75%) y el MOP (70%) solo piden credenciales del relator/a, que es un
 dato averiguable.
+
+Una tercera forma, del SLEP Santa Corina (65%): **la demo como causal de inadmisibilidad**. «Será
+inadmisible la oferta que no acompañe cotización y demo de la plataforma de aprendizaje» — y esa
+frase no está en el TDR sino en la descripción de la compra, así que solo aparece si se lee el
+`detalle.json` además de los adjuntos. Es de las exigencias más excluyentes que se han visto en el
+nicho: no hay demo que mostrar de una plataforma que se construiría después de adjudicar.
 
 Dos formas recurrentes de criterio que aparecieron en la tanda del 2026-09-03 y conviene reconocer:
 **la contradicción interna de las bases** —CONASET pondera 80/20 en el texto y 70/30 en la fórmula,

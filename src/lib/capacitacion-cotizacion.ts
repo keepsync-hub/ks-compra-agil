@@ -111,7 +111,7 @@ function bloqueModulos(r: RequisitosCapacitacion): string {
   return r.modulos
     .map(
       (m, i) => `<div class="mod">
-      <div class="mod-h"><span class="mod-n">${i + 1}</span><strong>${esc(m.titulo)}</strong><span class="mod-hrs">${m.horas} h</span></div>
+      <div class="mod-h"><span class="mod-n">${i + 1}</span><strong>${esc(m.titulo)}</strong><span class="mod-hrs">${m.horas.toLocaleString("es-CL")} h</span></div>
       <ul class="mod-t">${m.temas.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
     </div>`,
     )
