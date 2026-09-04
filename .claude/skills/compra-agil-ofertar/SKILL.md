@@ -102,7 +102,12 @@ Tres cosas que este cotizador hace a propósito y conviene no "arreglar":
    verificables (Dipres pide 7 cursos de Power BI en 3 años; Subtrans premia >7 años de docencia),
    y una oferta sin eso se descarta en admisibilidad. Esas filas del cuadro salen marcadas
    *Por confirmar* y encabezan los pendientes. Es el gate humano del nicho, igual que el de
-   fulfillment en licencias.
+   fulfillment en licencias. Lo que sí ocurre es lo inverso: cuando una persona entrega los
+   antecedentes, se declaran en `relator` dentro de `config/capacitaciones.json` y las filas pasan
+   a *Cumple* citando el documento que las respalda — hoy en `1618-69-COT26` y `1393495-768-COT26`.
+   La fila de experiencia en relatoría es la única que no se cierra al designar a la persona:
+   depende de `documentos_faltantes`, porque un currículum que enumera cursos no es el certificado
+   que el organismo pide adjuntar.
 2. **Respeta el régimen tributario que declara cada organismo.** Los tres TDR de Dipres presupuestan
    **exento** citando el art. 13 N°4 de la Ley de IVA (exención por giro educacional), Subtrans dice
    "impuestos incluidos", y Concepción y el Hospital no lo declaran — ahí el valor se presenta como

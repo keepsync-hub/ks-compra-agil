@@ -94,16 +94,31 @@ publican durante todo el día hábil y varias cierran en 24-48 horas.
 Dos hallazgos de la tanda del 2026-09-03 que conviene tener presentes al leer un TDR de este nicho:
 **las bases se contradicen seguido** —CONASET pondera 80/20 en el texto y 70/30 en la fórmula; la
 Defensoría exige 20 horas en las condiciones generales y 24 en los requisitos mínimos; Puerto Montt
-pide 12 horas cronológicas en tres jornadas de 15:00 a 18:00, que dan 9— y esas contradicciones se
+pide 12 horas cronológicas en tres jornadas de 15:00 a 18:00, que dan 9; el SLEP Santa Corina
+declara 3 días de plazo de entrega en la ficha del portal y «segundo semestre de 2026» en el
+numeral 7 de su TDR, para un programa de 18 horas y 800 participantes— y esas contradicciones se
 registran como criterio con su cita en vez de resolverse a dedo. Y **tres de los siete organismos no
 publican pauta de evaluación** (los dos TDR de DICREP y el del MOP, que además la anuncia y luego no
 la escribe), así que no se puede saber cuánto pesa el precio: eso también baja el score.
 
-Dos cosas que condicionan todo el nicho y no las resuelve el cotizador: **ninguna oferta nombra
-relator/a** (los TDR exigen título, CV y certificados verificables, y sin eso la oferta se
-descarta en admisibilidad), y **sigue sin confirmarse si KeepSync es OTEC registrada en SENCE** —
-de eso dependen tanto puntaje directo en algunas bases como la exención de IVA del art. 13 N°4 con
-que Dipres presupuesta. Ver el detalle en `.claude/skills/compra-agil-ofertar/SKILL.md`.
+Dos cosas condicionan el nicho y el cotizador no las resuelve solo. La primera es el **relator/a**:
+los TDR exigen título, CV y certificados verificables, y sin eso la oferta se descarta en
+admisibilidad. Dos de las dieciocho ofertas ya lo designan —Dipres `1618-69-COT26` y el SLEP Santa
+Corina `1393495-768-COT26`, las dos con Cristian Molina Espinoza y su currículum, y las dos con
+carta de presentación—, y en ambas sigue faltando el **respaldo documental** de los cursos
+dictados: el currículum los enumera, no los acredita. Las otras dieciséis salen diciendo
+«relator/a por designar», que es lo que corresponde mientras nadie lo designe. La segunda es que
+**sigue sin confirmarse si KeepSync es OTEC registrada en SENCE** — de eso dependen tanto puntaje
+directo en algunas bases como la exención de IVA del art. 13 N°4 con que Dipres presupuesta. Ver el
+detalle en `.claude/skills/compra-agil-ofertar/SKILL.md`.
+
+Ese segundo pendiente se decidía con `texto.includes("otec")`, y «otec» está dentro de
+**pr-otec-ción**: cualquier base que hablara de datos personales lo disparaba, así que cinco de las
+dieciocho ofertas afirmaban en su PDF que «estas bases lo puntúan o lo exigen» sin que sus bases
+nombraran nunca a SENCE. Una afirmación sobre las bases del organismo, dentro del documento que se
+le presenta a ese organismo, es el peor lugar donde puede salir un falso positivo. Va con
+`\botec\b|\bsence\b`: hoy lo llevan solo las tres que sí lo dicen (Subtrans, Hospital Padre
+Hurtado y Puerto Montt).
 
 Tres compras que el radar sí encontró quedaron **sin cotizar, y el archivo dice por qué**
 (`_no_cotizadas` en `config/capacitaciones.json`): la de Penco (2026-08-27) trae su único adjunto

@@ -200,7 +200,9 @@ export function renderCotizacionesCapacitacion(cotizaciones: Map<string, Cotizac
   const glosaRelator =
     conRelator.length === 0
       ? `Ninguna de estas propuestas nombra relator/a: el agente no inventa credenciales.`
-      : `${conRelator.length} de estas ${lista.length} propuestas ya nombra relator/a con sus antecedentes` +
+      : `${conRelator.length} de estas ${lista.length} propuestas ya ${
+          conRelator.length === 1 ? "nombra" : "nombran"
+        } relator/a con sus antecedentes` +
         ` (${[...new Set(conRelator.map((c) => c.relator!.nombre))].map(esc).join(", ")})` +
         `${
           relatoresFaltantes > 0
@@ -209,7 +211,8 @@ export function renderCotizacionesCapacitacion(cotizaciones: Map<string, Cotizac
         }.` +
         `${
           sinRelator > 0
-            ? ` Las otras ${sinRelator} siguen sin nombrar a nadie: el agente no inventa credenciales.`
+            ? ` ${sinRelator === 1 ? "La otra sigue" : `Las otras ${sinRelator} siguen`} sin nombrar a nadie: ` +
+              `el agente no inventa credenciales.`
             : ""
         }`;
   const menorPrecio = lista.filter((c) => c.criterioEvaluacion === "menor_precio").length;

@@ -95,8 +95,16 @@ function bloqueOferente(o: IdentidadOferente): string {
  * 2735-1052-COT26, 2306-700-COT26 y 3616-123-COT26. En ese caso la tarjeta de coordinación pasa a
  * la derecha. La alternativa era recortar el texto de las bases, que es justo lo que esta lámina
  * no debe hacer.
+ *
+ * Salvo que haya relator/a designado/a. Esos ~200px de sobra se midieron sobre la tarjeta de
+ * relatoría **sin** designar, que solo transcribe el perfil exigido; con relator/a la tarjeta pasa
+ * a acreditar exigencia por exigencia y a listar lo adjunto y lo que falta, y la columna derecha
+ * deja de ser la holgada — medido en 1393495-768-COT26, que desbordaba 200px justamente ahí. La
+ * regla, entonces, no es "izquierda contra derecha" sino que la coordinación acompaña a la columna
+ * que tenga espacio.
  */
 function coordinacionEnLaDerecha(r: RequisitosCapacitacion): boolean {
+  if (r.relator) return false;
   return (r.requisitos_metodologicos?.length ?? 0) > 0 && (r.exigencias_adicionales?.length ?? 0) > 0;
 }
 

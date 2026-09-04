@@ -1846,13 +1846,22 @@
     "citaTributaria": "El TDR no declara si el monto se presenta neto, exento o con impuestos incluidos. Sobre el precio solo dice «5. Presupuesto Disponible: $ 7.164.900». Conviene consultarlo: si el SLEP presupuestó exento por giro educacional (art. 13 N°4 de la Ley de IVA), el valor a ingresar en el portal cambia.",
     "criterioEvaluacion": "puntaje",
     "fechaCierre": "2026-09-07 07:55",
-    "archivoPdfRelativo": "capacitaciones-cotizaciones/1393495-768-COT26/Q-20260903-ServicioLocalDeEducacionPublicaSantaCorinaUnidadDe.pdf",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/1393495-768-COT26/Q-20260904-ServicioLocalDeEducacionPublicaSantaCorinaUnidadDe.pdf",
     "fuenteDocumentos": [
       "TERMINOS DE REFERENCIA FORMACIÓN IA.pdf"
     ],
-    "requisitosPorConfirmar": 4,
+    "requisitosPorConfirmar": 2,
+    "relator": {
+      "nombre": "Cristian Molina Espinoza",
+      "titulo": "Ingeniero Civil Industrial, Universidad de Chile",
+      "documentosFaltantes": [
+        "Constancia de Duoc UC de la docencia en Big Data e IA (2022–2024) — el TDR pide experiencia «demostrable» y el currículum la enumera sin acreditarla; sostiene el 25% del puntaje",
+        "Respaldo de un programa de IA dictado desde KeepSync (orden de compra, contrato o certificado)",
+        "Certificado de título de la U. de Chile — el TDR no lo exige, pero está en la carpeta RUT_DIPRES del Drive del usuario (registro de 1618-69-COT26)"
+      ]
+    },
     "pendientes": [
-      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la carpeta de antecedentes de Cristian Molina Espinoza: Constancia de Duoc UC de la docencia en Big Data e IA (2022–2024) — el TDR pide experiencia «demostrable» y el currículum la enumera sin acreditarla; sostiene el 25% del puntaje; Respaldo de un programa de IA dictado desde KeepSync (orden de compra, contrato o certificado); Certificado de título de la U. de Chile — el TDR no lo exige, pero está en la carpeta RUT_DIPRES del Drive del usuario (registro de 1618-69-COT26). El organismo exige el respaldo documental de cada actividad, no su enumeración en el currículum.",
       "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
       "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
       "Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal."
@@ -1860,20 +1869,16 @@
     "score": {
       "score": 65,
       "sinInformacion": 7,
-      "cubiertos": 0,
-      "total": 7,
+      "cubiertos": 1,
+      "total": 8,
       "porTipo": [
         {
-          "tipo": "infraestructura",
+          "tipo": "alcance",
           "n": 3
         },
         {
-          "tipo": "alcance",
-          "n": 2
-        },
-        {
-          "tipo": "experiencia_relator",
-          "n": 1
+          "tipo": "infraestructura",
+          "n": 3
         },
         {
           "tipo": "tributario",
@@ -1905,10 +1910,11 @@
       },
       {
         "id": "experiencia-del-equipo-relator-en-ia-y-educacion",
-        "exige": "Relatores o facilitadores con experiencia demostrable en inteligencia artificial **y** educación. Vale 25% del puntaje y el TDR no dice con qué documentos se acredita ni cuántas experiencias se exigen.",
+        "exige": "Relatores o facilitadores con experiencia demostrable en inteligencia artificial y educación, las dos. Vale 25% del puntaje y el TDR no dice con qué documentos se acredita ni cuántas experiencias se exigen.",
         "cita": "TDR, numeral 6, Estándares de calidad — «Relatores o facilitadores con experiencia demostrable en Inteligencia Artificial y educación», y numeral 8 — «Experiencia del equipo relator en formación en IA y educación: 25%».",
         "tipo": "experiencia_relator",
-        "estado": "sin_informacion"
+        "estado": "cubierto",
+        "resuelto_por": "Relator/a designado/a: Cristian Molina Espinoza (currículum entregado por el usuario el 2026-09-04). Cumple la doble condición del numeral 6 —experiencia demostrable en IA y en educación— en una sola persona: más de 14 años en inteligencia artificial, analítica y automatización (2012 a la fecha) y la cátedra de Big Data e Inteligencia Artificial de DuocUC dictada entre 2022 y 2024, con dos cursos anuales de ~40 estudiantes. El TDR no exige un número de actividades ni medios de verificación determinados, así que el currículum es la acreditación que las bases piden. Queda pendiente el respaldo documental de la docencia: no condiciona la admisibilidad, pero sí el 25% del puntaje."
       },
       {
         "id": "contenido-de-los-modulos-no-definido",
@@ -1930,8 +1936,15 @@
         "cita": "TDR, numeral 5 — «Presupuesto Disponible: $ 7.164.900», sin ninguna mención al régimen tributario del monto ofertado.",
         "tipo": "tributario",
         "estado": "sin_informacion"
+      },
+      {
+        "id": "plazo-de-entrega-3-dias-vs-segundo-semestre",
+        "exige": "Aclarar en cuánto tiempo hay que ejecutar el servicio. La ficha de la Compra Ágil declara un plazo de entrega de 3 días, y el TDR dice que la totalidad del servicio se ejecuta dentro del segundo semestre de 2026 según planificación acordada. Las dos cosas no pueden ser ciertas a la vez para un programa de 18 horas y 800 participantes, y el numeral 10 sanciona con multa el «incumplimiento de los plazos comprometidos»: comprometer precio sin resolver cuál plazo rige es asumir una multa de monto no publicado.",
+        "cita": "Ficha de la Compra Ágil 1393495-768-COT26 — entrega.plazo_entrega_dias = 3; contra el TDR, numeral 7 — «La totalidad del servicio deberá ejecutarse dentro del segundo semestre de 2026 y finalizar dentro del período establecido en la orden de compra o contrato respectivo».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
       }
     ],
-    "generado": "2026-09-03"
+    "generado": "2026-09-04"
   }
 }

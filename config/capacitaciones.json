@@ -3504,12 +3504,12 @@
         "horas_cronologicas": 18,
         "sesiones": 12,
         "horas_por_sesion": 1.5,
-        "glosa": "18 horas cronológicas: 12 módulos (6 por nivel) de 90 minutos, el mínimo que fija el TDR."
+        "glosa": "12 módulos (6 por nivel) de 90 minutos: el mínimo que fija el TDR."
       },
       "modalidad": {
         "tipo": "Online asincrónica con actividades colaborativas y tutorías virtuales sincrónicas",
-        "plataforma": "Plataforma de aprendizaje accesible por internet, con seguimiento y trazabilidad de participación, recursos descargables, mesa de ayuda y emisión de certificados digitales verificables.",
-        "horario": "Flexible, permitiendo la participación fuera de la jornada lectiva, según programación aprobada por la contraparte técnica."
+        "plataforma": "Plataforma de aprendizaje por internet, con seguimiento de participación y certificados digitales verificables.",
+        "horario": "Flexible, fuera de la jornada lectiva, según la programación que apruebe la contraparte técnica."
       },
       "fechas_ejecucion": "Segundo semestre de 2026, según la planificación que se acuerde con el SLEP.",
       "modulos": [
@@ -3610,22 +3610,72 @@
           ]
         }
       ],
-      "modulos_nota": "El TDR fija la estructura —dos niveles, «Seis módulos de aprendizaje por curso», «Duración mínima de 90 minutos por módulo»— pero **no define el contenido de los módulos**. Los doce títulos y sus temas son propuesta de KeepSync, contextualizada al sistema escolar chileno como exige el estándar de calidad del numeral 6, y se ajustan con la contraparte técnica. Ahí se juega el criterio de mayor peso de la pauta: «Calidad técnica de la propuesta», 40%.",
+      "modulos_nota": "El TDR fija la estructura —dos niveles, «Seis módulos de aprendizaje por curso», «Duración mínima de 90 minutos por módulo»— pero no define el contenido de los módulos. Los doce títulos y sus temas son propuesta de KeepSync, contextualizada al sistema escolar chileno como exige el estándar de calidad del numeral 6, y se ajustan con la contraparte técnica. Ahí se juega el criterio de mayor peso de la pauta: «Calidad técnica de la propuesta», 40%.",
+      "contenidos_sugeridos_por_el_organismo": false,
       "requisitos_metodologicos": [
-        "Online asincrónica con actividades colaborativas y tutorías virtuales sincrónicas.",
-        "Actividades prácticas contextualizadas al ámbito educativo en cada módulo.",
-        "Acompañamiento tutorial y mesa de ayuda durante toda la ejecución.",
-        "Horarios flexibles, para permitir la participación fuera de la jornada lectiva."
+        "Online asincrónica, con tutorías virtuales sincrónicas.",
+        "6 módulos por nivel, de 90 minutos mínimo cada uno.",
+        "Materiales digitales y actividades prácticas del ámbito educativo.",
+        "Acompañamiento tutorial y mesa de ayuda durante la ejecución.",
+        "Horarios flexibles y reportería de avance para el SLEP.",
+        "Recursos solo digitales y protección de datos (numerales 11 y 12)."
       ],
       "exigencias_adicionales": [
-        "Plataforma con acceso para hasta 800 participantes, seguimiento y trazabilidad de participación.",
-        "Certificados digitales verificables y recursos descargables reutilizables.",
-        "Demo de la plataforma de aprendizaje adjunta a la oferta: sin ella la oferta es inadmisible."
+        "Plataforma para hasta 800 participantes, con trazabilidad.",
+        "Certificados digitales verificables y recursos descargables.",
+        "Demo de la plataforma: sin ella la oferta es inadmisible."
       ],
       "relator_exigido": {
         "formacion": "El TDR no fija título ni disciplina: exige relatores o facilitadores con experiencia demostrable en inteligencia artificial y educación.",
         "experiencia_laboral": "Experiencia demostrable en inteligencia artificial y educación, como estándar de calidad del servicio.",
         "experiencia_relatoria": "La experiencia del equipo relator en formación en IA y educación vale 25% de la evaluación. El TDR no fija número de cursos ni medios de verificación."
+      },
+      "relator": {
+        "nombre": "Cristian Molina Espinoza",
+        "titulo": "Ingeniero Civil Industrial, Universidad de Chile",
+        "cargo": "Fundador y Head of AI, KeepSync",
+        "contacto": "cristian.molina@keepsync.ai · +56 9 3674 8442",
+        "acredita": {
+          "formacion": "Ingeniero Civil Industrial, Universidad de Chile (2007–2014). El numeral 6 no fija título ni disciplina —exige «experiencia demostrable en Inteligencia Artificial y educación»—, así que la ingeniería no es aquí un requisito de admisibilidad sino el sustento técnico del programa.",
+          "experiencia_laboral": "Más de 14 años continuos (2012 a la fecha) en IA, analítica de datos y automatización: KR Consulting, Rayen Salud, Ricoh Chile, Ricoh LATAM y KeepSync. Implementó los tableros analíticos que usan los Servicios de Salud del país y condujo el Centro de Excelencia regional de Ricoh.",
+          "experiencia_relatoria": "Docencia formal en la materia del encargo: cátedra de Big Data e Inteligencia Artificial en DuocUC entre 2022 y 2024, dos cursos anuales de ~40 estudiantes, con diseño propio de contenidos y casos. Suma workshops de adopción de IA en KeepSync. Es la doble condición del numeral 6 —IA y educación— en una sola persona."
+        },
+        "acredita_breve": {
+          "formacion": "Ingeniero Civil Industrial, Universidad de Chile (2007–2014). Se adjunta currículum.",
+          "experiencia_laboral": "Más de 14 años en IA, analítica de datos y automatización (2012 a la fecha), en Rayen Salud, Ricoh Chile, Ricoh LATAM y KeepSync.",
+          "experiencia_relatoria": "Cátedra de Big Data e Inteligencia Artificial en DuocUC (2022–2024), dos cursos anuales de ~40 estudiantes, más workshops de adopción de IA en KeepSync."
+        },
+        "documentos": [
+          "Currículum vitae actualizado (CVCristianMolinaEspinozaATS.pdf), 2026-09-04",
+          "Carta de presentación al SLEP con la postulación como relator"
+        ],
+        "documentos_faltantes": [
+          "Constancia de Duoc UC de la docencia en Big Data e IA (2022–2024) — el TDR pide experiencia «demostrable» y el currículum la enumera sin acreditarla; sostiene el 25% del puntaje",
+          "Respaldo de un programa de IA dictado desde KeepSync (orden de compra, contrato o certificado)",
+          "Certificado de título de la U. de Chile — el TDR no lo exige, pero está en la carpeta RUT_DIPRES del Drive del usuario (registro de 1618-69-COT26)"
+        ],
+        "fuente": "Currículum entregado por el usuario en la sesión del 2026-09-04 (CVCristianMolinaEspinozaATS.pdf). Todo lo que se afirma arriba sale de ese documento; el certificado de título consta en el registro de 1618-69-COT26 (carpeta RUT_DIPRES del Drive del usuario, 2026-08-22)."
+      },
+      "carta": {
+        "_que_es": "Prosa de la carta de presentación que encabeza la oferta. La identidad NO va acá: el membrete, la fecha y el bloque del oferente los arma src/lib/carta-presentacion.ts desde 'relator' y config/company.json, para que la carta y la propuesta no puedan contradecirse.",
+        "destinatario": [
+          "Servicio Local de Educación Pública Santa Corina",
+          "Unidad de Formación y Desarrollo Profesional",
+          "Sra. Carolina Herrera Sandoval, Encargada de Formación y Desarrollo Profesional"
+        ],
+        "referencia": "Carta de presentación — Compra Ágil 1393495-768-COT26, «Formación en Inteligencia Artificial para la Educación: Nivel Básico y Avanzado».",
+        "saludo": "Estimada señora Herrera:",
+        "parrafos": [
+          "Por medio de la presente manifiesto el interés de KeepSync en participar en la contratación del servicio de «Formación en Inteligencia Artificial para la Educación: Nivel Básico y Avanzado», y presento formalmente mi postulación como relator de la actividad. El numeral 6 de los Términos de Referencia exige relatores con experiencia demostrable en Inteligencia Artificial y educación: no en una u otra, sino en ambas. Mi trayectoria reúne esas dos condiciones en una sola persona, y es sobre esa base que se construye la propuesta que se acompaña.",
+          "Entre 2022 y 2024 dicté la cátedra de Big Data e Inteligencia Artificial en la carrera de Informática de Duoc UC, con dos cursos anuales de aproximadamente cuarenta estudiantes cada uno. En ese rol diseñé íntegramente los contenidos, los casos aplicados y las actividades prácticas de la asignatura, traduciendo conceptos técnicos complejos en tareas verificables para estudiantes sin formación previa en la materia. Esa experiencia es la que este encargo necesita: el universo que el Servicio Local convoca —hasta ochocientos docentes, directivos y asistentes de la educación— no es una audiencia técnica, y el riesgo real de un programa de IA para ese público no es quedarse corto de contenido sino perderlo en la primera sesión.",
+          "En paralelo acumulo más de catorce años de ejercicio profesional en inteligencia artificial, analítica de datos y automatización de procesos. En Rayen Salud implementé los tableros analíticos que hoy usan los Servicios de Salud del país para su gestión; en Ricoh LATAM conduje el Centro de Excelencia regional de soluciones tecnológicas, con alcance en doce países y responsabilidad directa sobre la arquitectura y el despliegue de las soluciones que enseñaba. Desde KeepSync, que fundé, lidero la adopción práctica de IA en organizaciones y diseño los programas de capacitación y las metodologías de adopción con que se sostiene. Lo que llevo al aula, por tanto, no es material de estudio: es ejecución efectiva realimentada en cada edición.",
+          "La propuesta técnica que se acompaña responde uno a uno a los requisitos del numeral 3: dos niveles, seis módulos por curso, noventa minutos como mínimo por módulo, modalidad online asincrónica con actividades colaborativas y tutorías virtuales sincrónicas, materiales de apoyo digitales, recursos descargables reutilizables, mesa de ayuda durante toda la ejecución, certificación digital y reportería de participación y avance para el Servicio Local. Los doce módulos están contextualizados al sistema escolar chileno, como pide el numeral 6: se trabaja sobre planificaciones alineadas al currículum nacional, adaptación de material por nivel lector, instrumentos de evaluación y rúbricas, lectura de asistencia y de indicadores de gestión, y el cuidado de los datos personales de estudiantes bajo la normativa chilena aplicable.",
+          "Quiero dejar constancia explícita de dos definiciones de la propuesta. La primera es que toda producción con apoyo de IA se somete a validación docente antes de llegar a un estudiante: el programa enseña a usar la herramienta y, con el mismo énfasis, a reconocer sus límites, sus sesgos y sus errores. La segunda es que el tratamiento de datos personales de estudiantes se aborda como contenido propio y no como advertencia al margen, en línea con el numeral 12 de los Términos de Referencia y con la normativa vigente de protección de datos.",
+          "Declaro la disponibilidad para ejecutar la totalidad del servicio dentro del segundo semestre de 2026, conforme a la planificación que se acuerde con la contraparte técnica, y el compromiso de entregar los siete productos exigidos en el numeral 7: plan de trabajo e implementación, habilitación de plataforma y carga de participantes, reporte intermedio, reporte final, nómina de participantes certificados, certificados digitales emitidos e informe consolidado de resultados.",
+          "Agradezco de antemano la consideración de esta propuesta y quedo a disposición para ampliar cualquier antecedente que el Servicio Local de Educación Pública Santa Corina estime necesario."
+        ],
+        "despedida": "Atentamente,",
+        "ciudad": "Santiago"
       },
       "entregables": [
         "Plan de trabajo e implementación.",
@@ -3634,7 +3684,7 @@
         "Nómina de participantes certificados y certificados digitales emitidos.",
         "Informe consolidado de resultados con la encuesta de satisfacción."
       ],
-      "logistica": "Servicio íntegramente en línea sobre la plataforma del proveedor. La conformidad técnica la otorga la contraparte técnica designada por el SLEP Santa Corina, previa verificación de contenidos, cobertura, reportes, certificaciones y funcionamiento de la plataforma.",
+      "logistica": "Servicio íntegramente en línea sobre la plataforma del proveedor. La conformidad técnica la otorga la contraparte designada por el SLEP, previa verificación de contenidos, cobertura, reportes, certificaciones y plataforma (numeral 13).",
       "documentos_obligatorios_oferta": [
         {
           "documento": "Cotización con el valor total del servicio, dentro del presupuesto disponible",
@@ -3651,6 +3701,10 @@
         {
           "documento": "Antecedentes del equipo relator que acrediten experiencia en inteligencia artificial y educación",
           "tipo": "acopio"
+        },
+        {
+          "documento": "Carta de presentación del oferente con la postulación del relator",
+          "tipo": "generable"
         }
       ],
       "evaluacion": {
@@ -3688,10 +3742,11 @@
         },
         {
           "id": "experiencia-del-equipo-relator-en-ia-y-educacion",
-          "exige": "Relatores o facilitadores con experiencia demostrable en inteligencia artificial **y** educación. Vale 25% del puntaje y el TDR no dice con qué documentos se acredita ni cuántas experiencias se exigen.",
+          "exige": "Relatores o facilitadores con experiencia demostrable en inteligencia artificial y educación, las dos. Vale 25% del puntaje y el TDR no dice con qué documentos se acredita ni cuántas experiencias se exigen.",
           "cita": "TDR, numeral 6, Estándares de calidad — «Relatores o facilitadores con experiencia demostrable en Inteligencia Artificial y educación», y numeral 8 — «Experiencia del equipo relator en formación en IA y educación: 25%».",
           "tipo": "experiencia_relator",
-          "estado": "sin_informacion"
+          "estado": "cubierto",
+          "resuelto_por": "Relator/a designado/a: Cristian Molina Espinoza (currículum entregado por el usuario el 2026-09-04). Cumple la doble condición del numeral 6 —experiencia demostrable en IA y en educación— en una sola persona: más de 14 años en inteligencia artificial, analítica y automatización (2012 a la fecha) y la cátedra de Big Data e Inteligencia Artificial de DuocUC dictada entre 2022 y 2024, con dos cursos anuales de ~40 estudiantes. El TDR no exige un número de actividades ni medios de verificación determinados, así que el currículum es la acreditación que las bases piden. Queda pendiente el respaldo documental de la docencia: no condiciona la admisibilidad, pero sí el 25% del puntaje."
         },
         {
           "id": "contenido-de-los-modulos-no-definido",
@@ -3712,6 +3767,13 @@
           "exige": "Confirmar si el presupuesto es neto, exento o con impuestos incluidos. El TDR no lo declara y el comprador es un servicio de educación pública, donde la exención del art. 13 N°4 sí puede aplicar: la diferencia es de 19% sobre $7.164.900.",
           "cita": "TDR, numeral 5 — «Presupuesto Disponible: $ 7.164.900», sin ninguna mención al régimen tributario del monto ofertado.",
           "tipo": "tributario",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "plazo-de-entrega-3-dias-vs-segundo-semestre",
+          "exige": "Aclarar en cuánto tiempo hay que ejecutar el servicio. La ficha de la Compra Ágil declara un plazo de entrega de 3 días, y el TDR dice que la totalidad del servicio se ejecuta dentro del segundo semestre de 2026 según planificación acordada. Las dos cosas no pueden ser ciertas a la vez para un programa de 18 horas y 800 participantes, y el numeral 10 sanciona con multa el «incumplimiento de los plazos comprometidos»: comprometer precio sin resolver cuál plazo rige es asumir una multa de monto no publicado.",
+          "cita": "Ficha de la Compra Ágil 1393495-768-COT26 — entrega.plazo_entrega_dias = 3; contra el TDR, numeral 7 — «La totalidad del servicio deberá ejecutarse dentro del segundo semestre de 2026 y finalizar dentro del período establecido en la orden de compra o contrato respectivo».",
+          "tipo": "alcance",
           "estado": "sin_informacion"
         }
       ]
