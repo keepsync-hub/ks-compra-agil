@@ -9,7 +9,10 @@ if (carpetas.length === 0) {
   return [{ json: { query: "'sin-carpetas' in parents", carpetas: [] } }];
 }
 
-const query = carpetas.map(c => "'" + c.id + "' in parents").join(" or ") +
+// Los paréntesis no son decorativos: en el lenguaje de consulta de Drive `and` liga más fuerte
+// que `or`, así que "A or B and trashed = false" se lee "A or (B and trashed = false)" y los
+// archivos en la papelera de todas las carpetas menos la última volverían como insumos.
+const query = "(" + carpetas.map(c => "'" + c.id + "' in parents").join(" or ") + ")" +
   " and trashed = false";
 
 return [{ json: { query, carpetas } }];
