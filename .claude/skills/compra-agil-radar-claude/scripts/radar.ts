@@ -592,11 +592,24 @@ async function main() {
     `\nEl barrido de \`proveedor_seleccionado\` usa 1 sola variante ancha por categoría, y solo en las que declaran \`barrer_adjudicaciones\` (ver PLAN-VOLUMEN.md).`,
   ].join("\n");
 
+  const huboAlgunListado = barrido.variantesSinConsultar.length + variantesFallidas.length < totalConsultas;
+
+  // El informe se guarda con la misma regla que la grilla de `docs/index.html`: si ninguna consulta
+  // llegó a la API, la corrida no tiene nada nuevo que decir y pisar el archivo sólo BORRA el
+  // registro de la última corrida que sí funcionó. Medido: una corrida sin ticket dejó el informe en
+  // 12 líneas donde había 148, perdiendo las 14 oportunidades de la corrida anterior — y CI lo
+  // commiteó. La página ya estaba protegida; el informe no.
   const outputDir = path.join(ROOT_DIR, "output");
   mkdirSync(outputDir, { recursive: true });
-  writeFileSync(path.join(outputDir, "radar-ultima-corrida.md"), reporte, "utf-8");
+  if (huboAlgunListado) {
+    writeFileSync(path.join(outputDir, "radar-ultima-corrida.md"), reporte, "utf-8");
+  } else {
+    console.warn(
+      `\n⚠ output/radar-ultima-corrida.md se dejó intacto: ninguna consulta llegó a la API, así que ` +
+        `el informe de la corrida anterior es más informativo que este.`,
+    );
+  }
 
-  const huboAlgunListado = barrido.variantesSinConsultar.length + variantesFallidas.length < totalConsultas;
   publicarPagina(barrido.hallazgos, [...categorias, ...omitidasPorSolo], categoriasSinBarrer, huboAlgunListado);
 
   console.log("\n" + reporte);

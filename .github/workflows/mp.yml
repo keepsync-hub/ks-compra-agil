@@ -5,9 +5,9 @@ name: Mercado Público — radar, cotizar y generar
 #
 #   1. `concurrency` serializa las corridas. Con dos workflows empujando a la misma rama, tres
 #      clics seguidos de "Cotizar" hacían fallar los dos últimos push con non-fast-forward.
-#   2. `data/` es efímero y gitignored. Si el radar corre en este mismo job, el cotizador encuentra
-#      `data/<codigo>/detalle.json` y el generador encuentra los anexos en blanco de
-#      `data/<codigo>/attachments/`, sin un script de rehidratación ni requests extra a la API.
+#   2. `data/` es efímero y gitignored, así que el cotizador y el generador necesitan que alguien
+#      reponga `data/<codigo>/detalle.json` en el mismo job. Ese alguien es `traer-detalle`
+#      (1 request por código), no el radar completo: ver el paso "Traer el detalle" más abajo.
 
 on:
   workflow_dispatch:
@@ -46,10 +46,21 @@ jobs:
   correr:
     runs-on: ubuntu-latest
     env:
-      COMPRA_AGIL_TICKET: ${{ secrets.COMPRA_AGIL_TICKET }}
+      # OJO con el nombre: el SECRETO se llama COMPRA_AGIL_TICKET, pero `src/lib/config.ts` lee la
+      # variable COMPRA_AGIL_API_TICKET. Estuvieron desalineados desde el primer día y por eso
+      # cualquier corrida con radar moría en la primera llamada a la API.
+      COMPRA_AGIL_API_TICKET: ${{ secrets.COMPRA_AGIL_TICKET }}
       N8N_BASE_URL: ${{ secrets.N8N_BASE_URL }}
       N8N_CLAVE: ${{ secrets.N8N_CLAVE }}
       CORRIDA_ID: ${{ inputs.corrida_id }}
+      # Los inputs NO se interpolan dentro de los `run:`. `workflow_dispatch` lo puede disparar
+      # cualquiera con permiso de escritura, y `${{ inputs.codigos }}` suelto en un script —o en un
+      # `git commit -m`— es una vía de inyección de comandos. Acá entran como variables y en el
+      # script se leen entrecomilladas.
+      ACCION: ${{ inputs.accion }}
+      CODIGOS: ${{ inputs.codigos }}
+      DOCUMENTOS: ${{ inputs.documentos }}
+      SOLO: ${{ inputs.solo }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -66,16 +77,29 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
 
-      # Chromium pesa y tarda: solo se instala cuando de verdad se va a renderizar un PDF.
-      - name: Instalar Chromium
-        if: inputs.accion != 'radar'
-        run: npx playwright install --with-deps chromium
+      # Cuestan segundos y cubren justo lo que este workflow ejecuta. Van antes de gastar el primer
+      # request de la API: una corrida que igual va a fallar no tiene por qué costar cuota.
+      - name: Typecheck y tests
+        run: |
+          npm run typecheck
+          npm test
+
+      - name: Traer el detalle de cada código
+        if: inputs.accion == 'cotizar' || inputs.accion == 'generar'
+        run: |
+          if [ -z "$CODIGOS" ]; then
+            echo "::error::La acción '$ACCION' necesita al menos un código."
+            exit 1
+          fi
+          # Un request por código. Antes esto lo hacía el radar entero (12 variantes `q` más un
+          # detalle por acierto) sólo para reponer un archivo que la API entrega de a uno.
+          npm run traer-detalle -- $(echo "$CODIGOS" | tr ',' ' ')
 
       - name: Radar
         if: inputs.accion == 'radar' || inputs.accion == 'ambos'
         run: |
-          if [ -n "${{ inputs.solo }}" ]; then
-            npm run radar -- --solo="${{ inputs.solo }}"
+          if [ -n "$SOLO" ]; then
+            npm run radar -- --solo="$SOLO"
           else
             npm run radar
           fi
@@ -83,26 +107,45 @@ jobs:
       - name: Cotizar
         if: inputs.accion == 'cotizar' || inputs.accion == 'ambos'
         run: |
-          if [ -z "${{ inputs.codigos }}" ]; then
-            echo "::error::La acción '${{ inputs.accion }}' necesita al menos un código."
+          if [ -z "$CODIGOS" ]; then
+            echo "::error::La acción '$ACCION' necesita al menos un código."
             exit 1
           fi
-          for codigo in $(echo "${{ inputs.codigos }}" | tr ',' ' '); do
+          for codigo in $(echo "$CODIGOS" | tr ',' ' '); do
             echo "::group::Cotizar $codigo"
             npm run cotizar-capacitacion -- "$codigo" || echo "::warning::Cotización de $codigo sin resultado"
             echo "::endgroup::"
           done
 
+      # Chromium pesa y tarda ~90 s: sólo se instala cuando de verdad hay algo que renderizar. Para
+      # `generar`, eso depende del catálogo: si todos los documentos del código son `acopio` (mitad
+      # de los 30 que exigen las seis compras fichadas) no se renderiza ni una página.
+      - name: ¿Hay algo que renderizar?
+        id: render
+        if: inputs.accion != 'radar'
+        run: |
+          if [ "$ACCION" != "generar" ]; then
+            echo "hace_falta=si" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          hace_falta=no
+          for codigo in $(echo "$CODIGOS" | tr ',' ' '); do
+            if npm run --silent generar-documento -- "$codigo" --solo-listar 2>/dev/null | grep -q '^generable'; then
+              hace_falta=si
+            fi
+          done
+          echo "hace_falta=$hace_falta" >> "$GITHUB_OUTPUT"
+
+      - name: Instalar Chromium
+        if: inputs.accion != 'radar' && steps.render.outputs.hace_falta == 'si'
+        run: npx playwright install --with-deps chromium
+
       - name: Generar documentos
         if: inputs.accion == 'generar'
         run: |
-          if [ -z "${{ inputs.codigos }}" ]; then
-            echo "::error::La acción 'generar' necesita al menos un código."
-            exit 1
-          fi
-          for codigo in $(echo "${{ inputs.codigos }}" | tr ',' ' '); do
+          for codigo in $(echo "$CODIGOS" | tr ',' ' '); do
             echo "::group::Generar $codigo"
-            npm run generar-documento -- "$codigo" $(echo "${{ inputs.documentos }}" | tr ',' ' ')
+            npm run generar-documento -- "$codigo" $(echo "$DOCUMENTOS" | tr ',' ' ')
             echo "::endgroup::"
           done
 
@@ -115,7 +158,7 @@ jobs:
             echo "Sin cambios que publicar."
             exit 0
           fi
-          git commit -m "Panel MP: ${{ inputs.accion }} ${{ inputs.codigos }}"
+          git commit -m "Panel MP: $ACCION $CODIGOS"
           # Otra corrida pudo haber empujado mientras esta trabajaba. `concurrency` las serializa,
           # pero el rebase cubre el caso de un push hecho a mano entremedio.
           for intento in 1 2 3; do
@@ -128,19 +171,19 @@ jobs:
 
       - name: Avisar a n8n
         run: |
-          case "${{ inputs.accion }}" in
+          case "$ACCION" in
             radar) npm run postear-n8n -- radar ;;
             cotizar|ambos)
               # Ojo con `[ test ] && cmd` acá: los pasos corren con `bash -e`, así que un test
               # falso devuelve 1 y tumba el paso entero. Va con if/fi.
-              if [ "${{ inputs.accion }}" = "ambos" ]; then
+              if [ "$ACCION" = "ambos" ]; then
                 npm run postear-n8n -- radar
               fi
-              for codigo in $(echo "${{ inputs.codigos }}" | tr ',' ' '); do
+              for codigo in $(echo "$CODIGOS" | tr ',' ' '); do
                 npm run postear-n8n -- cotizacion "$codigo"
               done ;;
             generar)
-              for codigo in $(echo "${{ inputs.codigos }}" | tr ',' ' '); do
+              for codigo in $(echo "$CODIGOS" | tr ',' ' '); do
                 npm run postear-n8n -- expediente "$codigo"
               done ;;
           esac
@@ -150,9 +193,9 @@ jobs:
       - name: Avisar el fallo a n8n
         if: failure()
         run: |
-          CODIGOS=$(echo "${{ inputs.codigos }}" | tr ',' ' ')
-          if [ -z "$CODIGOS" ]; then CODIGOS="-"; fi
-          npm run postear-n8n -- error $CODIGOS \
-            --motivo "Falló la acción '${{ inputs.accion }}' en GitHub Actions" \
+          LISTA=$(echo "$CODIGOS" | tr ',' ' ')
+          if [ -z "$LISTA" ]; then LISTA="-"; fi
+          npm run postear-n8n -- error $LISTA \
+            --motivo "Falló la acción '$ACCION' en GitHub Actions" \
             --run "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
           || echo "::warning::Tampoco se pudo avisar el fallo a n8n."

@@ -297,6 +297,62 @@ ya escapados, porque el SDK del builder es un subconjunto muy acotado de TypeScr
 sin `Object.assign`, sin `.join()`). El CSS y el JS de las páginas viven en **`docs/panel/`** y los
 sirve Pages: así quedan revisables en el diff en vez de enterrados en un literal del workflow.
 
+### Lo que se midió al ponerlo a correr por primera vez (2026-09-05)
+
+El panel estaba escrito entero y desplegado, y **nunca se había ejecutado**: `mp_solicitudes` con 0
+filas, los dos workflows con 0 ejecuciones, `mp.yml` con 0 corridas. Ponerlo a correr encontró siete
+defectos; los tres peores no eran visibles leyendo el código, y por eso lo que sigue importa más que
+la lista:
+
+- **`parents` no está en el enum de `fields`** del nodo Drive `fileFolder:search`. "Listar los
+  archivos" pedía `['id','name']` y `render-expediente.js` agrupa por `a.parents[0]`: descartaba
+  **todos** los archivos y el expediente decía "Sin insumos" siempre. Va `['*']`.
+- **`workflowInputs` con `value: null`** en "Crear el árbol en Drive". n8n corre `Object.keys(value)`
+  al validar y la ejecución moría con *"Cannot convert undefined or null to object"* antes de crear
+  una carpeta. Con un sub-workflow en `passthrough`, ese parámetro se **omite**.
+- **Precedencia en la consulta a Drive.** `query-hijos.js` armaba `A or B and trashed = false`, y ahí
+  `and` liga más fuerte que `or`: los archivos en la papelera de todas las carpetas menos la última
+  volvían como insumos. Lo encontró un test.
+
+En los dos primeros, la muestra `output:` del nodo en la fuente declaraba lo que se **esperaba**, no
+lo que el nodo devuelve. Una muestra escrita a mano no es una medición: cada nodo que se toque se
+valida con `get_node_types` antes de publicar (ver `n8n/README.md`).
+
+**Los chunks ya son ejecutables fuera de n8n.** `test/ayuda-chunks.ts` los corre como los corre n8n
+—el archivo es el cuerpo de una función con `$json`, `$input` y `$()` inyectados—; `npm test` cubre
+ingesta, cooldown, faltantes, pedido-drive, decision, query-hijos y render-expediente, más el
+catálogo de documentos, que es el contrato que comparten `postear-n8n.ts`, `carpetas-drive.ts` y
+`render-expediente.js` sin verse entre sí. Antes esos nueve archivos no los veía ni el typecheck y su
+único ambiente de ejecución era producción.
+
+**Un clic en "Cotizar" costaba 12+N requests para obtener uno que cuesta 1.** `/mp/cotizar`
+despachaba `accion: "ambos"` y barría las 12 variantes `q` de las 5 categorías activas sólo para
+reponer `data/<codigo>/detalle.json`. `npm run traer-detalle -- <codigo>` lo trae con **un** request
+delegando en `obtenerDetalleConCache()`. También: `mp.yml` corre `typecheck` y `test` antes de gastar
+cuota, y Chromium se instala sólo si el catálogo tiene algún documento `generable`
+(`generar-documento --solo-listar`) — en Dipres, de 6 documentos exigidos sólo 1 lo es.
+
+**El radar borraba el informe de la corrida anterior cuando no llegaba a la API.** La grilla de
+`docs/index.html` tenía el guard; `output/radar-ultima-corrida.md` no, porque `huboAlgunListado` se
+calculaba después de escribirlo. Una corrida sin ticket lo dejó en 12 líneas donde había 148, y CI lo
+commiteó. Ahora la bandera gobierna las dos escrituras.
+
+**Qué quedó probado contra producción**, con `1618-67-COT26` (Dipres) como código de prueba:
+ingesta → la tabla pasó de 0 a 1 fila; `GET /mp/panel` renderiza; "Avanzar" creó el árbol en Drive
+con `_ENTREGABLES` y las 6 carpetas numeradas, y un **segundo** "Avanzar" devolvió `creadas: 0` con
+los mismos siete ids —el find-or-create hace lo que promete, y sin él cada clic habría duplicado el
+árbol en silencio—; y el expediente lista los archivos con su `parents`.
+
+**Lo que sigue bloqueado, y no lo puede resolver el agente:** los tres secretos del repo
+(`COMPRA_AGIL_TICKET`, `N8N_BASE_URL`, `N8N_CLAVE`) **no están configurados**. Medido en la primera
+corrida de `mp.yml`: llegan vacíos al job —un secreto que existe se enmascara como `***`, no en
+blanco—, el radar reportó *"Falta COMPRA_AGIL_API_TICKET"* en su única consulta y `postear-n8n` se
+negó a enviar. Hasta que estén, ningún botón del panel produce datos. Tampoco existe todavía la
+credencial `httpHeaderAuth` de n8n llamada "KS Ingesta MP" con la cabecera `X-KS-Clave`: la única de
+ese tipo en la instancia se llama "Header Auth account". Y sigue abierto el hueco del entregable
+(nada sube el documento generado a `_ENTREGABLES`) y el repunte de `RAMA` en `acciones.ts`, hoy
+apuntada a `claude/n8n-radar-cotizaciones-08vr00`, desde donde Pages no publica.
+
 **Freno de cuota de 15 minutos** en `/mp/radar`: cada corrida barre todas las categorías activas y el
 repo tiene un 429 documentado a las 9 requests.
 

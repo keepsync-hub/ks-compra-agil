@@ -146,7 +146,12 @@ const listarArchivos = node({
       queryString: expr('{{ $json.query }}'),
       returnAll: true,
       filter: {},
-      options: { fields: ['id', 'name'] },
+      // `parents` NO está en el enum de `fields` del nodo (id, name, mimeType, trashed,
+      // webViewLink…): `*` es la única forma de que llegue. Y llega tiene que llegar, porque
+      // `render-expediente.js` agrupa los archivos por `a.parents[0]` y descarta el que no lo
+      // traiga — con `['id','name']` descartaba TODOS y el expediente decía "Sin insumos"
+      // siempre. La carpeta de al lado sí se conforma con id+name: ahí no se agrupa por padre.
+      options: { fields: ['*'] },
     },
     credentials: CRED_DRIVE,
   },

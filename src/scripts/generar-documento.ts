@@ -116,12 +116,13 @@ function resolver(contexto: Record<string, unknown>, expresion: string): string 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const soloJson = args.includes("--json");
+  const soloListar = args.includes("--solo-listar");
   const positional = args.filter((a) => !a.startsWith("--"));
   const codigo = positional[0];
   const pedidos = positional.slice(1);
 
   if (!codigo) {
-    console.error("Uso: npm run generar-documento -- <codigo> [NN ...] [--json]");
+    console.error("Uso: npm run generar-documento -- <codigo> [NN ...] [--json] [--solo-listar]");
     process.exit(1);
   }
 
@@ -157,6 +158,14 @@ async function main(): Promise<void> {
   const objetivo = pedidos.length
     ? catalogo.documentos.filter((d) => pedidos.includes(d.prefijo))
     : catalogo.documentos;
+
+  // `--solo-listar` dice qué naturaleza tiene cada documento sin producir ninguno. Lo usa el paso
+  // de CI que decide si vale la pena instalar Chromium: si todo lo que pide esta compra es
+  // `acopio`, no hay una sola página que renderizar y esos ~90 s de instalación se ahorran.
+  if (soloListar) {
+    for (const d of objetivo) console.log(`${d.tipo}\t${d.prefijo}\t${d.documento}`);
+    return;
+  }
 
   const resultados: ResultadoDocumento[] = [];
 

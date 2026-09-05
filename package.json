@@ -29,11 +29,13 @@
     "keywords-licitaciones": "tsx licitaciones/src/scripts/keywords.ts",
     "cotizar-licitaciones": "tsx .claude/skills/cotizar_licitaciones/scripts/cotizar.ts",
     "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts",
     "antecedentes-licitacion": "tsx licitaciones/src/scripts/antecedentes.ts",
     "adjuntos-licitacion": "tsx licitaciones/src/scripts/adjuntos-navegador.ts",
     "leer-adjuntos": "tsx licitaciones/src/scripts/leer-adjuntos.ts",
     "transformacion-digital": "tsx licitaciones/src/scripts/transformacion-digital.ts",
     "login-portal": "tsx licitaciones/src/scripts/login-portal.ts",
+    "traer-detalle": "tsx src/scripts/traer-detalle.ts",
     "postear-n8n": "tsx src/scripts/postear-n8n.ts",
     "generar-documento": "tsx src/scripts/generar-documento.ts",
     "subir-documento": "tsx .claude/skills/subir-documento-drive/scripts/subir-documento.ts"

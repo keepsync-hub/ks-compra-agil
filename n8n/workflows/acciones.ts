@@ -365,7 +365,11 @@ const crearCarpetas = node({
     parameters: {
       mode: 'once',
       workflowId: { __rl: true, mode: 'id', value: 'do3woax6AGPYxEAN', cachedResultName: 'MP · Carpetas Drive' },
-      workflowInputs: { mappingMode: 'autoMapInputData', value: null, schema: [] },
+      // Sin `workflowInputs`, a propósito. `MP · Carpetas Drive` recibe con `inputSource:
+      // 'passthrough'` (acepta todo), y para ese caso la definición del nodo dice que este
+      // parámetro se OMITE. Emitirlo con `value: null` —que es sólo un estado inicial de la UI—
+      // hace que n8n corra `Object.keys(null)` al validar y tumbe la ejecución con
+      // "Cannot convert undefined or null to object" antes de crear una sola carpeta.
       options: { waitForSubWorkflow: true },
     },
   },
