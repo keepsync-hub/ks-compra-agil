@@ -69,15 +69,16 @@ Cada tarjeta encabeza con un **score de apertura (0–100%)** que ordena el foco
 que no exige ninguna característica, capacidad o certificación particular que dirija la
 adjudicación, y baja 5% por cada criterio que falte revisar (`criterios_direccionadores` en
 `config/capacitaciones.json`, cada uno con su cita; el cálculo, en `src/lib/scoring-capacitacion.ts`).
-Hoy hay **dieciocho borradores**: seis de la tanda del 2026-08-22 (Dipres 85% y 75% dos,
+Hoy hay **diecinueve borradores**: seis de la tanda del 2026-08-22 (Dipres 85% y 75% dos,
 Subtrans 65%, Concepción 60%, Hospital Padre Hurtado 45% — este último exige las últimas 12 órdenes
 de compra del mismo curso, el filtro más direccionador de todas), cuatro del 2026-08-27 (Poder
-Judicial 70%, Lo Barnechea 65%, Combarbalá 60%, DAEM Osorno 55%) y ocho del 2026-09-03: MOP
+Judicial 70%, Lo Barnechea 65%, Combarbalá 60%, DAEM Osorno 55%), ocho del 2026-09-03: MOP
 Dirección de Aeropuertos (Project + Power BI) 70%, DICREP (Power BI y SQL) 65%, Defensoría del
 Contribuyente (Power Apps y Power Automate) 65%, CONASET (IA en ofimática) 65%, SLEP Santa Corina
 (IA para la educación) 65%, DICREP (comunicación digital + IA) 60%, Puerto Montt (IA municipal) 55%
-y Cochilco (IA del concepto al impacto) 50%. **No es una probabilidad de adjudicación**: es cuánto
-de la admisibilidad está sin resolver.
+y Cochilco (IA del concepto al impacto) 50%, y una del 2026-09-07: Cochilco de nuevo
+(`1121-56-COT26`, IA fundamentos, aplicaciones e impacto) 50%. **No es una probabilidad de
+adjudicación**: es cuánto de la admisibilidad está sin resolver.
 
 Las once más antiguas ya cerraron y siguen publicadas —el índice de cotizaciones se acumula y no
 borra, para que una corrida de un solo código no haga desaparecer a las demás—, así que la tarjeta
@@ -103,10 +104,10 @@ la escribe), así que no se puede saber cuánto pesa el precio: eso también baj
 
 Dos cosas condicionan el nicho y el cotizador no las resuelve solo. La primera es el **relator/a**:
 los TDR exigen título, CV y certificados verificables, y sin eso la oferta se descarta en
-admisibilidad. Dos de las dieciocho ofertas ya lo designan —Dipres `1618-69-COT26` y el SLEP Santa
+admisibilidad. Dos de las diecinueve ofertas ya lo designan —Dipres `1618-69-COT26` y el SLEP Santa
 Corina `1393495-768-COT26`, las dos con Cristian Molina Espinoza y su currículum, y las dos con
 carta de presentación—, y en ambas sigue faltando el **respaldo documental** de los cursos
-dictados: el currículum los enumera, no los acredita. Las otras dieciséis salen diciendo
+dictados: el currículum los enumera, no los acredita. Las otras diecisiete salen diciendo
 «relator/a por designar», que es lo que corresponde mientras nadie lo designe. La segunda es que
 **sigue sin confirmarse si KeepSync es OTEC registrada en SENCE** — de eso dependen tanto puntaje
 directo en algunas bases como la exención de IVA del art. 13 N°4 con que Dipres presupuesta. Ver el
@@ -114,7 +115,7 @@ detalle en `.claude/skills/compra-agil-ofertar/SKILL.md`.
 
 Ese segundo pendiente se decidía con `texto.includes("otec")`, y «otec» está dentro de
 **pr-otec-ción**: cualquier base que hablara de datos personales lo disparaba, así que cinco de las
-dieciocho ofertas afirmaban en su PDF que «estas bases lo puntúan o lo exigen» sin que sus bases
+entonces dieciocho ofertas afirmaban en su PDF que «estas bases lo puntúan o lo exigen» sin que sus bases
 nombraran nunca a SENCE. Una afirmación sobre las bases del organismo, dentro del documento que se
 le presenta a ese organismo, es el peor lugar donde puede salir un falso positivo. Va con
 `\botec\b|\bsence\b`: hoy lo llevan solo las tres que sí lo dicen (Subtrans, Hospital Padre
@@ -124,11 +125,20 @@ Tres compras que el radar sí encontró quedaron **sin cotizar, y el archivo dic
 (`_no_cotizadas` en `config/capacitaciones.json`): la de Penco (2026-08-27) trae su único adjunto
 como PDF escaneado sin capa de texto —llenar la ficha exigiría OCR o inventar el curso—; la del INIA
 (2026-08-27) no es capacitación sino créditos de API de Claude y ChatGPT, que van por
-`npm run cotizar` y siguen frenadas por el insumo bloqueante del nicho de licencias; y la de Cochilco
-`1121-56-COT26` (2026-09-03) cerraba veinte minutos después de que terminara la corrida del radar,
-sin margen para la revisión humana y el envío manual que este flujo exige. Esta última sí es
-cotizable: es el gemelo administrativo de `1121-57-COT26` —mismo requerimiento, mismos tres anexos,
-misma pauta— y su ficha sirve de base si Cochilco la republica.
+`npm run cotizar` y siguen frenadas por el insumo bloqueante del nicho de licencias; y la de Lo
+Barnechea `2735-1089-COT26` (2026-09-07, curso de Power BI para APS) cerraba veinticinco minutos
+después de que terminara la corrida del radar, sin margen para la revisión humana y el envío manual
+que este flujo exige.
+
+**La apuesta de dejar fichada una compra sin cotizar se pagó.** Cochilco `1121-56-COT26` quedó fuera
+por ese mismo motivo el 2026-09-03 —cerraba veinte minutos después de la corrida— y el archivo
+anotó que era el gemelo administrativo de `1121-57-COT26` y que su ficha servía de base si Cochilco
+la republicaba. La republicó: **segundo llamado**, cierre 2026-09-09 12:00, y el 2026-09-07 se
+cotizó reusando esa ficha —mismos anexos, misma pauta de evaluación, mismo score 50%— cambiando
+temario (13 contenidos mínimos en 5 módulos), horas (32 en vez de 75) y tope ($1.000.000 en vez de
+$1.550.000). Anotar por qué algo no se hizo, y con qué se retomaría, es lo que hizo barato retomarlo.
+Ojo con un dato que la ficha sí trae y el requerimiento no explica: el primer llamado registró **14
+ofertas recibidas** y aun así se relanzó. El motivo no está publicado y no se infiere.
 
 ## Regla de cálculo para cotizaciones en USD (`cotizar-usd`)
 
@@ -447,6 +457,24 @@ contrastarla: era `null` estructuralmente. El 20-08-2026 se midió de nuevo: **8
 El 30-08-2026 el radar de Kompu volvió a medirla sin buscarla: **303 requests en un día, 0 códigos
 429** (15 de sondeo + 288 de dos barridos completos de los cinco estados). La cota inferior conocida
 del límite diario pasa de 234 a 303.
+
+**Y sin embargo `npm run cuota` sigue sin converger, por una razón distinta de la que dice el párrafo
+de arriba.** Las cuatro únicas líneas de `historico/cuota.jsonl` son días *con* 429, a las 9
+(19-08), 17 (27-08), 24 (03-09) y 21 requests (07-09), todas de corridas del radar en la nube; la
+cota superior que reporta el script sigue siendo 9 y la inferior, «sin datos aún». `cerrarDiasPendientes()`
+sí cierra los días sin 429, pero cierra los que encuentra en `data/cuota/`, y **`data/` es efímero**:
+cada corrida en la nube parte de un checkout limpio, así que el día bueno nunca llega a cerrarse en
+el repo mientras que el día con 429 se anota al instante desde `registrar429()`. El rollup versionado
+está sesgado por construcción hacia los peores días. Los 83, 234 y 303 de arriba son mediciones
+reales, pero viven en esta prosa, no en el archivo que el script lee.
+
+Segundo hecho, del 07-09-2026: **429 a las 21 requests con 13 consultas y 9 detalles**. Una corrida
+completa del radar con las cinco categorías activas ya no cabe en lo que este ticket entrega por día,
+y el efecto concreto es que **cuatro de las nueve oportunidades salieron con ficha reducida** —las
+cuatro de capacitación— y por eso no entraron al índice histórico. La ficha reducida alcanzó igual
+para cotizar Cochilco, porque lo que decide el contenido de una cotización de curso son los
+**adjuntos**, que se bajan por el servicio público y no gastan cuota. La ficha reducida solo aportó
+tope, cierre, tipo de llamado y competencia.
 
 Aun así, la corrida ya no depende de que la cuota alcance: los errores de cuota no se confunden con
 una variante rota, y **las categorías que no se alcanzaron a barrer se arrastran del índice** hacia
