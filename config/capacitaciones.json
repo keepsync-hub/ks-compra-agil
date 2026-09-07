@@ -7,7 +7,7 @@
   "_no_cotizadas": {
     "4491-375-COT26": "Ilustre Municipalidad de Penco - Educación, «Capacitación Estrategias de Inteligencia Artificial para el aula, Escuela Vipla». Tope $1.200.000, cierre 2026-08-28 17:00. Su único adjunto (Capacitación IA Vipla.pdf) es un PDF escaneado SIN capa de texto: no se pudo leer un solo requisito. Llenar esta ficha exigiría OCR o inventar el contenido del curso, y el cotizador no inventa. Queda sin cotizar y publicada solo en la grilla de oportunidades del radar.",
     "1107279-199-COT26": "Instituto de Investigaciones Agropecuarias, «OpenAI ChatGPT API Créditos y Anthropic Claude API créditos». Tope $4.195.671, cierre 2026-08-28 15:45. No es capacitación: es el nicho de licencias, que se cotiza con npm run cotizar (fórmula de precio de lista + IVA + markup), no con la regla tope × 0,9 de este archivo. Hoy no se puede: config/company.json no está en el repo (es gitignored) y el cotizador de licencias se detiene antes de calcular. Sigue además pendiente el insumo bloqueante del nicho — la vía real de fulfillment y facturación de licencias Claude (ver CLAUDE.md).",
-    "1121-56-COT26": "Comisión Chilena del Cobre (Cochilco), «Curso: Inteligencia Artificial: fundamentos, aplicaciones e impacto». Tope $1.000.000, cierre 2026-09-03 12:00. Los adjuntos se leyeron y son cotizables —es el gemelo administrativo de 1121-57-COT26: mismo requerimiento de compra, mismos tres anexos, misma pauta de evaluación; cambian el temario, las horas mínimas (32 en vez de 75) y el tope—. Quedó sin cotizar por tiempo: la corrida del radar terminó a las 11:40 hora de Chile y el cierre era a las 12:00, sin margen para la revisión humana y el envío manual que este flujo exige. Si Cochilco lo republica, la ficha de 1121-57-COT26 sirve de base y solo hay que cambiar contenidos, horas y monto."
+    "2735-1089-COT26": "I. Municipalidad de Lo Barnechea, «Curso de Power BI Aplicado a la Gestión y Análisis de Datos en Atención Primaria de Salud (APS)». Tope $1.305.600, cierre 2026-09-07 16:00. Sus adjuntos se leyeron y son cotizables. Quedó sin cotizar por tiempo, por el mismo criterio con que quedó fuera 1121-56-COT26 en la corrida del 2026-09-03: el radar terminó a las 15:35 hora de Chile y el cierre era a las 16:00, sin margen para la revisión humana y el envío manual que este flujo exige. Si Lo Barnechea lo republica, la ficha de 2735-1052-COT26 (mismo organismo, mismo instrumento) sirve de base y hay que cambiar temario, horas y monto."
   },
   "cotizaciones": {
     "1618-67-COT26": {
@@ -3220,6 +3220,241 @@
           "id": "precio-pesa-40-por-ciento",
           "exige": "Asumir que el precio vale 40% del puntaje con fórmula proporcional al menor valor ofertado. Cotizar al 90% del tope (la regla de este cotizador) deja el criterio más pesado en manos de quien cotice más bajo.",
           "cita": "TDR, numeral 6.3 — «Se evaluará el precio total ofertado, asignándose el máximo puntaje a la oferta de menor valor económico. Puntaje = (Precio mínimo ofertado / Precio de la oferta evaluada) × 40.»",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "1121-56-COT26": {
+      "curso": "Inteligencia Artificial: fundamentos, aplicaciones e impacto",
+      "organismo_corto": "Cochilco",
+      "organismo_nombre": "Comisión Chilena del Cobre (Cochilco) — Departamento de Informática",
+      "fuente_documentos": [
+        "Requerimiento de compra-Inteligencia Artificial fundamentos aplic.pdf",
+        "Anexo N°1 - Datos del Oferente.docx",
+        "Anexo N°2 - Declaración Relativa a Programa de Integridad.docx",
+        "Anexo N°3 - Sustentabilidad.docx"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«El presupuesto máximo disponible para la actividad de capacitación es de $1.000.000.- impuestos incluidos» — Requerimiento de compra N° FSS04770/2026, numeral IV. La admisibilidad exige además «Presentar cotización económica con impuestos incluidos, la cual se encuentre dentro del presupuesto disponible»."
+      },
+      "objetivo": "Adquirir una comprensión integral de lo que es la inteligencia artificial, de la implementación de algoritmos de IA y de su uso en el mundo real, aplicada al trabajo del Departamento de Informática de Cochilco.",
+      "participantes": {
+        "maximo": 2,
+        "glosa": "2 cupos para personal profesional y administrativo del Departamento de Informática de Cochilco."
+      },
+      "duracion": {
+        "horas_cronologicas": 32,
+        "sesiones": null,
+        "horas_por_sesion": null,
+        "glosa": "32 horas cronológicas, el mínimo que exige el requerimiento. La distribución por módulo es propuesta del oferente."
+      },
+      "modalidad": {
+        "tipo": "Sincrónica en línea, con componente asincrónico de práctica",
+        "plataforma": "Teams u otra plataforma de videoconferencia, más aula virtual con material y ejercicios para las horas asincrónicas.",
+        "horario": "A convenir entre Cochilco y el proveedor."
+      },
+      "modalidad_observacion": "El requerimiento deja la modalidad abierta —«Presencial, streaming, asincrónico, sincrónico, ya sea Teams u otra plataforma, o híbrido»— y no la evalúa: no hay criterio de modalidad en la pauta. La propuesta ofrece sincrónico en línea con práctica asincrónica y la ajusta con Cochilco en la coordinación inicial.",
+      "fechas_ejecucion": "En las fechas que acuerden Cochilco y el proveedor.",
+      "modulos": [
+        {
+          "titulo": "Fundamentos de la inteligencia artificial",
+          "horas": 6,
+          "temas": [
+            "Conceptos fundamentales de la inteligencia artificial",
+            "Historia y evolución de la inteligencia artificial",
+            "Tipos de aprendizaje automático"
+          ]
+        },
+        {
+          "titulo": "Inteligencia artificial generativa: principios, ejemplos y aplicaciones",
+          "horas": 8,
+          "temas": [
+            "Principios de la inteligencia artificial generativa",
+            "Ejemplos de inteligencia artificial generativa",
+            "Aplicaciones prácticas de la inteligencia artificial generativa"
+          ]
+        },
+        {
+          "titulo": "La IA en la industria y en la toma de decisiones",
+          "horas": 6,
+          "temas": [
+            "Casos de uso de inteligencia artificial en la industria",
+            "Uso de inteligencia artificial en la toma de decisiones empresariales",
+            "Lectura de casos aplicables al contexto institucional de Cochilco"
+          ]
+        },
+        {
+          "titulo": "Implementación inicial de soluciones de IA en la organización",
+          "horas": 7,
+          "temas": [
+            "Implementación inicial de soluciones de inteligencia artificial en las organizaciones",
+            "Implementación de algoritmos de IA: del modelo al caso de uso",
+            "Taller práctico sobre datos y procesos del área de informática"
+          ]
+        },
+        {
+          "titulo": "Ética, riesgos y regulación de la inteligencia artificial",
+          "horas": 5,
+          "temas": [
+            "Ética en la inteligencia artificial",
+            "Desafíos y oportunidades sociales",
+            "Estrategias de mitigación de riesgos",
+            "Regulación de la inteligencia artificial",
+            "Evaluación final con nota y cierre"
+          ]
+        }
+      ],
+      "modulos_nota": "Los cinco módulos cubren los trece contenidos mínimos que lista el requerimiento en el numeral II, en el mismo orden. El requerimiento fija el mínimo de 32 horas cronológicas y no su distribución: el reparto por módulo es propuesta de KeepSync y se ajusta con el Encargado de Capacitación.",
+      "requisitos_metodologicos": [
+        "Guion metodológico que describa el desarrollo de la capacitación de forma clara y secuencial, con actividades, metodología, recursos y tiempos.",
+        "Objetivos de aprendizaje definidos, actividades prácticas y sistema de evaluación del aprendizaje.",
+        "Adaptación explícita al contexto institucional de Cochilco: reproducir el requerimiento da 0 puntos en el criterio de mayor peso.",
+        "Certificado de participación con asistencia y nota."
+      ],
+      "exigencias_adicionales": [
+        "Anexo N°1 con datos del oferente y datos bancarios.",
+        "Anexo N°2 con la declaración de programa de integridad, adjuntando el programa que la respalda.",
+        "Anexo N°3 de sustentabilidad con el respaldo de la medida declarada."
+      ],
+      "relator_exigido": {
+        "formacion": "El requerimiento no fija título ni disciplina del relator/a: exige el currículum y los medios de verificación de su experiencia.",
+        "experiencia_laboral": "Currículum del relator, relatora o equipo formador, presentado como requisito de admisibilidad.",
+        "experiencia_relatoria": "4 o más cursos de la temática acreditados con documentos verificables para el puntaje máximo del criterio (25%); entre 2 y 3 dan la mitad; 1 o ninguno, cero."
+      },
+      "entregables": [
+        "32 horas cronológicas de capacitación para 2 participantes.",
+        "Guion metodológico y programa de contenidos con objetivos de aprendizaje.",
+        "Material y actividades prácticas del curso.",
+        "Sistema de evaluación del aprendizaje aplicado.",
+        "Certificado de participación con asistencia y nota."
+      ],
+      "logistica": "Actividad coordinada con el Encargado de Capacitación de Cochilco, que administra el servicio, valida la ejecución y otorga la recepción conforme. No se contemplan garantías.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Cotización económica con impuestos incluidos, dentro del presupuesto disponible",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Propuesta técnica del curso, incluido el guion metodológico",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Programa de contenidos con objetivos de aprendizaje y duración, modalidad, metodología y sistema de evaluación",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Anexo N°1 — Formulario Datos del Oferente, con datos bancarios",
+          "tipo": "formulario"
+        },
+        {
+          "documento": "Anexo N°2 — Declaración relativa a programa de integridad, con el programa adjunto",
+          "tipo": "formulario"
+        },
+        {
+          "documento": "Anexo N°3 — Sustentabilidad, con el respaldo de la medida declarada",
+          "tipo": "formulario"
+        },
+        {
+          "documento": "Currículum del relator, relatora o equipo formador",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Medios de verificación de la experiencia del relator o equipo formador: certificados de ejecución, órdenes de compra, contratos, facturas o cartas de conformidad",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Medios de verificación de satisfacción de servicios previos: certificados de satisfacción, cartas de conformidad, informes de evaluación o actas de recepción conforme",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Medios de verificación de la experiencia del oferente: órdenes de compra, facturas, contratos o certificados de ejecución de servicios similares",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "puntaje",
+        "detalle": [
+          "Pertinencia y calidad técnica/metodológica 25%; experiencia del relator o equipo formador 25%; satisfacción acreditada de servicios previos 15%; experiencia acreditada del oferente 15%; precio 10%; enfoque de género 5%; programa de integridad 3%; sustentabilidad 2%.",
+          "El precio pesa solo 10%: la pauta premia la propuesta técnica y la evidencia documental muy por sobre el valor ofertado.",
+          "La oferta adjudicada debe obtener al menos 50 puntos ponderados en el subtotal técnico (los cuatro primeros criterios, que suman 80 puntos).",
+          "«una oferta que obtenga 0 puntos en a) pertinencia y calidad técnica/metodológica o, 0 puntos en b) experiencia del relator/equipo formador no será adjudicada, aunque tenga el menor precio».",
+          "Reproducir total o mayoritariamente el contenido del Requerimiento de Compra, sin aportar una propuesta técnica propia, da 0 puntos en el criterio de mayor peso.",
+          "Desempate en orden: calidad técnica, experiencia del relator, satisfacción acreditada, experiencia del oferente, precio y, por último, oferta ingresada primero.",
+          "Esta compra va en SEGUNDO LLAMADO: el primero cerró el 2026-09-03 12:00 y la ficha registra 14 ofertas recibidas. El requerimiento no explica por qué se relanzó — no se infiere acá."
+        ]
+      },
+      "multas": "1% del total (IVA incluido) por cada día de atraso, incluidos días inhábiles, con tope de 20 días. 5% del total por incumplimiento de las especificaciones técnicas, con obligación de corregir en 3 días hábiles y 1% diario adicional si se atrasa la nueva entrega. El tope global de multas es 20% del monto total; superarlo habilita el término anticipado. El proveedor tiene 5 días hábiles para descargos y 5 días hábiles para reposición.",
+      "pago": "Pago posterior a la actividad, previa recepción conforme y envío de factura o boleta de honorarios. Dentro de 30 días desde recibida y aprobada la factura, por transferencia electrónica de la Tesorería General de la República. La factura electrónica debe referir en el campo 801 el número de orden de compra, que debe estar aceptada en el portal. No se contemplan garantías.",
+      "criterios_direccionadores": [
+        {
+          "id": "cuatro-experiencias-del-relator",
+          "exige": "Acreditar 4 o más cursos de la temática ejecutados por el relator o equipo formador, con documentos verificables (certificados de ejecución, órdenes de compra, contratos, facturas o cartas de conformidad). Vale 25% del puntaje y obtener 0 acá impide la adjudicación cualquiera sea el precio.",
+          "cita": "Requerimiento, numeral VII b) — «100: Acredita 4 o más experiencias en la ejecución de cursos o actividades de capacitación directamente relacionadas con la temática del curso… La sola declaración de experiencia en el currículum no será suficiente si no se acompaña de antecedentes verificables.»",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "tres-medios-de-satisfaccion-acreditada",
+          "exige": "Presentar 3 o más certificados de satisfacción, cartas de conformidad, informes de evaluación o actas de recepción conforme emitidos por otros organismos. Vale 15% y la evidencia la emite el cliente anterior, no el oferente; Cochilco además puede verificarla llamando a las referencias.",
+          "cita": "Requerimiento, numeral VII c) — «100: Presenta 3 o más medios de verificación que acrediten una evaluación satisfactoria… La Comisión Chilena del Cobre podrá verificar la información… mediante comunicación telefónica o correo electrónico con las referencias remitidas en el anexo respectivo.»",
+          "tipo": "historial_portal",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "seis-servicios-similares-del-oferente",
+          "exige": "Acreditar la ejecución de 6 o más servicios de capacitación similares con documentos verificables. Vale 15% y menos de 3 da cero: excluye a quien no haya vendido ya capacitación varias veces.",
+          "cita": "Requerimiento, numeral VII d) — «100: Acredita la ejecución de 6 o más servicios de capacitación similares, mediante documentos verificables… 0: Acredita la ejecución de menos de 3 servicios de capacitación similares.»",
+          "tipo": "historial_portal",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "umbral-50-puntos-tecnicos",
+          "exige": "Obtener al menos 50 puntos ponderados en el subtotal técnico (calidad técnica, experiencia del relator, satisfacción acreditada y experiencia del oferente, 80 puntos en conjunto). Sin evidencia documental de las tres últimas, ese umbral es prácticamente inalcanzable.",
+          "cita": "Requerimiento, numeral VIII — «La oferta adjudicada deberá obtener, como mínimo 50 puntos ponderados en el subtotal técnico… Estos criterios representan, en conjunto, un máximo de 80 puntos ponderados.»",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "guion-metodologico-propio",
+          "exige": "Entregar un guion metodológico que describa el desarrollo de la capacitación de forma clara y secuencial, con actividades, metodología, recursos y tiempos, adaptado al contexto de Cochilco. Reproducir el requerimiento da 0 puntos en el criterio de 25%, lo que impide la adjudicación.",
+          "cita": "Requerimiento, numeral VII a) — «0: La propuesta no desarrolla adecuadamente los contenidos solicitados, omite o describe insuficientemente la metodología o el guion metodológico… o reproduce total o mayoritariamente el contenido del Requerimiento de Compra, sin aportar una propuesta técnica propia.»",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "sello-empresa-mujer",
+          "exige": "Sello Empresa Mujer de ChileProveedores. Vale 5% del puntaje y se acredita solo con el sello: no hay puntaje parcial.",
+          "cita": "Requerimiento, numeral VII f) — «Para acreditar este criterio, los oferentes deberán presentar el sello Empresa Mujer de ChileProveedores. 100: El oferente presenta sello Empresa Mujer… 0: El oferente no presenta sello Empresa Mujer.»",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "programa-de-integridad-documentado",
+          "exige": "Declarar en el Anexo N°2 que se tiene un programa de integridad conocido y difundido entre los colaboradores, y adjuntar el documento que lo contiene. Vale 3%: sin el documento, la declaración no puntúa.",
+          "cita": "Requerimiento, numeral VII g) — «100: El oferente presenta Anexo N°2 y adjunta Programa de Integridad vigente, declarando su existencia y difusión entre sus colaboradores.» Anexo N°2 — «A fin de comprobar su declaración se deberá adjuntar a la oferta el referido programa de integridad.»",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "anexo-3-sustentabilidad-con-respaldo",
+          "exige": "Anexo N°3 con procedimiento de gestión de residuos, política de sustentabilidad o sello, y su respaldo: certificado de residuos con antigüedad no superior a 6 meses, copia del procedimiento o sello vigente en la ficha de proveedor (Huella Chile, APL, ProPyme). Vale 2%.",
+          "cita": "Anexo N°3 Sustentabilidad — «El oferente deberá presentar el Anexo Sustentabilidad así como el respaldo de la medida declarada en el mencionado anexo», con los medios de verificación detallados por tipo de medida.",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "anexo-1-datos-y-cuenta-bancaria",
+          "exige": "Completar el Anexo N°1 del organismo con razón social, RUT, dirección, ciudad, teléfono, correo y los datos bancarios del oferente. Es un formulario del organismo, no un documento propio.",
+          "cita": "Anexo N°1 — «FORMULARIO DATOS DEL OFERENTE. A) DATOS DEL OFERENTE… B) DATOS BANCARIOS DEL OFERENTE: Banco, Número de Cuenta, Tipo de Cuenta, E-mail.»",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "carga-de-32-horas-para-2-cupos",
+          "exige": "Confirmar el alcance: el requerimiento pide un mínimo de 32 horas cronológicas para solo 2 cupos, dentro de un tope de $1.000.000 con impuestos incluidos. Define si conviene ofertar un curso cerrado para dos personas o cupos en un programa ya existente, y el margen por hora del que se dispone.",
+          "cita": "Requerimiento, numeral II — «Cupos: 2. Horas Cronológicas: 32 horas mínimo», y numeral IV — «El presupuesto máximo disponible para la actividad de capacitación es de $1.000.000.- impuestos incluidos.»",
           "tipo": "alcance",
           "estado": "sin_informacion"
         }

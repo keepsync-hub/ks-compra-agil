@@ -1946,5 +1946,132 @@
       }
     ],
     "generado": "2026-09-04"
+  },
+  "1121-56-COT26": {
+    "codigo": "1121-56-COT26",
+    "curso": "Inteligencia Artificial: fundamentos, aplicaciones e impacto",
+    "organismo": "Comisión Chilena del Cobre (Cochilco) — Departamento de Informática",
+    "topeClp": 1000000,
+    "totalClp": 900000,
+    "descuentoPct": 10,
+    "regimenTributario": "impuestos_incluidos",
+    "citaTributaria": "«El presupuesto máximo disponible para la actividad de capacitación es de $1.000.000.- impuestos incluidos» — Requerimiento de compra N° FSS04770/2026, numeral IV. La admisibilidad exige además «Presentar cotización económica con impuestos incluidos, la cual se encuentre dentro del presupuesto disponible».",
+    "criterioEvaluacion": "puntaje",
+    "fechaCierre": "2026-09-09 12:00",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/1121-56-COT26/Q-20260907-ComisionChilenaDelCobreCochilcoDepartamentoDeInfor.pdf",
+    "fuenteDocumentos": [
+      "Requerimiento de compra-Inteligencia Artificial fundamentos aplic.pdf",
+      "Anexo N°1 - Datos del Oferente.docx",
+      "Anexo N°2 - Declaración Relativa a Programa de Integridad.docx",
+      "Anexo N°3 - Sustentabilidad.docx"
+    ],
+    "requisitosPorConfirmar": 5,
+    "pendientes": [
+      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+      "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
+      "Confirmar la modalidad con el organismo mediante consulta formal. El requerimiento deja la modalidad abierta —«Presencial, streaming, asincrónico, sincrónico, ya sea Teams u otra plataforma, o híbrido»— y no la evalúa: no hay criterio de modalidad en la pauta. La propuesta ofrece sincrónico en línea con práctica asincrónica y la ajusta con Cochilco en la coordinación inicial."
+    ],
+    "score": {
+      "score": 50,
+      "sinInformacion": 10,
+      "cubiertos": 0,
+      "total": 10,
+      "porTipo": [
+        {
+          "tipo": "alcance",
+          "n": 3
+        },
+        {
+          "tipo": "certificacion",
+          "n": 2
+        },
+        {
+          "tipo": "historial_portal",
+          "n": 2
+        },
+        {
+          "tipo": "identidad",
+          "n": 2
+        },
+        {
+          "tipo": "experiencia_relator",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "cuatro-experiencias-del-relator",
+        "exige": "Acreditar 4 o más cursos de la temática ejecutados por el relator o equipo formador, con documentos verificables (certificados de ejecución, órdenes de compra, contratos, facturas o cartas de conformidad). Vale 25% del puntaje y obtener 0 acá impide la adjudicación cualquiera sea el precio.",
+        "cita": "Requerimiento, numeral VII b) — «100: Acredita 4 o más experiencias en la ejecución de cursos o actividades de capacitación directamente relacionadas con la temática del curso… La sola declaración de experiencia en el currículum no será suficiente si no se acompaña de antecedentes verificables.»",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "tres-medios-de-satisfaccion-acreditada",
+        "exige": "Presentar 3 o más certificados de satisfacción, cartas de conformidad, informes de evaluación o actas de recepción conforme emitidos por otros organismos. Vale 15% y la evidencia la emite el cliente anterior, no el oferente; Cochilco además puede verificarla llamando a las referencias.",
+        "cita": "Requerimiento, numeral VII c) — «100: Presenta 3 o más medios de verificación que acrediten una evaluación satisfactoria… La Comisión Chilena del Cobre podrá verificar la información… mediante comunicación telefónica o correo electrónico con las referencias remitidas en el anexo respectivo.»",
+        "tipo": "historial_portal",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "seis-servicios-similares-del-oferente",
+        "exige": "Acreditar la ejecución de 6 o más servicios de capacitación similares con documentos verificables. Vale 15% y menos de 3 da cero: excluye a quien no haya vendido ya capacitación varias veces.",
+        "cita": "Requerimiento, numeral VII d) — «100: Acredita la ejecución de 6 o más servicios de capacitación similares, mediante documentos verificables… 0: Acredita la ejecución de menos de 3 servicios de capacitación similares.»",
+        "tipo": "historial_portal",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "umbral-50-puntos-tecnicos",
+        "exige": "Obtener al menos 50 puntos ponderados en el subtotal técnico (calidad técnica, experiencia del relator, satisfacción acreditada y experiencia del oferente, 80 puntos en conjunto). Sin evidencia documental de las tres últimas, ese umbral es prácticamente inalcanzable.",
+        "cita": "Requerimiento, numeral VIII — «La oferta adjudicada deberá obtener, como mínimo 50 puntos ponderados en el subtotal técnico… Estos criterios representan, en conjunto, un máximo de 80 puntos ponderados.»",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "guion-metodologico-propio",
+        "exige": "Entregar un guion metodológico que describa el desarrollo de la capacitación de forma clara y secuencial, con actividades, metodología, recursos y tiempos, adaptado al contexto de Cochilco. Reproducir el requerimiento da 0 puntos en el criterio de 25%, lo que impide la adjudicación.",
+        "cita": "Requerimiento, numeral VII a) — «0: La propuesta no desarrolla adecuadamente los contenidos solicitados, omite o describe insuficientemente la metodología o el guion metodológico… o reproduce total o mayoritariamente el contenido del Requerimiento de Compra, sin aportar una propuesta técnica propia.»",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "sello-empresa-mujer",
+        "exige": "Sello Empresa Mujer de ChileProveedores. Vale 5% del puntaje y se acredita solo con el sello: no hay puntaje parcial.",
+        "cita": "Requerimiento, numeral VII f) — «Para acreditar este criterio, los oferentes deberán presentar el sello Empresa Mujer de ChileProveedores. 100: El oferente presenta sello Empresa Mujer… 0: El oferente no presenta sello Empresa Mujer.»",
+        "tipo": "certificacion",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "programa-de-integridad-documentado",
+        "exige": "Declarar en el Anexo N°2 que se tiene un programa de integridad conocido y difundido entre los colaboradores, y adjuntar el documento que lo contiene. Vale 3%: sin el documento, la declaración no puntúa.",
+        "cita": "Requerimiento, numeral VII g) — «100: El oferente presenta Anexo N°2 y adjunta Programa de Integridad vigente, declarando su existencia y difusión entre sus colaboradores.» Anexo N°2 — «A fin de comprobar su declaración se deberá adjuntar a la oferta el referido programa de integridad.»",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "anexo-3-sustentabilidad-con-respaldo",
+        "exige": "Anexo N°3 con procedimiento de gestión de residuos, política de sustentabilidad o sello, y su respaldo: certificado de residuos con antigüedad no superior a 6 meses, copia del procedimiento o sello vigente en la ficha de proveedor (Huella Chile, APL, ProPyme). Vale 2%.",
+        "cita": "Anexo N°3 Sustentabilidad — «El oferente deberá presentar el Anexo Sustentabilidad así como el respaldo de la medida declarada en el mencionado anexo», con los medios de verificación detallados por tipo de medida.",
+        "tipo": "certificacion",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "anexo-1-datos-y-cuenta-bancaria",
+        "exige": "Completar el Anexo N°1 del organismo con razón social, RUT, dirección, ciudad, teléfono, correo y los datos bancarios del oferente. Es un formulario del organismo, no un documento propio.",
+        "cita": "Anexo N°1 — «FORMULARIO DATOS DEL OFERENTE. A) DATOS DEL OFERENTE… B) DATOS BANCARIOS DEL OFERENTE: Banco, Número de Cuenta, Tipo de Cuenta, E-mail.»",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "carga-de-32-horas-para-2-cupos",
+        "exige": "Confirmar el alcance: el requerimiento pide un mínimo de 32 horas cronológicas para solo 2 cupos, dentro de un tope de $1.000.000 con impuestos incluidos. Define si conviene ofertar un curso cerrado para dos personas o cupos en un programa ya existente, y el margen por hora del que se dispone.",
+        "cita": "Requerimiento, numeral II — «Cupos: 2. Horas Cronológicas: 32 horas mínimo», y numeral IV — «El presupuesto máximo disponible para la actividad de capacitación es de $1.000.000.- impuestos incluidos.»",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      }
+    ],
+    "generado": "2026-09-07"
   }
 }
