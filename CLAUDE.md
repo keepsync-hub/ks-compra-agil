@@ -496,6 +496,24 @@ que una oferta real llegue a enviarse a un organismo comprador — el envío fin
 humano y nunca el agente (ver guardrails abajo). El radar y el informe del nicho
 (`output/informe-nicho-claude.md`) sí tienen valor aunque esta pregunta quede sin resolver.
 
+**Una segunda hipótesis, medida el 2026-09-08 y más barata de verificar que la de fulfillment.**
+Cotizar `5584-82-COT26` (Universidad de Chile, «6 licencias suscripción anual Agente Claude AI»,
+tope $1.200.000) terminó sin PDF, y no por el markup: con la regla de precio vigente, el plan más
+barato —Claude Pro anual, USD 17/mes— sale en **$1.963.762, el 164% del tope**, y ya en el paso 3
+de la regla —costo más impuesto no recuperable, **markup cero**— van $1.434.974, o sea el 120% del
+presupuesto. Ningún plan cabe, así que la ambigüedad del plan (el texto no lo nombra y la compra no
+trae adjuntos) resultó irrelevante.
+
+Lo que hay debajo: $1.200.000 ÷ 6 son **$200.000 por licencia al año**, y el precio de lista de
+Claude Pro anual son USD 204, que al dólar observado de ese día eran **$190.499**. El organismo
+presupuestó **un 5% por sobre el precio de lista de Anthropic**, cuando solo el IVA de venta ya son
+$226.694 por licencia. Un presupuesto así solo lo puede cumplir quien compre directo a Anthropic:
+ningún intermediario chileno entra. Si ese patrón se repite, **estas compras nacen desiertas** y el
+79% de fracaso no necesita explicarse por fulfillment. Se verifica sin gastar cuota, dividiendo el
+tope por la cantidad de licencias en las 47 compras de `historico/observaciones.jsonl` y comparando
+contra el precio de lista del plan que nombran. El detalle del caso, con las cinco tablas y las
+cifras verificadas, en `output/5584-82-COT26/analisis-inadmisibilidad.md`.
+
 ## Datos ya confirmados
 
 - KeepSync **es Empresa de Menor Tamaño (EMT)** → puede ofertar en primer llamado.
