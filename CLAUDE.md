@@ -69,18 +69,22 @@ Cada tarjeta encabeza con un **score de apertura (0–100%)** que ordena el foco
 que no exige ninguna característica, capacidad o certificación particular que dirija la
 adjudicación, y baja 5% por cada criterio que falte revisar (`criterios_direccionadores` en
 `config/capacitaciones.json`, cada uno con su cita; el cálculo, en `src/lib/scoring-capacitacion.ts`).
-Hoy hay **diecinueve borradores**: seis de la tanda del 2026-08-22 (Dipres 85% y 75% dos,
+Hoy hay **veinticinco borradores**: seis de la tanda del 2026-08-22 (Dipres 85% y 75% dos,
 Subtrans 65%, Concepción 60%, Hospital Padre Hurtado 45% — este último exige las últimas 12 órdenes
 de compra del mismo curso, el filtro más direccionador de todas), cuatro del 2026-08-27 (Poder
 Judicial 70%, Lo Barnechea 65%, Combarbalá 60%, DAEM Osorno 55%), ocho del 2026-09-03: MOP
 Dirección de Aeropuertos (Project + Power BI) 70%, DICREP (Power BI y SQL) 65%, Defensoría del
 Contribuyente (Power Apps y Power Automate) 65%, CONASET (IA en ofimática) 65%, SLEP Santa Corina
 (IA para la educación) 65%, DICREP (comunicación digital + IA) 60%, Puerto Montt (IA municipal) 55%
-y Cochilco (IA del concepto al impacto) 50%, y una del 2026-09-07: Cochilco de nuevo
-(`1121-56-COT26`, IA fundamentos, aplicaciones e impacto) 50%. **No es una probabilidad de
+y Cochilco (IA del concepto al impacto) 50%, una del 2026-09-07: Cochilco de nuevo
+(`1121-56-COT26`, IA fundamentos, aplicaciones e impacto) 50%, y **seis del 2026-09-08**:
+Universidad de Atacama (IA aplicada a la actividad académica) 85%, Poder Judicial de nuevo
+(`425-339-COT26`, IA aplicada al análisis de datos con Microsoft Copilot) 65%, y cuatro que se
+comentan más abajo — Subsecretaría de Derechos Humanos con tres cursos simultáneos (50%, 50% y 45%)
+e INAPI 40%, el score más bajo fichado hasta hoy. **No es una probabilidad de
 adjudicación**: es cuánto de la admisibilidad está sin resolver.
 
-Las once más antiguas ya cerraron y siguen publicadas —el índice de cotizaciones se acumula y no
+Las quince más antiguas ya cerraron y siguen publicadas —el índice de cotizaciones se acumula y no
 borra, para que una corrida de un solo código no haga desaparecer a las demás—, así que la tarjeta
 las marca *Cerrada* y las manda al final de la grilla. Publicar un borrador de una compra en la que
 ya no se puede ofertar, sin decirlo, es el mismo defecto que la grilla de oportunidades corrigió.
@@ -91,6 +95,43 @@ existían: tres de licencias Claude —INIA con dos, Servicio de Salud Araucaní
 para 12 usuarios— y la de capacitación más grande fichada hasta hoy, el SLEP Santa Corina con tope
 $7.164.900 para hasta 800 participantes, publicada a las 15:31 del mismo día. Las Compras Ágiles se
 publican durante todo el día hábil y varias cierran en 24-48 horas.
+
+**Lo que enseñó la tanda del 2026-09-08.** Las seis compras nuevas son todas de IA —ninguna de BI ni
+de automatización— y entre ellas está el score más bajo y el más alto fichados hasta hoy, lo que
+ilustra para qué sirve el número:
+
+- **INAPI `519302-71-COT26` (40%) reparte los 100 puntos íntegramente entre credenciales del
+  instructor/a** —formación 30, especialización en IA 30, experiencia en relatoría 40— y **el precio
+  no puntúa**: entra solo como tercer criterio de desempate, después del Sello Empresa Mujer y de la
+  Política de Integridad. Es la pauta más direccionadora vista en el nicho: cotizar más barato no
+  mueve nada. Trae además tres cosas que conviene reconocer como forma recurrente: un tope de
+  **16 páginas** («Se revisarán sólo las primeras 16 páginas cargadas en la oferta») donde tienen que
+  caber la propuesta técnica de dos cursos y todos los certificados; una fecha imposible
+  («Programación: 07, 14, 21 y 20 de octubre de 2026») con un horario que difiere entre dos apartados
+  del mismo documento; y una contradicción entre el requisito y la pauta —admite «carrera afín a TIC»
+  como título válido y esa misma carrera vale **0 puntos** en el factor de 30—. Todo eso se registra
+  como criterio con su cita, no se resuelve a dedo.
+- **La Subsecretaría de Derechos Humanos publicó tres cursos el mismo día** (`957865-155/156/157`),
+  con las mismas Bases Simplificadas cambiando materia, cupos y monto. Ninguna de las tres publica
+  pauta de evaluación: enumeran cuatro antecedentes «para la evaluación de la propuesta» y ahí
+  terminan. Las tres exigen formación de pre **y** postgrado del relator/a —el postgrado se exige, no
+  se valora—, y las tres hacen del Anexo N°1 (guion metodológico) una causal directa de
+  inadmisibilidad. Con las de DICREP y el MOP, ya son **seis** las compras fichadas que no dicen
+  cuánto pesa el precio.
+- **La Universidad de Atacama `5956-122-COT26` (85%) es el extremo opuesto**: su único adjunto es el
+  formulario interno de solicitud de cotización, no exige título ni experiencia del relator/a y no
+  fija más que «duración mínima de 4 horas aproximadamente» para 16 académicos/as con tope
+  $2.000.000. Lo que queda sin resolver no son credenciales sino alcance: cuánto curso espera el
+  requirente, cómo va a evaluar, y si el servicio es realmente online —el objeto dice «online» y el
+  mismo formulario fija dirección de entrega en Copiapó—.
+
+**Y un defecto del índice de cotizaciones que salió acá:** `docs/capacitaciones-cotizaciones/index.json`
+guarda la fecha de cierre **de la corrida en que se cotizó**, no la vigente. Cochilco `1121-57-COT26`
+volvió en segundo llamado con cierre 2026-09-10 y la página lo seguía mostrando *Cerrada* con el
+cierre del primer llamado (2026-09-04). Se arregla volviendo a correr
+`npm run cotizar-capacitacion -- <codigo>`, que relee `data/<codigo>/detalle.json` recién refrescado
+por el radar. Vale la pena revisarlo cuando el radar reporte un segundo llamado de algo ya cotizado:
+publicar como cerrada una compra en la que **sí** se puede ofertar es el mismo defecto al revés.
 
 Dos hallazgos de la tanda del 2026-09-03 que conviene tener presentes al leer un TDR de este nicho:
 **las bases se contradicen seguido** —CONASET pondera 80/20 en el texto y 70/30 en la fórmula; la
@@ -468,13 +509,21 @@ el repo mientras que el día con 429 se anota al instante desde `registrar429()`
 está sesgado por construcción hacia los peores días. Los 83, 234 y 303 de arriba son mediciones
 reales, pero viven en esta prosa, no en el archivo que el script lee.
 
-Segundo hecho, del 07-09-2026: **429 a las 21 requests con 13 consultas y 9 detalles**. Una corrida
-completa del radar con las cinco categorías activas ya no cabe en lo que este ticket entrega por día,
-y el efecto concreto es que **cuatro de las nueve oportunidades salieron con ficha reducida** —las
+Segundo hecho, del 07-09-2026: **429 a las 21 requests con 13 consultas y 9 detalles**. Ese día una
+corrida completa del radar con las cinco categorías activas no cupo en lo que el ticket entregó,
+y el efecto concreto fue que **cuatro de las nueve oportunidades salieron con ficha reducida** —las
 cuatro de capacitación— y por eso no entraron al índice histórico. La ficha reducida alcanzó igual
 para cotizar Cochilco, porque lo que decide el contenido de una cotización de curso son los
 **adjuntos**, que se bajan por el servicio público y no gastan cuota. La ficha reducida solo aportó
 tope, cierre, tipo de llamado y competencia.
+
+Tercer hecho, del 08-09-2026, que corrige la lectura del anterior: **32 requests en un día, 0 códigos
+429**, con la misma corrida completa de las cinco categorías (13 consultas más los detalles). O sea
+que las 21 requests del 07-09 no eran un techo: el 429 vuelve a comportarse como episodio y no como
+límite, igual que el de las 9 requests del 19-08. Lo único que sí falló ese día fueron **dos detalles
+con 504** (`976-60-COT26` y `425-325-COT26`), que salieron con ficha reducida sin costar la corrida.
+Y como `data/cuota/` es efímero, este día bueno tampoco llega a `historico/cuota.jsonl`: vive en esta
+prosa, como los de 83, 234 y 303.
 
 Aun así, la corrida ya no depende de que la cuota alcance: los errores de cuota no se confunden con
 una variante rota, y **las categorías que no se alcanzaron a barrer se arrastran del índice** hacia

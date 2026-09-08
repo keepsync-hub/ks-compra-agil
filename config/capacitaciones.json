@@ -4012,6 +4012,1201 @@
           "estado": "sin_informacion"
         }
       ]
+    },
+    "425-339-COT26": {
+      "curso": "Inteligencia Artificial aplicada al análisis de datos y la gestión administrativa (Microsoft Copilot)",
+      "organismo_corto": "Poder Judicial",
+      "organismo_nombre": "Corporación Administrativa del Poder Judicial (CAPJ) — Sección de Capacitación, Departamento de RR.HH.",
+      "fuente_documentos": [
+        "TERM. DE REFERENCIA N° 371.pdf"
+      ],
+      "tributacion": {
+        "regimen": "no_declarado",
+        "cita": "El TDR fija «Presupuesto estimado $1.200.000» (letra F) y exige que «La cotización deberá estar expresada en pesos chilenos. Todos los precios que se incluyan en la cotización deberán expresarse en valores totales», pero en ningún punto declara si ese presupuesto es con impuestos incluidos o exento. El valor se presenta como TOTAL y el régimen queda por consultar."
+      },
+      "objetivo": "Al final de la actividad, los participantes estarán en condiciones de conocer los fundamentos de IA Copilot y aplicar herramientas de manera crítica, ética y efectiva en el análisis de información compleja y aspectos de la gestión administrativa, mejorando la claridad en la comunicación de resultados y salvaguardando la responsabilidad profesional y el juicio experto en la toma de decisiones.",
+      "participantes": {
+        "maximo": 54,
+        "glosa": "54 funcionarios/as Directivos y Profesionales de la Corporación Administrativa del Poder Judicial."
+      },
+      "duracion": {
+        "horas_cronologicas": 8,
+        "sesiones": 1,
+        "horas_por_sesion": 8,
+        "glosa": "8 horas cronológicas en una jornada de un día, según fija el TDR en la letra B."
+      },
+      "modalidad": {
+        "tipo": "Presencial con transmisión virtual simultánea",
+        "plataforma": "Sala provista por la CAPJ en Mario Alvo Hassan 1460, piso 6, Santiago, más sesión de Zoom simultánea provista y coordinada por la Corporación.",
+        "horario": "Un día hábil de octubre de 2026, en horario estimado de 8:00 a 17:00 hrs."
+      },
+      "fechas_ejecucion": "Mes de octubre de 2026, en día y horario laboral (lunes a viernes) que la Corporación informará al momento de la contratación.",
+      "modulos": [
+        {
+          "titulo": "Fundamentos de IA aplicada al análisis de datos y puesta en marcha de Copilot",
+          "horas": 2,
+          "temas": [
+            "Fundamentos de la IA aplicada al análisis de datos y su impacto en el trabajo profesional",
+            "Copilot: configuración, tipos de cuentas y accesibilidad"
+          ]
+        },
+        {
+          "titulo": "Chat y agentes de IA aplicados al ámbito laboral",
+          "horas": 2,
+          "temas": [
+            "Chat y agentes de IA",
+            "Agentes aplicados al ámbito laboral de la gestión administrativa"
+          ]
+        },
+        {
+          "titulo": "Copilot para comprender, limpiar y verificar datos complejos",
+          "horas": 2,
+          "temas": [
+            "Uso de la IA de Copilot para apoyar la comprensión, limpieza y verificación de datos complejos, mediante ejercicios prácticos",
+            "Integración de Microsoft Copilot con Office 365"
+          ]
+        },
+        {
+          "titulo": "Uso ético y responsable, y evaluación sumativa grupal",
+          "horas": 2,
+          "temas": [
+            "Criterios éticos y de uso responsable de la IA aplicada al análisis de datos, considerando la confidencialidad de la información",
+            "Comunicación de resultados salvaguardando la responsabilidad profesional y el juicio experto",
+            "Evaluación sumativa grupal sobre un caso preparado por el evaluador y resuelto en equipos"
+          ]
+        }
+      ],
+      "modulos_nota": "Los cuatro módulos cubren los siete temas propuestos por el TDR en su letra A, en el mismo orden. El TDR fija la duración total (8 horas cronológicas en una jornada) y no su distribución: el reparto por módulo es propuesta de KeepSync y se ajusta en la reunión de coordinación que el propio TDR contempla en la letra G.",
+      "requisitos_metodologicos": [
+        "Metodología activo-participativa, con casos prácticos, simulaciones y ejercicios aplicados sobre las herramientas y sistemas institucionales.",
+        "Actividades de activación del conocimiento al inicio y de cierre de la jornada.",
+        "Evaluación sumativa grupal final sobre un caso resuelto en equipos.",
+        "Acta de asistencia y aprobación con las horas de la capacitación."
+      ],
+      "exigencias_adicionales": [
+        "La actividad debe enfocarse en Microsoft Copilot: la CAPJ ya tiene licencias vigentes de esa herramienta.",
+        "La cotización debe indicar nombre, teléfono y correo electrónico ubicable del proveedor.",
+        "Ante diferencias entre el precio del portal y el de la cotización, prevalece el de la cotización."
+      ],
+      "relator_exigido": {
+        "formacion": "Título profesional excluyente de al menos 8 semestres, del área de las Ciencias de la Administración, de la Computación o de la Ingeniería, de universidad o IP reconocido por el Estado, acreditado con certificado de título verificable.",
+        "experiencia_laboral": "Especialización acreditada en Inteligencia Artificial: al menos un curso de 24 horas cronológicas, con certificado o acta de la institución que lo impartió.",
+        "experiencia_relatoria": "«Certificado de Experiencia» firmado y timbrado por la institución que recibió cada capacitación (excluyente), de actividades dictadas en los últimos 3 años. 3 o más cursos: 100 puntos; 1 o 2: 50."
+      },
+      "entregables": [
+        "8 horas cronológicas de capacitación en una jornada, presencial y con transmisión virtual simultánea, para 54 funcionarios/as.",
+        "Evaluación sumativa grupal final, con un caso preparado por el evaluador y resuelto en equipos.",
+        "Acta de asistencia y aprobación con la cantidad de horas de la capacitación."
+      ],
+      "logistica": "Reunión de coordinación previa, presencial o por Zoom, para calibrar los aspectos técnicos y operativos del TDR. La sala y el Zoom los provee la Corporación. Se formaliza con la orden de compra y su aceptación. No hay garantías.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Propuesta económica en pesos chilenos, en valores totales, con nombre, teléfono y correo electrónico de contacto del proveedor",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Propuesta técnica del curso: programa, contenidos, metodología activo-participativa y evaluación sumativa",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Copia simple del título profesional del relator/a, con número de decreto, registro profesional, ID, folio o código de validación electrónica",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificado o acta de la especialización en Inteligencia Artificial del relator/a, de al menos 24 horas cronológicas",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "«Certificado de Experiencia» del expositor, firmado y timbrado por la empresa o institución que recibió la capacitación (formulario modelo adjunto al TDR)",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "puntaje",
+        "detalle": [
+          "Propuesta económica 40% (precio mínimo ofertado ÷ oferta que se evalúa × 100) y experiencia del oferente 60%.",
+          "En el criterio de experiencia: 3 o más cursos impartidos = 100 puntos; 1 o 2 cursos impartidos = 50 puntos.",
+          "El criterio de mayor peso es documental y no depende del precio: sin «Certificado de Experiencia» firmado y timbrado por el receptor de la capacitación, no hay puntaje que compense en el 40% restante.",
+          "El título profesional y el «Certificado de Experiencia» son requisitos excluyentes: sin ellos la oferta no llega a evaluarse."
+        ]
+      },
+      "multas": "El TDR no establece multas ni garantías. Contempla que, si un proceso no finaliza, se pagan las horas utilizadas contra entrega de un informe de avance confeccionado por el oferente y aprobado por la Corporación.",
+      "pago": "Contra factura electrónica o boleta de honorarios y entrega del acta de asistencia y evaluación al término de la capacitación, dentro de un plazo no superior a 30 días corridos desde la presentación del documento y previa recepción conforme. Si la factura es observada, el plazo se cuenta desde su reingreso subsanado. La Corporación puede reclamar el contenido de la factura dentro de 8 días corridos, conforme al art. 3° de la Ley 19.983.",
+      "criterios_direccionadores": [
+        {
+          "id": "titulo-profesional-excluyente-de-8-semestres",
+          "exige": "Título profesional del relator/a en Ciencias de la Administración, de la Computación o de la Ingeniería, de al menos 8 semestres, otorgado por universidad o instituto profesional reconocido por el Estado, acreditado con documento verificable. Es requisito excluyente: sin él la oferta no se evalúa.",
+          "cita": "TDR N° 371, letra C — «El relator debe contar con título profesional (requisito excluyente) del área de las Ciencias de la Administración… o de las Ciencias de la Computación… o de las ciencias de la Ingeniería… de al menos 8 semestres».",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "especializacion-en-ia-de-24-horas",
+          "exige": "Acreditar una especialización del relator/a en el área de la Inteligencia Artificial de al menos 24 horas cronológicas, con certificado o acta emitida por la institución que la impartió.",
+          "cita": "TDR N° 371, letra C — «acreditar especialización (al menos un curso) en el Área de la Inteligencia Artificial… esta debe tener a lo menos 24 hrs. cronológicas de duración y ser acreditada mediante un certificado o acta, emitido por la institución que efectuó dicha especialización».",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "certificado-de-experiencia-firmado-y-timbrado",
+          "exige": "Un «Certificado de Experiencia» por cada capacitación previa, completado, firmado y timbrado por la empresa o institución que recibió la capacitación. Es excluyente y lo emite un tercero: no basta declararlo en el currículum. Solo valen actividades dictadas dentro de los 3 años anteriores a la publicación del TDR.",
+          "cita": "TDR N° 371, letra C — «adjuntando un “Certificado de Experiencia”, como requisito excluyente, el cual debe ser completado con los datos solicitados, firmado y timbrado por la empresa o institución que haya recibido la capacitación… Se considerarán experiencias válidas, las actividades impartidas dentro del plazo de 3 años».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "tres-cursos-impartidos-para-el-puntaje-maximo",
+          "exige": "Acreditar 3 o más cursos impartidos para obtener los 100 puntos del criterio que pesa 60% de la evaluación. Con 1 o 2 cursos se obtiene la mitad, lo que en la práctica solo se compensa cotizando muy por debajo del resto.",
+          "cita": "TDR N° 371, letra C, tabla de criterios — «Experiencia 60%. 1 o 2 cursos impartidos: 50 puntos. 3 o más cursos impartidos: 100 puntos».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "enfoque-obligado-en-microsoft-copilot",
+          "exige": "La actividad debe estar enfocada en Microsoft Copilot, la herramienta que la CAPJ ya tiene licenciada, incluyendo su configuración, tipos de cuenta, agentes e integración con Office 365. Confirmar que KeepSync puede dictar el curso sobre esa plataforma específica y con qué ambiente de práctica.",
+          "cita": "TDR N° 371, letra A — «esta institución cuenta con licencias vigentes de la herramienta de Inteligencia Artificial Microsoft Copilot, la cual forma parte de su ecosistema tecnológico y estrategia de transformación digital, por lo que esta actividad deberá estar enfocada en esta herramienta».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "regimen-tributario-no-declarado",
+          "exige": "Confirmar si los $1.200.000 del presupuesto estimado son con impuestos incluidos o exentos. El TDR exige cotizar «en valores totales» pero no declara el régimen, y la diferencia es el 19% del monto.",
+          "cita": "TDR N° 371, letra F — «Presupuesto estimado $1.200.000… Todos los precios que se incluyan en la cotización deberán expresarse en valores totales». El documento no menciona IVA ni exención en ningún punto.",
+          "tipo": "tributario",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "cafeteria-y-almuerzo-sin-responsable-declarado",
+          "exige": "Confirmar quién provee el servicio de cafetería AM y PM y la jornada de almuerzo que el TDR incluye en la jornada de 54 participantes. El documento los menciona como parte de la actividad sin decir si son de cargo del proveedor o de la Corporación, y para 54 personas la diferencia es material dentro de un tope de $1.200.000.",
+          "cita": "TDR N° 371, letra B — «La actividad tendrá una duración total de 8 horas cronológicas, organizadas en sesión de 1 día, en horario estimado de 8:00 a 17:00 hrs., contando con servicio de cafetería AM y PM y jornada de almuerzo».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "5956-122-COT26": {
+      "curso": "Inteligencia Artificial aplicada a la actividad académica",
+      "organismo_corto": "U. de Atacama",
+      "organismo_nombre": "Universidad de Atacama — Departamento de Psicología, Facultad de Humanidades y Educación",
+      "fuente_documentos": [
+        "3. Formulario Compra Capacitación IA - Psicología - POA.pdf"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«El monto no podrá superar las 100 UTM (valor debe incluir IVA y despacho (despacho en caso de bienes). Monto total de la compra $ 2.000.000» — Formulario de Solicitud de Cotización de Compra Ágil. El mismo formulario marca el presupuesto como *disponible*: «La oferta del proveedor que supere el valor disponible para el producto o servicio, será declarada inadmisible»."
+      },
+      "objetivo": "Contratar un servicio de capacitación online en Inteligencia Artificial aplicada al trabajo académico, dirigido a 16 académicos/as del Departamento de Psicología de la Universidad de Atacama, con énfasis en docencia universitaria, investigación social, producción y análisis de información, escritura científica y uso ético y responsable de herramientas de IA.",
+      "participantes": {
+        "maximo": 16,
+        "glosa": "16 académicos/as del Departamento de Psicología de la Universidad de Atacama."
+      },
+      "duracion": {
+        "horas_cronologicas": 4,
+        "sesiones": 2,
+        "horas_por_sesion": 2,
+        "glosa": "4 horas cronológicas, el mínimo aproximado que declara el formulario del requirente, distribuidas en dos sesiones de 2 horas. La extensión definitiva se ajusta con el responsable del proceso."
+      },
+      "modalidad": {
+        "tipo": "Online sincrónica",
+        "plataforma": "Plataforma de videoconferencia (Zoom, Google Meet o Microsoft Teams) provista por KeepSync, más aula virtual con el material del curso.",
+        "horario": "A convenir con el Departamento de Psicología dentro del plazo de entrega de 20 días hábiles."
+      },
+      "modalidad_observacion": "El formulario declara el servicio como capacitación «online» en el objeto de la adquisición y, a la vez, consigna una dirección de entrega física —Avenida Copayapu 485, Copiapó, Departamento de Psicología— y un plazo de entrega de 20 días hábiles. La propuesta se presenta online, según el objeto declarado, y consulta formalmente si se requiere alguna sesión presencial en esa dirección.",
+      "fechas_ejecucion": "Dentro de los 20 días hábiles de plazo de entrega que fija el formulario, en las fechas que acuerden el Departamento de Psicología y el proveedor.",
+      "contenidos_sugeridos_por_el_organismo": false,
+      "modulos": [
+        {
+          "titulo": "IA aplicada a la docencia universitaria",
+          "horas": 1,
+          "temas": [
+            "Fundamentos de la inteligencia artificial generativa para el trabajo académico",
+            "Diseño de actividades, materiales y evaluaciones con apoyo de IA",
+            "Criterios de integridad académica en el aula universitaria"
+          ]
+        },
+        {
+          "titulo": "IA en investigación social: producción y análisis de información",
+          "horas": 1,
+          "temas": [
+            "Búsqueda, organización y síntesis de literatura con apoyo de IA",
+            "Apoyo al análisis de información cualitativa y cuantitativa en investigación social",
+            "Trazabilidad de fuentes y verificación de resultados"
+          ]
+        },
+        {
+          "titulo": "IA aplicada a la escritura científica",
+          "horas": 1,
+          "temas": [
+            "Estructura, redacción y revisión de manuscritos con apoyo de IA",
+            "Traducción, estilo y adecuación a normas editoriales",
+            "Límites, autoría y declaración del uso de IA en publicaciones"
+          ]
+        },
+        {
+          "titulo": "Uso ético y responsable de herramientas de IA",
+          "horas": 1,
+          "temas": [
+            "Sesgos, alucinaciones y límites de los modelos",
+            "Datos personales y sensibles en contextos de investigación en psicología",
+            "Plan personal de aplicación al trabajo académico"
+          ]
+        }
+      ],
+      "modulos_nota": "El formulario del requirente no lista contenidos ni estructura del curso: declara cinco énfasis —docencia universitaria, investigación social, producción y análisis de información, escritura científica y uso ético y responsable de herramientas de IA—. Los cuatro módulos son propuesta de KeepSync sobre esos énfasis y se ajustan con el responsable del proceso; el análisis y la producción de información se abordan dentro del módulo de investigación social.",
+      "requisitos_metodologicos": [
+        "Aplicación al trabajo académico real del Departamento de Psicología, por sobre ejemplos genéricos.",
+        "Ejercicios prácticos guiados en cada módulo.",
+        "Material digital del curso y certificado de participación."
+      ],
+      "exigencias_adicionales": [
+        "Adjuntar cotización detallada para evaluación.",
+        "La compra ágil se adjudica por la totalidad de lo indicado en el formulario: no admite varios adjudicatarios."
+      ],
+      "relator_exigido": {
+        "formacion": "El formulario no exige título ni disciplina del relator/a, ni pide acreditar formación alguna.",
+        "experiencia_laboral": "El formulario no exige experiencia profesional acreditada del relator/a.",
+        "experiencia_relatoria": "El formulario no exige experiencia previa en relatoría ni establece medios de verificación. Es la compra menos exigente en credenciales de toda la cartera fichada."
+      },
+      "entregables": [
+        "4 horas cronológicas de capacitación online sincrónica para 16 académicos/as.",
+        "Material digital del curso y guías de ejercicios.",
+        "Certificado de participación para cada asistente.",
+        "Cotización detallada, dentro del presupuesto disponible de $2.000.000 con IVA incluido."
+      ],
+      "logistica": "Actividad coordinada con Douglas Véliz Vergara (Douglas.veliz@uda.cl, +56959471821), responsable del proceso según el formulario. Plazo de entrega de 20 días hábiles. El formulario no contempla garantías.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Cotización detallada para evaluación, dentro del presupuesto disponible de $2.000.000 con IVA incluido",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Propuesta técnica del curso: programa, módulos, metodología y duración",
+          "tipo": "generable"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "no_declarado",
+        "detalle": [
+          "El formulario del requirente no publica criterios de evaluación, ponderaciones ni pauta de puntaje: no se puede saber cuánto pesa el precio frente a la propuesta técnica.",
+          "El presupuesto está marcado como *disponible* (no estimado): «La oferta del proveedor que supere el valor disponible para el producto o servicio, será declarada inadmisible».",
+          "«La compra ágil se adjudica por la totalidad de lo indicado en el formulario, vale decir, una compra ágil no puede tener varios adjudicatarios»."
+        ]
+      },
+      "multas": "El formulario no establece multas, garantías ni causales de término anticipado.",
+      "pago": "El formulario no declara forma ni plazo de pago. Fija el plazo de entrega del servicio en 20 días hábiles y el centro de costo 51606, ítem 12633.",
+      "criterios_direccionadores": [
+        {
+          "id": "duracion-minima-imprecisa",
+          "exige": "Definir la extensión real esperada del curso. El formulario pide una «duración mínima de 4 horas aproximadamente» para 16 académicos/as con un tope de $2.000.000, sin fijar duración exacta ni máxima: no se sabe si el requirente espera media jornada o un programa de varias sesiones, y de eso depende tanto el costo como la competitividad de la oferta.",
+          "cita": "Formulario de Solicitud de Cotización, detalle técnico — «servicio de capacitación para 16 académicos/as – Duración mínima de 4 horas aproximadamente».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "sin-pauta-de-evaluacion",
+          "exige": "Conocer cómo se evaluarán las ofertas. El único adjunto es el formulario interno de solicitud de cotización, que no publica criterios de evaluación ni ponderaciones, así que no se puede saber cuánto pesa el precio ni qué se premia de la propuesta técnica.",
+          "cita": "El «Formulario de Solicitud de Cotización de Compra Ágil», único documento adjunto a la compra, no contiene apartado alguno de criterios de evaluación: solo objeto, detalle técnico, plazo, dirección de entrega, contacto, monto y centro de costo.",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "online-con-direccion-de-entrega-en-copiapo",
+          "exige": "Confirmar si el servicio es íntegramente online o si alguna sesión debe dictarse en Copiapó. El objeto declara una capacitación «online» y el mismo formulario consigna dirección de entrega en Avenida Copayapu 485, Copiapó, sin resolver la diferencia.",
+          "cita": "Formulario de Solicitud de Cotización — objeto: «Contratación de un servicio de capacitación online en Inteligencia Artificial aplicada al trabajo académico»; y «Dirección de entrega: Avenida Copayapu 485, Copiapó - Departamento de Psicología».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "519302-71-COT26": {
+      "curso": "Herramientas tecnológicas en Inteligencia Artificial: dos cursos (Procesos Administrativos y Formación de Audiencias)",
+      "organismo_corto": "INAPI",
+      "organismo_nombre": "Instituto Nacional de Propiedad Industrial (INAPI)",
+      "fuente_documentos": [
+        "Ficha Compra Ágil - Herramientas tecnológicas IA.pdf"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«Monto total estimado disponible $2.400.000.- Impuestos incluidos. Estimado Proveedor, favor al momento de cotizar indicar en el portal “el monto total”, ya que la orden de compra se emite por el total que usted informa en el portal, sin posibilidad de modificación posterior» — Ficha Compra Ágil, apartado Monto total estimado disponible."
+      },
+      "objetivo": "Entregar un programa de capacitación en herramientas de Inteligencia Artificial estructurado en dos cursos independientes: el Curso 1, para que hasta 22 funcionarios/as de INAPI usen herramientas de IA de manera práctica, segura, crítica y responsable en sus procesos administrativos; y el Curso 2, para que 1 funcionario/a evalúe, diseñe, use y aplique herramientas de IA generativa en el desarrollo metodológico, el diseño instruccional, la evaluación del aprendizaje y la impartición de clases para audiencias de personas adultas.",
+      "participantes": {
+        "maximo": 23,
+        "glosa": "Curso 1: hasta 22 funcionarios/as de INAPI. Curso 2: 1 funcionario/a. Los dos cursos van en una sola oferta."
+      },
+      "duracion": {
+        "horas_cronologicas": 33,
+        "sesiones": 4,
+        "horas_por_sesion": 2,
+        "glosa": "Curso 1: 8 horas presenciales en 4 sesiones de 2 horas. Curso 2: 25 horas virtuales, el mínimo del rango 25–40."
+      },
+      "modalidad": {
+        "tipo": "Mixta: Curso 1 presencial en el salón de INAPI; Curso 2 virtual sincrónico",
+        "plataforma": "Curso 1 en el salón de INAPI; Curso 2 en videoconferencia. Se usan las plataformas provistas por INAPI: Gemini, NotebookLM, ChatGPT, Claude, Canva y Perplexity.",
+        "horario": "Curso 1: miércoles de 15:00 a 17:00. Curso 2: dos clases semanales en jornada laboral."
+      },
+      "modalidad_observacion": "La ficha programa el Curso 1 los días «07, 14, 21 y 20 de octubre de 2026»: la cuarta fecha es anterior a la tercera y no puede ser un miércoles consecutivo de esa serie. La propuesta asume cuatro miércoles consecutivos de octubre de 2026 y consulta formalmente la fecha correcta antes de comprometerla.",
+      "fechas_ejecucion": "Curso 1: cuatro sesiones en octubre de 2026 (la ficha programa «07, 14, 21 y 20 de octubre de 2026»). Ambos cursos dentro de la extensión máxima de 45 días hábiles contados desde la aceptación de la orden de compra.",
+      "modulos": [
+        {
+          "titulo": "Curso 1 · Sesión 1: Producción documental aplicada con IA",
+          "horas": 2,
+          "temas": [
+            "Definición del propósito, destinatario y estándar del documento; organización y síntesis de antecedentes",
+            "Elaboración de correos, minutas, actas, informes y respuestas frecuentes; adaptación de tono y formato institucional; uso de plantillas",
+            "Reconocimiento de herramientas: ChatGPT, Claude, Gemini y NotebookLM; diferencias y cuándo usar cada una"
+          ]
+        },
+        {
+          "titulo": "Curso 1 · Sesión 2: Prompts, controles y flujos de trabajo reutilizables",
+          "horas": 2,
+          "temas": [
+            "Qué es un prompt y cómo funciona; tokens, contexto, temperatura y alucinaciones",
+            "Modelos de IA en la nube frente a modelos locales; «vibe coding» y cómo se aplica",
+            "Comparación entre plataformas; anonimización; control de hechos, citas y versión final",
+            "Diseño de un flujo de trabajo reutilizable y su ficha (tarea, plataforma, prompt, controles)"
+          ]
+        },
+        {
+          "titulo": "Curso 1 · Sesión 3: Análisis de datos e indicadores con apoyo de IA",
+          "horas": 2,
+          "temas": [
+            "Estructura y calidad de bases; diccionario de datos; limpieza y detección de duplicados, vacíos e inconsistencias",
+            "Preguntas analíticas; cálculo y validación de indicadores con controles independientes",
+            "GPTs personalizados, Gems en Gemini, Proyectos en Claude y NotebookLM para organizar fuentes",
+            "Introducción a la generación de código con IA, agentes simples y qué es una API key"
+          ]
+        },
+        {
+          "titulo": "Curso 1 · Sesión 4: Paneles de control y transferencia al puesto de trabajo",
+          "horas": 2,
+          "temas": [
+            "Pregunta de gestión y usuario del panel; indicadores, fuente, periodicidad, responsable y umbrales",
+            "Diseño visual y accesibilidad; construcción de gráficos, actualización y lectura de alertas",
+            "Presentación del prototipo, plan personal de aplicación y apoyo entre pares",
+            "Evaluación final con nota mediante resolución de caso práctico"
+          ]
+        },
+        {
+          "titulo": "Curso 2 · Educación e IA generativa",
+          "horas": 9,
+          "temas": [
+            "Fundamentos de IA aplicada a entornos educativos",
+            "Herramientas de IA generativa para docentes",
+            "Criterios éticos y pedagógicos del uso de IA en la formación de personas adultas (andragogía)"
+          ]
+        },
+        {
+          "titulo": "Curso 2 · Diseño instruccional y creación de recursos",
+          "horas": 8,
+          "temas": [
+            "Elaboración de secuencias didácticas y planificación de clases",
+            "Generación de material multimedia interactivo",
+            "Personalización del aprendizaje"
+          ]
+        },
+        {
+          "titulo": "Curso 2 · Evaluación del aprendizaje y retroalimentación con IA",
+          "horas": 8,
+          "temas": [
+            "Diseño de rúbricas y elaboración de reactivos y evaluaciones",
+            "Automatización de la retroalimentación formativa",
+            "Integridad académica",
+            "Evaluación final con nota mediante resolución de caso práctico"
+          ]
+        }
+      ],
+      "modulos_nota": "Los cuatro módulos del Curso 1 cubren los tres bloques de contenido que lista la ficha —producción documental, análisis de datos e indicadores, y paneles de control y transferencia— repartidos en las 4 sesiones presenciales de 2 horas que ella misma fija; el bloque de producción documental ocupa dos sesiones porque concentra la mayor parte de los contenidos enumerados. Los tres módulos del Curso 2 son los tres bloques de contenidos mínimos de la ficha, en el mismo orden. La ficha fija para el Curso 2 un rango de 25 a 40 horas y no su distribución: la propuesta toma el mínimo de 25 horas y reparte por módulo, ajustable con la contraparte.",
+      "requisitos_metodologicos": [
+        "Curso 1 con 30% conceptual y 70% práctico, con ejercicios acompañados.",
+        "Evaluación diagnóstica inicial del Curso 1, preferentemente virtual.",
+        "Evaluación final con nota de 1 a 7 mediante caso práctico, en ambos cursos.",
+        "Informe final con alumno, duración, fecha, asistencia, notas y satisfacción.",
+        "Diplomas digitales con nombre, nota y año del curso.",
+        "Medición de uso efectivo a los 60 o 90 días (Curso 1).",
+        "Información pública, ficticia o anonimizada, con validación humana.",
+        "Apoyo diferenciado para participantes con menor experiencia."
+      ],
+      "exigencias_adicionales": [
+        "Usar solo las herramientas de IA autorizadas y provistas por INAPI.",
+        "Colación simple en cada sesión presencial, para participantes e instructor.",
+        "Material didáctico enviado a más tardar el día anterior al inicio del curso.",
+        "Asistencia exigida de hasta 70%; se puede reprogramar 1 clase con 48 horas de aviso.",
+        "El curso debe poder congelarse por un máximo de 7 días corridos.",
+        "Se revisan solo las primeras 16 páginas de la oferta; vigencia de la oferta, 15 días."
+      ],
+      "relator_exigido": {
+        "formacion": "Título profesional o licenciatura en Educación, Pedagogía, Tecnología Educativa o carrera afín a TIC, con imagen del documento. La pauta reserva el máximo para quien además tenga magíster o doctorado.",
+        "experiencia_laboral": "Especialización en IA acreditada con diplomado o postítulo para el puntaje máximo; los certificados de cursos puntúan menos. Se exige currículum.",
+        "experiencia_relatoria": "Cartas, certificados o evidencia de capacitación en IA aplicada, Data Science o IA generativa: tres o más experiencias dan el máximo del factor de mayor peso."
+      },
+      "entregables": [
+        "Curso 1: 8 horas presenciales en 4 sesiones para hasta 22 funcionarios/as, con colación.",
+        "Curso 2: 25 horas virtuales sincrónicas para 1 funcionario/a.",
+        "Evaluación diagnóstica del Curso 1, evaluación final con nota y diplomas digitales.",
+        "Material didáctico entregado antes del inicio de cada curso.",
+        "Informe final con asistencia, notas y satisfacción, y medición de uso a 60 o 90 días."
+      ],
+      "logistica": "Curso 1 en el salón de INAPI; el proveedor aporta la colación de cada sesión. Extensión máxima de 45 días hábiles desde la aceptación de la orden de compra.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Oferta económica por el monto total con impuestos incluidos, indicada en el portal (la orden de compra se emite por ese total, sin modificación posterior)",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Propuesta técnica de los dos cursos: contenidos, modalidad, duración, metodología, evaluaciones y productos",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Currículum vítae del instructor o instructora (uno para ambos cursos, o dos, uno por curso)",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Imagen del título profesional o de licenciatura en Educación, Pedagogía, Tecnología Educativa o carrera afín a TIC, y del magíster, máster o doctorado cuando lo haya",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados de diplomado, postítulo o cursos de especialización en Inteligencia Artificial y materias afines",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Cartas de recomendación, certificados o evidencia de experiencia en capacitación en IA Aplicada, Data Science o herramientas de IA generativa",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "puntaje",
+        "detalle": [
+          "Pauta de 100 puntos repartida íntegramente en el instructor/a: formación académica 30, especialización en IA 30 y experiencia en relatoría o docencia 40.",
+          "El precio no puntúa: solo entra como tercer criterio de desempate, después del Sello Empresa Mujer y de la Política de Integridad.",
+          "«Se revisarán sólo las primeras 16 páginas cargadas en la oferta»: la propuesta técnica y todos los certificados del instructor/a deben caber en ese límite.",
+          "Si se presentan dos instructores, uno por curso, el puntaje se calcula como el promedio simple de ambos.",
+          "«Los proveedores que cumplen con los requisitos mínimos pasan a la siguiente instancia de evaluación»: la pauta se aplica después de la admisibilidad."
+        ]
+      },
+      "multas": "La ficha no establece multas ni garantías. Fija la asistencia exigida en hasta un 70%, permite reprogramar como máximo 1 clase con 48 horas de anticipación y admite congelar el curso por un máximo de 7 días corridos.",
+      "pago": "Pago a 30 días contados desde la emisión de la factura, la que debe emitirse cuando el curso finalice y una vez que la orden de compra esté en estado «Recepción Conforme» en el portal. La recepción conforme se otorga una vez recibido y aprobado el informe final del curso. Facturación a Instituto Nacional de Propiedad Industrial, RUT 65.999.669-3, Carabineros de Chile N°185, Santiago, giro Sector Público.",
+      "criterios_direccionadores": [
+        {
+          "id": "pauta-que-solo-evalua-al-instructor",
+          "exige": "Toda la pauta de evaluación (100 puntos) mide credenciales del instructor/a: formación 30, especialización 30 y experiencia 40. El precio no aporta puntaje y solo desempata en tercer lugar. Sin un relator/a designado con certificados adjuntos, la oferta compite con 0 puntos.",
+          "cita": "Ficha Compra Ágil, Pauta de Evaluación — factores «Formación Académica del Instructor(a)» (30), «Especialización: En Inteligencia Artificial» (30) y «Experiencia del Instructor(a)» (40), TOTAL 100; y «En el caso que se presente un empate, INAPI seleccionará al oferente que cuente con Sello Empresa Mujer…, en segundo lugar, que posea Política de Integridad y en tercer lugar: menor precio».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "magister-o-doctorado-para-el-puntaje-maximo",
+          "exige": "Los 30 puntos de formación académica solo se obtienen con título profesional más magíster, máster o doctorado en IA, Ciencia de Datos, Educación/Docencia, Tecnología o Gestión. Un título de ingeniería sin postgrado da 20 y uno de administración 15.",
+          "cita": "Ficha Compra Ágil, Pauta de Evaluación — «a. Presenta Título Profesional más Magíster, Máster o Doctorado en áreas afines (IA, Ciencia de Datos, Educación/Docencia, Tecnología o Gestión). 30».",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "contradiccion-titulo-exigido-versus-puntaje-cero",
+          "exige": "Resolver la contradicción entre el requisito y la pauta: el apartado del instructor admite «carrera afín a TIC» como título válido, y la pauta le asigna 0 puntos en el factor que vale 30. Una oferta admisible puede así partir con un tercio del puntaje perdido.",
+          "cita": "Ficha Compra Ágil, apartado Organismo Capacitador / Instructor(a) — «Título profesional o de licenciatura en Educación, Pedagogía, Tecnología Educativa o carrera afín a TIC»; y Pauta de Evaluación — «d. Título profesional de otras carreras afines al área de TIC. 0».",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "diplomado-o-postitulo-en-ia",
+          "exige": "Los 30 puntos de especialización exigen diplomado o postítulo en IA Aplicada, Data Science, Transformación Digital, Gestión de TI, herramientas de IA generativa, Prompt Engineering o arquitecturas Cloud. Cuatro o más certificados de cursos dan 20 y tres o menos, 10.",
+          "cita": "Ficha Compra Ágil, Pauta de Evaluación — «a. Presenta certificado de diplomado(s) o postítulo(s)… 30. b. Presenta 4 o más certificados de cursos 20. c. Presenta 3 o menos certificados de cursos 10».",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "tres-experiencias-de-relatoria-acreditadas",
+          "exige": "Los 40 puntos del factor de mayor peso exigen 3 o más experiencias de relatoría o docencia en IA Aplicada, Data Science o herramientas de IA generativa, acreditadas con cartas de recomendación, certificados o evidencia. Las emite un tercero: no basta el currículum.",
+          "cita": "Ficha Compra Ágil, Pauta de Evaluación — «El Instructor(a) presenta carta/s de recomendación, certificado o evidencia de experiencia en capacitación en Inteligencia Artificial Aplicada, Data Science o Herramientas de IA Generativa. 3 o más experiencias de relatoría o docencia. 40».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "tope-de-16-paginas-de-oferta",
+          "exige": "Toda la oferta —propuesta técnica de dos cursos, currículum, títulos, postgrados, diplomados y cartas de experiencia— debe caber en 16 páginas: «Se revisarán sólo las primeras 16 páginas cargadas». Definir qué se adjunta y en qué orden, porque lo que quede fuera no se evalúa.",
+          "cita": "Ficha Compra Ágil, Pauta de Evaluación — «Se revisarán sólo las primeras 16 páginas cargadas en la oferta».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "programacion-con-fecha-inconsistente",
+          "exige": "Confirmar las fechas del Curso 1. La ficha programa «07, 14, 21 y 20 de octubre de 2026»: la cuarta fecha es anterior a la tercera y rompe la serie de miércoles consecutivos que declara el propio cuadro de programación.",
+          "cita": "Ficha Compra Ágil, Curso 1 — «Programación: 07, 14, 21 y 20 de octubre de 2026, de 14:30 a 16:30 horas en las dependencias de INAPI»; y cuadro de Programación y Modalidad — «4 sesiones presenciales. Miércoles de 15:00 a 17:00 hrs.». El horario también difiere entre los dos apartados.",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "colacion-por-sesion-a-cargo-del-proveedor",
+          "exige": "Costear la colación simple (alimentos dulces y salados) para hasta 23 personas en cada una de las 4 sesiones presenciales, dentro del tope de $2.400.000 que cubre además 33 horas de relatoría.",
+          "cita": "Ficha Compra Ágil, Condiciones de Implementación — «El Curso 1 debe incluir una colación simple en cada sesión presencial para los participantes y el instructor (alimentos dulces y salados). INAPI dispondrá de estación con café, té y agua».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "solo-herramientas-autorizadas-por-inapi",
+          "exige": "Dictar los ejercicios exclusivamente sobre las plataformas que INAPI autoriza y provee —Gemini, NotebookLM, ChatGPT, Claude, Canva y Perplexity—, trabajando con información pública, ficticia o anonimizada. Confirmar qué cuentas y accesos entrega INAPI y cuáles debe aportar el proveedor.",
+          "cita": "Ficha Compra Ágil, Condiciones de Implementación — «Usar exclusivamente herramientas de IA autorizadas por INAPI. Trabajar inicialmente con información pública, ficticia, anonimizada o expresamente autorizada»; y Curso 1 — «Su diseño incorpora Gemini, NotebookLM, ChatGPT, Claude, Canva y Perplexity que son las plataformas provistas institucionalmente».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "cuatro-sesiones-presenciales-en-santiago",
+          "exige": "Disponibilidad del instructor/a para dictar 4 sesiones presenciales en el salón de INAPI, Carabineros de Chile N°185, Santiago, en miércoles consecutivos y en horario fijo de tarde, mientras corre en paralelo el Curso 2 virtual.",
+          "cita": "Ficha Compra Ágil, cuadro de Programación y Modalidad — «Curso 1: IA en Procesos Administrativos. Presencial (Salón INAPI)… 4 sesiones presenciales. Miércoles de 15:00 a 17:00 hrs.».",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "congelamiento-del-curso-por-siete-dias",
+          "exige": "Comprometer que el curso puede congelarse por hasta 7 días corridos y que una clase puede reprogramarse con 48 horas de aviso, sin costo declarado, dentro de la extensión máxima de 45 días hábiles.",
+          "cita": "Ficha Compra Ágil, Condiciones de Implementación — «Asistencia exigida de hasta un 70%, con opción de reprogramar máximo 1 clase con 48 horas de anticipación» y «El curso deberá poder congelarse por un máximo de 7 días de corrido».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "medicion-de-uso-efectivo-a-60-o-90-dias",
+          "exige": "Realizar una medición de uso efectivo entre 60 y 90 días después de terminado el Curso 1. Esa obligación se ejecuta fuera del plazo de 45 días hábiles del servicio y después de la recepción conforme, sin que la ficha declare cómo se paga ni quién la administra.",
+          "cita": "Ficha Compra Ágil, Requisitos y Condiciones para Ambos Cursos — «Medición posterior a los 60 o 90 días para verificar uso efectivo (Curso 1)».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "957865-157-COT26": {
+      "curso": "Gestión Administrativa Moderna: Metodologías Ágiles, Inteligencia Artificial y Análisis de Datos para la Mejora Institucional",
+      "organismo_corto": "Subsecretaría de DD.HH.",
+      "organismo_nombre": "Subsecretaría de Derechos Humanos — División de Administración y Finanzas",
+      "fuente_documentos": [
+        "BSC Gestion Administrativa Moderna.pdf",
+        "Anexo N°1.docx"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«5.2. Precio impuestos incluidos $3.200.000.- (tres millones doscientos mil pesos)» — Bases Simplificadas de Contratación, numeral 5.2."
+      },
+      "objetivo": "Aplicar herramientas de metodologías ágiles, inteligencia artificial y análisis de datos para optimizar procesos administrativos, fortalecer la toma de decisiones basada en evidencia y mejorar la eficiencia institucional en el contexto de la gestión pública.",
+      "participantes": {
+        "maximo": 8,
+        "glosa": "8 cupos para personas funcionarias de gestión y desarrollo de personas, transparencia, finanzas, compras y servicios generales de la DAF."
+      },
+      "duracion": {
+        "horas_cronologicas": 16,
+        "sesiones": 4,
+        "horas_por_sesion": 4,
+        "glosa": "16 horas cronológicas en cuatro jornadas de cuatro horas, como fijan las bases."
+      },
+      "modalidad": {
+        "tipo": "Virtual sincrónica",
+        "plataforma": "Plataforma de videoconferencia estable provista por KeepSync, con soporte técnico y grabación de las sesiones previa autorización.",
+        "horario": "Cuatro jornadas de 09:00 a 13:00 hrs., a definir con la contraparte técnica."
+      },
+      "fechas_ejecucion": "Durante septiembre y/u octubre de 2026, en coordinación con la contraparte técnica institucional.",
+      "contenidos_sugeridos_por_el_organismo": false,
+      "modulos": [
+        {
+          "titulo": "Jornada 1 · Gestión administrativa moderna y mejora continua",
+          "horas": 4,
+          "temas": [
+            "Herramientas y enfoques contemporáneos de gestión administrativa orientados a la mejora continua y la modernización institucional",
+            "Taller de diagnóstico organizacional y mapeo rápido de procesos de las unidades participantes",
+            "Identificación de procesos críticos de la División de Administración y Finanzas"
+          ]
+        },
+        {
+          "titulo": "Jornada 2 · Metodologías ágiles aplicadas a procesos institucionales",
+          "horas": 4,
+          "temas": [
+            "Principios y herramientas ágiles para organizar, priorizar y mejorar procesos de trabajo institucional",
+            "Simulación práctica de tableros Kanban y otras herramientas ágiles sobre procesos institucionales reales",
+            "Plantillas ágiles y tablero Kanban digital para el trabajo de la unidad"
+          ]
+        },
+        {
+          "titulo": "Jornada 3 · Inteligencia artificial y análisis de datos para decidir con evidencia",
+          "horas": 4,
+          "temas": [
+            "Herramientas básicas de inteligencia artificial y análisis de datos para apoyar la toma de decisiones",
+            "Laboratorio práctico guiado de IA aplicada a la elaboración de reportes, minutas, análisis documental y automatización de tareas recurrentes",
+            "Guía práctica de diseño de prompts y criterios de uso responsable"
+          ]
+        },
+        {
+          "titulo": "Jornada 4 · Proyecto integrador: propuesta de mejora institucional",
+          "horas": 4,
+          "temas": [
+            "Diseño de propuestas de mejora que integren metodologías ágiles, inteligencia artificial y análisis de datos",
+            "Canvas de mejora y plantilla de proyecto integrador vinculada a un proceso real de la unidad de cada participante",
+            "Presentación, retroalimentación y rúbrica de evaluación del proyecto aplicado final"
+          ]
+        }
+      ],
+      "modulos_nota": "Las bases fijan la estructura —cuatro jornadas de cuatro horas cronológicas—, los cuatro objetivos de aprendizaje y la metodología mínima, pero no listan contenidos. Los cuatro módulos son propuesta de KeepSync: cada jornada desarrolla uno de los cuatro objetivos de aprendizaje del numeral 4.1 c), en el mismo orden, e incorpora las actividades de la metodología mínima del numeral 4.2 b). El guion metodológico detallado se presenta en el formato del Anexo N°1.",
+      "requisitos_metodologicos": [
+        "Enfoque andragógico y participativo, con exposición dialogada y demostraciones prácticas guiadas.",
+        "Taller de diagnóstico organizacional y mapeo rápido de procesos de las unidades participantes.",
+        "Simulación práctica de tableros Kanban sobre procesos institucionales reales.",
+        "Laboratorio guiado de IA para reportes, minutas, análisis documental y automatización de tareas.",
+        "Uso preferente de procesos y casos reales de la DAF, por sobre ejemplos genéricos.",
+        "Proyecto integrador final vinculado a un proceso real de la unidad de cada participante.",
+        "Evaluación de satisfacción, de aprendizaje y de transferencia en formato DNSC."
+      ],
+      "exigencias_adicionales": [
+        "Anexo N°1 con el Guion Metodológico: sin él la oferta es inadmisible.",
+        "Programa, material, presentaciones, casos, tablero Kanban, plantillas, guía de prompts, canvas, rúbrica, encuestas y certificado para cada participante.",
+        "Soporte técnico en cada jornada y envío del enlace con 24 horas de anticipación.",
+        "Grabar cada jornada, previa autorización, y ponerla a disposición de la institución.",
+        "Responder consultas o incidencias dentro de 48 horas hábiles.",
+        "Reemplazo oportuno del relator/a, con equivalencia técnica acreditable."
+      ],
+      "relator_exigido": {
+        "formacion": "Formación de pre y postgrado pertinente al curso, en administración pública, ingeniería industrial o comercial, gestión de procesos, transformación digital o afines, con certificado de título y de grado.",
+        "experiencia_laboral": "Tres años como mínimo en metodologías ágiles (Scrum, Kanban), mejora de procesos o modernización de la gestión, más conocimientos demostrables en IA generativa y análisis de datos.",
+        "experiencia_relatoria": "Un año como mínimo en docencia, relatoría o facilitación para personas adultas, acreditado con currículum más certificados, contratos u órdenes de compra."
+      },
+      "entregables": [
+        "16 horas de capacitación virtual sincrónica en cuatro jornadas, para 8 participantes.",
+        "Programa, material, plantillas, canvas, guías y presentaciones, en digital.",
+        "Nómina de participantes, registro de asistencia e informe final de ejecución.",
+        "Encuestas de satisfacción, de aprendizaje y de evaluación del/de la relator/a.",
+        "Propuestas de mejora del proyecto integrador final, sobre procesos reales de la DAF.",
+        "Certificados de aprobación de cada participante."
+      ],
+      "logistica": "Coordinación con la contraparte técnica, que verifica el cumplimiento y otorga la recepción conforme. Se formaliza con la orden de compra. No hay garantías.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Anexo N°1 — Propuesta Técnica: Guion Metodológico, en el formato del organismo (obligatorio; su omisión hace inadmisible la oferta)",
+          "tipo": "formulario"
+        },
+        {
+          "documento": "Propuesta técnica del curso con módulos, contenidos, actividades, materiales y duración",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Cotización que describa cómo se dará cumplimiento a las características mínimas del numeral 4.2 letras a), b), c), d) y e)",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Currículum vítae del/la relator/a propuesto/a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados o acreditaciones de formación del/la relator/a: títulos y postgrados",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados de experiencia docente, de relatoría o en implementación de metodologías ágiles, inteligencia artificial o análisis de datos: contratos, órdenes de compra o certificados de prestación",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "no_declarado",
+        "detalle": [
+          "Las bases no publican pauta de evaluación: enumeran los antecedentes obligatorios «para la evaluación de la propuesta» sin criterios, puntajes ni ponderaciones. No se puede saber cuánto pesa el precio frente a los antecedentes del relator/a.",
+          "Los cuatro antecedentes del numeral 12 son todos obligatorios: propuesta técnica con guion metodológico, currículum del relator/a, certificados de formación y certificados de experiencia.",
+          "«En caso de no adjuntar Anexo N°1, su oferta será declarada inadmisible».",
+          "«Si el oferente presenta multas pendientes de pago con la Subsecretaría de Derechos Humanos su oferta será declarada inadmisible»."
+        ]
+      },
+      "multas": "Las bases no detallan multas propias: remiten a «las multas y medidas establecidas en el módulo de Compra Ágil del Sistema de Información de Compras Públicas de ChileCompra… vigente al momento de la contratación», aplicadas mediante acto fundado y previo plazo de descargos. Procede el término anticipado, entre otras causales, por incumplimiento grave, por no comparecencia del relator/a comprometido/a sin reemplazo oportuno y equivalente, por impartir contenidos sustancialmente distintos a los ofertados, y cuando las multas alcancen o superen el 20% del valor total del contrato.",
+      "pago": "Facturación una vez terminados los trabajos y recibidos conformes por la contraparte técnica. Pago dentro de un plazo máximo de 30 días corridos desde la recepción conforme y la correcta emisión y recepción del documento tributario, conforme a la Ley N° 21.131 sobre pago oportuno y a la Ley N° 19.886 y su Reglamento (D.S. N° 661 de Hacienda).",
+      "criterios_direccionadores": [
+        {
+          "id": "postgrado-pertinente-exigido",
+          "exige": "El relator/a debe acreditar formación de pre Y postgrado pertinente al contenido del curso, en administración pública, ingeniería industrial o comercial, ciencias de la administración, gestión de procesos, transformación digital o afines, con copia del certificado de título y del grado académico. El postgrado se exige, no se valora.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) i — «Acreditar formación de pre y postgrado pertinente al contenido del curso, en áreas de administración pública, ingeniería industrial o comercial, ciencias de la administración, gestión de procesos, transformación digital o disciplinas afines. Dicha información deberá acreditarse mediante copia simple de certificado de título profesional y grado académico correspondiente».",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "tres-anos-en-metodologias-agiles",
+          "exige": "Acreditar tres años de experiencia profesional en implementación de metodologías ágiles (Scrum, Kanban), mejora de procesos o modernización de la gestión, preferentemente en instituciones públicas.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) ii — «Acreditar experiencia profesional mínima de tres (3) años en implementación de metodologías ágiles (Scrum, Kanban), mejora de procesos o modernización de la gestión, preferentemente en instituciones públicas».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "experiencia-demostrable-en-ia-generativa-y-datos",
+          "exige": "Acreditar experiencia o conocimientos aplicados demostrables en herramientas de inteligencia artificial generativa y de análisis de datos aplicados a la gestión administrativa. Las bases exigen que sean demostrables, no declarados.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) iii — «Experiencia o conocimientos aplicados demostrables en herramientas de inteligencia artificial generativa y de análisis de datos aplicados a la gestión administrativa».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "un-ano-en-docencia-a-personas-adultas",
+          "exige": "Acreditar al menos un año de experiencia en docencia, relatoría o facilitación de procesos formativos dirigidos a personas adultas, idealmente en instituciones públicas.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) iv — «Acreditar experiencia mínima de un (1) año en docencia, relatoría o facilitación de procesos formativos dirigidos a personas adultas, idealmente en instituciones públicas».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "certificados-de-experiencia-emitidos-por-terceros",
+          "exige": "Los tres requisitos anteriores se acreditan con currículum MÁS certificados, contratos, órdenes de compra o certificados de prestación de servicios, y los tres antecedentes documentales del numeral 12 son obligatorios. Los emite un tercero: un currículum que enumera la trayectoria no es el certificado que las bases exigen adjuntar.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) v — «La experiencia deberá acreditarse mediante currículum vitae actualizado… certificados, contratos, órdenes de compra, certificados de prestación de servicios u otros antecedentes verificables»; y numeral 12, antecedentes 3 y 4, ambos «Obligatorio».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "anexo-1-obligatorio-so-pena-de-inadmisibilidad",
+          "exige": "Adjuntar el Guion Metodológico en el formato del Anexo N°1, desarrollado por cada módulo o sesión con objetivos, contenidos, actividades, metodología, materiales, duración, productos esperados y forma de evaluación. Su omisión es causal directa de inadmisibilidad.",
+          "cita": "Bases Simplificadas, numeral 6 — «el proveedor deberá adjuntar obligatoriamente el Guion Metodológico del curso, elaborado conforme al formato contenido en el Anexo N°1… En caso de no adjuntar Anexo N°1, su oferta será declarada inadmisible».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "sin-pauta-de-evaluacion",
+          "exige": "Conocer cómo se evaluarán las ofertas. Las bases enumeran cuatro antecedentes obligatorios «para la evaluación de la propuesta» pero no publican criterios, puntajes ni ponderaciones: no se puede saber cuánto pesa el precio ni qué diferencia a dos ofertas admisibles.",
+          "cita": "Bases Simplificadas, numeral 12 — «Para la evaluación de la propuesta, el proveedor deberá adjuntar los siguientes antecedentes», seguido de una tabla de cuatro documentos con la sola observación «Obligatorio». El documento no contiene apartado de criterios de evaluación ni ponderaciones.",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "evaluacion-de-transferencia-en-formato-dnsc",
+          "exige": "Aplicar tres niveles de evaluación —satisfacción, aprendizaje y transferencia— conforme a las orientaciones y formato de la Dirección Nacional del Servicio Civil. La evaluación de transferencia se mide después de la actividad, sobre el desempeño en el puesto de trabajo, y las bases no declaran su plazo ni quién la administra.",
+          "cita": "Bases Simplificadas, numeral 4.1 i) — «Niveles de evaluación requeridos: Evaluación de satisfacción, evaluación de aprendizaje y evaluación de transferencia de los/as participantes, conforme a las orientaciones y formato de la Dirección Nacional del Servicio Civil (DNSC)».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "multas-remitidas-al-modulo-de-compra-agil",
+          "exige": "Conocer el régimen de multas aplicable. Las bases no lo detallan: remiten al del módulo de Compra Ágil de ChileCompra vigente al momento de contratar, y a la vez fijan el término anticipado cuando las multas alcanzan el 20% del contrato. No se puede dimensionar el riesgo al ofertar.",
+          "cita": "Bases Simplificadas, numeral 9 — «se aplicarán las multas y medidas establecidas en el módulo de Compra Ágil del Sistema de Información de Compras Públicas de ChileCompra o del mecanismo de contratación utilizado, vigente al momento de la contratación»; y numeral 8 — «Reiteración de incumplimientos que hayan dado origen a la aplicación de multas, cuando éstas, en su conjunto, alcancen o superen el 20% del valor total del contrato».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "sin-multas-pendientes-con-la-subsecretaria",
+          "exige": "Verificar que KeepSync no registre multas pendientes de pago con la Subsecretaría de Derechos Humanos: es causal directa de inadmisibilidad y se comprueba contra el historial del organismo, no contra un documento del oferente.",
+          "cita": "Bases Simplificadas, numeral 13, Comportamiento contractual anterior — «Si el oferente presenta multas pendientes de pago con la Subsecretaría de Derechos Humanos su oferta será declarada inadmisible».",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "957865-156-COT26": {
+      "curso": "Inteligencia Artificial y Derechos Humanos: Impactos, Riesgos y Oportunidades",
+      "organismo_corto": "Subsecretaría de DD.HH.",
+      "organismo_nombre": "Subsecretaría de Derechos Humanos — División de Protección",
+      "fuente_documentos": [
+        "BSC Inteligencia Artifificial y DDHH impactos, riesgos y oportuni.pdf",
+        "Anexo N°1.docx"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«5.2. Precio impuestos incluidos $3.200.000.- (tres millones doscientos mil pesos)» — Bases Simplificadas de Contratación, numeral 5.2."
+      },
+      "objetivo": "Aplicar críticamente los impactos, riesgos y oportunidades de la inteligencia artificial desde un enfoque de derechos humanos, con criterios normativos, éticos y técnicos, para fortalecer el análisis institucional, la formulación de recomendaciones y el uso responsable de herramientas de inteligencia artificial en el ámbito de protección de derechos humanos.",
+      "participantes": {
+        "maximo": 8,
+        "glosa": "8 cupos para personas funcionarias de los equipos de análisis normativo y sistemas internacionales de protección de la División de Protección."
+      },
+      "duracion": {
+        "horas_cronologicas": 16,
+        "sesiones": 4,
+        "horas_por_sesion": 4,
+        "glosa": "16 horas cronológicas en cuatro jornadas de cuatro horas, como fijan las bases."
+      },
+      "modalidad": {
+        "tipo": "Virtual sincrónica",
+        "plataforma": "Plataforma de videoconferencia estable provista por KeepSync, con soporte técnico y grabación de las sesiones previa autorización.",
+        "horario": "Cuatro jornadas de 09:00 a 13:00 hrs., a definir con la contraparte técnica."
+      },
+      "fechas_ejecucion": "Durante septiembre y/u octubre de 2026, en coordinación con la contraparte técnica institucional.",
+      "contenidos_sugeridos_por_el_organismo": false,
+      "modulos": [
+        {
+          "titulo": "Jornada 1 · Fundamentos de la inteligencia artificial y derechos humanos",
+          "horas": 4,
+          "temas": [
+            "Fundamentos de la inteligencia artificial y su relación con los derechos humanos",
+            "Tendencias, debates y estándares internacionales emergentes",
+            "Análisis documental guiado de instrumentos internacionales de derechos humanos y documentos de referencia de ONU/OACNUDH"
+          ]
+        },
+        {
+          "titulo": "Jornada 2 · Riesgos, impactos y desafíos regulatorios",
+          "horas": 4,
+          "temas": [
+            "Riesgos e impactos de la inteligencia artificial sobre el goce de derechos humanos",
+            "Desafíos regulatorios asociados y regulación comparada",
+            "Estudio de casos y debate técnico sobre vulneraciones de derechos asociadas al uso de inteligencia artificial"
+          ]
+        },
+        {
+          "titulo": "Jornada 3 · Uso responsable de IA en el análisis normativo y los sistemas de protección",
+          "horas": 4,
+          "temas": [
+            "Criterios de uso responsable y seguro de herramientas de inteligencia artificial",
+            "Taller práctico guiado de IA aplicada al análisis normativo, jurídico y documental",
+            "Guía práctica de diseño de prompts y controles de verificación de fuentes"
+          ]
+        },
+        {
+          "titulo": "Jornada 4 · Proyecto práctico: aplicación responsable de IA en la División de Protección",
+          "horas": 4,
+          "temas": [
+            "Diseño de propuestas de aplicación responsable de inteligencia artificial vinculadas a un proceso real de la unidad de cada participante",
+            "Trabajo sobre instrumentos propios de la División de Protección: informes internacionales, seguimiento de recomendaciones, análisis normativo comparado y sistematización documental",
+            "Presentación, retroalimentación y rúbrica de evaluación del proyecto práctico final"
+          ]
+        }
+      ],
+      "modulos_nota": "Las bases fijan la estructura —cuatro jornadas de cuatro horas cronológicas—, los cuatro objetivos de aprendizaje y la metodología mínima, pero no listan contenidos. Los cuatro módulos son propuesta de KeepSync: cada jornada desarrolla uno de los cuatro objetivos de aprendizaje del numeral 4.1 c), en el mismo orden, e incorpora las actividades de la metodología mínima del numeral 4.2 b). El guion metodológico detallado se presenta en el formato del Anexo N°1.",
+      "requisitos_metodologicos": [
+        "Enfoque andragógico y participativo, con exposición dialogada y análisis documental guiado.",
+        "Estudio de casos y debate técnico sobre riesgos, impactos y vulneraciones de derechos.",
+        "Taller práctico guiado de IA aplicada al análisis normativo, jurídico y documental.",
+        "Uso preferente de casos e instrumentos reales de la División de Protección.",
+        "Proyecto práctico final vinculado a un proceso real de la unidad de cada participante.",
+        "Evaluación de satisfacción, de aprendizaje y de transferencia en formato DNSC."
+      ],
+      "exigencias_adicionales": [
+        "Anexo N°1 con el Guion Metodológico: sin él la oferta es inadmisible.",
+        "Programa, material, lecturas de ONU/OACNUDH, casos, guía de prompts, plantilla y rúbrica, encuestas y certificado para cada participante.",
+        "Acceso a herramientas de inteligencia artificial para los ejercicios prácticos.",
+        "Soporte técnico en cada jornada y envío del enlace con 24 horas de anticipación.",
+        "Grabar cada jornada, previa autorización, y ponerla a disposición de la institución.",
+        "Responder consultas o incidencias dentro de 48 horas hábiles.",
+        "Reemplazo oportuno del relator/a, con equivalencia técnica acreditable."
+      ],
+      "relator_exigido": {
+        "formacion": "Formación de pre y postgrado pertinente al curso, en derecho, ciencias políticas, relaciones internacionales, derechos humanos, ética aplicada, ciencias de la computación o afines, con título y grado.",
+        "experiencia_laboral": "Tres años como mínimo en IA, derechos humanos, derecho internacional o gobernanza digital, más uso demostrable de IA generativa en análisis jurídico o documental.",
+        "experiencia_relatoria": "Un año como mínimo en docencia, relatoría o facilitación para personas adultas, acreditado con currículum más certificados, contratos u órdenes de compra."
+      },
+      "entregables": [
+        "16 horas de capacitación virtual sincrónica en cuatro jornadas, para 8 participantes.",
+        "Programa, material, lecturas de referencia, guías y presentaciones, en digital.",
+        "Acceso a herramientas de IA para los ejercicios prácticos.",
+        "Nómina de participantes, registro de asistencia e informe final de ejecución.",
+        "Encuestas de satisfacción, de aprendizaje y de evaluación del/de la relator/a.",
+        "Propuestas de aplicación responsable de IA del proyecto final y certificados."
+      ],
+      "logistica": "Coordinación con la contraparte técnica, que verifica el cumplimiento y otorga la recepción conforme. Se formaliza con la orden de compra. No hay garantías.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Anexo N°1 — Propuesta Técnica: Guion Metodológico, en el formato del organismo (obligatorio; su omisión hace inadmisible la oferta)",
+          "tipo": "formulario"
+        },
+        {
+          "documento": "Propuesta técnica del curso con módulos, contenidos, actividades, materiales y duración",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Cotización que describa cómo se dará cumplimiento a las características mínimas del numeral 4.2 letras a), b), c), d) y e)",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Currículum vítae del/la relator/a propuesto/a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados o acreditaciones de formación del/la relator/a: títulos y postgrados",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados de experiencia docente, de relatoría o en materias de inteligencia artificial, derechos humanos, derecho internacional o gobernanza digital: contratos, órdenes de compra o certificados de prestación",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "no_declarado",
+        "detalle": [
+          "Las bases no publican pauta de evaluación: enumeran los antecedentes obligatorios «para la evaluación de la propuesta» sin criterios, puntajes ni ponderaciones. No se puede saber cuánto pesa el precio frente a los antecedentes del relator/a.",
+          "Los cuatro antecedentes del numeral 12 son todos obligatorios: propuesta técnica con guion metodológico, currículum del relator/a, certificados de formación y certificados de experiencia.",
+          "«En caso de no adjuntar Anexo N°1, su oferta será declarada inadmisible».",
+          "«Si el oferente presenta multas pendientes de pago con la Subsecretaría de Derechos Humanos su oferta será declarada inadmisible»."
+        ]
+      },
+      "multas": "Las bases no detallan multas propias: remiten a «las multas y medidas establecidas en el módulo de Compra Ágil del Sistema de Información de Compras Públicas de ChileCompra… vigente al momento de la contratación», aplicadas mediante acto fundado y previo plazo de descargos. Procede el término anticipado, entre otras causales, por incumplimiento grave, por no comparecencia del relator/a comprometido/a sin reemplazo oportuno y equivalente, por impartir contenidos sustancialmente distintos a los ofertados, y cuando las multas alcancen o superen el 20% del valor total del contrato.",
+      "pago": "Facturación una vez terminados los trabajos y recibidos conformes por la contraparte técnica. Pago dentro de un plazo máximo de 30 días corridos desde la recepción conforme y la correcta emisión y recepción del documento tributario, conforme a la Ley N° 21.131 sobre pago oportuno y a la Ley N° 19.886 y su Reglamento (D.S. N° 661 de Hacienda).",
+      "criterios_direccionadores": [
+        {
+          "id": "postgrado-pertinente-exigido",
+          "exige": "El relator/a debe acreditar formación de pre Y postgrado pertinente al contenido del curso, en derecho, ciencias políticas, relaciones internacionales, derechos humanos, ética aplicada, ciencias de la computación o afines, con copia del certificado de título y del grado académico. El postgrado se exige, no se valora.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) i — «Acreditar formación de pre y postgrado pertinente al contenido del curso, en áreas de derecho, ciencias políticas, relaciones internacionales, derechos humanos, ética aplicada, ciencias de la computación o disciplinas afines. Dicha información deberá acreditarse mediante copia simple de certificado de título profesional y grado académico correspondiente».",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "tres-anos-en-ia-y-derechos-humanos",
+          "exige": "Acreditar tres años de experiencia profesional en materias de inteligencia artificial, derechos humanos, derecho internacional de los derechos humanos o gobernanza digital, preferentemente en organismos públicos o internacionales. Es un cruce de dos especialidades poco frecuente en un mismo profesional.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) ii — «Acreditar experiencia profesional mínima de tres (3) años en materias de inteligencia artificial, derechos humanos, derecho internacional de los derechos humanos o gobernanza digital, preferentemente en organismos públicos o internacionales».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "experiencia-demostrable-en-ia-para-analisis-juridico",
+          "exige": "Acreditar experiencia o conocimientos aplicados demostrables en el uso responsable de herramientas de inteligencia artificial generativa para el análisis jurídico, normativo o documental. Las bases exigen que sean demostrables, no declarados.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) iii — «Experiencia o conocimientos aplicados demostrables en el uso responsable de herramientas de inteligencia artificial generativa para el análisis jurídico, normativo o documental».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "un-ano-en-docencia-a-personas-adultas",
+          "exige": "Acreditar al menos un año de experiencia en docencia, relatoría o facilitación de procesos formativos dirigidos a personas adultas, idealmente en instituciones públicas.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) iv — «Acreditar experiencia mínima de un (1) año en docencia, relatoría o facilitación de procesos formativos dirigidos a personas adultas, idealmente en instituciones públicas».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "certificados-de-experiencia-emitidos-por-terceros",
+          "exige": "Los tres requisitos anteriores se acreditan con currículum MÁS certificados, contratos, órdenes de compra o certificados de prestación de servicios, y los tres antecedentes documentales del numeral 12 son obligatorios. Los emite un tercero: un currículum que enumera la trayectoria no es el certificado que las bases exigen adjuntar.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) v — «La experiencia deberá acreditarse mediante currículum vitae actualizado… certificados, contratos, órdenes de compra, certificados de prestación de servicios u otros antecedentes verificables»; y numeral 12, antecedentes 3 y 4 («Certificados o acreditaciones de formación del/la relator/a» y «Certificados de experiencia docente, relatoría o en materias de inteligencia artificial, derechos humanos, derecho internacional o gobernanza digital»), ambos «Obligatorio».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "anexo-1-obligatorio-so-pena-de-inadmisibilidad",
+          "exige": "Adjuntar el Guion Metodológico en el formato del Anexo N°1, desarrollado por cada módulo o sesión con objetivos, contenidos, actividades, metodología, materiales, duración, productos esperados y forma de evaluación. Su omisión es causal directa de inadmisibilidad.",
+          "cita": "Bases Simplificadas, numeral 6 — «el proveedor deberá adjuntar obligatoriamente el Guion Metodológico del curso, elaborado conforme al formato contenido en el Anexo N°1… En caso de no adjuntar Anexo N°1, su oferta será declarada inadmisible».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "sin-pauta-de-evaluacion",
+          "exige": "Conocer cómo se evaluarán las ofertas. Las bases enumeran cuatro antecedentes obligatorios «para la evaluación de la propuesta» pero no publican criterios, puntajes ni ponderaciones: no se puede saber cuánto pesa el precio ni qué diferencia a dos ofertas admisibles.",
+          "cita": "Bases Simplificadas, numeral 12 — «Para la evaluación de la propuesta, el proveedor deberá adjuntar los siguientes antecedentes», seguido de una tabla de cuatro documentos con la sola observación «Obligatorio». El documento no contiene apartado de criterios de evaluación ni ponderaciones.",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "evaluacion-de-transferencia-en-formato-dnsc",
+          "exige": "Aplicar tres niveles de evaluación —satisfacción, aprendizaje y transferencia— conforme a las orientaciones y formato de la Dirección Nacional del Servicio Civil. La evaluación de transferencia se mide después de la actividad, sobre el desempeño en el puesto de trabajo, y las bases no declaran su plazo ni quién la administra.",
+          "cita": "Bases Simplificadas, numeral 4.1 i) — «Niveles de evaluación requeridos: Evaluación de satisfacción, evaluación de aprendizaje y evaluación de transferencia de los/as participantes, conforme a las orientaciones y formato de la Dirección Nacional del Servicio Civil (DNSC)».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "multas-remitidas-al-modulo-de-compra-agil",
+          "exige": "Conocer el régimen de multas aplicable. Las bases no lo detallan: remiten al del módulo de Compra Ágil de ChileCompra vigente al momento de contratar, y a la vez fijan el término anticipado cuando las multas alcanzan el 20% del contrato. No se puede dimensionar el riesgo al ofertar.",
+          "cita": "Bases Simplificadas, numeral 9 — «se aplicarán las multas y medidas establecidas en el módulo de Compra Ágil del Sistema de Información de Compras Públicas de ChileCompra o del mecanismo de contratación utilizado, vigente al momento de la contratación»; y numeral 8 — «Reiteración de incumplimientos que hayan dado origen a la aplicación de multas, cuando éstas, en su conjunto, alcancen o superen el 20% del valor total del contrato».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "sin-multas-pendientes-con-la-subsecretaria",
+          "exige": "Verificar que KeepSync no registre multas pendientes de pago con la Subsecretaría de Derechos Humanos: es causal directa de inadmisibilidad y se comprueba contra el historial del organismo, no contra un documento del oferente.",
+          "cita": "Bases Simplificadas, numeral 13, Comportamiento contractual anterior — «Si el oferente presenta multas pendientes de pago con la Subsecretaría de Derechos Humanos su oferta será declarada inadmisible».",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "acceso-a-herramientas-de-ia-para-los-participantes",
+          "exige": "El proveedor debe entregar a cada participante acceso a herramientas de inteligencia artificial para los ejercicios prácticos. Las bases no dicen a cuáles, por cuánto tiempo ni con qué plan, y el costo de ocho licencias corre por cuenta del oferente dentro del tope de $3.200.000.",
+          "cita": "Bases Simplificadas, numeral 4.2 c) v — «Materiales y productos pedagógicos: El proveedor deberá entregar a cada participante: … Acceso a herramientas de inteligencia artificial para los ejercicios prácticos».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "957865-155-COT26": {
+      "curso": "Uso de Inteligencia Artificial para Análisis de Grandes Volúmenes de Información en Contextos de Búsqueda y Trayectorias",
+      "organismo_corto": "Subsecretaría de DD.HH.",
+      "organismo_nombre": "Subsecretaría de Derechos Humanos — Unidad Programa de Derechos Humanos",
+      "fuente_documentos": [
+        "BSC Uso de IA analisis Busqueda y Trayectoria.pdf",
+        "Anexo N°1.docx"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«5.2. Precio impuestos incluidos $2.000.000.- (dos millones de pesos)» — Bases Simplificadas de Contratación, numeral 5.2."
+      },
+      "objetivo": "Aplicar herramientas de inteligencia artificial de manera segura, trazable y controlada para apoyar el análisis de grandes volúmenes de información documental, la reconstrucción de trayectorias de víctimas, la identificación preliminar de patrones y la elaboración de informes técnicos en contextos de búsqueda y trayectorias, manteniendo control humano permanente, rigor metodológico y resguardo de información sensible.",
+      "participantes": {
+        "maximo": 5,
+        "glosa": "5 cupos para personas funcionarias del área de búsqueda y trayectorias de la Unidad Programa de Derechos Humanos."
+      },
+      "duracion": {
+        "horas_cronologicas": 16,
+        "sesiones": 4,
+        "horas_por_sesion": 4,
+        "glosa": "16 horas cronológicas en cuatro jornadas de cuatro horas, como fijan las bases."
+      },
+      "modalidad": {
+        "tipo": "Virtual sincrónica",
+        "plataforma": "Plataforma de videoconferencia estable provista por KeepSync, con soporte técnico y grabación de las sesiones previa autorización.",
+        "horario": "Cuatro jornadas de 09:00 a 13:00 hrs., a definir con la contraparte técnica."
+      },
+      "fechas_ejecucion": "Durante septiembre y/u octubre de 2026, en coordinación con la contraparte técnica institucional.",
+      "contenidos_sugeridos_por_el_organismo": false,
+      "modulos": [
+        {
+          "titulo": "Jornada 1 · Principios, límites y uso seguro de IA en el trabajo documental",
+          "horas": 4,
+          "temas": [
+            "Principios, límites y criterios de uso seguro de herramientas de IA para el trabajo documental en contextos de búsqueda de personas víctimas de desaparición forzada",
+            "Riesgos, sesgos y limitaciones de los resultados generados por herramientas de inteligencia artificial",
+            "Criterios de resguardo de información sensible y control humano permanente"
+          ]
+        },
+        {
+          "titulo": "Jornada 2 · Extracción, organización y sistematización documental con trazabilidad",
+          "horas": 4,
+          "temas": [
+            "Extracción, organización y sistematización de información documental compleja con apoyo de IA",
+            "Trazabilidad de fuentes y verificación manual de resultados generados por IA",
+            "Plantillas de instrucciones (prompts) y guía de verificación documental"
+          ]
+        },
+        {
+          "titulo": "Jornada 3 · Reconstrucción de trayectorias e identificación preliminar de patrones",
+          "horas": 4,
+          "temas": [
+            "Apoyo a la reconstrucción de trayectorias de víctimas con herramientas de inteligencia artificial",
+            "Identificación preliminar de patrones descriptivos en múltiples fuentes documentales",
+            "Taller práctico y aplicado de reconstrucción de trayectorias sobre casos simulados"
+          ]
+        },
+        {
+          "titulo": "Jornada 4 · Informes técnicos, cronologías y control de calidad",
+          "horas": 4,
+          "temas": [
+            "Elaboración de informes técnicos, resúmenes y cronologías documentales con respaldo verificable",
+            "Estándares de calidad institucional y listas de chequeo de control",
+            "Aplicación de checklists de control de calidad y criterios de resguardo de información sensible"
+          ]
+        }
+      ],
+      "modulos_nota": "Las bases fijan la estructura —cuatro jornadas de cuatro horas cronológicas—, los cuatro objetivos de aprendizaje y la metodología mínima, pero no listan contenidos. Los cuatro módulos son propuesta de KeepSync: cada jornada desarrolla uno de los cuatro objetivos de aprendizaje del numeral 4.1 c), en el mismo orden, e incorpora las actividades de la metodología mínima del numeral 4.2 b). El guion metodológico detallado se presenta en el formato del Anexo N°1.",
+      "requisitos_metodologicos": [
+        "Enfoque andragógico y participativo, con análisis de casos del contexto del Programa de DD.HH.",
+        "Identificación y análisis de riesgos, sesgos y limitaciones de los resultados generados por IA.",
+        "Taller aplicado de reconstrucción de trayectorias y laboratorios de sistematización documental.",
+        "Ejercicios guiados de verificación y validación manual, con foco en trazabilidad de fuentes.",
+        "Aplicación de checklists de control de calidad y resguardo de información sensible.",
+        "Evaluación de satisfacción y de aprendizaje en formato DNSC."
+      ],
+      "exigencias_adicionales": [
+        "Anexo N°1 con el Guion Metodológico: sin él la oferta es inadmisible.",
+        "Programa, material, manual de uso seguro de IA, plantillas de prompts, casos simulados, listas de chequeo, encuestas y certificado para cada participante.",
+        "Soporte técnico en cada jornada y envío del enlace con 24 horas de anticipación.",
+        "Grabar cada jornada, previa autorización, y ponerla a disposición de la institución.",
+        "Responder consultas o incidencias dentro de 48 horas hábiles.",
+        "Reemplazo oportuno del relator/a, con equivalencia técnica acreditable."
+      ],
+      "relator_exigido": {
+        "formacion": "Formación de pre y postgrado pertinente al curso, en inteligencia artificial, ciencia de datos, informática, análisis de información, ingeniería o afines, con certificado de título y de grado.",
+        "experiencia_laboral": "Tres años como mínimo, demostrables, en herramientas de IA aplicadas al análisis y procesamiento de información, más experiencia en IA generativa o procesamiento de lenguaje natural.",
+        "experiencia_relatoria": "Un año como mínimo en docencia, relatoría o facilitación para personas adultas, acreditado con currículum más certificados, contratos u órdenes de compra."
+      },
+      "entregables": [
+        "16 horas de capacitación virtual sincrónica en cuatro jornadas, para 5 participantes.",
+        "Programa, material, guías, plantillas de prompts y presentaciones, en digital.",
+        "Nómina de participantes, registro de asistencia e informe final de ejecución.",
+        "Encuestas de satisfacción, de aprendizaje y de evaluación del/de la relator/a.",
+        "Certificados de aprobación de cada participante."
+      ],
+      "logistica": "Coordinación con la contraparte técnica, que verifica el cumplimiento y otorga la recepción conforme. Se formaliza con la orden de compra. No hay garantías.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Anexo N°1 — Propuesta Técnica: Guion Metodológico, en el formato del organismo (obligatorio; su omisión hace inadmisible la oferta)",
+          "tipo": "formulario"
+        },
+        {
+          "documento": "Propuesta técnica del curso con módulos, contenidos, actividades, materiales y duración",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Cotización que describa cómo se dará cumplimiento a las características mínimas del numeral 4.2 letras a), b), c), d) y e)",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Currículum vítae del/la relator/a propuesto/a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados o acreditaciones de formación del/la relator/a: títulos y postgrados",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados de experiencia docente, de relatoría o en implementación de metodologías ágiles, inteligencia artificial o análisis de datos: contratos, órdenes de compra o certificados de prestación",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "no_declarado",
+        "detalle": [
+          "Las bases no publican pauta de evaluación: enumeran los antecedentes obligatorios «para la evaluación de la propuesta» sin criterios, puntajes ni ponderaciones. No se puede saber cuánto pesa el precio frente a los antecedentes del relator/a.",
+          "Los cuatro antecedentes del numeral 12 son todos obligatorios: propuesta técnica con guion metodológico, currículum del relator/a, certificados de formación y certificados de experiencia.",
+          "«En caso de no adjuntar Anexo N°1, su oferta será declarada inadmisible».",
+          "«Si el oferente presenta multas pendientes de pago con la Subsecretaría de Derechos Humanos su oferta será declarada inadmisible»."
+        ]
+      },
+      "multas": "Las bases no detallan multas propias: remiten a «las multas y medidas establecidas en el módulo de Compra Ágil del Sistema de Información de Compras Públicas de ChileCompra… vigente al momento de la contratación», aplicadas mediante acto fundado y previo plazo de descargos. Procede el término anticipado, entre otras causales, por incumplimiento grave, por no comparecencia del relator/a comprometido/a sin reemplazo oportuno y equivalente, por impartir contenidos sustancialmente distintos a los ofertados, y cuando las multas alcancen o superen el 20% del valor total del contrato.",
+      "pago": "Facturación una vez terminados los trabajos y recibidos conformes por la contraparte técnica. Pago dentro de un plazo máximo de 30 días corridos desde la recepción conforme y la correcta emisión y recepción del documento tributario, conforme a la Ley N° 21.131 sobre pago oportuno y a la Ley N° 19.886 y su Reglamento (D.S. N° 661 de Hacienda).",
+      "criterios_direccionadores": [
+        {
+          "id": "postgrado-pertinente-exigido",
+          "exige": "El relator/a debe acreditar formación de pre Y postgrado pertinente al contenido del curso, en inteligencia artificial, ciencia de datos, informática, análisis de información, ingeniería, tecnologías de información o afines, con copia del certificado de título y del grado académico. El postgrado se exige, no se valora.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) i — «Acreditar formación de pre y postgrado pertinente al contenido del curso, en áreas relacionadas con inteligencia artificial, ciencia de datos, informática, análisis de información, ingeniería, tecnologías de información o disciplinas afines. Dicha información deberá acreditarse mediante copia simple de certificado de título profesional y grado académico correspondiente».",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "tres-anos-en-ia-aplicada-al-analisis-de-informacion",
+          "exige": "Acreditar tres años de experiencia profesional demostrable en herramientas de inteligencia artificial aplicadas al análisis y procesamiento de información, preferentemente en instituciones públicas.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) ii — «Acreditar experiencia profesional mínima de tres (3) años demostrable en herramientas de inteligencia artificial aplicadas al análisis y procesamiento de información u otras materias pertinentes al objeto de la capacitación, preferentemente en instituciones públicas».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "experiencia-en-ia-generativa-y-procesamiento-de-lenguaje",
+          "exige": "Acreditar experiencia en el uso de herramientas de inteligencia artificial generativa, modelos de lenguaje o procesamiento de lenguaje natural, con conocimientos aplicados en investigación documental, búsqueda de información o análisis de datos.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) iii — «Experiencia en utilización de herramientas de inteligencia artificial generativa, modelos de lenguajes, procesamiento de lenguaje natural u otras tecnologías pertinentes al objeto del curso. Conocimientos aplicados en contextos de investigación documental, búsqueda de información, análisis de datos o materias relacionadas».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "un-ano-en-docencia-a-personas-adultas",
+          "exige": "Acreditar al menos un año de experiencia en docencia, relatoría o facilitación de procesos formativos dirigidos a personas adultas, idealmente en instituciones públicas.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) iv — «Acreditar experiencia mínima de un (1) año en docencia, relatoría o facilitación de actividades de capacitación dirigidos a personas adultas, idealmente en instituciones públicas».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "certificados-de-experiencia-emitidos-por-terceros",
+          "exige": "Los tres requisitos anteriores se acreditan con currículum MÁS certificados, contratos, órdenes de compra o certificados de prestación de servicios, y los tres antecedentes documentales del numeral 12 son obligatorios. Los emite un tercero: un currículum que enumera la trayectoria no es el certificado que las bases exigen adjuntar.",
+          "cita": "Bases Simplificadas, numeral 4.2 a) v — «La experiencia deberá acreditarse mediante currículum vitae actualizado… certificados, contratos, órdenes de compra, certificados de prestación de servicios u otros antecedentes verificables»; y numeral 12, antecedentes 3 y 4, ambos «Obligatorio».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "anexo-1-obligatorio-so-pena-de-inadmisibilidad",
+          "exige": "Adjuntar el Guion Metodológico en el formato del Anexo N°1, desarrollado por cada módulo o sesión con objetivos, contenidos, actividades, metodología, materiales, duración, productos esperados y forma de evaluación. Su omisión es causal directa de inadmisibilidad.",
+          "cita": "Bases Simplificadas, numeral 6 — «el proveedor deberá adjuntar obligatoriamente el Guion Metodológico del curso, elaborado conforme al formato contenido en el Anexo N°1… En caso de no adjuntar Anexo N°1, su oferta será declarada inadmisible».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "sin-pauta-de-evaluacion",
+          "exige": "Conocer cómo se evaluarán las ofertas. Las bases enumeran cuatro antecedentes obligatorios «para la evaluación de la propuesta» pero no publican criterios, puntajes ni ponderaciones: no se puede saber cuánto pesa el precio ni qué diferencia a dos ofertas admisibles.",
+          "cita": "Bases Simplificadas, numeral 12 — «Para la evaluación de la propuesta, el proveedor deberá adjuntar los siguientes antecedentes», seguido de una tabla de cuatro documentos con la sola observación «Obligatorio». El documento no contiene apartado de criterios de evaluación ni ponderaciones.",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "multas-remitidas-al-modulo-de-compra-agil",
+          "exige": "Conocer el régimen de multas aplicable. Las bases no lo detallan: remiten al del módulo de Compra Ágil de ChileCompra vigente al momento de contratar, y a la vez fijan el término anticipado cuando las multas alcanzan el 20% del contrato. No se puede dimensionar el riesgo al ofertar.",
+          "cita": "Bases Simplificadas, numeral 9 — «se aplicarán las multas y medidas establecidas en el módulo de Compra Ágil del Sistema de Información de Compras Públicas de ChileCompra o del mecanismo de contratación utilizado, vigente al momento de la contratación»; y numeral 8 — «Reiteración de incumplimientos que hayan dado origen a la aplicación de multas, cuando éstas, en su conjunto, alcancen o superen el 20% del valor total del contrato».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "sin-multas-pendientes-con-la-subsecretaria",
+          "exige": "Verificar que KeepSync no registre multas pendientes de pago con la Subsecretaría de Derechos Humanos: es causal directa de inadmisibilidad y se comprueba contra el historial del organismo, no contra un documento del oferente.",
+          "cita": "Bases Simplificadas, numeral 13, Comportamiento contractual anterior — «Si el oferente presenta multas pendientes de pago con la Subsecretaría de Derechos Humanos su oferta será declarada inadmisible».",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "trabajo-sobre-informacion-de-victimas-de-desaparicion-forzada",
+          "exige": "La actividad se dicta sobre el trabajo documental del área de búsqueda y trayectorias de víctimas de desaparición forzada, con exigencia de trazabilidad de fuentes, verificación manual de todo resultado generado por IA, checklists de control de calidad y resguardo de información sensible. Definir con qué material se dictan los laboratorios —las bases hablan de «casos simulados o situaciones prácticas»— y bajo qué condiciones de tratamiento de datos.",
+          "cita": "Bases Simplificadas, numeral 4.2 b) — «Ejercicios guiados de verificación y validación manual de resultados generados por IA, con foco en trazabilidad de fuentes» y «Actividades orientadas a la aplicación de checklists de control de calidad y criterios de resguardo de información sensible»; numeral 4.2 c) vi — «Casos simulados o situaciones prácticas utilizadas durante la actividad».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        }
+      ]
     }
   },
   "_regla_score": "score = 100 − 5 × (criterios con estado \"sin_informacion\"). 100% = la compra no presenta ningún filtro que dirija la adjudicación hacia un proveedor con una característica, capacidad o certificación muy particular. Regla fijada por el usuario el 2026-08-22. Cada criterio declara su cita: nada se penaliza sin evidencia en los adjuntos. Al confirmar uno se cambia su estado a \"cubierto\" con `resuelto_por`, y el score sube sin tocar código.",
