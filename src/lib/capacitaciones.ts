@@ -170,13 +170,14 @@ export function loadCapacitacionesConfig(): CapacitacionesConfig {
       if (!(c.tipo in GLOSA_TIPO)) {
         throw new Error(`config/capacitaciones.json — ${codigo}/${c.id}: tipo desconocido "${c.tipo}".`);
       }
-      if (c.estado !== "sin_informacion" && c.estado !== "cubierto") {
+      if (c.estado !== "sin_informacion" && c.estado !== "cubierto" && c.estado !== "no_cumple") {
         throw new Error(`config/capacitaciones.json — ${codigo}/${c.id}: estado inválido "${c.estado}".`);
       }
-      if (c.estado === "cubierto" && !c.resuelto_por?.trim()) {
+      if ((c.estado === "cubierto" || c.estado === "no_cumple") && !c.resuelto_por?.trim()) {
         throw new Error(
-          `config/capacitaciones.json — ${codigo}/${c.id}: está marcado "cubierto" sin 'resuelto_por'. ` +
-            `Dar por resuelto un criterio sube el score: tiene que decir con qué evidencia.`,
+          `config/capacitaciones.json — ${codigo}/${c.id}: está marcado "${c.estado}" sin 'resuelto_por'. ` +
+            `Cerrar un criterio —para bien o para mal— cambia lo que el PDF le afirma al organismo: ` +
+            `tiene que decir con qué evidencia.`,
         );
       }
     }
@@ -473,8 +474,15 @@ export function derivarCumplimiento(r: RequisitosCapacitacion): FilaCumplimiento
 
 /**
  * Lo que impide presentar esta oferta hoy. Se deriva de la config, no se escribe a mano por
- * oportunidad: si mañana KeepSync confirma su condición de OTEC o define un catálogo de costos,
- * el pendiente desaparece de los seis PDF a la vez.
+ * oportunidad: el día que KeepSync defina un catálogo de costos, el pendiente desaparece de los
+ * veinticinco PDF a la vez.
+ *
+ * El 2026-09-08 pasó lo inverso con el otro bloqueo del nicho y conviene tenerlo presente al leer
+ * esta función: el usuario confirmó que KeepSync **no** es OTEC registrada en SENCE. Una respuesta
+ * es igual de definitiva que la otra, pero no borra el pendiente — lo convierte en un hecho con
+ * consecuencias, y son dos consecuencias distintas que antes viajaban juntas en una sola frase:
+ * el puntaje que algunas bases reservan a los OTEC, y la exención de IVA del artículo 13 N°4 que
+ * otras dan por supuesta. Por eso dejaron de ser `if/else`.
  */
 export function derivarPendientes(
   r: RequisitosCapacitacion,
@@ -517,13 +525,19 @@ export function derivarPendientes(
   const textoOtec = JSON.stringify(r).toLowerCase();
   if (/\botec\b|\bsence\b/.test(textoOtec)) {
     p.push(
-      "Confirmar si KeepSync está registrada como OTEC en SENCE: estas bases lo puntúan o lo exigen, " +
-        "y de ello depende además la exención de IVA del artículo 13 N°4.",
+      "KeepSync NO es OTEC registrada en SENCE (confirmado por el usuario el 2026-09-08). Estas bases " +
+        "nombran esa condición: revisar en el cuadro de criterios si acá la puntúan, la exigen o solo " +
+        "la piden cuando el oferente ya está acreditado, porque el efecto es distinto en cada caso.",
     );
-  } else if (r.tributacion.regimen === "exento") {
+  }
+
+  if (r.tributacion.regimen === "exento") {
     p.push(
-      "Confirmar que KeepSync puede facturar exento por giro educacional (artículo 13 N°4 de la Ley " +
-        "sobre Impuesto a las Ventas y Servicios). El organismo presupuestó el servicio como exento.",
+      "Resolver la exención de IVA con el contador antes de presentar. El organismo presupuestó el " +
+        "servicio exento invocando el artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios, " +
+        "y esa exención se apoya en la calidad de institución que imparte enseñanza o capacitación: " +
+        "KeepSync no es OTEC registrada en SENCE (confirmado el 2026-09-08), así que no puede darse por " +
+        "aplicable. Si el servicio va afecto, el 19% no cabe bajo el tope y la oferta sería inadmisible.",
     );
   }
 

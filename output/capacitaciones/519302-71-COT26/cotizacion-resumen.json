@@ -1,24 +1,21 @@
 {
-  "codigo": "1121-57-COT26",
-  "curso": "Inteligencia Artificial: del concepto al impacto",
-  "organismo": "Comisión Chilena del Cobre (Cochilco) — Departamento de Informática",
-  "tope_clp": 1550000,
-  "total_clp": 1395000,
+  "codigo": "519302-71-COT26",
+  "curso": "Herramientas tecnológicas en Inteligencia Artificial: dos cursos (Procesos Administrativos y Formación de Audiencias)",
+  "organismo": "Instituto Nacional de Propiedad Industrial (INAPI)",
+  "tope_clp": 2400000,
+  "total_clp": 2160000,
   "descuento_pct": 10,
   "regimen_tributario": "impuestos_incluidos",
   "formula": "90% del presupuesto disponible — regla del usuario, no derivada de costos reales",
   "criterio_evaluacion_organismo": "puntaje",
-  "archivo_publicable": "Q-20260908-ComisionChilenaDelCobreCochilcoDepartamentoDeInfor.pdf",
+  "archivo_publicable": "Q-20260908-InstitutoNacionalDePropiedadIndustrialInapi.pdf",
   "fuente_documentos": [
-    "Requerimiento de compra - Curso Inteligencia Artificial del conce.pdf",
-    "Anexo N°1 - Datos del Oferente.docx",
-    "Anexo N°2 - Declaración Relativa a Programa de Integridad.docx",
-    "Anexo N°3 - Sustentabilidad.docx"
+    "Ficha Compra Ágil - Herramientas tecnológicas IA.pdf"
   ],
   "requisitos_por_confirmar": 5,
   "relator": null,
-  "score_apertura_pct": 50,
-  "score_criterios_sin_informacion": 10,
+  "score_apertura_pct": 40,
+  "score_criterios_sin_informacion": 12,
   "score_criterios_no_cumple": 0,
   "score_criterios_cubiertos": 0,
   "_score_nota": "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que hoy no esté resuelto a favor de KeepSync: sea porque falta revisarlo (sin_informacion) o porque ya se revisó y no se cumple (no_cumple). Ver config/capacitaciones.json → criterios_direccionadores.",
@@ -26,7 +23,7 @@
     "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
     "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
     "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
-    "Confirmar la modalidad con el organismo mediante consulta formal. El requerimiento deja la modalidad abierta —«Presencial, streaming, asincrónico, sincrónico, ya sea Teams u otra plataforma, o híbrido»— y no la evalúa: no hay criterio de modalidad en la pauta. La propuesta ofrece sincrónico en línea con práctica asincrónica y la ajusta con Cochilco en la coordinación inicial."
+    "Confirmar la modalidad con el organismo mediante consulta formal. La ficha programa el Curso 1 los días «07, 14, 21 y 20 de octubre de 2026»: la cuarta fecha es anterior a la tercera y no puede ser un miércoles consecutivo de esa serie. La propuesta asume cuatro miércoles consecutivos de octubre de 2026 y consulta formalmente la fecha correcta antes de comprometerla."
   ],
   "apto_para_enviar": false,
   "_apto_nota": "Siempre false: falta designar relator/a con credenciales verificables, y el precio no sale de un costo real. El envío lo hace un humano, nunca este script."

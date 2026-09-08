@@ -559,16 +559,21 @@ function render(c: Ctx): string {
   L.push("entrega remoto en ≤30 días?, **C** ¿exige acreditación que no tiene?, **D** ¿hay costo conocido");
   L.push("para poner precio bajo el tope? — `servible = A ∧ B ∧ ¬C`, `ofertable = servible ∧ D`.");
   L.push("");
-  L.push("### Los dos insumos bloqueantes");
+  L.push("### El insumo bloqueante que queda, y el que se resolvió");
   L.push("");
   L.push("1. **No existe catálogo de costos de servicios de KeepSync** (confirmado con el usuario el");
   L.push("   2026-08-20): ni valor hora de asesoría o relatoría, ni costo por proyecto, ni costo mensual de");
   L.push("   operación. Como `D = no` para todas las familias, **ninguna es ofertable hoy**, por grande que");
   L.push("   sea. Es el mismo tipo de insumo que mantiene marcadas PRELIMINAR a las cotizaciones de Array.");
-  L.push("2. **No está confirmado si KeepSync es OTEC registrada en SENCE.** Condiciona la familia de");
-  L.push("   capacitación entera — que es, según la sección 3, la de mayor volumen que KeepSync toca.");
+  L.push("2. ~~No está confirmado si KeepSync es OTEC registrada en SENCE.~~ **Resuelto el 2026-09-08:");
+  L.push("   el usuario confirmó que NO lo es.** Y resulta que condicionaba menos de lo que se temía: de las");
+  L.push("   25 Compras Ágiles de capacitación fichadas, solo 3 nombran OTEC o SENCE y **ninguna lo exige");
+  L.push("   como admisibilidad** — en la única que lo puntúa vale 10% del total. Deja de ser una barrera de");
+  L.push("   entrada y pasa a ser un techo de puntaje, más un problema tributario donde el organismo");
+  L.push("   presupuestó exento invocando el artículo 13 N°4. Lo medido vale para Compra Ágil, no para");
+  L.push("   capacitación con franquicia tributaria.");
   L.push("");
-  L.push("Mientras esos dos no se resuelvan, esto es **investigación de mercado**: dice dónde jugar, no");
+  L.push("Mientras el primero no se resuelva, esto es **investigación de mercado**: dice dónde jugar, no");
   L.push("habilita ninguna oferta.");
   L.push("");
 

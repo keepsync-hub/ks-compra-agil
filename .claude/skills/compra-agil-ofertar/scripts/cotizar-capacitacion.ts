@@ -182,9 +182,10 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
           : null,
         score_apertura_pct: score.score,
         score_criterios_sin_informacion: score.sinInformacion,
+        score_criterios_no_cumple: score.noCumple,
         score_criterios_cubiertos: score.cubiertos,
         _score_nota:
-          "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que falte revisar (config/capacitaciones.json → criterios_direccionadores).",
+          "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que hoy no esté resuelto a favor de KeepSync: sea porque falta revisarlo (sin_informacion) o porque ya se revisó y no se cumple (no_cumple). Ver config/capacitaciones.json → criterios_direccionadores.",
         pendientes: data.pendientes,
         apto_para_enviar: false,
         _apto_nota: requisitos.relator
@@ -208,7 +209,8 @@ async function cotizar(codigo: string, fecha: Date): Promise<CotizacionPublicada
     `  ${codigo} — ${requisitos.curso}\n` +
       `    Tope ${topeClp.toLocaleString("es-CL")} → ofertado ${totalClp.toLocaleString("es-CL")} CLP ` +
       `(${descuentoPct}% bajo el tope, ${requisitos.tributacion.regimen})\n` +
-      `    Score de apertura: ${score.score}% (${score.sinInformacion} criterio(s) sin información × −5%` +
+      `    Score de apertura: ${score.score}% (${score.sinInformacion} criterio(s) sin información` +
+      `${score.noCumple > 0 ? `, ${score.noCumple} confirmado(s) como NO cumplido(s)` : ""} × −5%` +
       `${score.cubiertos > 0 ? `, ${score.cubiertos} cubierto(s)` : ""})\n` +
       `    PDF: output/capacitaciones/${codigo}/${nombreArchivoPdf}` +
       (rutaCarta ? `\n    Carta: output/capacitaciones/${codigo}/antecedentes/${path.basename(rutaCarta)}` : "") +
