@@ -145,16 +145,46 @@ la escribe), así que no se puede saber cuánto pesa el precio: eso también baj
 
 Dos cosas condicionan el nicho y el cotizador no las resuelve solo. La primera es el **relator/a**:
 los TDR exigen título, CV y certificados verificables, y sin eso la oferta se descarta en
-admisibilidad. Dos de las diecinueve ofertas ya lo designan —Dipres `1618-69-COT26` y el SLEP Santa
+admisibilidad. Dos de las veinticinco ofertas ya lo designan —Dipres `1618-69-COT26` y el SLEP Santa
 Corina `1393495-768-COT26`, las dos con Cristian Molina Espinoza y su currículum, y las dos con
 carta de presentación—, y en ambas sigue faltando el **respaldo documental** de los cursos
-dictados: el currículum los enumera, no los acredita. Las otras diecisiete salen diciendo
-«relator/a por designar», que es lo que corresponde mientras nadie lo designe. La segunda es que
-**sigue sin confirmarse si KeepSync es OTEC registrada en SENCE** — de eso dependen tanto puntaje
-directo en algunas bases como la exención de IVA del art. 13 N°4 con que Dipres presupuesta. Ver el
-detalle en `.claude/skills/compra-agil-ofertar/SKILL.md`.
+dictados: el currículum los enumera, no los acredita. Las otras veintitrés salen diciendo
+«relator/a por designar», que es lo que corresponde mientras nadie lo designe. Ver el detalle en
+`.claude/skills/compra-agil-ofertar/SKILL.md`.
 
-Ese segundo pendiente se decidía con `texto.includes("otec")`, y «otec» está dentro de
+La segunda **dejó de ser una pregunta el 2026-09-08: el usuario confirmó que KeepSync NO es OTEC
+registrada en SENCE.** Y lo primero que hay que decir es que condicionaba bastante menos de lo que
+este archivo temía. De las veinticinco compras fichadas, solo **tres** nombran OTEC o SENCE y
+**ninguna lo exige como admisibilidad**: Subtrans le da 10% del puntaje final —100 puntos contra 0,
+sin puntaje parcial—, Puerto Montt pide el certificado de vigencia solo «en caso de estar
+acreditado» (al no estarlo, no hay documento que presentar ni penalización), y en el Hospital Padre
+Hurtado la palabra aparece dentro de una suposición de redacción sobre licencias de publicador de
+Power BI. No es una barrera de entrada: es un techo de puntaje en una de veinticinco.
+
+Donde sí duele es en **la exención de IVA**. Las tres compras de Dipres presupuestan *exento*
+invocando el art. 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios, que se apoya en la
+calidad de institución que imparte enseñanza o capacitación. Sin OTEC esa exención no puede darse
+por aplicable, y la aritmética no perdona: cotizar el 90% de un tope de $1.500.000 son $1.350.000,
+que con 19% encima quedan en $1.606.500 y **no caben bajo el tope**. Eso no lo resuelve el agente
+—es materia del contador y del giro ante el SII—, así que sale como pendiente en el PDF de toda
+compra presupuestada exenta, y con esa aritmética escrita.
+
+El score tuvo que aprender a decirlo. Tenía dos estados, `sin_informacion` (descuenta) y `cubierto`
+(no descuenta), y ninguno sirve para «se revisó y no se cumple»: marcar el criterio de Subtrans como
+cubierto habría **subido** el score con la peor noticia. Va un tercer estado, `no_cumple`, que
+descuenta igual que `sin_informacion` —el obstáculo es el mismo, solo que ya no hay qué averiguar— y
+se muestra aparte. El caso de Puerto Montt es el contrario y por eso queda `cubierto`: la exigencia
+era condicional, no se cumple la condición, y desaparece. Subtrans se queda en 65% y Puerto Montt
+sube de 55% a 60%.
+
+**Esas dos tarjetas de la página no van a moverse, y está bien.** Las tres compras que nombran
+OTEC ya cerraron, y el cotizador se niega a regenerar un borrador de una compra cerrada, así que
+`docs/index.html` seguirá mostrando Puerto Montt en 55% con las observaciones de su día. La tarjeta
+y su PDF siguen coincidiendo entre sí —son el registro de lo que se sabía entonces— y quedan
+marcadas *Cerrada*. Lo que sí se actualizó es la nota que encabeza la grilla, que ahora afirma el
+hecho en vez de la pregunta. `config/capacitaciones.json` es la fuente de verdad para lo que venga.
+
+Ese pendiente se decidía con `texto.includes("otec")`, y «otec» está dentro de
 **pr-otec-ción**: cualquier base que hablara de datos personales lo disparaba, así que cinco de las
 entonces dieciocho ofertas afirmaban en su PDF que «estas bases lo puntúan o lo exigen» sin que sus bases
 nombraran nunca a SENCE. Una afirmación sobre las bases del organismo, dentro del documento que se
@@ -438,7 +468,7 @@ el árbol en silencio.
 
 **Guardrails que este flujo no relaja:** nada escribe en mercadopublico.cl, `_ENTREGABLES` es bandeja
 de **revisión** y no de salida, y los dos bloqueos de admisibilidad del nicho —ninguna oferta nombra
-relator/a, y sigue sin confirmarse si KeepSync es OTEC en SENCE— aparecen ahora en el panel, en el
+relator/a, y KeepSync no es OTEC en SENCE— aparecen ahora en el panel, en el
 expediente y **dentro del PDF generado**. Hacerlos visibles no es resolverlos.
 
 ### Subir un documento al expediente desde la terminal (`subir-documento-drive`)

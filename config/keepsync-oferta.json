@@ -65,10 +65,12 @@
       "que_bloquea": "Sin esto una familia puede declararse SERVIBLE pero nunca OFERTABLE: no se puede saber si cabe bajo el tope de la compra ni si deja margen. Es el mismo tipo de insumo que mantiene marcadas PRELIMINAR a todas las cotizaciones de Array."
     },
     {
-      "id": "otec-sence-sin-confirmar",
-      "activo": true,
-      "descripcion": "No está confirmado si KeepSync es OTEC registrada en SENCE. src/lib/condiciones.ts:53-58 detecta la exigencia en las fichas pero deliberadamente NO la declara faltante, porque asumirlo haría que el calificador descarte solas todas las compras de capacitación — y eso es decisión del usuario, no supuesto del agente.",
-      "que_bloquea": "Condiciona toda la familia de capacitación, que es donde el estudio mide el mayor volumen que KeepSync toca."
+      "id": "no-es-otec-sence",
+      "activo": false,
+      "descripcion": "RESUELTO el 2026-09-08: el usuario confirmó que KeepSync NO es OTEC registrada en SENCE. Deja de ser un insumo que falta y pasa a ser una limitación conocida. Lo medido sobre las 25 Compras Ágiles de capacitación ya fichadas en config/capacitaciones.json: solo 3 nombran OTEC o SENCE y NINGUNA lo exige como requisito de admisibilidad — en 577290-82-COT26 (Subtrans) vale el 10% del puntaje y se pierde entero, en 2324-885-COT26 (Puerto Montt) el certificado se pide solo «en caso de estar acreditado» y por lo tanto no aplica, y en 1057503-2156-COT26 (Hospital Padre Hurtado) la palabra aparece en una suposición de redacción sobre licencias de Power BI. src/lib/condiciones.ts:53-58 sigue detectando la exigencia en las fichas y sigue sin declararla faltante, ahora por una razón medida y no por prudencia.",
+      "que_bloquea": "Ya no bloquea la familia de capacitación: le pone un techo. Donde las bases reservan puntaje a los OTEC, ese puntaje se pierde y no se recupera con precio. Y donde el organismo presupuestó exento invocando el artículo 13 N°4 —las tres compras de Dipres—, la exención no puede darse por aplicable: eso hay que resolverlo con el contador, porque si el servicio va afecto el 19% no cabe bajo el tope.",
+      "confirmado_por_el_usuario": "2026-09-08",
+      "respuesta": "NO. KeepSync no es OTEC registrada en SENCE."
     }
   ],
   "criterios": [
@@ -165,14 +167,14 @@
       "A_evidencia": "El catálogo público NO lista formación como servicio: lista cuatro servicios gestionados. Pero PLAN-VOLUMEN.md:205-211 registra que KeepSync puede facturar servicios propios, y el repo ya tiene tres categorías de cursos activas desde el 2026-08-20.",
       "B": "si",
       "B_evidencia": "Relatoría remota, sin activo físico. Los plazos de estas compras (5 días de entrega en los casos observados) caben en la metodología.",
-      "C": "no-se-sabe",
-      "C_evidencia": "Las Compras Ágiles de capacitación suelen exigir OTEC registrada en SENCE (src/lib/condiciones.ts:53-58) y NO está confirmado si KeepSync lo es.",
+      "C": "no",
+      "C_evidencia": "Medido el 2026-09-08 sobre las 25 Compras Ágiles de capacitación fichadas: 3 nombran OTEC o SENCE y ninguna lo exige como admisibilidad (en la única que lo puntúa vale 10% del total). El usuario confirmó ese mismo día que KeepSync NO es OTEC, así que dejó de ser un no-se-sabe: la acreditación no es un requisito de entrada en este instrumento, cuesta puntaje donde aparece. El alcance de lo medido es Compra Ágil; no dice nada sobre capacitación con franquicia tributaria.",
       "D": "no",
       "D_evidencia": "insumo bloqueante sin-catalogo-de-costos-de-servicios",
       "veredicto": "por-definir",
       "ofertable": false,
-      "quien": "agente (pendiente de aprobación del usuario)",
-      "fecha": "2026-08-20"
+      "quien": "agente (el hecho lo confirmó el usuario el 2026-09-08; el veredicto sigue pendiente de su aprobación)",
+      "fecha": "2026-09-08"
     },
     {
       "familia_id": "capacitacion",
@@ -180,14 +182,14 @@
       "A_evidencia": "Igual que capacitacion-ti-datos, pero sobre TODA la formación, incluida la que no tiene nada que ver con TI (lengua de señas, primeros auxilios, apicultura). KeepSync no tiene por qué poder dictarla.",
       "B": "si",
       "B_evidencia": "Solo para la fracción que sea remota y de materia propia.",
-      "C": "no-se-sabe",
-      "C_evidencia": "Mismo OTEC/SENCE sin confirmar.",
+      "C": "no",
+      "C_evidencia": "Medido el 2026-09-08 sobre las 25 Compras Ágiles de capacitación fichadas: 3 nombran OTEC o SENCE y ninguna lo exige como admisibilidad (en la única que lo puntúa vale 10% del total). El usuario confirmó ese mismo día que KeepSync NO es OTEC, así que dejó de ser un no-se-sabe: la acreditación no es un requisito de entrada en este instrumento, cuesta puntaje donde aparece. El alcance de lo medido es Compra Ágil; no dice nada sobre capacitación con franquicia tributaria.",
       "D": "no",
       "D_evidencia": "insumo bloqueante sin-catalogo-de-costos-de-servicios",
       "veredicto": "por-definir",
       "ofertable": false,
-      "quien": "agente (pendiente de aprobación del usuario)",
-      "fecha": "2026-08-20"
+      "quien": "agente (el hecho lo confirmó el usuario el 2026-09-08; el veredicto sigue pendiente de su aprobación)",
+      "fecha": "2026-09-08"
     },
     {
       "familia_id": "ti-servicios",

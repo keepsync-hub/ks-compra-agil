@@ -110,8 +110,10 @@ function tarjeta(c: CotizacionPublicada): string {
           </div>
           <div class="score-txt">
             ${c.score.sinInformacion} criterio(s) por resolver × −5%${
-              c.score.cubiertos > 0 ? ` · ${c.score.cubiertos} ya cubierto(s)` : ""
-            }<br>
+              // Las tarjetas viejas del índice se escribieron antes de que existiera `no_cumple`
+              // (2026-09-08) y no traen el campo: sin el `?? 0` saldría "undefined confirmado(s)".
+              (c.score.noCumple ?? 0) > 0 ? ` · ${c.score.noCumple} confirmado(s) como no cumplido(s), que descuentan igual` : ""
+            }${c.score.cubiertos > 0 ? ` · ${c.score.cubiertos} ya cubierto(s)` : ""}<br>
             <span class="hint">${esc(resumenTipos)}</span>
           </div>
         </div>
@@ -234,19 +236,23 @@ export function renderCotizacionesCapacitacion(cotizaciones: Map<string, Cotizac
       <strong>Score de apertura (0–100%).</strong> Mide qué tan libre está la cancha:
       <strong>100%</strong> sería una compra que no exige ninguna característica, capacidad o
       certificación particular que dirija la adjudicación hacia un proveedor determinado. Se
-      descuenta <strong>5% por cada criterio que haya que revisar y del que hoy no se tenga
-      información</strong>. Un score alto no dice que se vaya a ganar: dice que lo que falta para
-      poder presentarse son pocas cosas y son averiguables. Uno bajo marca una compra escrita
-      alrededor de un proveedor que ya existe. Cada criterio va citado en la tarjeta, y el score
-      sube solo a medida que se confirman en <code>config/capacitaciones.json</code>.
+      descuenta <strong>5% por cada criterio que hoy no esté resuelto a favor de KeepSync</strong>,
+      sea porque falta revisarlo o porque ya se revisó y no se cumple. Un score alto no dice que se
+      vaya a ganar: dice que lo que falta para poder presentarse son pocas cosas y son averiguables.
+      Uno bajo marca una compra escrita alrededor de un proveedor que ya existe. Cada criterio va
+      citado en la tarjeta, y el score sube solo a medida que se confirman en
+      <code>config/capacitaciones.json</code>.
     </div>
     <div class="note" style="margin-bottom:1.25rem;">
       <strong>Ninguno está listo para presentar, y el bloqueo no es el precio.</strong>
       Los ${lista.length} organismos exigen un/a relator/a con título, currículum y certificados
       verificables, y una oferta sin esos antecedentes se descarta en admisibilidad antes de que
-      nadie mire el monto. ${glosaRelator} Sigue además sin confirmarse si KeepSync es <strong>OTEC registrada en
-      SENCE</strong>, de lo que dependen tanto puntaje directo en algunas bases como la exención de
-      IVA del artículo 13 N°4 con que varios presupuestaron el servicio.
+      nadie mire el monto. ${glosaRelator} Y el segundo bloqueo del nicho dejó de ser una pregunta:
+      el 2026-09-08 se confirmó que <strong>KeepSync no es OTEC registrada en SENCE</strong>. Donde
+      las bases reservan puntaje a los OTEC, ese puntaje se pierde entero y no se recupera cotizando
+      más barato; y donde el organismo presupuestó el servicio <strong>exento</strong> invocando el
+      artículo 13 N°4, esa exención ya no puede darse por aplicable y hay que resolverla con el
+      contador antes de presentar — si el servicio va afecto, el 19% no cabe bajo el tope.
       ${
         menorPrecio > 0
           ? `Y en ${menorPrecio} de estas compras el organismo <strong>adjudica al menor precio</strong>, así que

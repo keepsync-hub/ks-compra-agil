@@ -648,7 +648,7 @@
     "citaTributaria": "«Presupuesto estimado $2.100.000. La cotización deberá estar expresada en pesos chilenos. Todos los precios que se incluyan en la cotización deberán expresarse en valores totales» — TDR, apartado I. Propuesta económica. El TDR no declara si el monto es neto, exento o con impuestos incluidos: se presenta el valor como TOTAL y el tratamiento tributario queda por confirmar con la Corporación.",
     "criterioEvaluacion": "puntaje",
     "fechaCierre": "2026-09-09 12:00",
-    "archivoPdfRelativo": "capacitaciones-cotizaciones/425-325-COT26/Q-20260903-CorporacionAdministrativaDelPoderJudicial.pdf",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/425-325-COT26/Q-20260908-CorporacionAdministrativaDelPoderJudicial.pdf",
     "fuenteDocumentos": [
       "TDR_Curso_Capacitación_Power_BI_(publicar).pdf"
     ],
@@ -662,6 +662,7 @@
     "score": {
       "score": 70,
       "sinInformacion": 6,
+      "noCumple": 0,
       "cubiertos": 0,
       "total": 6,
       "porTipo": [
@@ -731,7 +732,7 @@
         "estado": "sin_informacion"
       }
     ],
-    "generado": "2026-09-03"
+    "generado": "2026-09-08"
   },
   "3616-123-COT26": {
     "codigo": "3616-123-COT26",
@@ -1525,7 +1526,7 @@
     "citaTributaria": "Ni el TDR ni las especificaciones administrativas declaran si el monto se presenta neto, exento o con impuestos incluidos. Sobre el precio solo dicen «Presupuesto estimado: $1.000.000.- presupuesto regular, Dirección de Aeropuertos, nivel central» y «Se debe considerar pago con crédito a 30 días» — Especificaciones administrativas y técnicas.",
     "criterioEvaluacion": "no_declarado",
     "fechaCierre": "2026-09-10 17:00",
-    "archivoPdfRelativo": "capacitaciones-cotizaciones/976-60-COT26/Q-20260903-MinisterioDeObrasPublicasDireccionDeAeropuertosDap.pdf",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/976-60-COT26/Q-20260908-MinisterioDeObrasPublicasDireccionDeAeropuertosDap.pdf",
     "fuenteDocumentos": [
       "Términos de Referencia.pdf",
       "Especifícaciones técnicas y administrativas.pdf",
@@ -1542,6 +1543,7 @@
     "score": {
       "score": 70,
       "sinInformacion": 6,
+      "noCumple": 0,
       "cubiertos": 0,
       "total": 6,
       "porTipo": [
@@ -1607,7 +1609,7 @@
         "estado": "sin_informacion"
       }
     ],
-    "generado": "2026-09-03"
+    "generado": "2026-09-08"
   },
   "1219102-48-COT26": {
     "codigo": "1219102-48-COT26",
@@ -1736,6 +1738,7 @@
     "score": {
       "score": 50,
       "sinInformacion": 10,
+      "noCumple": 0,
       "cubiertos": 0,
       "total": 10,
       "porTipo": [
@@ -1958,7 +1961,7 @@
     "citaTributaria": "«El presupuesto máximo disponible para la actividad de capacitación es de $1.000.000.- impuestos incluidos» — Requerimiento de compra N° FSS04770/2026, numeral IV. La admisibilidad exige además «Presentar cotización económica con impuestos incluidos, la cual se encuentre dentro del presupuesto disponible».",
     "criterioEvaluacion": "puntaje",
     "fechaCierre": "2026-09-09 12:00",
-    "archivoPdfRelativo": "capacitaciones-cotizaciones/1121-56-COT26/Q-20260907-ComisionChilenaDelCobreCochilcoDepartamentoDeInfor.pdf",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/1121-56-COT26/Q-20260908-ComisionChilenaDelCobreCochilcoDepartamentoDeInfor.pdf",
     "fuenteDocumentos": [
       "Requerimiento de compra-Inteligencia Artificial fundamentos aplic.pdf",
       "Anexo N°1 - Datos del Oferente.docx",
@@ -1975,6 +1978,7 @@
     "score": {
       "score": 50,
       "sinInformacion": 10,
+      "noCumple": 0,
       "cubiertos": 0,
       "total": 10,
       "porTipo": [
@@ -2072,7 +2076,7 @@
         "estado": "sin_informacion"
       }
     ],
-    "generado": "2026-09-07"
+    "generado": "2026-09-08"
   },
   "425-339-COT26": {
     "codigo": "425-339-COT26",
@@ -2099,6 +2103,7 @@
     "score": {
       "score": 65,
       "sinInformacion": 7,
+      "noCumple": 0,
       "cubiertos": 0,
       "total": 7,
       "porTipo": [
@@ -2202,6 +2207,7 @@
     "score": {
       "score": 85,
       "sinInformacion": 3,
+      "noCumple": 0,
       "cubiertos": 0,
       "total": 3,
       "porTipo": [
@@ -2261,6 +2267,7 @@
     "score": {
       "score": 40,
       "sinInformacion": 12,
+      "noCumple": 0,
       "cubiertos": 0,
       "total": 12,
       "porTipo": [
@@ -2399,6 +2406,7 @@
     "score": {
       "score": 50,
       "sinInformacion": 10,
+      "noCumple": 0,
       "cubiertos": 0,
       "total": 10,
       "porTipo": [
@@ -2519,6 +2527,7 @@
     "score": {
       "score": 45,
       "sinInformacion": 11,
+      "noCumple": 0,
       "cubiertos": 0,
       "total": 11,
       "porTipo": [
@@ -2646,6 +2655,7 @@
     "score": {
       "score": 50,
       "sinInformacion": 10,
+      "noCumple": 0,
       "cubiertos": 0,
       "total": 10,
       "porTipo": [

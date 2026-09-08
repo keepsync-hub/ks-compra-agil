@@ -925,10 +925,11 @@
       "criterios_direccionadores": [
         {
           "id": "otec-sence",
-          "exige": "Ser Universidad, Instituto Profesional, CFT reconocido por el Estado u OTEC con certificado SENCE: vale el 10% del puntaje final (100 puntos contra 0).",
+          "exige": "Ser Universidad, Instituto Profesional, CFT reconocido por el Estado u OTEC con certificado SENCE: vale el 10% del puntaje final (100 puntos contra 0). KeepSync no es ninguna de esas cosas, así que este criterio se pierde entero.",
           "cita": "Requerimiento, criterio Entidad Certificada (10%)",
           "tipo": "certificacion",
-          "estado": "sin_informacion"
+          "estado": "no_cumple",
+          "resuelto_por": "Confirmado por el usuario el 2026-09-08: KeepSync NO es OTEC registrada en SENCE. El criterio no admite puntaje parcial —100 puntos o 0—, así que la oferta parte 10 puntos abajo del máximo y eso no se resuelve cotizando más barato. Queda registrado como incumplido, no como pendiente por averiguar."
         },
         {
           "id": "docente-data-science",
@@ -1109,7 +1110,7 @@
         },
         {
           "id": "otec-perfil-publicador",
-          "exige": "Que todos los equipos «del OTEC» cuenten con perfil de publicador de Power BI con licencia de pago. La redacción da por supuesto que el oferente es un OTEC.",
+          "exige": "Que todos los equipos «del OTEC» cuenten con perfil de publicador de Power BI con licencia de pago. La redacción da por supuesto que el oferente es un OTEC, y KeepSync no lo es (confirmado el 2026-09-08); lo que sigue sin resolverse es lo que la exigencia realmente pide, que son las licencias de publicador.",
           "cita": "Memo N°96, requisitos para la postulación del oferente",
           "tipo": "certificacion",
           "estado": "sin_informacion"
@@ -2172,10 +2173,11 @@
         },
         {
           "id": "otec-sence-vigente",
-          "exige": "Certificado de vigencia como Organismo Técnico de Capacitación (SENCE), si el oferente está acreditado. Sigue sin confirmarse si KeepSync lo es.",
+          "exige": "Certificado de vigencia como Organismo Técnico de Capacitación (SENCE), exigido solo «en caso de estar acreditado». KeepSync no lo está, así que no hay certificado que presentar.",
           "cita": "Bases técnicas, TEMARIO MINIMO A EVALUAR — «Forma y metodología de evaluación, en caso de estar acreditado por el Organismo Técnico de Capacitación, presentar certificado Vigencia del Organismo Técnico de Capacitación (SENCE).»",
           "tipo": "certificacion",
-          "estado": "sin_informacion"
+          "estado": "cubierto",
+          "resuelto_por": "Confirmado por el usuario el 2026-09-08: KeepSync NO es OTEC registrada en SENCE. La exigencia es condicional: las bases piden el certificado únicamente a quien ya está acreditado y no asignan puntaje por estarlo. Al no cumplirse la condición, no queda documento que adjuntar ni penalización asociada — es de los pocos casos en que una respuesta negativa cierra un criterio en vez de agravarlo."
         },
         {
           "id": "giro-sii-asociado-al-servicio",

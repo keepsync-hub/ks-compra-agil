@@ -80,7 +80,8 @@ entregables, cuadro de cumplimiento, y oferta económica con los pendientes.
 bloque `COTIZACIONES:INICIO/FIN` de `docs/index.html` con una tarjeta por borrador: monto ofertado
 contra el tope, régimen tributario, cómo adjudica el organismo, y las **observaciones** desplegables
 —lo que impide presentar esa oferta— más de qué documentos salieron los requisitos. Arriba del
-grid va la nota con lo que bloquea al nicho entero (relator, OTEC/SENCE, menor precio).
+grid va la nota con lo que bloquea al nicho entero (relator, la exención de IVA sin OTEC, menor
+precio).
 
 Ese bloque es un **tercer par de marcadores** en la misma página que refresca el radar, y por eso
 `reemplazarBloque` se exporta desde `src/lib/pagina-compra-agil.ts`: `npm run radar` reescribe
@@ -112,6 +113,14 @@ Tres cosas que este cotizador hace a propósito y conviene no "arreglar":
    **exento** citando el art. 13 N°4 de la Ley de IVA (exención por giro educacional), Subtrans dice
    "impuestos incluidos", y Concepción y el Hospital no lo declaran — ahí el valor se presenta como
    TOTAL y el pendiente es consultarlo. No se agrega un 19% donde el organismo presupuestó exento.
+
+   Desde el 2026-09-08 el caso `exento` lleva además un pendiente propio, y es el efecto concreto de
+   que **KeepSync no sea OTEC en SENCE**: esa exención se apoya en la calidad de institución que
+   imparte enseñanza o capacitación, así que no puede darse por aplicable. El PDF lo dice con la
+   aritmética adelante —el 90% de un tope de $1.500.000 son $1.350.000, que con 19% encima quedan en
+   $1.606.500 y no caben bajo el tope—, porque el riesgo no es cotizar de más sino descubrirlo al
+   facturar. Lo resuelve el contador, no el agente: la regla de no agregar el 19% por cuenta propia
+   sigue intacta.
 3. **Verifica que nada se recorte.** Las láminas tienen alto fijo y `overflow:hidden` (es lo que
    garantiza las 5 páginas), así que el modo de falla natural es que un requisito largo se corte
    *en silencio*. `generarCotizacionCapacitacionPdf` mide `scrollHeight` vs `clientHeight` en el
@@ -140,17 +149,23 @@ criterio que haya que revisar y del que hoy no se tenga información**.
 
 Los criterios viven en `criterios_direccionadores` de `config/capacitaciones.json`, uno por
 exigencia, cada uno con su **cita** al documento del organismo. `src/lib/scoring-capacitacion.ts`
-solo cuenta: `score = 100 − 5 × (criterios en estado "sin_informacion")`, con piso en 0.
+solo cuenta: `score = 100 − 5 × (criterios en estado "sin_informacion" o "no_cumple")`, con piso
+en 0.
 
-De las dieciocho fichadas hasta hoy, el rango va de 85% a 45%. El orden no es casual — el Hospital
+De las veinticinco fichadas hasta hoy, el rango va de 85% a 40%. El orden no es casual — el Hospital
 Padre Hurtado (45%) exige las **últimas 12 órdenes de compra del mismo curso** en Mercado Público,
 que excluye a cualquiera que no lo haya vendido ya varias veces; Cochilco (50%) reparte 55% del
 puntaje entre experiencia del relator, satisfacción acreditada por terceros y 6 o más servicios
-similares del oferente, y deja el precio en 10%; Puerto Montt (55%) exige que el relator/a sea
+similares del oferente, y deja el precio en 10%; Puerto Montt (60%) exige que el relator/a sea
 Ingeniero en Informática o en Información y Control de Gestión **con** postítulo en IA; Concepción
 (60%) da 35 de 100 puntos por un magíster; Subtrans (65%) reserva 10% del puntaje a ser OTEC. En el
-otro extremo, Dipres (85% y 75%) y el MOP (70%) solo piden credenciales del relator/a, que es un
-dato averiguable.
+otro extremo, Dipres (85% y 75%), la Universidad de Atacama (85%) y el MOP (70%) solo piden
+credenciales del relator/a —o nada—, que es un dato averiguable.
+
+El piso lo puso INAPI el 2026-09-08 con **40%**: su pauta reparte los 100 puntos íntegramente entre
+formación, especialización y experiencia del instructor/a, y **el precio no puntúa** — entra solo
+como tercer criterio de desempate, después del Sello Empresa Mujer y de la Política de Integridad.
+Es el caso extremo de lo que este score mide: una compra donde cotizar más barato no mueve nada.
 
 Una tercera forma, del SLEP Santa Corina (65%): **la demo como causal de inadmisibilidad**. «Será
 inadmisible la oferta que no acompañe cotización y demo de la plataforma de aprendizaje» — y esa
@@ -170,8 +185,15 @@ resolver.
 Qué **no** es: una probabilidad de adjudicación. No pondera monto, competencia ni precio. Es cuánto
 de la admisibilidad está sin resolver hoy.
 
-El score **sube solo, sin tocar código**, cuando alguien confirma un criterio: se cambia su
-`estado` a `"cubierto"` y se escribe `resuelto_por` con la evidencia. El cargador valida esto en
+El score **se mueve solo, sin tocar código**, cuando alguien resuelve un criterio: se cambia su
+`estado` y se escribe `resuelto_por` con la evidencia. Hay tres estados y la diferencia entre los
+dos últimos se aprendió el 2026-09-08, cuando el usuario confirmó que KeepSync **no** es OTEC en
+SENCE: `sin_informacion` descuenta porque falta revisarlo; `cubierto` no descuenta porque se cumple
+—o porque la exigencia era condicional y no aplica, como el certificado SENCE de Puerto Montt, que
+las bases piden solo «en caso de estar acreditado»—; y `no_cumple` descuenta **igual** que
+`sin_informacion` porque el obstáculo sigue ahí, como el 10% de Subtrans, que se pierde entero y no
+se recupera cotizando más abajo. Marcar ese criterio `cubierto` habría subido el score con la peor
+noticia posible. El cargador valida esto en
 serio, porque el número se publica y se lee como dato duro: **corta la corrida** si un criterio no
 tiene cita, si un `"cubierto"` viene sin `resuelto_por`, si hay ids duplicados (contarían dos
 veces), si el tipo es desconocido o si la lista viene vacía (declarar cero criterios es afirmar

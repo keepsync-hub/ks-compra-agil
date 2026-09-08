@@ -17,8 +17,9 @@
   "relator": null,
   "score_apertura_pct": 50,
   "score_criterios_sin_informacion": 10,
+  "score_criterios_no_cumple": 0,
   "score_criterios_cubiertos": 0,
-  "_score_nota": "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que falte revisar (config/capacitaciones.json → criterios_direccionadores).",
+  "_score_nota": "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que hoy no esté resuelto a favor de KeepSync: sea porque falta revisarlo (sin_informacion) o porque ya se revisó y no se cumple (no_cumple). Ver config/capacitaciones.json → criterios_direccionadores.",
   "pendientes": [
     "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
     "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
