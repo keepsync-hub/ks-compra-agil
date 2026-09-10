@@ -69,7 +69,7 @@ Cada tarjeta encabeza con un **score de apertura (0–100%)** que ordena el foco
 que no exige ninguna característica, capacidad o certificación particular que dirija la
 adjudicación, y baja 5% por cada criterio que falte revisar (`criterios_direccionadores` en
 `config/capacitaciones.json`, cada uno con su cita; el cálculo, en `src/lib/scoring-capacitacion.ts`).
-Hoy hay **veinticinco borradores**: seis de la tanda del 2026-08-22 (Dipres 85% y 75% dos,
+Hoy hay **veintiocho borradores**: seis de la tanda del 2026-08-22 (Dipres 85% y 75% dos,
 Subtrans 65%, Concepción 60%, Hospital Padre Hurtado 45% — este último exige las últimas 12 órdenes
 de compra del mismo curso, el filtro más direccionador de todas), cuatro del 2026-08-27 (Poder
 Judicial 70%, Lo Barnechea 65%, Combarbalá 60%, DAEM Osorno 55%), ocho del 2026-09-03: MOP
@@ -81,10 +81,12 @@ y Cochilco (IA del concepto al impacto) 50%, una del 2026-09-07: Cochilco de nue
 Universidad de Atacama (IA aplicada a la actividad académica) 85%, Poder Judicial de nuevo
 (`425-339-COT26`, IA aplicada al análisis de datos con Microsoft Copilot) 65%, y cuatro que se
 comentan más abajo — Subsecretaría de Derechos Humanos con tres cursos simultáneos (50%, 50% y 45%)
-e INAPI 40%, el score más bajo fichado hasta hoy. **No es una probabilidad de
+e INAPI 40%, el score más bajo fichado hasta hoy, y **tres del 2026-09-10**: Hospital San José
+(Power BI intermedio) 65%, MINVU (herramientas de Power BI) 65% y Río Hurtado (IA para el Programa
+de Integración Escolar) 65%. **No es una probabilidad de
 adjudicación**: es cuánto de la admisibilidad está sin resolver.
 
-Las quince más antiguas ya cerraron y siguen publicadas —el índice de cotizaciones se acumula y no
+Las veintidós más antiguas ya cerraron y siguen publicadas —el índice de cotizaciones se acumula y no
 borra, para que una corrida de un solo código no haga desaparecer a las demás—, así que la tarjeta
 las marca *Cerrada* y las manda al final de la grilla. Publicar un borrador de una compra en la que
 ya no se puede ofertar, sin decirlo, es el mismo defecto que la grilla de oportunidades corrigió.
@@ -133,6 +135,43 @@ cierre del primer llamado (2026-09-04). Se arregla volviendo a correr
 por el radar. Vale la pena revisarlo cuando el radar reporte un segundo llamado de algo ya cotizado:
 publicar como cerrada una compra en la que **sí** se puede ofertar es el mismo defecto al revés.
 
+**Lo que enseñó la tanda del 2026-09-10.** Las tres compras nuevas —dos de Power BI y una de IA—
+salieron las tres en 65%, y lo que las separa no es el score sino dónde está lo que falta:
+
+- **El MINVU `587-165-COT26` es la compra más grande del nicho hasta hoy ($5.800.000) y la que menos
+  premia el precio**: 55% certificación del relator/a, 35% experiencia del relator/a, 10% precio, con
+  el precio además en último lugar del desempate. La certificación es **binaria** —«Sí Cumple 100 /
+  No Cumple 0»— y exige una credencial vigente obtenida desde 2023 (tipo Power BI Data Analyst
+  Associate), que emite un tercero: sin ella se pierde más de la mitad de la evaluación de golpe.
+  Con INAPI, ya son dos las compras fichadas donde cotizar más barato casi no mueve nada.
+- **Río Hurtado `3267-47-COT26` es la primera compra fichada que puntúa el domicilio del oferente**:
+  10% para «empresa o persona que tiene su domicilio o actividad dentro de la región», 40 puntos de
+  100 para las otras regiones. Es un descuento que ninguna oferta puede remontar por mérito propio.
+  Trae además una jornada presencial de 4 horas en el Internado de Pichasca con coffee break para 31
+  y set impreso por participante, compitiendo por el mismo tope de $1.500.000 que paga la relatoría,
+  y la contradicción de fecha ya conocida del nicho (22/09 en el encabezado del TDR y en la ficha del
+  portal, 24/09 en el cuerpo del TDR y en la solicitud).
+- **El Hospital San José `1549-3882-COT26` publica la ponderación en la ficha y la pauta en ninguna
+  parte**: 30% precio, 30% cumplimiento de EE.TT. y 40% «programa de curso ofertado», sin decir qué
+  se premia dentro de ese 40%, que es el criterio de mayor peso. Es una variante de las seis compras
+  que no publican pauta: acá sí se sabe cuánto pesa cada cosa, y aun así no se sabe cómo se puntúa.
+- **Dos de las tres no dicen si el tope incluye impuestos**, y en las dos el 90% del tope más IVA se
+  pasa: $1.350.000 × 1,19 = $1.606.500 sobre un tope de $1.500.000. En Río Hurtado la contradicción
+  es explícita —el TDR habla de «presupuesto disponible» y el acta de evaluación compara por «PRECIO
+  NETO»—, y en el Hospital San José el portal declara el presupuesto como *Estimado*, no *Disponible*.
+
+**Y la lámina 3 del PDF tiene menos espacio del que parece.** Las tres fichas nuevas salieron con
+`CONTENIDO RECORTADO en lámina 3` en la primera corrida, y no era la plantilla: eran las tres fichas
+más largas de toda la cartera (4.264, 3.374 y 2.891 caracteres en los campos de esa lámina, contra un
+máximo previo de 2.689). El presupuesto real, medido con Chromium sobre el HTML que se imprime, es
+**638px por columna** —la lámina son 794px menos los dos sellos (PRELIMINAR y BORRADOR, 25px cada
+uno), el eyebrow y el título—, y las columnas se llenan desparejo, así que a veces desborda la
+derecha (relatoría + entregables + coordinación) y no la izquierda. El guardrail hizo exactamente lo
+suyo: se negó a emitir los tres PDF hasta que el contenido cupiera, que es lo correcto —un requisito
+recortado es un requisito no declarado ante el organismo—. Lo que hay que saber al fichar una compra
+nueva es que **la ficha se escribe para caber**: el detalle largo de las bases va en
+`criterios_direccionadores`, que se publican en la página y no compiten por esa lámina.
+
 Dos hallazgos de la tanda del 2026-09-03 que conviene tener presentes al leer un TDR de este nicho:
 **las bases se contradicen seguido** —CONASET pondera 80/20 en el texto y 70/30 en la fórmula; la
 Defensoría exige 20 horas en las condiciones generales y 24 en los requisitos mínimos; Puerto Montt
@@ -145,21 +184,21 @@ la escribe), así que no se puede saber cuánto pesa el precio: eso también baj
 
 Dos cosas condicionan el nicho y el cotizador no las resuelve solo. La primera es el **relator/a**:
 los TDR exigen título, CV y certificados verificables, y sin eso la oferta se descarta en
-admisibilidad. Dos de las veinticinco ofertas ya lo designan —Dipres `1618-69-COT26` y el SLEP Santa
+admisibilidad. Dos de las veintiocho ofertas ya lo designan —Dipres `1618-69-COT26` y el SLEP Santa
 Corina `1393495-768-COT26`, las dos con Cristian Molina Espinoza y su currículum, y las dos con
 carta de presentación—, y en ambas sigue faltando el **respaldo documental** de los cursos
-dictados: el currículum los enumera, no los acredita. Las otras veintitrés salen diciendo
+dictados: el currículum los enumera, no los acredita. Las otras veintiséis salen diciendo
 «relator/a por designar», que es lo que corresponde mientras nadie lo designe. Ver el detalle en
 `.claude/skills/compra-agil-ofertar/SKILL.md`.
 
 La segunda **dejó de ser una pregunta el 2026-09-08: el usuario confirmó que KeepSync NO es OTEC
 registrada en SENCE.** Y lo primero que hay que decir es que condicionaba bastante menos de lo que
-este archivo temía. De las veinticinco compras fichadas, solo **tres** nombran OTEC o SENCE y
+este archivo temía. De las veintiocho compras fichadas, solo **tres** nombran OTEC o SENCE y
 **ninguna lo exige como admisibilidad**: Subtrans le da 10% del puntaje final —100 puntos contra 0,
 sin puntaje parcial—, Puerto Montt pide el certificado de vigencia solo «en caso de estar
 acreditado» (al no estarlo, no hay documento que presentar ni penalización), y en el Hospital Padre
 Hurtado la palabra aparece dentro de una suposición de redacción sobre licencias de publicador de
-Power BI. No es una barrera de entrada: es un techo de puntaje en una de veinticinco.
+Power BI. No es una barrera de entrada: es un techo de puntaje en una de veintiocho.
 
 Donde sí duele es en **la exención de IVA**. Las tres compras de Dipres presupuestan *exento*
 invocando el art. 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios, que se apoya en la

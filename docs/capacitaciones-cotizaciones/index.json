@@ -2750,5 +2750,320 @@
       }
     ],
     "generado": "2026-09-08"
+  },
+  "1549-3882-COT26": {
+    "codigo": "1549-3882-COT26",
+    "curso": "Power BI Intermedio para el Análisis y Visualización de Datos",
+    "organismo": "Servicio de Salud Metropolitano Norte — Hospital San José, Unidad de Capacitación",
+    "topeClp": 1500000,
+    "totalClp": 1350000,
+    "descuentoPct": 10,
+    "regimenTributario": "no_declarado",
+    "citaTributaria": "«12. Presupuesto Referencial — Monto estimado total: $1.500.000.-» y el listado de lo que ese valor incluye (plataforma LMS, relatoría, tutoría, material, evaluaciones, certificación, soporte e informe final). El TDR no dice si el monto es neto o con impuestos, y la ficha del portal declara el presupuesto como *Estimado*, no como *Disponible*.",
+    "criterioEvaluacion": "puntaje",
+    "fechaCierre": "2026-09-14 09:00",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/1549-3882-COT26/Q-20260910-ServicioDeSaludMetropolitanoNorteHospitalSanJoseUn.pdf",
+    "fuenteDocumentos": [
+      "247 Power BI Intermedio para Análisis y Visualización de Datos co.docx",
+      "Ficha de la Compra Ágil 1549-3882-COT26 (descripción del requerimiento)"
+    ],
+    "requisitosPorConfirmar": 5,
+    "pendientes": [
+      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+      "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
+      "Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal.",
+      "Confirmar la modalidad con el organismo mediante consulta formal. La ficha del portal fija un plazo de entrega de 1 día para un curso de 24 horas pedagógicas, mientras el TDR declara que «la fecha de ejecución será coordinada entre la Unidad de Capacitación del Hospital San José y el oferente adjudicado». La propuesta se presenta con la fecha por coordinar, según el TDR, y consulta formalmente cómo debe entenderse el plazo de entrega de la ficha."
+    ],
+    "score": {
+      "score": 65,
+      "sinInformacion": 7,
+      "noCumple": 0,
+      "cubiertos": 0,
+      "total": 7,
+      "porTipo": [
+        {
+          "tipo": "alcance",
+          "n": 2
+        },
+        {
+          "tipo": "infraestructura",
+          "n": 2
+        },
+        {
+          "tipo": "experiencia_relator",
+          "n": 1
+        },
+        {
+          "tipo": "titulo_grado",
+          "n": 1
+        },
+        {
+          "tipo": "tributario",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "programa-del-curso-40-por-ciento-sin-pauta",
+        "exige": "Conocer cómo se puntúa el criterio de mayor peso. El «PROGRAMA DE CURSO OFERTADO» vale 40% de la evaluación y ningún documento publica su pauta: no se sabe si premia extensión, profundidad, actividades prácticas o alineamiento con el temario, y de eso depende cómo se construye la propuesta técnica.",
+        "cita": "Ficha Compra Ágil 1549-3882-COT26, descripción — «SE DEBE CONSIDERAR QUE SE EVALUARA: 30% PRECIO, 30% CUMPLIMIENTO EETT, 40% PROGRAMA DE CURSO OFERTADO». El TDR adjunto no contiene apartado de criterios de evaluación.",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "plataforma-lms-con-cuenta-de-jefatura",
+        "exige": "Disponer de una plataforma LMS propia compatible con Windows, macOS, Android, iOS y navegadores habituales, con contenidos descargables, registro individual de avance, evaluaciones en línea con retroalimentación, canal de soporte técnico, reportes periódicos de seguimiento y una cuenta adicional para la Jefatura de Capacitación. Es infraestructura de operación continua, no una sala de videoconferencia.",
+        "cita": "TDR, numeral 6.1 Plataforma Virtual — «La Jefatura de Capacitación deberá contar con una cuenta adicional para revisión del material, monitoreo y seguimiento del proceso formativo», más «Acceso a contenidos descargables…», «Registro individual de avance académico», «Evaluaciones en línea con retroalimentación», «Canal de soporte técnico» y «Reportes periódicos de seguimiento académico para la Unidad de Capacitación».",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "certificado-con-folio-o-qr-verificable",
+        "exige": "Emitir certificados digitales con firma institucional válida y código QR, folio verificable o validación digital. Exige un mecanismo de verificación de certificados, no solo un PDF con el nombre del participante.",
+        "cita": "TDR, numeral 7.3 Certificación — el certificado «deberá indicar: Nombre de la entidad capacitadora… Horas pedagógicas cursadas. Firma institucional válida. Código QR, folio verificable o validación digital».",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-con-power-bi-avanzado-comprobable",
+        "exige": "Designar un relator/a con experiencia comprobable en uso avanzado de Power BI —Power Query, modelamiento, DAX y Power BI Services— y experiencia previa como docente o relator en análisis de datos y visualización, adjuntando su currículum vítae actualizado.",
+        "cita": "TDR, numeral 4 Perfil del docente o relator — «El oferente deberá identificar al docente o relator responsable de impartir la capacitación, adjuntando currículum vitae actualizado», y el relator «deberá acreditar: … Experiencia comprobable en uso avanzado de Microsoft Power BI… Experiencia previa como docente o relator en herramientas de análisis, inteligencia de negocios y visualización de datos».",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "titulo-relator-disciplina-afin",
+        "exige": "Acreditar formación profesional o técnica del relator/a en informática, ingeniería, análisis de datos, inteligencia de negocios, tecnologías de la información o disciplinas afines.",
+        "cita": "TDR, numeral 4 Perfil del docente o relator — «Formación profesional o técnica en informática, ingeniería, análisis de datos, inteligencia de negocios, tecnologías de la información o disciplinas afines».",
+        "tipo": "titulo_grado",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "regimen-tributario-no-declarado",
+        "exige": "Determinar si el presupuesto de $1.500.000 es neto o con impuestos incluidos. El TDR lo llama «monto estimado total» y enumera lo que el valor incluye sin nombrar impuestos; la ficha del portal declara el presupuesto como *Estimado*. Con IVA, el 90% del tope ($1.350.000) llega a $1.606.500 y excede el monto de referencia.",
+        "cita": "TDR, numeral 12 Presupuesto Referencial — «Monto estimado total: $1.500.000.- Valor incluye: Uso de plataforma virtual LMS. Relatoría especializada… Informe final de ejecución». Ficha Compra Ágil — «tipo_presupuesto: Estimado».",
+        "tipo": "tributario",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "plazo-de-entrega-de-1-dia-versus-fecha-por-coordinar",
+        "exige": "Resolver qué significa el plazo de entrega de 1 día que fija la ficha del portal para un curso de 24 horas pedagógicas cuya fecha de ejecución el TDR deja por coordinar. De eso depende cuándo debe estar operativa la plataforma y cuándo parte la ejecución.",
+        "cita": "Ficha Compra Ágil — «plazo_entrega_dias: 1». TDR, numeral 11 Fecha de Ejecución — «La fecha de ejecución será coordinada entre la Unidad de Capacitación del Hospital San José y el oferente adjudicado, considerando disponibilidad institucional, continuidad operativa y planificación del proceso formativo».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      }
+    ],
+    "generado": "2026-09-10"
+  },
+  "587-165-COT26": {
+    "codigo": "587-165-COT26",
+    "curso": "Herramientas de Power BI para el análisis de datos",
+    "organismo": "Subsecretaría del Ministerio de Vivienda y Urbanismo (MINVU)",
+    "topeClp": 5800000,
+    "totalClp": 5220000,
+    "descuentoPct": 10,
+    "regimenTributario": "impuestos_incluidos",
+    "citaTributaria": "«El presupuesto disponible para esta contratación es de $5.800.000.- (Cinco millones ochocientos mil pesos), e incluye impuestos y cualquier otro gasto asociado a la oferta. Las ofertas que excedan dicho presupuesto serán declaradas inadmisibles» — numeral 3, Presupuesto Disponible.",
+    "criterioEvaluacion": "puntaje",
+    "fechaCierre": "2026-09-15 12:00",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/587-165-COT26/Q-20260910-SubsecretariaDelMinisterioDeViviendaYUrbanismoMinv.pdf",
+    "fuenteDocumentos": [
+      "REQUERIMIENTOS TECNICOS.pdf (Solicitud de Cotización, Santiago, 10 de septiembre de 2026)"
+    ],
+    "requisitosPorConfirmar": 4,
+    "pendientes": [
+      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+      "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo."
+    ],
+    "score": {
+      "score": 65,
+      "sinInformacion": 7,
+      "noCumple": 0,
+      "cubiertos": 0,
+      "total": 7,
+      "porTipo": [
+        {
+          "tipo": "alcance",
+          "n": 3
+        },
+        {
+          "tipo": "certificacion",
+          "n": 1
+        },
+        {
+          "tipo": "experiencia_relator",
+          "n": 1
+        },
+        {
+          "tipo": "identidad",
+          "n": 1
+        },
+        {
+          "tipo": "titulo_grado",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "certificacion-vigente-del-relator-55-por-ciento-binaria",
+        "exige": "Acreditar, con certificado o credencial vigente a la fecha de cierre, una certificación obtenida desde 2023 en Power BI, análisis de datos, Azure orientado a análisis de datos o SQL —tipo Microsoft Certified: Power BI Data Analyst Associate—. Es el criterio de mayor peso (55%) y es binario: sin ella la oferta obtiene 0 puntos en más de la mitad de la evaluación. La emite un tercero y no se sustituye con certificados de cursos.",
+        "cita": "Numeral 6, letra a) Certificación del relator/a (55%) — «Se evaluará que el o los relatores identificados expresamente en la oferta cuenten con certificaciones obtenidas desde el año 2023 en adelante, vigentes… No se considerarán certificados de asistencia, participación o aprobación de cursos de capacitación… Si alguno de los relatores propuestos no acredita una certificación con los antecedentes requeridos, la oferta obtendrá 0 puntos en este criterio».",
+        "tipo": "certificacion",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "nueve-relatorias-de-power-bi-acreditadas",
+        "exige": "Acreditar 9 o más relatorías de cursos o capacitaciones en Power BI —solo esa materia— finalizadas a la fecha de cierre y ejecutadas desde 2021, con certificados, contratos, facturas o boletas de honorarios. Sin medios de verificación el puntaje es 0 en un criterio que pesa 35%.",
+        "cita": "Numeral 6, letra b) Experiencia del relator/a (35%) — «otras áreas temáticas distintas a la señalada no serán consideradas… Para acreditar la experiencia, el oferente deberá adjuntar certificados, contratos, facturas o boletas de honorarios… En caso de no presentar estos medios de verificación, se les asignará un puntaje igual a 0 puntos»; tabla de puntaje: «9,0 o más — 100 puntos».",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "titulo-del-relator-acreditado-con-documento",
+        "exige": "Presentar junto con la oferta el certificado de título, copia del título profesional o certificado de profesionales del Registro Civil del o los relatores, con título profesional o técnico de nivel superior de institución reconocida por el Estado. Lo emite un tercero.",
+        "cita": "Numeral 4, Relator/es — «deberá/n contar con título profesional o técnico de nivel superior otorgado por una institución reconocida por el Estado. Esta condición deberá acreditarse mediante la presentación, junto con la oferta, de al menos uno de los siguientes documentos: certificado de título, copia del título profesional o certificado de profesionales emitido por el Servicio de Registro Civil e Identificación».",
+        "tipo": "titulo_grado",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "precio-pesa-solo-10-por-ciento",
+        "exige": "Asumir que el precio casi no mueve la adjudicación: pesa 10% y también es el último criterio de desempate. El 90% del puntaje se decide por credenciales del relator/a, que emite un tercero. Cotizar más barato no compensa la falta de certificación ni de relatorías acreditadas, y de eso depende si conviene invertir en esta oferta.",
+        "cita": "Numeral 6 — cuadro de criterios: «Certificación del relator/a 55%; Experiencia del relator/a 35%; Precio 10%», y letra d) Resolución en caso de empates — orden de prelación «I. Certificación del relator/a. II. Experiencia del relator/a. III. Precio».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "registro-de-proveedores-habilitado",
+        "exige": "Estar inscrito y hábil en el Registro de Proveedores de la Dirección de Compras y Contratación Pública al participar del proceso.",
+        "cita": "Numeral 2, Registro Proveedores — «Los proponentes que deseen participar del presente proceso de Compra Ágil, deberán estar inscritos en el Registro de Proveedores a cargo de la Dirección de Compras y Contratación Pública y encontrarse habilitados».",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "detalle-obligatorio-de-caracteristicas-minimas",
+        "exige": "Mencionar expresamente en la cotización cada una de las características mínimas del numeral 4 —nombre del curso, 24 horas cronológicas en sesiones de 4 horas, programa, modalidad y plataformas, 26 participantes, relatores individualizados, diplomas—. Omitir cualquiera de ellas es causal declarada de inadmisibilidad, antes de toda evaluación.",
+        "cita": "Numeral 4, Características mínimas del servicio — «La oferta debe dar cumplimiento a cada una de las características establecidas en el presente punto N° 4, las cuales deben ser mencionadas claramente en la cotización, en caso de no detallarse estas características, la oferta será declarada inadmisible».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "multa-de-4-por-ciento-diario",
+        "exige": "Evaluar la exposición a multas antes de comprometer fechas: 4% del pago total sin impuestos por cada día de atraso, con tope de 20% del monto total, sobre un curso cuyas fechas definitivas se acuerdan después de la adjudicación y se formalizan por acta.",
+        "cita": "Numeral 8.1, letra a — «En caso de atraso en la ejecución del servicio, se aplicará una multa equivalente al 4% del monto del pago total de la contratación, sin impuestos, por cada día de atraso… el monto total de las multas cobradas durante la vigencia de la contratación no podrá superar el 20% del monto total de la contratación».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      }
+    ],
+    "generado": "2026-09-10"
+  },
+  "3267-47-COT26": {
+    "codigo": "3267-47-COT26",
+    "curso": "Uso de inteligencia artificial y herramientas digitales para la diversificación de la enseñanza",
+    "organismo": "Ilustre Municipalidad de Río Hurtado — Departamento de Educación, Programa de Integración Escolar (PIE)",
+    "topeClp": 1500000,
+    "totalClp": 1350000,
+    "descuentoPct": 10,
+    "regimenTributario": "no_declarado",
+    "citaTributaria": "El TDR declara «PRESUPUESTO DISPONIBLE: $1.500.000 (Un millón quinientos mil)» y la solicitud «Monto proyectado: 1.500.000», sin decir si incluye impuestos. El acta de evaluación, en cambio, compara a los oferentes por «PRECIO NETO» en su cuadro del criterio económico: los dos documentos no usan la misma base.",
+    "criterioEvaluacion": "puntaje",
+    "fechaCierre": "2026-09-11 10:00",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/3267-47-COT26/Q-20260910-IlustreMunicipalidadDeRioHurtadoDepartamentoDeEduc.pdf",
+    "fuenteDocumentos": [
+      "Terminos de Referencia y Acta de Evaluación.pdf",
+      "Solicitud-de-Capacitacion-PIE-2026.pdf"
+    ],
+    "requisitosPorConfirmar": 5,
+    "pendientes": [
+      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+      "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
+      "Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal.",
+      "Confirmar la modalidad con el organismo mediante consulta formal. Los adjuntos declaran dos fechas distintas para la misma jornada: el encabezado del TDR y la ficha del portal dicen 22 de septiembre de 2026, y el cuerpo del TDR y la solicitud de capacitación dicen 24/09/2026. La propuesta se presenta con la fecha por confirmar con el Departamento de Educación y deja constancia de la diferencia."
+    ],
+    "score": {
+      "score": 65,
+      "sinInformacion": 7,
+      "noCumple": 0,
+      "cubiertos": 0,
+      "total": 7,
+      "porTipo": [
+        {
+          "tipo": "alcance",
+          "n": 3
+        },
+        {
+          "tipo": "historial_portal",
+          "n": 1
+        },
+        {
+          "tipo": "identidad",
+          "n": 1
+        },
+        {
+          "tipo": "infraestructura",
+          "n": 1
+        },
+        {
+          "tipo": "tributario",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "proveedor-con-domicilio-en-la-region-de-coquimbo",
+        "exige": "Tener domicilio o actividad en la Región de Coquimbo para obtener los 100 puntos del criterio que pesa 10%. Un oferente de otra región parte con 40 de 100 en ese criterio, sin nada que pueda hacer al respecto en esta oferta. Falta confirmar el domicilio con que KeepSync está inscrita en el Registro de Proveedores.",
+        "cita": "Acta de Evaluación, (C) Proveedor Locales / Ponderación 10% — «Empresa o persona que tiene su domicilio o actividad dentro de la región en la que se ubica el organismo público que realiza la compra. 100 / Otras Regiones 40».",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "diez-trabajos-similares-acreditados",
+        "exige": "Acreditar 10 o más trabajos similares con contratos, órdenes de compra con recepción conforme, facturas firmadas y timbradas o certificados para obtener los 100 puntos del criterio que pesa 20%. Entre 9 y 4 trabajos el puntaje cae a la mitad y sin acreditación es 0. Los documentos los emite un tercero.",
+        "cita": "Acta de Evaluación, (D) Experiencia del Oferente / Ponderación 20% — «Corresponde a la experiencia comprobable de los oferentes en Trabajos Similares a través de documentos tales como: Contratos debidamente otorgados, Órdenes de compra con Recepción conforme, Facturas debidamente firmadas y timbradas, Certificados, etc.» y la tabla «Experiencia entre 10 o más Trabajos similares 100 Puntos / Experiencia entre 9 y 4 Trabajos similares 50 Puntos / No Acredita experiencia. 0 Puntos».",
+        "tipo": "historial_portal",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "logistica-presencial-en-pichasca",
+        "exige": "Ejecutar una jornada presencial de 4 horas en el Internado de Pichasca, comuna de Río Hurtado (Región de Coquimbo), llevando coffee break para 31 personas, los recursos tecnológicos de apoyo y un set impreso por participante (presentación impresa, cuaderno y lápiz). Es logística en terreno, a más de 400 km de Santiago, que compite por el mismo tope de $1.500.000 que cubre la relatoría.",
+        "cita": "TDR — «FECHA, HORA Y LUGAR DE LA ACTIVIDAD: … lugar del encuentro Internado de Pichasca y hora a las 13:30 hrs., en la Comuna de Río Hurtado»; y Consideraciones especiales — «1 servicio de coffee break para los participantes. Materiales y recursos tecnológicos necesarios para el desarrollo del taller… Entrega a cada participante de un set de material de apoyo para la jornada, que incluya, al menos: Diapositivas o presentación de la capacitación impresas… Cuaderno, libreta o bloc de notas… Lápiz o lapicera».",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "fecha-de-la-jornada-contradictoria",
+        "exige": "Confirmar la fecha de la jornada antes de comprometer la logística presencial. Los adjuntos declaran dos fechas distintas para la misma actividad: 22 de septiembre en el encabezado del TDR y en la ficha del portal, y 24/09/2026 en el cuerpo del TDR y en la solicitud de capacitación.",
+        "cita": "TDR, encabezado — «A realizarse el día 22 de Septiembre de 2026, lugar del encuentro Internado de Pichasca y hora a las 13:30 hrs.»; TDR, cuerpo y Solicitud de capacitación — «Fecha de desarrollo: 24/09/2026»; ficha del portal — «** Fecha 22/09/2026 y hora 13:30 - duración 4 horas».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "fotografias-y-lista-de-implementacion",
+        "exige": "Presentar «Fotografías y Lista de Implementación para utilizar en la Actividad» como parte de la oferta, cuya no presentación es causal declarada de inadmisibilidad. El TDR no dice qué debe fotografiarse —implementación propia, actividades anteriores, materiales—, y un oferente sin registro fotográfico de actividades previas no sabe qué adjuntar.",
+        "cita": "TDR, Documentos para presentar en oferta — «- Fotografías y Lista de Implementación para utilizar en la Actividad»; y «*** La no presentación de la información y/o documentación solicitada será causal de inadmisibilidad, por lo que la propuesta no pasará a la etapa de evaluación».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "plan-de-trabajo-evaluado-por-tramos-cualitativos",
+        "exige": "Conocer qué separa un plan de trabajo de 100 puntos de uno de 75 o 50 en el criterio que pesa 45%. Los tramos se describen con adjetivos —«supera las expectativas», «innovador», «absolutamente atractivo», «razonable atractivo»— sin ningún parámetro verificable, y el propio cuadro se refiere a la coherencia «con el evento celebrado» y a un «Anexo A» que los adjuntos no incluyen.",
+        "cita": "Acta de Evaluación, (B) Especificaciones Técnicas / Ponderación 45% — «Presenta un Plan de Trabajo para ejecutar el servicio que supera las expectativas y que es totalmente coherente en términos de sus actividades con el evento celebrado, es innovador o se aprecia absolutamente atractivo. 100»; y el tramo de 25 puntos, que remite a un plan «que no se ajusta a los requerimientos descritos en el Anexo A», anexo que no viene entre los documentos publicados.",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "presupuesto-disponible-versus-precio-neto",
+        "exige": "Determinar si el tope de $1.500.000 es neto o con impuestos incluidos. El TDR lo declara como «presupuesto disponible» y la solicitud como «monto proyectado», sin nombrar impuestos, mientras el acta de evaluación compara a los oferentes por «PRECIO NETO». Con IVA, el 90% del tope ($1.350.000) llega a $1.606.500 y excede el presupuesto declarado.",
+        "cita": "TDR — «PRESUPUESTO DISPONIBLE: $1.500.000 (Un millón quinientos mil)»; Solicitud de capacitación — «Monto proyectado: 1.500.000»; Acta de Evaluación, (A) Oferta Económica — cuadro «Precio Comparativo — RUT / OFERENTE / PRECIO NETO / %».",
+        "tipo": "tributario",
+        "estado": "sin_informacion"
+      }
+    ],
+    "generado": "2026-09-10"
   }
 }

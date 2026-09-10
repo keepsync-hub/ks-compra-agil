@@ -5209,6 +5209,631 @@
           "estado": "sin_informacion"
         }
       ]
+    },
+    "1549-3882-COT26": {
+      "curso": "Power BI Intermedio para el Análisis y Visualización de Datos",
+      "organismo_corto": "Hospital San José",
+      "organismo_nombre": "Servicio de Salud Metropolitano Norte — Hospital San José, Unidad de Capacitación",
+      "fuente_documentos": [
+        "247 Power BI Intermedio para Análisis y Visualización de Datos co.docx",
+        "Ficha de la Compra Ágil 1549-3882-COT26 (descripción del requerimiento)"
+      ],
+      "tributacion": {
+        "regimen": "no_declarado",
+        "cita": "«12. Presupuesto Referencial — Monto estimado total: $1.500.000.-» y el listado de lo que ese valor incluye (plataforma LMS, relatoría, tutoría, material, evaluaciones, certificación, soporte e informe final). El TDR no dice si el monto es neto o con impuestos, y la ficha del portal declara el presupuesto como *Estimado*, no como *Disponible*."
+      },
+      "objetivo": "Fortalecer las competencias técnicas de 15 funcionarios/as del Hospital San José en el uso intermedio de Microsoft Power BI para el análisis, transformación, modelamiento y visualización de datos, permitiendo desarrollar reportes dinámicos, dashboards ejecutivos y herramientas analíticas orientadas a la toma de decisiones institucionales.",
+      "participantes": {
+        "maximo": 15,
+        "glosa": "15 funcionarios profesionales regidos por la Ley N.º 18.834, que requieren fortalecer competencias en análisis, modelamiento y visualización de datos."
+      },
+      "duracion": {
+        "horas_cronologicas": 24,
+        "sesiones": 4,
+        "horas_por_sesion": 2,
+        "glosa": "24 horas pedagógicas: 16 asincrónicas en plataforma y 8 sincrónicas en 4 sesiones de 2 horas. El TDR admite ajustar la distribución manteniendo el total."
+      },
+      "modalidad": {
+        "tipo": "E-Learning combinada (sincrónica y asincrónica)",
+        "plataforma": "Plataforma LMS de KeepSync (Windows, macOS, Android, iOS y navegadores habituales), más videoconferencia para lo sincrónico.",
+        "horario": "A coordinar con la Unidad de Capacitación, según disponibilidad institucional y continuidad operativa."
+      },
+      "modalidad_observacion": "La ficha del portal fija un plazo de entrega de 1 día para un curso de 24 horas pedagógicas, mientras el TDR declara que «la fecha de ejecución será coordinada entre la Unidad de Capacitación del Hospital San José y el oferente adjudicado». La propuesta se presenta con la fecha por coordinar, según el TDR, y consulta formalmente cómo debe entenderse el plazo de entrega de la ficha.",
+      "fechas_ejecucion": "Por coordinar entre la Unidad de Capacitación del Hospital San José y el proveedor adjudicado, considerando disponibilidad institucional, continuidad operativa y planificación del proceso formativo (numeral 11 del TDR).",
+      "contenidos_sugeridos_por_el_organismo": true,
+      "modulos": [
+        {
+          "titulo": "Introducción al análisis de datos con Power BI intermedio",
+          "horas": 3,
+          "temas": [
+            "Revisión de fundamentos del entorno Power BI",
+            "Arquitectura general de Power BI y flujo de trabajo analítico",
+            "Buenas prácticas en modelamiento y visualización de datos",
+            "Aplicación del análisis de datos al contexto institucional y preparación del entorno de trabajo",
+            "Actividad práctica: reconocimiento guiado del entorno y revisión de caso aplicado"
+          ]
+        },
+        {
+          "titulo": "Transformación de datos con Power Query",
+          "horas": 4,
+          "temas": [
+            "Importación de datos desde múltiples fuentes",
+            "Limpieza, transformación y normalización de datos",
+            "Combinación y anexado de consultas; creación de columnas personalizadas",
+            "Tipificación, consistencia de datos y preparación de datasets para análisis",
+            "Actividad práctica: ejercicio aplicado de transformación y consolidación de datos"
+          ]
+        },
+        {
+          "titulo": "Modelamiento de datos",
+          "horas": 4,
+          "temas": [
+            "Diseño de relaciones entre tablas e integridad relacional",
+            "Diseño de modelos eficientes para análisis e implementación de esquema estrella",
+            "Optimización del rendimiento del modelo",
+            "Buenas prácticas de estructuración de datos",
+            "Actividad práctica: construcción de modelo relacional aplicado"
+          ]
+        },
+        {
+          "titulo": "Lenguaje DAX intermedio",
+          "horas": 5,
+          "temas": [
+            "Introducción al lenguaje DAX; columnas calculadas y medidas personalizadas",
+            "Funciones agregadas y cálculos dinámicos",
+            "Inteligencia temporal aplicada",
+            "Buenas prácticas en construcción de indicadores",
+            "Actividad práctica: desarrollo de medidas e indicadores aplicados"
+          ]
+        },
+        {
+          "titulo": "Visualización avanzada de datos",
+          "horas": 5,
+          "temas": [
+            "Principios de visualización efectiva y diseño de gráficos avanzados",
+            "Segmentadores, filtros dinámicos y jerarquías temporales",
+            "Visualizaciones geográficas e interacciones entre objetos visuales",
+            "Personalización de dashboards ejecutivos",
+            "Actividad práctica: diseño de dashboard interactivo aplicado"
+          ]
+        },
+        {
+          "titulo": "Publicación y gestión en Power BI Services",
+          "horas": 3,
+          "temas": [
+            "Publicación de informes en la nube y administración de espacios de trabajo",
+            "Compartición segura de dashboards e informes; actualización de datasets",
+            "Colaboración institucional mediante Power BI Services",
+            "Buenas prácticas de administración y mantenimiento",
+            "Actividad práctica: publicación y gestión del reporte final, más ejercicio integrador"
+          ]
+        }
+      ],
+      "modulos_nota": "Los seis módulos y sus contenidos son los que el propio TDR lista en su numeral 5, en el mismo orden, incluidas las actividades prácticas de cada uno. La asignación de horas por módulo es propuesta de KeepSync —el TDR fija el total (24 horas pedagógicas) y su reparto entre sincrónico y asincrónico, no las horas de cada módulo— y suma exactamente las 24 horas comprometidas.",
+      "requisitos_metodologicos": [
+        "Andragogía y aprendizaje activo, con ejercicios aplicados al contexto institucional.",
+        "Aprendizaje autónomo asincrónico compatible con las funciones laborales.",
+        "Tutoría especializada, resolución de consultas, retroalimentación y seguimiento individual.",
+        "Videos, guías descargables, casos aplicados, ejercicios guiados y cuestionarios.",
+        "Sesiones sincrónicas para dudas, ejercicios guiados, dashboards, DAX y ejercicio integrador.",
+        "Aprobación con 60% de logro: evaluaciones modulares, actividades prácticas y ejercicio final."
+      ],
+      "exigencias_adicionales": [
+        "Cuenta adicional para la Jefatura de Capacitación, con revisión del material y seguimiento.",
+        "Avance individual, evaluaciones en línea, soporte técnico y reportes periódicos a la Unidad.",
+        "Encuesta institucional de satisfacción, de aplicación obligatoria.",
+        "Certificado digital con horas, firma institucional y código QR o folio verificable.",
+        "Informe final en 5 días hábiles: nómina, notas, asistencia y certificados."
+      ],
+      "relator_exigido": {
+        "formacion": "Formación profesional o técnica en informática, ingeniería, análisis de datos, inteligencia de negocios o TI. Exige identificar al relator y adjuntar su CV actualizado.",
+        "experiencia_laboral": "Experiencia comprobable en uso avanzado de Power BI: Power Query, modelamiento, DAX y Power BI Services.",
+        "experiencia_relatoria": "Experiencia previa como docente o relator en análisis de datos, BI y visualización. Deseable en instituciones públicas."
+      },
+      "entregables": [
+        "24 horas pedagógicas e-learning combinada (16 asincrónicas, 8 sincrónicas) para 15 funcionarios/as.",
+        "Plataforma LMS con contenidos descargables, avance individual, evaluaciones, soporte y cuenta de seguimiento para la Jefatura.",
+        "Material de apoyo: videos, guías, casos aplicados, ejercicios y cuestionarios.",
+        "Certificado digital con folio o QR verificable por participante aprobado.",
+        "Informe final en 5 días hábiles y aplicación de la encuesta de satisfacción."
+      ],
+      "logistica": "Servicio a distancia. La ficha del portal consigna San José 1196 y plazo de entrega de 1 día; el TDR no exige presencialidad y deja las fechas por coordinar. No contempla garantías.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Oferta económica dentro del presupuesto referencial de $1.500.000, indicando qué incluye el valor",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Programa del curso ofertado: módulos, contenidos, actividades prácticas, metodología, duración y distribución sincrónica/asincrónica (criterio que pesa 40% de la evaluación)",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Declaración de cumplimiento de las especificaciones técnicas del TDR, punto por punto (criterio que pesa 30%)",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Identificación del docente o relator responsable de impartir la capacitación",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Currículum vítae actualizado del docente o relator",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Antecedentes que acrediten experiencia comprobable en uso avanzado de Power BI y experiencia previa como docente o relator en análisis de datos, inteligencia de negocios y visualización",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "puntaje",
+        "detalle": [
+          "La ficha del portal declara la ponderación: «SE DEBE CONSIDERAR QUE SE EVALUARA: 30% PRECIO, 30% CUMPLIMIENTO EETT, 40% PROGRAMA DE CURSO OFERTADO».",
+          "El criterio de mayor peso —el programa del curso ofertado, 40%— no tiene pauta publicada: ni la ficha ni el TDR dicen cómo se puntúa ni qué se premia dentro de ese 40%.",
+          "El precio pesa 30%: es de las pocas compras fichadas del nicho donde cotizar más bajo sí mueve puntaje de manera relevante.",
+          "El presupuesto de la ficha está declarado como *Estimado*, no como *Disponible*; el TDR lo llama «Presupuesto Referencial». La oferta se mantiene igualmente bajo el tope."
+        ]
+      },
+      "multas": "Ni el TDR ni la ficha establecen multas, garantías ni causales de término anticipado. La ficha marca «multa/sanción» en su resumen sin desarrollar cláusula alguna en los adjuntos.",
+      "pago": "El TDR no declara forma ni plazo de pago. Fija el informe final del oferente dentro de 5 días hábiles posteriores al término del curso.",
+      "criterios_direccionadores": [
+        {
+          "id": "programa-del-curso-40-por-ciento-sin-pauta",
+          "exige": "Conocer cómo se puntúa el criterio de mayor peso. El «PROGRAMA DE CURSO OFERTADO» vale 40% de la evaluación y ningún documento publica su pauta: no se sabe si premia extensión, profundidad, actividades prácticas o alineamiento con el temario, y de eso depende cómo se construye la propuesta técnica.",
+          "cita": "Ficha Compra Ágil 1549-3882-COT26, descripción — «SE DEBE CONSIDERAR QUE SE EVALUARA: 30% PRECIO, 30% CUMPLIMIENTO EETT, 40% PROGRAMA DE CURSO OFERTADO». El TDR adjunto no contiene apartado de criterios de evaluación.",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "plataforma-lms-con-cuenta-de-jefatura",
+          "exige": "Disponer de una plataforma LMS propia compatible con Windows, macOS, Android, iOS y navegadores habituales, con contenidos descargables, registro individual de avance, evaluaciones en línea con retroalimentación, canal de soporte técnico, reportes periódicos de seguimiento y una cuenta adicional para la Jefatura de Capacitación. Es infraestructura de operación continua, no una sala de videoconferencia.",
+          "cita": "TDR, numeral 6.1 Plataforma Virtual — «La Jefatura de Capacitación deberá contar con una cuenta adicional para revisión del material, monitoreo y seguimiento del proceso formativo», más «Acceso a contenidos descargables…», «Registro individual de avance académico», «Evaluaciones en línea con retroalimentación», «Canal de soporte técnico» y «Reportes periódicos de seguimiento académico para la Unidad de Capacitación».",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "certificado-con-folio-o-qr-verificable",
+          "exige": "Emitir certificados digitales con firma institucional válida y código QR, folio verificable o validación digital. Exige un mecanismo de verificación de certificados, no solo un PDF con el nombre del participante.",
+          "cita": "TDR, numeral 7.3 Certificación — el certificado «deberá indicar: Nombre de la entidad capacitadora… Horas pedagógicas cursadas. Firma institucional válida. Código QR, folio verificable o validación digital».",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "relator-con-power-bi-avanzado-comprobable",
+          "exige": "Designar un relator/a con experiencia comprobable en uso avanzado de Power BI —Power Query, modelamiento, DAX y Power BI Services— y experiencia previa como docente o relator en análisis de datos y visualización, adjuntando su currículum vítae actualizado.",
+          "cita": "TDR, numeral 4 Perfil del docente o relator — «El oferente deberá identificar al docente o relator responsable de impartir la capacitación, adjuntando currículum vitae actualizado», y el relator «deberá acreditar: … Experiencia comprobable en uso avanzado de Microsoft Power BI… Experiencia previa como docente o relator en herramientas de análisis, inteligencia de negocios y visualización de datos».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "titulo-relator-disciplina-afin",
+          "exige": "Acreditar formación profesional o técnica del relator/a en informática, ingeniería, análisis de datos, inteligencia de negocios, tecnologías de la información o disciplinas afines.",
+          "cita": "TDR, numeral 4 Perfil del docente o relator — «Formación profesional o técnica en informática, ingeniería, análisis de datos, inteligencia de negocios, tecnologías de la información o disciplinas afines».",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "regimen-tributario-no-declarado",
+          "exige": "Determinar si el presupuesto de $1.500.000 es neto o con impuestos incluidos. El TDR lo llama «monto estimado total» y enumera lo que el valor incluye sin nombrar impuestos; la ficha del portal declara el presupuesto como *Estimado*. Con IVA, el 90% del tope ($1.350.000) llega a $1.606.500 y excede el monto de referencia.",
+          "cita": "TDR, numeral 12 Presupuesto Referencial — «Monto estimado total: $1.500.000.- Valor incluye: Uso de plataforma virtual LMS. Relatoría especializada… Informe final de ejecución». Ficha Compra Ágil — «tipo_presupuesto: Estimado».",
+          "tipo": "tributario",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "plazo-de-entrega-de-1-dia-versus-fecha-por-coordinar",
+          "exige": "Resolver qué significa el plazo de entrega de 1 día que fija la ficha del portal para un curso de 24 horas pedagógicas cuya fecha de ejecución el TDR deja por coordinar. De eso depende cuándo debe estar operativa la plataforma y cuándo parte la ejecución.",
+          "cita": "Ficha Compra Ágil — «plazo_entrega_dias: 1». TDR, numeral 11 Fecha de Ejecución — «La fecha de ejecución será coordinada entre la Unidad de Capacitación del Hospital San José y el oferente adjudicado, considerando disponibilidad institucional, continuidad operativa y planificación del proceso formativo».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "587-165-COT26": {
+      "curso": "Herramientas de Power BI para el análisis de datos",
+      "organismo_corto": "MINVU",
+      "organismo_nombre": "Subsecretaría del Ministerio de Vivienda y Urbanismo (MINVU)",
+      "fuente_documentos": [
+        "REQUERIMIENTOS TECNICOS.pdf (Solicitud de Cotización, Santiago, 10 de septiembre de 2026)"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«El presupuesto disponible para esta contratación es de $5.800.000.- (Cinco millones ochocientos mil pesos), e incluye impuestos y cualquier otro gasto asociado a la oferta. Las ofertas que excedan dicho presupuesto serán declaradas inadmisibles» — numeral 3, Presupuesto Disponible."
+      },
+      "objetivo": "Desarrollar las competencias necesarias para que 26 funcionarios/as del MINVU utilicen Power BI como herramienta de análisis de datos, permitiéndoles importar, transformar, modelar y visualizar información de manera interactiva, con el fin de generar reportes y dashboards que faciliten la toma de decisiones basadas en datos.",
+      "participantes": {
+        "maximo": 26,
+        "glosa": "26 funcionarios/as de la Subsecretaría del MINVU, en el marco del Plan Anual de Capacitación 2026."
+      },
+      "duracion": {
+        "horas_cronologicas": 24,
+        "sesiones": 6,
+        "horas_por_sesion": 4,
+        "glosa": "24 horas cronológicas en seis sesiones de 4 horas, como exige el numeral 4. Las prácticas asincrónicas se cuentan dentro de esas 24 horas."
+      },
+      "modalidad": {
+        "tipo": "Online sincrónica, complementada con actividades prácticas asincrónicas",
+        "plataforma": "Zoom, Google Meet o Microsoft Teams, a elección del MINVU, con grabación de las sesiones y repositorio del material.",
+        "horario": "A acordar con la Contraparte Técnica del MINVU y formalizar mediante acta suscrita por ambas partes."
+      },
+      "fechas_ejecucion": "Durante 2026, idealmente entre octubre y noviembre. Las fechas definitivas se acuerdan con el proveedor adjudicado y se formalizan mediante acta suscrita por el proveedor y la Contraparte Técnica del MINVU (numeral 5).",
+      "contenidos_sugeridos_por_el_organismo": true,
+      "modulos": [
+        {
+          "titulo": "Arquitectura y entorno de trabajo en Inteligencia de Negocios (BI)",
+          "horas": 4,
+          "temas": [
+            "Qué es la inteligencia de negocios y para qué sirve en la gestión pública",
+            "Arquitectura general de Power BI: Desktop, Service y Mobile",
+            "Recorrido por el entorno de trabajo y el flujo analítico completo",
+            "Ejercicio práctico guiado de reconocimiento del entorno"
+          ]
+        },
+        {
+          "titulo": "Extracción y carga de datos con Power BI",
+          "horas": 4,
+          "temas": [
+            "Conexión a múltiples orígenes: Excel, CSV, bases de datos y servicios web",
+            "Modos de conexión: importación y consulta directa",
+            "Actualización de datos y buenas prácticas de carga",
+            "Ejercicio práctico con bases de datos de ejemplo"
+          ]
+        },
+        {
+          "titulo": "Modelado de datos",
+          "horas": 4,
+          "temas": [
+            "Diseño de relaciones entre tablas e integridad relacional",
+            "Esquema estrella y modelos eficientes para análisis",
+            "Jerarquías, tablas de calendario y optimización del modelo",
+            "Ejercicio práctico de construcción de un modelo aplicado"
+          ]
+        },
+        {
+          "titulo": "Transformación de datos",
+          "horas": 4,
+          "temas": [
+            "Power Query: limpieza, normalización y tipificación de datos",
+            "Combinación y anexado de consultas; columnas personalizadas",
+            "Pasos aplicados, reproducibilidad y control de errores",
+            "Ejercicio práctico de consolidación de fuentes"
+          ]
+        },
+        {
+          "titulo": "Cálculos con DAX (Data Analysis Expressions)",
+          "horas": 4,
+          "temas": [
+            "Columnas calculadas y medidas: cuándo usar cada una",
+            "Funciones de agregación, filtro y contexto de evaluación",
+            "Inteligencia temporal e indicadores de gestión",
+            "Ejercicio práctico de construcción de medidas"
+          ]
+        },
+        {
+          "titulo": "Creación de informes y dashboards con Power BI",
+          "horas": 4,
+          "temas": [
+            "Principios de visualización efectiva y elección de gráficos",
+            "Segmentadores, filtros e interacciones entre objetos visuales",
+            "Publicación, compartición y actualización de informes",
+            "Ejercicio integrador: dashboard aplicado al trabajo del MINVU"
+          ]
+        }
+      ],
+      "modulos_nota": "Los seis módulos corresponden uno a uno a los contenidos mínimos del numeral 4 del requerimiento técnico, en el mismo orden. La numeración del propio documento llega hasta 5 pero su punto 5 contiene dos contenidos («Realizar cálculos con DAX… Crear informes y Dashboards con Power BI»), que acá se separan en dos módulos para respetar ambos. El reparto de 4 horas por módulo es propuesta de KeepSync y calza con las sesiones de 4 horas que exige el mismo numeral; los temas de cada módulo también son propuesta de KeepSync sobre el contenido mínimo enunciado.",
+      "requisitos_metodologicos": [
+        "Sesiones sincrónicas por videoconferencia (Zoom, Meet o Teams), con prácticas asincrónicas dentro de las 24 horas cronológicas.",
+        "Material complementario: presentaciones, material de estudio, ejercicios y las bases de datos de ejemplo de las actividades prácticas.",
+        "Grabación de todas las sesiones, disponible para revisión posterior de los participantes.",
+        "Programa o temario con objetivos, contenidos, actividades propuestas y su duración."
+      ],
+      "exigencias_adicionales": [
+        "Estar inscrito y hábil en el Registro de Proveedores (numeral 2).",
+        "Detallar en la cotización cada característica mínima del numeral 4: omitirlas la hace inadmisible.",
+        "Individualizar al o los relatores con nombre y apellidos completos.",
+        "Diploma por asistente e informe de asistencia a la Contraparte Técnica.",
+        "Pacto de Integridad del numeral 9, incluido el cumplimiento de la Ley N° 21.643."
+      ],
+      "relator_exigido": {
+        "formacion": "Título profesional o técnico de nivel superior de institución reconocida por el Estado, acreditado con la oferta.",
+        "experiencia_laboral": "Certificación vigente obtenida desde 2023 en Power BI, análisis de datos, Azure para datos o SQL. No sirven certificados de cursos.",
+        "experiencia_relatoria": "Relatorías en Power BI desde 2021, finalizadas al cierre y acreditadas con certificados, contratos, facturas o boletas. Nueve o más dan el puntaje máximo."
+      },
+      "entregables": [
+        "24 horas cronológicas online sincrónicas, en seis sesiones de 4 horas, para 26 funcionarios/as.",
+        "Programa o temario con objetivos, contenidos, actividades y su duración.",
+        "Material complementario: presentaciones, material de estudio, ejercicios y bases de datos de ejemplo.",
+        "Grabaciones de todas las sesiones, disponibles para revisión posterior.",
+        "Diploma por asistente e informe de asistencia a la Contraparte Técnica."
+      ],
+      "logistica": "Servicio online. Contraparte técnica: Joaquina Rojas Vergara (titular) y Ángela Bravo Jara (suplente). La ficha consigna plazo de entrega de 60 días. Sin garantías; con multas por atraso.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Cotización con el detalle de cada una de las características mínimas del numeral 4 (su omisión hace la oferta inadmisible), por un monto igual o inferior a $5.800.000 con impuestos incluidos",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Programa o temario del curso con objetivos, contenidos, actividades propuestas y duración",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Individualización del o los relatores con nombre y apellidos completos",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Certificado de título, copia del título profesional o certificado de profesionales del Registro Civil del o los relatores",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados o credenciales vigentes del o los relatores, obtenidos desde 2023, en Power BI, análisis de datos, Azure orientado a análisis de datos o SQL (criterio que pesa 55%)",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados, contratos, facturas o boletas de honorarios que acrediten relatorías en Power BI ejecutadas desde 2021 (criterio que pesa 35%)",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "puntaje",
+        "detalle": [
+          "Certificación del relator/a 55%, Experiencia del relator/a 35%, Precio 10%. «Se seleccionará al proveedor que obtenga el mayor puntaje, no siendo necesariamente aquel que oferte el menor precio, en atención a la especificidad del curso solicitado».",
+          "La certificación es binaria: «Sí Cumple 100 puntos / No Cumple 0 puntos». Si alguno de los relatores propuestos no acredita una certificación vigente de las materias exigidas, la oferta obtiene 0 puntos en el criterio que pesa 55%.",
+          "La experiencia se puntúa por tramos de relatorías acreditadas: 9,0 o más = 100; 6,0 a 8,9 = 75; 3,0 a 5,9 = 40; 1,0 a 2,9 = 10; 0,0 a 0,9 = 0.",
+          "Precio: «Puntaje criterio precio = [(precio mínimo ofertado / precio de la oferta a evaluar) * 100]», ponderado por 0,10.",
+          "Empates: se desempata por el criterio de mayor puntaje en el orden Certificación del relator/a, Experiencia del relator/a y, en último lugar, Precio."
+        ]
+      },
+      "multas": "Multa de 4% del monto del pago total de la contratación, sin impuestos, por cada día de atraso en la ejecución del servicio, con tope de 20% del monto total de la contratación. El proveedor tiene 2 días hábiles para presentar descargos por correo electrónico ante la Contraparte Técnica.",
+      "pago": "El requerimiento no declara forma ni plazo de pago. Establece que el monto de las multas se rebaja del pago que la entidad debe efectuar en los estados de pago más próximos. El plazo de entrega de la ficha del portal es de 60 días.",
+      "criterios_direccionadores": [
+        {
+          "id": "certificacion-vigente-del-relator-55-por-ciento-binaria",
+          "exige": "Acreditar, con certificado o credencial vigente a la fecha de cierre, una certificación obtenida desde 2023 en Power BI, análisis de datos, Azure orientado a análisis de datos o SQL —tipo Microsoft Certified: Power BI Data Analyst Associate—. Es el criterio de mayor peso (55%) y es binario: sin ella la oferta obtiene 0 puntos en más de la mitad de la evaluación. La emite un tercero y no se sustituye con certificados de cursos.",
+          "cita": "Numeral 6, letra a) Certificación del relator/a (55%) — «Se evaluará que el o los relatores identificados expresamente en la oferta cuenten con certificaciones obtenidas desde el año 2023 en adelante, vigentes… No se considerarán certificados de asistencia, participación o aprobación de cursos de capacitación… Si alguno de los relatores propuestos no acredita una certificación con los antecedentes requeridos, la oferta obtendrá 0 puntos en este criterio».",
+          "tipo": "certificacion",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "nueve-relatorias-de-power-bi-acreditadas",
+          "exige": "Acreditar 9 o más relatorías de cursos o capacitaciones en Power BI —solo esa materia— finalizadas a la fecha de cierre y ejecutadas desde 2021, con certificados, contratos, facturas o boletas de honorarios. Sin medios de verificación el puntaje es 0 en un criterio que pesa 35%.",
+          "cita": "Numeral 6, letra b) Experiencia del relator/a (35%) — «otras áreas temáticas distintas a la señalada no serán consideradas… Para acreditar la experiencia, el oferente deberá adjuntar certificados, contratos, facturas o boletas de honorarios… En caso de no presentar estos medios de verificación, se les asignará un puntaje igual a 0 puntos»; tabla de puntaje: «9,0 o más — 100 puntos».",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "titulo-del-relator-acreditado-con-documento",
+          "exige": "Presentar junto con la oferta el certificado de título, copia del título profesional o certificado de profesionales del Registro Civil del o los relatores, con título profesional o técnico de nivel superior de institución reconocida por el Estado. Lo emite un tercero.",
+          "cita": "Numeral 4, Relator/es — «deberá/n contar con título profesional o técnico de nivel superior otorgado por una institución reconocida por el Estado. Esta condición deberá acreditarse mediante la presentación, junto con la oferta, de al menos uno de los siguientes documentos: certificado de título, copia del título profesional o certificado de profesionales emitido por el Servicio de Registro Civil e Identificación».",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "precio-pesa-solo-10-por-ciento",
+          "exige": "Asumir que el precio casi no mueve la adjudicación: pesa 10% y también es el último criterio de desempate. El 90% del puntaje se decide por credenciales del relator/a, que emite un tercero. Cotizar más barato no compensa la falta de certificación ni de relatorías acreditadas, y de eso depende si conviene invertir en esta oferta.",
+          "cita": "Numeral 6 — cuadro de criterios: «Certificación del relator/a 55%; Experiencia del relator/a 35%; Precio 10%», y letra d) Resolución en caso de empates — orden de prelación «I. Certificación del relator/a. II. Experiencia del relator/a. III. Precio».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "registro-de-proveedores-habilitado",
+          "exige": "Estar inscrito y hábil en el Registro de Proveedores de la Dirección de Compras y Contratación Pública al participar del proceso.",
+          "cita": "Numeral 2, Registro Proveedores — «Los proponentes que deseen participar del presente proceso de Compra Ágil, deberán estar inscritos en el Registro de Proveedores a cargo de la Dirección de Compras y Contratación Pública y encontrarse habilitados».",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "detalle-obligatorio-de-caracteristicas-minimas",
+          "exige": "Mencionar expresamente en la cotización cada una de las características mínimas del numeral 4 —nombre del curso, 24 horas cronológicas en sesiones de 4 horas, programa, modalidad y plataformas, 26 participantes, relatores individualizados, diplomas—. Omitir cualquiera de ellas es causal declarada de inadmisibilidad, antes de toda evaluación.",
+          "cita": "Numeral 4, Características mínimas del servicio — «La oferta debe dar cumplimiento a cada una de las características establecidas en el presente punto N° 4, las cuales deben ser mencionadas claramente en la cotización, en caso de no detallarse estas características, la oferta será declarada inadmisible».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "multa-de-4-por-ciento-diario",
+          "exige": "Evaluar la exposición a multas antes de comprometer fechas: 4% del pago total sin impuestos por cada día de atraso, con tope de 20% del monto total, sobre un curso cuyas fechas definitivas se acuerdan después de la adjudicación y se formalizan por acta.",
+          "cita": "Numeral 8.1, letra a — «En caso de atraso en la ejecución del servicio, se aplicará una multa equivalente al 4% del monto del pago total de la contratación, sin impuestos, por cada día de atraso… el monto total de las multas cobradas durante la vigencia de la contratación no podrá superar el 20% del monto total de la contratación».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        }
+      ]
+    },
+    "3267-47-COT26": {
+      "curso": "Uso de inteligencia artificial y herramientas digitales para la diversificación de la enseñanza",
+      "organismo_corto": "Municipalidad de Río Hurtado",
+      "organismo_nombre": "Ilustre Municipalidad de Río Hurtado — Departamento de Educación, Programa de Integración Escolar (PIE)",
+      "fuente_documentos": [
+        "Terminos de Referencia y Acta de Evaluación.pdf",
+        "Solicitud-de-Capacitacion-PIE-2026.pdf"
+      ],
+      "tributacion": {
+        "regimen": "no_declarado",
+        "cita": "El TDR declara «PRESUPUESTO DISPONIBLE: $1.500.000 (Un millón quinientos mil)» y la solicitud «Monto proyectado: 1.500.000», sin decir si incluye impuestos. El acta de evaluación, en cambio, compara a los oferentes por «PRECIO NETO» en su cuadro del criterio económico: los dos documentos no usan la misma base."
+      },
+      "objetivo": "Desarrollar una capacitación práctica, lúdica y participativa dirigida a 31 profesionales del Programa de Integración Escolar de Río Hurtado, orientada al uso de inteligencia artificial, aplicaciones y recursos digitales para planificar, adaptar y elaborar recursos pedagógicos diversificados, favoreciendo la inclusión, participación y aprendizaje de todos los estudiantes, considerando también contextos con conectividad limitada o inexistente.",
+      "participantes": {
+        "maximo": 31,
+        "glosa": "31 profesionales del Programa de Integración Escolar de Río Hurtado: educadores/as diferenciales, psicopedagogos/as, psicólogos/as, fonoaudiólogos/as y equipos de apoyo a la inclusión."
+      },
+      "duracion": {
+        "horas_cronologicas": 4,
+        "sesiones": 1,
+        "horas_por_sesion": 4,
+        "glosa": "4 horas cronológicas en una sola jornada, de 13:30 a 17:30, según fijan el TDR y la solicitud de capacitación."
+      },
+      "modalidad": {
+        "tipo": "Presencial, en una jornada",
+        "plataforma": "Jornada presencial en el Internado de Pichasca. KeepSync aporta los recursos tecnológicos y el material impreso y digital de los participantes.",
+        "horario": "13:30 a 17:30 horas."
+      },
+      "modalidad_observacion": "Los adjuntos declaran dos fechas distintas para la misma jornada: el encabezado del TDR y la ficha del portal dicen 22 de septiembre de 2026, y el cuerpo del TDR y la solicitud de capacitación dicen 24/09/2026. La propuesta se presenta con la fecha por confirmar con el Departamento de Educación y deja constancia de la diferencia.",
+      "fechas_ejecucion": "Una jornada de 13:30 a 17:30 horas en el Internado de Pichasca. La fecha exacta está por confirmar: los adjuntos consignan 22/09/2026 y 24/09/2026 en distintos apartados.",
+      "contenidos_sugeridos_por_el_organismo": true,
+      "modulos": [
+        {
+          "titulo": "Inteligencia artificial aplicada al trabajo PIE",
+          "horas": 1.5,
+          "temas": [
+            "Conceptos básicos y usos de la inteligencia artificial en educación",
+            "Uso de IA para planificación y adaptación de textos, instrucciones y actividades",
+            "Elaboración de instrucciones para obtener mejores resultados de la IA",
+            "Uso responsable y protección de datos",
+            "Actividades prácticas y lúdicas con situaciones reales del trabajo PIE"
+          ]
+        },
+        {
+          "titulo": "Creación y adaptación de recursos con inteligencia artificial",
+          "horas": 1.5,
+          "temas": [
+            "Creación de actividades diversificadas",
+            "Adaptación y simplificación de textos e instrucciones",
+            "Elaboración de apoyos visuales y material educativo",
+            "Adaptación de recursos según diferentes necesidades educativas y uso de aplicaciones complementarias",
+            "Actividad práctica: elaboración de un recurso pedagógico concreto"
+          ]
+        },
+        {
+          "titulo": "Aplicaciones digitales y baja conectividad",
+          "horas": 0.75,
+          "temas": [
+            "Aplicaciones para crear recursos visuales, actividades y material educativo",
+            "Recursos para favorecer la comprensión, participación y autonomía",
+            "Uso de aplicaciones y materiales previamente descargados",
+            "Preparación anticipada de recursos con IA para su uso sin Internet",
+            "Estrategias para establecimientos con conectividad limitada o inexistente, con actividad práctica de aplicación"
+          ]
+        },
+        {
+          "titulo": "Cierre",
+          "horas": 0.25,
+          "temas": [
+            "Reflexión y resolución de dudas",
+            "Socialización de los recursos elaborados durante la jornada"
+          ]
+        }
+      ],
+      "modulos_nota": "Los tres módulos y el cierre son los que el propio TDR lista en su apartado «Temas», con sus contenidos en el mismo orden. El reparto de horas dentro de la jornada de 4 horas es propuesta de KeepSync —el TDR fija el total y no las horas de cada módulo— y suma exactamente las 4 horas comprometidas.",
+      "requisitos_metodologicos": [
+        "Capacitación práctica, lúdica, dinámica y participativa, bajo el principio de «aprender haciendo».",
+        "Trabajo colaborativo y resolución de situaciones del trabajo PIE, no exposición teórica.",
+        "Exploración directa de las herramientas por parte de los participantes.",
+        "Herramientas aplicables al trabajo PIE, con estrategias para baja o nula conectividad."
+      ],
+      "exigencias_adicionales": [
+        "Coffee break para los 31 participantes en la jornada.",
+        "Materiales y recursos tecnológicos de apoyo físico para el desarrollo de la capacitación.",
+        "Set impreso por participante: presentación de la capacitación, cuaderno o bloc de notas y lápiz.",
+        "Material de apoyo digital con herramientas, orientaciones, ejemplos de instrucciones para usar IA y recursos.",
+        "Certificado por participante, fotografías y lista de implementación, y cantidad de personas que cubren el servicio."
+      ],
+      "relator_exigido": {
+        "formacion": "El TDR no exige título, grado ni disciplina del relator/a: pide presentar el «PERFIL DE LOS RELATORES» como parte del plan de trabajo, sin fijar requisitos mínimos ni medios de verificación.",
+        "experiencia_laboral": "El TDR no exige experiencia profesional acreditada del relator/a. Lo que sí puntúa (20%) es la experiencia del oferente en trabajos similares, no la del relator/a.",
+        "experiencia_relatoria": "El TDR no exige experiencia previa en relatoría del relator/a ni establece tramos de puntaje para ella."
+      },
+      "entregables": [
+        "4 horas cronológicas presenciales en el Internado de Pichasca para 31 profesionales PIE.",
+        "Plan de trabajo con carta Gantt, metodología, contenido y perfil de los relatores.",
+        "Set de material impreso por participante y material de apoyo digital.",
+        "Coffee break para los 31 participantes y recursos tecnológicos de apoyo.",
+        "Certificado de participación para cada asistente."
+      ],
+      "logistica": "Actividad presencial en el Internado de Pichasca, Río Hurtado, Región de Coquimbo. La ficha consigna Samo Alto S/N y plazo de entrega de 5 días. Financiamiento FAEP 2025. Sin garantías ni multas.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Plan de trabajo y características del servicio, con descripción de los productos y servicios ofrecidos (su omisión es causal declarada de inadmisibilidad)",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Carta Gantt de la actividad",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Metodología de trabajo",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Contenido de la capacitación a ofertar",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Perfil de los relatores y cantidad de personas para cubrir el servicio",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Oferta económica dentro del presupuesto disponible de $1.500.000",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Fotografías y lista de implementación a utilizar en la actividad",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Contratos, órdenes de compra con recepción conforme, facturas firmadas y timbradas o certificados que acrediten experiencia en trabajos similares (criterio que pesa 20%)",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "puntaje",
+        "detalle": [
+          "Oferta económica 25%, Especificaciones técnicas 45%, Proveedor local 10%, Experiencia del oferente 20%.",
+          "Oferta económica: «Puntaje Monto Oferta = 100* (Oferta menor / Oferta a evaluar)». «Quien no informe alguno de los valores quedara automáticamente fuera de Evaluación».",
+          "Especificaciones técnicas: se puntúa el plan de trabajo en cuatro tramos (100 si «supera las expectativas… es innovador o se aprecia absolutamente atractivo», 75, 50 y 25), y «No cumple con las especificaciones técnicas, falta un producto del listado, no informa en ningún formulario, quedara Fuera de bases». Los tramos son cualitativos y no definen qué separa a uno del siguiente.",
+          "Proveedor local: 100 puntos para «Empresa o persona que tiene su domicilio o actividad dentro de la región en la que se ubica el organismo público que realiza la compra» y 40 para «Otras Regiones».",
+          "Experiencia del oferente: 10 o más trabajos similares = 100 puntos; entre 9 y 4 = 50 puntos; no acredita = 0 puntos.",
+          "«La no presentación de la información y/o documentación solicitada será causal de inadmisibilidad, por lo que la propuesta no pasará a la etapa de evaluación»."
+        ]
+      },
+      "multas": "El TDR no establece multas, garantías ni causales de término anticipado.",
+      "pago": "El TDR no declara forma ni plazo de pago. El financiamiento proviene del FAEP 2025 y el plazo de entrega de la ficha del portal es de 5 días.",
+      "criterios_direccionadores": [
+        {
+          "id": "proveedor-con-domicilio-en-la-region-de-coquimbo",
+          "exige": "Tener domicilio o actividad en la Región de Coquimbo para obtener los 100 puntos del criterio que pesa 10%. Un oferente de otra región parte con 40 de 100 en ese criterio, sin nada que pueda hacer al respecto en esta oferta. Falta confirmar el domicilio con que KeepSync está inscrita en el Registro de Proveedores.",
+          "cita": "Acta de Evaluación, (C) Proveedor Locales / Ponderación 10% — «Empresa o persona que tiene su domicilio o actividad dentro de la región en la que se ubica el organismo público que realiza la compra. 100 / Otras Regiones 40».",
+          "tipo": "identidad",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "diez-trabajos-similares-acreditados",
+          "exige": "Acreditar 10 o más trabajos similares con contratos, órdenes de compra con recepción conforme, facturas firmadas y timbradas o certificados para obtener los 100 puntos del criterio que pesa 20%. Entre 9 y 4 trabajos el puntaje cae a la mitad y sin acreditación es 0. Los documentos los emite un tercero.",
+          "cita": "Acta de Evaluación, (D) Experiencia del Oferente / Ponderación 20% — «Corresponde a la experiencia comprobable de los oferentes en Trabajos Similares a través de documentos tales como: Contratos debidamente otorgados, Órdenes de compra con Recepción conforme, Facturas debidamente firmadas y timbradas, Certificados, etc.» y la tabla «Experiencia entre 10 o más Trabajos similares 100 Puntos / Experiencia entre 9 y 4 Trabajos similares 50 Puntos / No Acredita experiencia. 0 Puntos».",
+          "tipo": "historial_portal",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "logistica-presencial-en-pichasca",
+          "exige": "Ejecutar una jornada presencial de 4 horas en el Internado de Pichasca, comuna de Río Hurtado (Región de Coquimbo), llevando coffee break para 31 personas, los recursos tecnológicos de apoyo y un set impreso por participante (presentación impresa, cuaderno y lápiz). Es logística en terreno, a más de 400 km de Santiago, que compite por el mismo tope de $1.500.000 que cubre la relatoría.",
+          "cita": "TDR — «FECHA, HORA Y LUGAR DE LA ACTIVIDAD: … lugar del encuentro Internado de Pichasca y hora a las 13:30 hrs., en la Comuna de Río Hurtado»; y Consideraciones especiales — «1 servicio de coffee break para los participantes. Materiales y recursos tecnológicos necesarios para el desarrollo del taller… Entrega a cada participante de un set de material de apoyo para la jornada, que incluya, al menos: Diapositivas o presentación de la capacitación impresas… Cuaderno, libreta o bloc de notas… Lápiz o lapicera».",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "fecha-de-la-jornada-contradictoria",
+          "exige": "Confirmar la fecha de la jornada antes de comprometer la logística presencial. Los adjuntos declaran dos fechas distintas para la misma actividad: 22 de septiembre en el encabezado del TDR y en la ficha del portal, y 24/09/2026 en el cuerpo del TDR y en la solicitud de capacitación.",
+          "cita": "TDR, encabezado — «A realizarse el día 22 de Septiembre de 2026, lugar del encuentro Internado de Pichasca y hora a las 13:30 hrs.»; TDR, cuerpo y Solicitud de capacitación — «Fecha de desarrollo: 24/09/2026»; ficha del portal — «** Fecha 22/09/2026 y hora 13:30 - duración 4 horas».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "fotografias-y-lista-de-implementacion",
+          "exige": "Presentar «Fotografías y Lista de Implementación para utilizar en la Actividad» como parte de la oferta, cuya no presentación es causal declarada de inadmisibilidad. El TDR no dice qué debe fotografiarse —implementación propia, actividades anteriores, materiales—, y un oferente sin registro fotográfico de actividades previas no sabe qué adjuntar.",
+          "cita": "TDR, Documentos para presentar en oferta — «- Fotografías y Lista de Implementación para utilizar en la Actividad»; y «*** La no presentación de la información y/o documentación solicitada será causal de inadmisibilidad, por lo que la propuesta no pasará a la etapa de evaluación».",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "plan-de-trabajo-evaluado-por-tramos-cualitativos",
+          "exige": "Conocer qué separa un plan de trabajo de 100 puntos de uno de 75 o 50 en el criterio que pesa 45%. Los tramos se describen con adjetivos —«supera las expectativas», «innovador», «absolutamente atractivo», «razonable atractivo»— sin ningún parámetro verificable, y el propio cuadro se refiere a la coherencia «con el evento celebrado» y a un «Anexo A» que los adjuntos no incluyen.",
+          "cita": "Acta de Evaluación, (B) Especificaciones Técnicas / Ponderación 45% — «Presenta un Plan de Trabajo para ejecutar el servicio que supera las expectativas y que es totalmente coherente en términos de sus actividades con el evento celebrado, es innovador o se aprecia absolutamente atractivo. 100»; y el tramo de 25 puntos, que remite a un plan «que no se ajusta a los requerimientos descritos en el Anexo A», anexo que no viene entre los documentos publicados.",
+          "tipo": "alcance",
+          "estado": "sin_informacion"
+        },
+        {
+          "id": "presupuesto-disponible-versus-precio-neto",
+          "exige": "Determinar si el tope de $1.500.000 es neto o con impuestos incluidos. El TDR lo declara como «presupuesto disponible» y la solicitud como «monto proyectado», sin nombrar impuestos, mientras el acta de evaluación compara a los oferentes por «PRECIO NETO». Con IVA, el 90% del tope ($1.350.000) llega a $1.606.500 y excede el presupuesto declarado.",
+          "cita": "TDR — «PRESUPUESTO DISPONIBLE: $1.500.000 (Un millón quinientos mil)»; Solicitud de capacitación — «Monto proyectado: 1.500.000»; Acta de Evaluación, (A) Oferta Económica — cuadro «Precio Comparativo — RUT / OFERENTE / PRECIO NETO / %».",
+          "tipo": "tributario",
+          "estado": "sin_informacion"
+        }
+      ]
     }
   },
   "_regla_score": "score = 100 − 5 × (criterios con estado \"sin_informacion\"). 100% = la compra no presenta ningún filtro que dirija la adjudicación hacia un proveedor con una característica, capacidad o certificación muy particular. Regla fijada por el usuario el 2026-08-22. Cada criterio declara su cita: nada se penaliza sin evidencia en los adjuntos. Al confirmar uno se cambia su estado a \"cubierto\" con `resuelto_por`, y el score sube sin tocar código.",

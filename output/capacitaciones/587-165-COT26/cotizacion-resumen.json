@@ -1,0 +1,29 @@
+{
+  "codigo": "587-165-COT26",
+  "curso": "Herramientas de Power BI para el análisis de datos",
+  "organismo": "Subsecretaría del Ministerio de Vivienda y Urbanismo (MINVU)",
+  "tope_clp": 5800000,
+  "total_clp": 5220000,
+  "descuento_pct": 10,
+  "regimen_tributario": "impuestos_incluidos",
+  "formula": "90% del presupuesto disponible — regla del usuario, no derivada de costos reales",
+  "criterio_evaluacion_organismo": "puntaje",
+  "archivo_publicable": "Q-20260910-SubsecretariaDelMinisterioDeViviendaYUrbanismoMinv.pdf",
+  "fuente_documentos": [
+    "REQUERIMIENTOS TECNICOS.pdf (Solicitud de Cotización, Santiago, 10 de septiembre de 2026)"
+  ],
+  "requisitos_por_confirmar": 4,
+  "relator": null,
+  "score_apertura_pct": 65,
+  "score_criterios_sin_informacion": 7,
+  "score_criterios_no_cumple": 0,
+  "score_criterios_cubiertos": 0,
+  "_score_nota": "100% = la compra no exige ninguna característica, capacidad o certificación particular que dirija la adjudicación. −5% por cada criterio que hoy no esté resuelto a favor de KeepSync: sea porque falta revisarlo (sin_informacion) o porque ya se revisó y no se cumple (no_cumple). Ver config/capacitaciones.json → criterios_direccionadores.",
+  "pendientes": [
+    "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+    "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+    "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo."
+  ],
+  "apto_para_enviar": false,
+  "_apto_nota": "Siempre false: falta designar relator/a con credenciales verificables, y el precio no sale de un costo real. El envío lo hace un humano, nunca este script."
+}
