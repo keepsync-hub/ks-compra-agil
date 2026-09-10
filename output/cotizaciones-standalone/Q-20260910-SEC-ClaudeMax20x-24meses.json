@@ -1,0 +1,76 @@
+{
+  "id": "Q-20260910-SEC",
+  "titulo": "Claude Max 20x",
+  "cliente": "Superintendencia de Electricidad y Combustibles (SEC)",
+  "fuente_tipo_cambio": "mindicador.cl (dólar observado, 2026-09-10) — verificado con curl; el fetch de Node no sale por el proxy de este entorno",
+  "tipo_cambio_observado": 925.97,
+  "monto_usd_total": 9600,
+  "neto_clp": 12834100,
+  "iva_clp": 2438479,
+  "total_clp": 15272579,
+  "lineas": [
+    {
+      "producto": "Claude Max 20x",
+      "usuarios": 2,
+      "meses": 24,
+      "precio_lista_usd_mes": 200,
+      "fuente_precio_lista": "Precio publicado por Anthropic: USD 200/usuario/mes (plan Max 20x); no hay tarifa anual con descuento para Max",
+      "monto_usd": 9600,
+      "neto_unitario_mensual_clp": 267377,
+      "neto_clp": 12834100,
+      "iva_clp": 2438479,
+      "total_clp": 15272579,
+      "calculo": {
+        "monto_usd": 9600,
+        "tipo_cambio_observado": 925.97,
+        "recargo_tipo_cambio_pct": 5.5,
+        "tipo_cambio_ajustado": 976.9,
+        "costo_clp": 9378224,
+        "impuesto_no_recuperable_pct": 19,
+        "costo_con_impuesto_clp": 11160087,
+        "markup_pct": 15,
+        "precio_cotizacion_clp": 12834100,
+        "iva_venta_pct": 19,
+        "valor_final_clp": 15272579,
+        "pasos": [
+          {
+            "paso": "1. Tipo de cambio ajustado",
+            "descripcion": "Tipo de cambio observado ($925.97) + 5.5%",
+            "valor_clp": 976.9
+          },
+          {
+            "paso": "2. Costo",
+            "descripcion": "USD 9600 × tipo de cambio ajustado",
+            "valor_clp": 9378224
+          },
+          {
+            "paso": "3. Costo con impuesto no recuperable",
+            "descripcion": "Costo + 19% (impuesto que KeepSync no puede recuperar, se trata como costo)",
+            "valor_clp": 11160087
+          },
+          {
+            "paso": "4. Precio de cotización (neto)",
+            "descripcion": "Costo con impuesto + 15% de markup — este es el precio a utilizar en la cotización",
+            "valor_clp": 12834100
+          },
+          {
+            "paso": "5. Valor final (con IVA de venta)",
+            "descripcion": "Precio de cotización + 19% de IVA — valor final a presentar",
+            "valor_clp": 15272579
+          }
+        ]
+      }
+    }
+  ],
+  "oferente": {
+    "razon_social": "KEEPSYNC SPA",
+    "rut": "78.441.121-4",
+    "contacto_email": "cristian.molina@keepsync.ai",
+    "campos_por_confirmar": [
+      "domicilio legal",
+      "representante legal (nombre completo y RUN)",
+      "giro declarado ante el SII"
+    ]
+  },
+  "emitida_en": "2026-09-10T03:46:24.004Z"
+}
