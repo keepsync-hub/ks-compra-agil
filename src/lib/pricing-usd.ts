@@ -1,23 +1,26 @@
 /**
- * Regla de cálculo para cotizaciones cuyo costo base está en USD (fijada por el usuario el
- * 2026-08-28). Es una regla de **negocio**, no ligada a un nicho concreto: hoy no reemplaza la
- * fórmula ya en producción de `cotizarLinea` (`src/lib/pricing.ts`, licencias Claude —
- * tipo de cambio observado sin recargo, markup_pct configurable en company.json, hoy 10%). Antes
- * de usarla para reemplazar esa fórmula, confirmar con el usuario si es una actualización de la
- * misma regla o una regla nueva para otro tipo de costo en USD.
+ * Regla de cálculo para cotizaciones cuyo costo base está en **moneda extranjera** (fijada por el
+ * usuario el 2026-08-28 para USD, extendida al euro el 2026-09-14 con la misma aritmética sobre el
+ * **valor observado** de la moneda). Desde el 2026-08-28 es también la fórmula de producción para
+ * licencias Claude: `cotizarLinea` (`src/lib/pricing.ts`) delega acá.
  *
  * Los cinco pasos, en orden (cada uno se aplica sobre el resultado del anterior):
  *   1. tipo de cambio ajustado = tipo de cambio observado × (1 + 5,5%).
- *   2. costo CLP = monto USD × tipo de cambio ajustado.
+ *   2. costo CLP = monto en moneda extranjera × tipo de cambio ajustado.
  *   3. costo con impuesto = costo CLP × (1 + 19%) — impuesto no recuperable, costo para KeepSync
  *      (no es el IVA de venta: es un impuesto que KeepSync paga y no puede recuperar, así que se
  *      trata como mayor costo antes de calcular el markup).
  *   4. precio de cotización = costo con impuesto × (1 + 15%) — markup sobre el costo ya con el
  *      impuesto no recuperable adentro. Este es el valor NETO a usar en la cotización.
- *   5. valor final = precio de cotización × (1 + 19%) — IVA de venta, para presentar el total al
- *      organismo comprador.
+ *   5. valor final = precio de cotización × (1 + 19%) — IVA de venta, para presentar el total.
  *
- * Es decir: valor_final = monto_usd × tc_observado × 1,055 × 1,19 × 1,15 × 1,19.
+ * Es decir: valor_final = monto × tc_observado × 1,055 × 1,19 × 1,15 × 1,19.
+ *
+ * La regla no depende de **cuál** sea la moneda: lo único que cambia entre el dólar y el euro es el
+ * valor observado que entra en el paso 1 (dólar observado y euro observado son dos series distintas
+ * del Banco Central, las dos publicadas por mindicador.cl). Por eso el cálculo general vive en
+ * `calcularCotizacionMonedaExtranjera` y `calcularCotizacionUsd` es el caso USD de esa misma
+ * función, conservado con el nombre de campo `monto_usd` que ya usan `pricing.ts` y `cotizar-usd`.
  */
 
 export const RECARGO_TIPO_CAMBIO_PCT = 5.5;
@@ -25,14 +28,17 @@ export const IMPUESTO_NO_RECUPERABLE_PCT = 19;
 export const MARKUP_USD_PCT = 15;
 export const IVA_VENTA_PCT = 19;
 
+/** Monedas extranjeras con valor observado publicado que este repo sabe convertir. */
+export type MonedaExtranjera = "USD" | "EUR";
+
 export interface CotizacionUsdPaso {
   paso: string;
   descripcion: string;
   valor_clp: number;
 }
 
-export interface CotizacionUsdResultado {
-  monto_usd: number;
+/** Campos comunes a cualquier moneda: todo lo que sale del tipo de cambio ajustado hacia abajo. */
+interface CotizacionMonedaComun {
   tipo_cambio_observado: number;
   recargo_tipo_cambio_pct: number;
   tipo_cambio_ajustado: number;
@@ -43,33 +49,46 @@ export interface CotizacionUsdResultado {
   /** Precio neto a utilizar en la cotización (antes del IVA de venta). */
   precio_cotizacion_clp: number;
   iva_venta_pct: number;
-  /** Valor final a presentar al organismo comprador (precio de cotización + IVA de venta). */
+  /** Valor final a presentar al cliente (precio de cotización + IVA de venta). */
   valor_final_clp: number;
   pasos: CotizacionUsdPaso[];
 }
 
+export interface CotizacionMonedaResultado extends CotizacionMonedaComun {
+  moneda: MonedaExtranjera;
+  monto_moneda: number;
+}
+
+export interface CotizacionUsdResultado extends CotizacionMonedaComun {
+  monto_usd: number;
+}
+
 /**
- * Aplica la regla de cotización en USD descrita arriba a un monto en dólares, dado el tipo de
- * cambio observado (sin ajustar). No consulta ningún servicio: quien llame decide de dónde sale
- * `tipoCambioObservado` — `obtenerTipoCambioUsdClp` en `src/lib/pricing.ts` ya sabe pedirlo en
- * vivo a mindicador.cl con fallback fijo.
+ * Aplica la regla a un monto en la moneda indicada, dado su **valor observado** (sin ajustar). No
+ * consulta ningún servicio: quien llame decide de dónde sale `tipoCambioObservado`
+ * (`obtenerTipoCambioObservado` en `src/lib/pricing.ts` lo pide en vivo a mindicador.cl).
  */
-export function calcularCotizacionUsd(montoUsd: number, tipoCambioObservado: number): CotizacionUsdResultado {
-  if (!(montoUsd > 0)) {
-    throw new Error(`monto_usd debe ser mayor que 0 (recibido: ${montoUsd})`);
+export function calcularCotizacionMonedaExtranjera(
+  monto: number,
+  tipoCambioObservado: number,
+  moneda: MonedaExtranjera = "USD",
+): CotizacionMonedaResultado {
+  if (!(monto > 0)) {
+    throw new Error(`monto en ${moneda} debe ser mayor que 0 (recibido: ${monto})`);
   }
   if (!(tipoCambioObservado > 0)) {
     throw new Error(`tipo_cambio_observado debe ser mayor que 0 (recibido: ${tipoCambioObservado})`);
   }
 
   const tipoCambioAjustado = tipoCambioObservado * (1 + RECARGO_TIPO_CAMBIO_PCT / 100);
-  const costoClp = montoUsd * tipoCambioAjustado;
+  const costoClp = monto * tipoCambioAjustado;
   const costoConImpuestoClp = costoClp * (1 + IMPUESTO_NO_RECUPERABLE_PCT / 100);
   const precioCotizacionClp = costoConImpuestoClp * (1 + MARKUP_USD_PCT / 100);
   const valorFinalClp = precioCotizacionClp * (1 + IVA_VENTA_PCT / 100);
 
   return {
-    monto_usd: montoUsd,
+    moneda,
+    monto_moneda: monto,
     tipo_cambio_observado: tipoCambioObservado,
     recargo_tipo_cambio_pct: RECARGO_TIPO_CAMBIO_PCT,
     tipo_cambio_ajustado: round2(tipoCambioAjustado),
@@ -88,7 +107,7 @@ export function calcularCotizacionUsd(montoUsd: number, tipoCambioObservado: num
       },
       {
         paso: "2. Costo",
-        descripcion: `USD ${montoUsd} × tipo de cambio ajustado`,
+        descripcion: `${moneda} ${monto} × tipo de cambio ajustado`,
         valor_clp: round0(costoClp),
       },
       {
@@ -108,6 +127,19 @@ export function calcularCotizacionUsd(montoUsd: number, tipoCambioObservado: num
       },
     ],
   };
+}
+
+/**
+ * Caso USD de `calcularCotizacionMonedaExtranjera`, con el campo `monto_usd` que ya consumen
+ * `pricing.ts` (licencias Claude) y el script `cotizar-usd`.
+ */
+export function calcularCotizacionUsd(montoUsd: number, tipoCambioObservado: number): CotizacionUsdResultado {
+  const { moneda: _moneda, monto_moneda, ...resto } = calcularCotizacionMonedaExtranjera(
+    montoUsd,
+    tipoCambioObservado,
+    "USD",
+  );
+  return { monto_usd: monto_moneda, ...resto };
 }
 
 function round0(n: number): number {

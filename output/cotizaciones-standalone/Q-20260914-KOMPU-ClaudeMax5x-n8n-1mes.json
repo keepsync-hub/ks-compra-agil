@@ -1,0 +1,143 @@
+{
+  "id": "Q-20260914-KOMPU",
+  "titulo": "Claude Max 5x y n8n",
+  "cliente": "Kompu.cl",
+  "tipos_cambio": {
+    "USD": {
+      "valor": 940.91,
+      "fuente": "mindicador.cl (dólar observado, 2026-09-14) — verificado con curl; el fetch de Node no sale por el proxy de este entorno"
+    },
+    "EUR": {
+      "valor": 1091.29,
+      "fuente": "mindicador.cl (euro observado, 2026-09-14) — verificado con curl; el fetch de Node no sale por el proxy de este entorno"
+    }
+  },
+  "montos_por_moneda": {
+    "USD": 100,
+    "EUR": 20
+  },
+  "neto_clp": 167357,
+  "iva_clp": 31798,
+  "total_clp": 199155,
+  "lineas": [
+    {
+      "producto": "Claude Max 5x",
+      "usuarios": 1,
+      "meses": 1,
+      "moneda": "USD",
+      "precio_lista_moneda_mes": 100,
+      "fuente_precio_lista": "Precio publicado por Anthropic: USD 100/usuario/mes (plan Max 5x); Anthropic no publica tarifa anual con descuento para Max",
+      "monto_moneda": 100,
+      "neto_unitario_mensual_clp": 135846,
+      "neto_clp": 135846,
+      "iva_clp": 25810,
+      "total_clp": 161656,
+      "calculo": {
+        "moneda": "USD",
+        "monto_moneda": 100,
+        "tipo_cambio_observado": 940.91,
+        "recargo_tipo_cambio_pct": 5.5,
+        "tipo_cambio_ajustado": 992.66,
+        "costo_clp": 99266,
+        "impuesto_no_recuperable_pct": 19,
+        "costo_con_impuesto_clp": 118127,
+        "markup_pct": 15,
+        "precio_cotizacion_clp": 135846,
+        "iva_venta_pct": 19,
+        "valor_final_clp": 161656,
+        "pasos": [
+          {
+            "paso": "1. Tipo de cambio ajustado",
+            "descripcion": "Tipo de cambio observado ($940.91) + 5.5%",
+            "valor_clp": 992.66
+          },
+          {
+            "paso": "2. Costo",
+            "descripcion": "USD 100 × tipo de cambio ajustado",
+            "valor_clp": 99266
+          },
+          {
+            "paso": "3. Costo con impuesto no recuperable",
+            "descripcion": "Costo + 19% (impuesto que KeepSync no puede recuperar, se trata como costo)",
+            "valor_clp": 118127
+          },
+          {
+            "paso": "4. Precio de cotización (neto)",
+            "descripcion": "Costo con impuesto + 15% de markup — este es el precio a utilizar en la cotización",
+            "valor_clp": 135846
+          },
+          {
+            "paso": "5. Valor final (con IVA de venta)",
+            "descripcion": "Precio de cotización + 19% de IVA — valor final a presentar",
+            "valor_clp": 161656
+          }
+        ]
+      }
+    },
+    {
+      "producto": "n8n",
+      "usuarios": 1,
+      "meses": 1,
+      "moneda": "EUR",
+      "precio_lista_moneda_mes": 20,
+      "fuente_precio_lista": "Precio indicado por el usuario: EUR 20/mes",
+      "monto_moneda": 20,
+      "neto_unitario_mensual_clp": 31511,
+      "neto_clp": 31511,
+      "iva_clp": 5988,
+      "total_clp": 37499,
+      "calculo": {
+        "moneda": "EUR",
+        "monto_moneda": 20,
+        "tipo_cambio_observado": 1091.29,
+        "recargo_tipo_cambio_pct": 5.5,
+        "tipo_cambio_ajustado": 1151.31,
+        "costo_clp": 23026,
+        "impuesto_no_recuperable_pct": 19,
+        "costo_con_impuesto_clp": 27401,
+        "markup_pct": 15,
+        "precio_cotizacion_clp": 31511,
+        "iva_venta_pct": 19,
+        "valor_final_clp": 37499,
+        "pasos": [
+          {
+            "paso": "1. Tipo de cambio ajustado",
+            "descripcion": "Tipo de cambio observado ($1091.29) + 5.5%",
+            "valor_clp": 1151.31
+          },
+          {
+            "paso": "2. Costo",
+            "descripcion": "EUR 20 × tipo de cambio ajustado",
+            "valor_clp": 23026
+          },
+          {
+            "paso": "3. Costo con impuesto no recuperable",
+            "descripcion": "Costo + 19% (impuesto que KeepSync no puede recuperar, se trata como costo)",
+            "valor_clp": 27401
+          },
+          {
+            "paso": "4. Precio de cotización (neto)",
+            "descripcion": "Costo con impuesto + 15% de markup — este es el precio a utilizar en la cotización",
+            "valor_clp": 31511
+          },
+          {
+            "paso": "5. Valor final (con IVA de venta)",
+            "descripcion": "Precio de cotización + 19% de IVA — valor final a presentar",
+            "valor_clp": 37499
+          }
+        ]
+      }
+    }
+  ],
+  "oferente": {
+    "razon_social": "KEEPSYNC SPA",
+    "rut": "78.441.121-4",
+    "contacto_email": "cristian.molina@keepsync.ai",
+    "campos_por_confirmar": [
+      "domicilio legal",
+      "representante legal (nombre completo y RUN)",
+      "giro declarado ante el SII"
+    ]
+  },
+  "emitida_en": "2026-09-14T12:50:46.890Z"
+}

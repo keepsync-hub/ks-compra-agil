@@ -1,6 +1,6 @@
 import type { CompanyConfig } from "./config.js";
 import type { PlanClaude } from "./condiciones.js";
-import { calcularCotizacionUsd } from "./pricing-usd.js";
+import { calcularCotizacionUsd, type MonedaExtranjera } from "./pricing-usd.js";
 
 /**
  * Mapeo del plan detectado en el texto de la compra a la clave de `company.pricing.planes`.
@@ -46,21 +46,46 @@ export function detectarPlanPricingDeTexto(texto: string): { clave: string; requ
 }
 
 /**
- * Tipo de cambio USD/CLP: se consulta en vivo al "dólar observado" (Banco Central de Chile,
- * vía mindicador.cl, API pública sin auth) para no dejar un número fijo desactualizándose con
- * el tiempo. `fx_fallback_clp_por_usd` en company.json es el respaldo si el servicio falla.
+ * Serie del Banco Central (vía mindicador.cl, API pública sin auth) de la que sale el **valor
+ * observado** de cada moneda. El dólar y el euro son dos series distintas: el euro observado no se
+ * deriva del dólar con una paridad, se pide aparte.
  */
-export async function obtenerTipoCambioUsdClp(fallback: number): Promise<{ valor: number; fuente: string }> {
+const SERIE_MINDICADOR: Record<MonedaExtranjera, { ruta: string; glosa: string }> = {
+  USD: { ruta: "dolar", glosa: "dólar observado" },
+  EUR: { ruta: "euro", glosa: "euro observado" },
+};
+
+/**
+ * Pide el valor observado de una moneda. **No inventa un respaldo**: si el servicio no responde
+ * devuelve `valor: null` con el motivo, y quien llame decide si aborta o usa un valor pasado a mano
+ * con su fuente. Es deliberado — un tipo de cambio silenciosamente distinto del que se cree estar
+ * usando cambia el precio de una cotización sin que nada lo delate.
+ */
+export async function obtenerTipoCambioObservado(
+  moneda: MonedaExtranjera,
+): Promise<{ valor: number; fuente: string } | { valor: null; motivo: string }> {
+  const serie = SERIE_MINDICADOR[moneda];
   try {
-    const res = await fetch("https://mindicador.cl/api/dolar", { signal: AbortSignal.timeout(8000) });
+    const res = await fetch(`https://mindicador.cl/api/${serie.ruta}`, { signal: AbortSignal.timeout(8000) });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = (await res.json()) as { serie: { fecha: string; valor: number }[] };
     const ultimo = json.serie?.[0];
     if (!ultimo || typeof ultimo.valor !== "number") throw new Error("respuesta sin serie de valores");
-    return { valor: ultimo.valor, fuente: `mindicador.cl (dólar observado, ${ultimo.fecha.slice(0, 10)})` };
+    return { valor: ultimo.valor, fuente: `mindicador.cl (${serie.glosa}, ${ultimo.fecha.slice(0, 10)})` };
   } catch (err) {
-    return { valor: fallback, fuente: `fallback fijo en company.json (fx en vivo falló: ${(err as Error).message})` };
+    return { valor: null, motivo: (err as Error).message };
   }
+}
+
+/**
+ * Tipo de cambio USD/CLP para las cotizaciones de licencias: el dólar observado en vivo, con
+ * `fx_fallback_clp_por_usd` de company.json como respaldo si el servicio falla. El respaldo queda
+ * dicho en `fuente` — revisarla antes de dar por buena una cotización.
+ */
+export async function obtenerTipoCambioUsdClp(fallback: number): Promise<{ valor: number; fuente: string }> {
+  const observado = await obtenerTipoCambioObservado("USD");
+  if (observado.valor !== null) return observado;
+  return { valor: fallback, fuente: `fallback fijo en company.json (fx en vivo falló: ${observado.motivo})` };
 }
 
 export interface LineaCotizada {

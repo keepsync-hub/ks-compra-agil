@@ -2,18 +2,24 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR } from "../lib/config.js";
 import { cargarIdentidadOferente } from "../lib/capacitaciones.js";
-import { obtenerTipoCambioUsdClp } from "../lib/pricing.js";
+import { obtenerTipoCambioObservado } from "../lib/pricing.js";
+import type { MonedaExtranjera } from "../lib/pricing-usd.js";
 import {
-  cotizarSuscripcionUsd,
+  cotizarSuscripcionSaaS,
   generarCotizacionSuscripcionPdf,
-  type LineaSuscripcionUsd,
-} from "../lib/cotizacion-suscripcion-usd.js";
+  parsearLineaSuscripcion,
+  type LineaSuscripcionSaaS,
+  type TipoCambioObservado,
+} from "../lib/cotizacion-suscripcion-saas.js";
 
 /**
- * Cotización comercial directa de una o varias suscripciones SaaS con precio de lista en USD por
- * usuario y por mes (Perplexity Pro, ChatGPT Plus, Claude Max…). No es una oferta a un proceso de
- * compra pública: no hay código de Compra Ágil ni tope presupuestario que respetar, y por eso vive
- * acá y no en `.claude/skills/compra-agil-ofertar/`.
+ * Cotización comercial directa de una o varias suscripciones SaaS con precio de lista en moneda
+ * extranjera por usuario y por mes (Perplexity Pro, ChatGPT Plus, Claude Max, n8n…). No es una
+ * oferta a un proceso de compra pública: no hay código de Compra Ágil ni tope presupuestario que
+ * respetar, y por eso vive acá y no en `.claude/skills/compra-agil-ofertar/`.
+ *
+ * Las líneas pueden mezclar monedas (USD y EUR): cada una se convierte con el **valor observado**
+ * de la suya y todo el documento sale en pesos chilenos.
  *
  * El precio sale entero de la regla `cotizar-usd` (src/lib/pricing-usd.ts) y el PDF del estilo
  * único de KeepSync (src/lib/estilo-keepsync.ts). El precio de lista es un dato del proveedor y
@@ -24,12 +30,14 @@ import {
  *     --id=Q-20260828-INIA --titulo="Claude Max 5x y Max 20x" \
  *     --cliente="Instituto de Investigaciones Agropecuarias (INIA)" \
  *     --linea="Claude Max 5x|100|1|12|Precio publicado por Anthropic: USD 100/mes" \
- *     --linea="Claude Max 20x|200|1|12|Precio publicado por Anthropic: USD 200/mes" \
+ *     --linea="n8n Starter|EUR 20|1|12|Precio indicado por el usuario: EUR 20/mes" \
  *     [--tc=925.25] [--tc-fuente="dólar observado, mindicador.cl, 28-08-2026"] \
+ *     [--tc-eur=1091.29] [--tc-eur-fuente="euro observado, mindicador.cl, 14-09-2026"] \
  *     [--slug=ClaudeMax] [--salida=output/cotizaciones-standalone]
  *
- * `--linea` se repite una vez por producto y lleva cinco campos separados por `|`:
- * producto, USD por usuario/mes, usuarios, meses, fuente del precio de lista.
+ * `--linea` se repite una vez por producto y lleva cinco campos separados por `|`: producto,
+ * precio por usuario/mes (con prefijo de moneda opcional — USD si no se dice), usuarios, meses,
+ * fuente del precio de lista.
  */
 interface Args {
   simples: Map<string, string>;
@@ -59,46 +67,14 @@ function requerido(m: Map<string, string>, clave: string): string {
   return v.trim();
 }
 
-/**
- * Cada `--linea` son cinco campos separados por `|`. Se exige exactamente cinco: si el texto de la
- * fuente trae un `|`, el parseo tiene que fallar en voz alta y no repartir mal los campos —
- * cotizar con el número equivocado en silencio es el peor desenlace posible acá.
- */
-function parsearLinea(crudo: string, i: number): LineaSuscripcionUsd {
-  const partes = crudo.split("|").map((p) => p.trim());
-  if (partes.length !== 5) {
-    console.error(
-      `--linea #${i + 1} debe tener 5 campos separados por "|" ` +
-        `(producto|usd_mes|usuarios|meses|fuente); recibí ${partes.length}: "${crudo}"`,
-    );
+/** Traduce el error del parser del módulo a un mensaje de consola con el número de línea. */
+function parsearLinea(crudo: string, i: number): LineaSuscripcionSaaS {
+  try {
+    return parsearLineaSuscripcion(crudo);
+  } catch (err) {
+    console.error(`--linea #${i + 1}: ${(err as Error).message}`);
     process.exit(1);
   }
-  // Los `= ""` son para el compilador (noUncheckedIndexedAccess): el largo ya se validó arriba, y
-  // si por algo llegaran vacíos las validaciones de más abajo los rechazan igual.
-  const [producto = "", usdMes = "", usuarios = "", meses = "", fuente = ""] = partes;
-  const num = (v: string, nombre: string) => {
-    const n = Number(v);
-    if (!Number.isFinite(n) || n <= 0) {
-      console.error(`--linea #${i + 1}: ${nombre} debe ser un número mayor que 0 (recibí "${v}").`);
-      process.exit(1);
-    }
-    return n;
-  };
-  if (!producto) {
-    console.error(`--linea #${i + 1}: falta el nombre del producto.`);
-    process.exit(1);
-  }
-  if (!fuente) {
-    console.error(`--linea #${i + 1}: falta la fuente del precio de lista. Acá no se inventan precios.`);
-    process.exit(1);
-  }
-  return {
-    producto,
-    precioListaUsdMes: num(usdMes, "usd_mes"),
-    usuarios: num(usuarios, "usuarios"),
-    meses: num(meses, "meses"),
-    fuentePrecioLista: fuente,
-  };
 }
 
 /** Nombre de archivo sin espacios ni tildes, mismo criterio que el resto de output/. */
@@ -126,38 +102,55 @@ async function main() {
   }
   const lineas = lineasCrudas.map(parsearLinea);
 
-  // Tipo de cambio: en vivo (dólar observado, mindicador.cl) salvo que se fije a mano para
-  // reproducir una cotización ya emitida. El recargo de 5,5% lo aplica la regla, no este script.
-  const tcManual = m.get("tc");
-  let tipoCambioObservado: number;
-  let fuenteTipoCambio: string;
-  if (tcManual) {
-    tipoCambioObservado = Number(tcManual);
-    if (!Number.isFinite(tipoCambioObservado) || tipoCambioObservado <= 0) {
-      console.error(`--tc inválido: "${tcManual}"`);
+  // Tipo de cambio: el valor observado de cada moneda usada, en vivo (mindicador.cl) salvo que se
+  // fije a mano para reproducir una cotización ya emitida. El recargo de 5,5% lo aplica la regla,
+  // no este script. Si el servicio no responde y no hay valor a mano, esto **falla**: cotizar con
+  // un tipo de cambio de respaldo sin que nadie lo note cambia el precio en silencio.
+  const BANDERAS: Record<MonedaExtranjera, { valor: string; fuente: string }> = {
+    USD: { valor: "tc", fuente: "tc-fuente" },
+    EUR: { valor: "tc-eur", fuente: "tc-eur-fuente" },
+  };
+  const monedasUsadas = [...new Set(lineas.map((l) => l.moneda))];
+  const tiposCambio: Partial<Record<MonedaExtranjera, TipoCambioObservado>> = {};
+  for (const moneda of monedasUsadas) {
+    const banderas = BANDERAS[moneda];
+    const manual = m.get(banderas.valor);
+    if (manual) {
+      const valor = Number(manual);
+      if (!Number.isFinite(valor) || valor <= 0) {
+        console.error(`--${banderas.valor} inválido: "${manual}"`);
+        process.exit(1);
+      }
+      // `--tc-fuente` existe porque "manual" a secas borra la procedencia del número, y este repo no
+      // afirma nada sin cita. Se usa cuando el fetch en vivo no está disponible (acá el proxy del
+      // entorno tumba el fetch de Node aunque curl sí llegue a mindicador.cl) pero el valor
+      // observado del día sí se verificó por otra vía.
+      tiposCambio[moneda] = {
+        valor,
+        fuente: m.get(banderas.fuente)?.trim() || `manual (argumento --${banderas.valor})`,
+      };
+      continue;
+    }
+    const observado = await obtenerTipoCambioObservado(moneda);
+    if (observado.valor === null) {
+      console.error(
+        `No se pudo obtener el valor observado de ${moneda} (${observado.motivo}). ` +
+          `Verificarlo y pasarlo con --${banderas.valor}=<valor> --${banderas.fuente}="<de dónde salió>".`,
+      );
       process.exit(1);
     }
-    // `--tc-fuente` existe porque "manual" a secas borra la procedencia del número, y este repo no
-    // afirma nada sin cita. Se usa cuando el fetch en vivo no está disponible (acá el proxy del
-    // entorno tumba el fetch de Node aunque curl sí llegue a mindicador.cl) pero el dólar observado
-    // del día sí se verificó por otra vía.
-    fuenteTipoCambio = m.get("tc-fuente")?.trim() || "manual (argumento --tc)";
-  } else {
-    const fx = await obtenerTipoCambioUsdClp(916);
-    tipoCambioObservado = fx.valor;
-    fuenteTipoCambio = fx.fuente;
+    tiposCambio[moneda] = observado;
   }
 
   const oferente = cargarIdentidadOferente();
   const fecha = new Date();
 
-  const { resumen, html } = cotizarSuscripcionUsd({
+  const { resumen, html } = cotizarSuscripcionSaaS({
     id,
     titulo,
     cliente,
     lineas,
-    tipoCambioObservado,
-    fuenteTipoCambio,
+    tiposCambio,
     oferente,
     fecha,
   });
@@ -173,17 +166,22 @@ async function main() {
 
   const clp = (n: number) => "$" + n.toLocaleString("es-CL");
   console.log(`${id} — ${titulo} — ${cliente}`);
-  console.log(`Tipo de cambio observado: ${clp(tipoCambioObservado)} (${fuenteTipoCambio})`);
+  for (const moneda of monedasUsadas) {
+    const tc = tiposCambio[moneda];
+    if (tc) console.log(`Valor observado ${moneda}: ${clp(tc.valor)} (${tc.fuente})`);
+  }
   console.log("");
   for (const l of resumen.lineas) {
     console.log(
-      `${l.producto}: USD ${l.precio_lista_usd_mes}/usuario/mes × ${l.usuarios} × ${l.meses} = ` +
-        `USD ${l.monto_usd} → neto ${clp(l.neto_clp)} (unitario mensual ${clp(l.neto_unitario_mensual_clp)})`,
+      `${l.producto}: ${l.moneda} ${l.precio_lista_moneda_mes}/usuario/mes × ${l.usuarios} × ${l.meses} = ` +
+        `${l.moneda} ${l.monto_moneda} → neto ${clp(l.neto_clp)} (unitario mensual ${clp(l.neto_unitario_mensual_clp)})`,
     );
     for (const p of l.calculo.pasos) console.log(`   ${p.paso}: ${clp(p.valor_clp)}`);
   }
   console.log("");
-  console.log(`USD total: USD ${resumen.monto_usd_total}`);
+  for (const [moneda, monto] of Object.entries(resumen.montos_por_moneda)) {
+    console.log(`Costo de lista ${moneda}: ${moneda} ${monto}`);
+  }
   console.log(`Neto ${clp(resumen.neto_clp)} + IVA ${clp(resumen.iva_clp)} = TOTAL ${clp(resumen.total_clp)}`);
   if (resumen.oferente.campos_por_confirmar.length) {
     console.log(`\nIdentidad del oferente pendiente (no aparece en este PDF): ${resumen.oferente.campos_por_confirmar.join(", ")}.`);

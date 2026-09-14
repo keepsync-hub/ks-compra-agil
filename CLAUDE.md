@@ -216,7 +216,9 @@ ofertas recibidas** y aun así se relanzó. El motivo no está publicado y no se
 `npm run cotizar-usd -- <monto_usd> [tipo_cambio]` implementa una regla de precio para costos en
 USD fijada por el usuario el 2026-08-28, documentada en la skill `ks-comun:ks-skill-cotizar-usd` de
 la librería (`keepsync-hub/ks-skill-hub`) e
-implementada en `src/lib/pricing-usd.ts` (`calcularCotizacionUsd`): (1) tipo de cambio observado +
+implementada en `src/lib/pricing-usd.ts` (`calcularCotizacionUsd`, y desde el 2026-09-14 el caso USD
+de `calcularCotizacionMonedaExtranjera`, que aplica la misma aritmética al **euro observado**):
+(1) tipo de cambio observado +
 5,5% de recargo, (2) costo en CLP con ese tipo de cambio ajustado, (3) +19% de impuesto no
 recuperable (costo para KeepSync, no el IVA de venta), (4) +15% de markup sobre ese costo —el
 resultado es el precio a utilizar en la cotización—, (5) +19% de IVA de venta para el valor final
@@ -779,12 +781,12 @@ de arriba aplican tal cual a ese dominio. Lo que hay que saber para operarlo:
   usuario es lo único que queda por probar. Ver "Acceso a los antecedentes" en
   `licitaciones/PLAN.md`. El cotizador sigue bloqueado por falta de catálogo de costos reales.
 
-## Cotización comercial directa de una suscripción en USD (`cotizar-suscripcion`)
+## Cotización comercial directa de una suscripción SaaS (`cotizar-suscripcion`)
 
 `npm run cotizar-suscripcion` cubre un caso que ninguno de los cuatro cotizadores tenía: una
 cotización **fuera de un proceso de compra pública** —sin código de Compra Ágil, sin tope
-presupuestario que respetar— para una suscripción SaaS cuyo precio de lista está en USD por usuario
-y por mes. Nació de la cotización de Perplexity Pro para INIA (`Q-20260828-INIA`), que se había
+presupuestario que respetar— para una suscripción SaaS cuyo precio de lista está en moneda
+extranjera por usuario y por mes. Nació de la cotización de Perplexity Pro para INIA (`Q-20260828-INIA`), que se había
 generado a mano y quedó solo como PDF en Drive: sin código en el repo no se podía regenerar ni
 auditar el cálculo.
 
@@ -799,17 +801,37 @@ peso.
 
 Una cotización puede tener **varias líneas con tarifas distintas** (1 Claude Max 5x a USD 100/mes +
 1 Max 20x a USD 200/mes, por ejemplo): `--linea` se repite, con cinco campos separados por `|` —
-`producto|usd_mes|usuarios|meses|fuente`. Si el parseo no encuentra exactamente cinco campos falla
+`producto|precio|usuarios|meses|fuente`. Si el parseo no encuentra exactamente cinco campos falla
 en voz alta en vez de repartirlos mal: cotizar con el número equivocado en silencio es el peor
 desenlace posible acá. El precio de lista se pasa a mano junto con su fuente en el quinto campo: el
 script no lo adivina ni lo consulta, igual que el resto del repo.
 
-`--tc` fija el tipo de cambio a mano y `--tc-fuente` dice de dónde salió. Hace falta porque
-`obtenerTipoCambioUsdClp` **cambia al fallback de `company.json` en silencio** cuando el fetch en
-vivo falla (en el entorno de los agentes en la nube el proxy tumba el `fetch` de Node aunque `curl`
-sí llegue a mindicador.cl), y una cotización del mismo día al mismo cliente saldría con otro tipo de
-cambio. El script imprime siempre la fuente del tipo de cambio: revisarla antes de dar el PDF por
-bueno.
+**Las líneas pueden mezclar monedas, y cada una se convierte con la suya** (2026-09-14, cotización
+`Q-20260914-KOMPU`: Claude Max 5x en USD + n8n en EUR). La regla de precio no depende de cuál sea la
+moneda —lo único que cambia es el **valor observado** que entra en el paso 1, y el dólar observado y
+el euro observado son series distintas del Banco Central—, así que el cálculo general vive en
+`calcularCotizacionMonedaExtranjera` (`src/lib/pricing-usd.ts`) y `calcularCotizacionUsd` quedó como
+su caso USD, con el campo `monto_usd` que ya consumen `pricing.ts` y `cotizar-usd`. La moneda va
+como **prefijo opcional del precio** en `--linea` (`100` = `USD 100`; `EUR 20` o `€20` cambian la
+moneda de esa línea) para no romper las invocaciones ya escritas, que asumen USD. El documento sale
+íntegramente en pesos: los costos de lista se agrupan por moneda en el `.json` y **no se suman entre
+sí** —USD 100 + EUR 20 no son 120 de nada—, y solo los valores ya convertidos se totalizan.
+
+Si una línea usa una moneda sin tipo de cambio, el cotizador **falla**: convertir euros con el dólar
+cotizaría ~16% barato y nada en el PDF lo delataría. Por lo mismo, `obtenerTipoCambioObservado`
+(`src/lib/pricing.ts`, hoy dólar y euro de mindicador.cl) **ya no inventa un respaldo**: devuelve
+`valor: null` con el motivo y el script se detiene pidiendo el valor a mano. `obtenerTipoCambioUsdClp`
+conserva el fallback de `company.json` para las cotizaciones de licencias, con la fuente diciéndolo.
+
+`--tc`/`--tc-fuente` (dólar) y `--tc-eur`/`--tc-eur-fuente` (euro) fijan el valor observado a mano.
+Hacen falta porque en el entorno de los agentes en la nube el proxy tumba el `fetch` de Node aunque
+`curl` sí llegue a mindicador.cl, y también para reproducir una cotización ya emitida: sin eso, una
+del mismo día al mismo cliente saldría con otro tipo de cambio. El script imprime siempre el valor
+observado de cada moneda y su fuente: revisarlas antes de dar el PDF por bueno.
+
+**Dos defectos de redacción que salió a la luz cotizar un solo mes** y que el módulo ya corrige:
+decía «1 meses» (ahora `glosaMeses`) y contaba **usuarios** donde eran **suscripciones** —una
+persona con una cuenta Claude y una n8n aparecía como «2 usuarios»—.
 
 **El PDF no muestra el tipo de cambio, el impuesto no recuperable ni el markup**, por la misma razón
 por la que se sacaron de la cotización de licencias Claude el 2026-08-28 (commit a84c1bf): es un

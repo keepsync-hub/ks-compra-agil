@@ -7,7 +7,11 @@ import {
   mesAnoEs,
   renderizarPdfDesdeHtml,
 } from "./estilo-keepsync.js";
-import { calcularCotizacionUsd, type CotizacionUsdResultado } from "./pricing-usd.js";
+import {
+  calcularCotizacionMonedaExtranjera,
+  type CotizacionMonedaResultado,
+  type MonedaExtranjera,
+} from "./pricing-usd.js";
 import type { IdentidadOferente } from "./capacitaciones.js";
 
 /**
@@ -17,12 +21,19 @@ import type { IdentidadOferente } from "./capacitaciones.js";
  *
  * Por qué existe como módulo y no como un script de una sola vez: la cotización de Perplexity Pro
  * para INIA se generó primero a mano y quedó solo como PDF en Drive — sin código en el repo, no se
- * podía regenerar ni auditar el cálculo. Acá el precio sale íntegro de `calcularCotizacionUsd`
+ * podía regenerar ni auditar el cálculo. Acá el precio sale íntegro de `calcularCotizacionMonedaExtranjera`
  * (skill `ks-comun:ks-skill-cotizar-usd`) y el PDF de `estilo-keepsync.ts`
  * (skill `ks-comun:ks-skill-keepsync-pdf`),
  * sin duplicar ni la fórmula ni la paleta.
  *
- * El monto en USD que se le pasa a la regla es el **anual de cada línea**: precio de lista mensual
+ * Una cotización puede mezclar monedas: el precio de lista de Claude Max está en USD y el de n8n en
+ * euros, y la regla es la misma para las dos — lo único que cambia es el **valor observado** que
+ * entra en el paso 1 (el dólar observado y el euro observado son series distintas del Banco
+ * Central). Cada línea declara su moneda y el llamador entrega el valor observado de cada una con
+ * su fuente; si falta el de alguna moneda usada, esto falla en voz alta en vez de convertir con el
+ * tipo de cambio equivocado. El documento que ve el cliente queda íntegramente en pesos chilenos.
+ *
+ * El monto en moneda extranjera que se le pasa a la regla es el **total de cada línea**: precio de lista mensual
  * × usuarios × meses. La regla se aplica una vez por línea, no mes a mes — multiplicar primero y
  * convertir después es lo que pidió el usuario, y además evita arrastrar el redondeo doce veces.
  * Se aplica por línea y no sobre el total porque así el subtotal que muestra cada fila de la tabla
@@ -33,13 +44,15 @@ import type { IdentidadOferente } from "./capacitaciones.js";
  * un documento de cliente final y esa fue la instrucción del usuario para la cotización de
  * licencias Claude del 2026-08-28 (commit a84c1bf, "Simplificar cotización INIA a solo valores
  * finales en CLP"). El desglose completo de los cinco pasos, línea por línea, sí queda en el
- * `resumen` que devuelve `cotizarSuscripcionUsd`, para el registro interno en `output/`.
+ * `resumen` que devuelve `cotizarSuscripcionSaaS`, para el registro interno en `output/`.
  */
-export interface LineaSuscripcionUsd {
+export interface LineaSuscripcionSaaS {
   /** Nombre comercial del producto tal como se factura, p.ej. "Claude Max 5x". */
   producto: string;
-  /** Precio de lista publicado por el proveedor, en USD por usuario y por mes. */
-  precioListaUsdMes: number;
+  /** Moneda del precio de lista de este producto. */
+  moneda: MonedaExtranjera;
+  /** Precio de lista publicado por el proveedor, en la moneda de la línea, por usuario y por mes. */
+  precioListaMonedaMes: number;
   /** Cuántas suscripciones de este producto (una por usuario). */
   usuarios: number;
   /** Duración del compromiso, en meses. */
@@ -48,63 +61,130 @@ export interface LineaSuscripcionUsd {
   fuentePrecioLista: string;
 }
 
-export interface SuscripcionUsdEntrada {
+/**
+ * Parsea un `--linea` de `npm run cotizar-suscripcion`: cinco campos separados por `|`
+ * (`producto|precio|usuarios|meses|fuente`). Vive acá, y no en el script, para que sea testeable:
+ * el script solo traduce el error a un mensaje de consola y un exit code.
+ *
+ * El precio acepta un prefijo de moneda opcional — `100` y `USD 100` son lo mismo, `EUR 20` o
+ * `€20` cambian la moneda de esa línea. Va como prefijo del campo y no como un sexto campo para no
+ * romper las invocaciones ya documentadas, que asumen USD.
+ *
+ * Todo lo que no calce exactamente **lanza**. Un `|` de más en el texto de la fuente repartiría los
+ * campos corridos y cotizaría con el número equivocado en silencio, que es el peor desenlace acá.
+ */
+export function parsearLineaSuscripcion(crudo: string): LineaSuscripcionSaaS {
+  const partes = crudo.split("|").map((p) => p.trim());
+  if (partes.length !== 5) {
+    throw new Error(
+      `debe tener 5 campos separados por "|" (producto|precio|usuarios|meses|fuente); ` +
+        `recibí ${partes.length}: "${crudo}"`,
+    );
+  }
+  // Los `= ""` son para el compilador (noUncheckedIndexedAccess): el largo ya se validó arriba, y
+  // si por algo llegaran vacíos las validaciones de más abajo los rechazan igual.
+  const [producto = "", precio = "", usuarios = "", meses = "", fuente = ""] = partes;
+
+  const m = /^(?:(usd|eur|€)\s*)?([0-9]+(?:[.][0-9]+)?)$/i.exec(precio.replace(/,/g, "."));
+  if (!m) {
+    throw new Error(
+      `precio inválido: "${precio}". Se espera un número, con un prefijo de moneda opcional ` +
+        `(USD por defecto): "100", "USD 100", "EUR 20", "€20".`,
+    );
+  }
+  const prefijo = (m[1] ?? "usd").toLowerCase();
+  const moneda: MonedaExtranjera = prefijo === "usd" ? "USD" : "EUR";
+  const precioListaMonedaMes = Number(m[2]);
+  if (!(precioListaMonedaMes > 0)) {
+    throw new Error(`el precio debe ser mayor que 0 (recibí "${precio}").`);
+  }
+
+  const entero = (v: string, nombre: string): number => {
+    const n = Number(v);
+    if (!Number.isInteger(n) || n <= 0) {
+      throw new Error(`${nombre} debe ser un entero mayor que 0 (recibí "${v}").`);
+    }
+    return n;
+  };
+  if (!producto) throw new Error("falta el nombre del producto.");
+  if (!fuente) throw new Error("falta la fuente del precio de lista. Acá no se inventan precios.");
+
+  return {
+    producto,
+    moneda,
+    precioListaMonedaMes,
+    usuarios: entero(usuarios, "usuarios"),
+    meses: entero(meses, "meses"),
+    fuentePrecioLista: fuente,
+  };
+}
+
+/** Valor observado de una moneda, con la fuente de la que salió (nunca se inventa). */
+export interface TipoCambioObservado {
+  /** Valor observado SIN el recargo de 5,5% — el recargo lo aplica la regla. */
+  valor: number;
+  /** De dónde salió (queda en el resumen interno, no en el PDF). */
+  fuente: string;
+}
+
+export interface SuscripcionSaaSEntrada {
   /** Identificador de la cotización, p.ej. "Q-20260828-INIA". Va en la carátula y en el archivo. */
   id: string;
   /** Cómo se llama el conjunto en la carátula, p.ej. "Claude Max 5x y Max 20x". */
   titulo: string;
   /** A quién se dirige la cotización. */
   cliente: string;
-  lineas: LineaSuscripcionUsd[];
-  /** Dólar observado SIN el recargo de 5,5% — el recargo lo aplica la regla. */
-  tipoCambioObservado: number;
-  /** De dónde salió el tipo de cambio (queda en el resumen interno, no en el PDF). */
-  fuenteTipoCambio: string;
+  lineas: LineaSuscripcionSaaS[];
+  /** Valor observado de cada moneda usada por las líneas. Falta una → error, no una conversión a ciegas. */
+  tiposCambio: Partial<Record<MonedaExtranjera, TipoCambioObservado>>;
   oferente: IdentidadOferente;
   fecha: Date;
   /** Condiciones extra, además de las que este módulo agrega siempre. */
   condicionesExtra?: string[];
 }
 
-export interface LineaSuscripcionUsdResumen {
+export interface LineaSuscripcionSaaSResumen {
   producto: string;
   usuarios: number;
   meses: number;
-  precio_lista_usd_mes: number;
+  moneda: MonedaExtranjera;
+  precio_lista_moneda_mes: number;
   fuente_precio_lista: string;
-  monto_usd: number;
+  monto_moneda: number;
   neto_unitario_mensual_clp: number;
   neto_clp: number;
   iva_clp: number;
   total_clp: number;
-  calculo: CotizacionUsdResultado;
+  calculo: CotizacionMonedaResultado;
 }
 
-export interface SuscripcionUsdResumen {
+export interface SuscripcionSaaSResumen {
   id: string;
   titulo: string;
   cliente: string;
-  fuente_tipo_cambio: string;
-  tipo_cambio_observado: number;
-  monto_usd_total: number;
+  /** Valor observado y fuente de cada moneda efectivamente usada. */
+  tipos_cambio: Partial<Record<MonedaExtranjera, TipoCambioObservado>>;
+  /** Costo de lista por moneda. No se suman entre sí: son monedas distintas. */
+  montos_por_moneda: Partial<Record<MonedaExtranjera, number>>;
   neto_clp: number;
   iva_clp: number;
   total_clp: number;
-  lineas: LineaSuscripcionUsdResumen[];
+  lineas: LineaSuscripcionSaaSResumen[];
   oferente: { razon_social: string; rut: string; contacto_email: string; campos_por_confirmar: string[] };
   emitida_en: string;
 }
 
-export interface SuscripcionUsdCotizada {
-  resumen: SuscripcionUsdResumen;
+export interface SuscripcionSaaSCotizada {
+  resumen: SuscripcionSaaSResumen;
   html: string;
 }
 
 /**
- * Aplica la regla `cotizar-usd` a cada línea y arma el HTML de las tres láminas. No escribe nada:
- * quien llame decide dónde va el PDF y el resumen.
+ * Aplica la regla `cotizar-usd` a cada línea —con el valor observado de la moneda de esa línea— y
+ * arma el HTML de las tres láminas. No escribe nada: quien llame decide dónde va el PDF y el
+ * resumen.
  */
-export function cotizarSuscripcionUsd(e: SuscripcionUsdEntrada): SuscripcionUsdCotizada {
+export function cotizarSuscripcionSaaS(e: SuscripcionSaaSEntrada): SuscripcionSaaSCotizada {
   if (!e.lineas.length) {
     throw new Error("La cotización necesita al menos una línea.");
   }
@@ -115,20 +195,31 @@ export function cotizarSuscripcionUsd(e: SuscripcionUsdEntrada): SuscripcionUsdC
     if (!(l.meses > 0) || !Number.isInteger(l.meses)) {
       throw new Error(`meses debe ser un entero mayor que 0 en "${l.producto}" (recibido: ${l.meses})`);
     }
+    // Sin el valor observado de la moneda no hay conversión posible, y la peor salida sería
+    // convertir euros con el dólar: eso cotizaría ~16% barato sin que nada lo delate.
+    if (!e.tiposCambio[l.moneda]) {
+      throw new Error(
+        `Falta el tipo de cambio observado de ${l.moneda}, que usa la línea "${l.producto}". ` +
+          `No se convierte con el de otra moneda.`,
+      );
+    }
   }
 
-  const lineas: LineaSuscripcionUsdResumen[] = e.lineas.map((l) => {
-    const montoUsd = l.precioListaUsdMes * l.usuarios * l.meses;
-    const calculo = calcularCotizacionUsd(montoUsd, e.tipoCambioObservado);
+  const lineas: LineaSuscripcionSaaSResumen[] = e.lineas.map((l) => {
+    const montoMoneda = l.precioListaMonedaMes * l.usuarios * l.meses;
+    // El `!` lo respalda la validación de arriba: toda moneda usada tiene su tipo de cambio.
+    const tc = e.tiposCambio[l.moneda]!;
+    const calculo = calcularCotizacionMonedaExtranjera(montoMoneda, tc.valor, l.moneda);
     const netoClp = calculo.precio_cotizacion_clp;
     const totalClp = calculo.valor_final_clp;
     return {
       producto: l.producto,
       usuarios: l.usuarios,
       meses: l.meses,
-      precio_lista_usd_mes: l.precioListaUsdMes,
+      moneda: l.moneda,
+      precio_lista_moneda_mes: l.precioListaMonedaMes,
       fuente_precio_lista: l.fuentePrecioLista,
-      monto_usd: montoUsd,
+      monto_moneda: montoMoneda,
       neto_unitario_mensual_clp: Math.round(netoClp / (l.usuarios * l.meses)),
       neto_clp: netoClp,
       iva_clp: totalClp - netoClp,
@@ -137,15 +228,23 @@ export function cotizarSuscripcionUsd(e: SuscripcionUsdEntrada): SuscripcionUsdC
     };
   });
 
-  const suma = (f: (l: LineaSuscripcionUsdResumen) => number) => lineas.reduce((a, l) => a + f(l), 0);
+  const suma = (f: (l: LineaSuscripcionSaaSResumen) => number) => lineas.reduce((a, l) => a + f(l), 0);
 
-  const resumen: SuscripcionUsdResumen = {
+  // Los costos de lista se agrupan por moneda en vez de sumarse: USD 100 + EUR 20 no son 120 de
+  // nada. Solo los valores en pesos, que ya pasaron por la regla, se pueden totalizar.
+  const montosPorMoneda: Partial<Record<MonedaExtranjera, number>> = {};
+  for (const l of lineas) {
+    montosPorMoneda[l.moneda] = (montosPorMoneda[l.moneda] ?? 0) + l.monto_moneda;
+  }
+  const tiposCambioUsados: Partial<Record<MonedaExtranjera, TipoCambioObservado>> = {};
+  for (const l of lineas) tiposCambioUsados[l.moneda] = e.tiposCambio[l.moneda];
+
+  const resumen: SuscripcionSaaSResumen = {
     id: e.id,
     titulo: e.titulo,
     cliente: e.cliente,
-    fuente_tipo_cambio: e.fuenteTipoCambio,
-    tipo_cambio_observado: e.tipoCambioObservado,
-    monto_usd_total: suma((l) => l.monto_usd),
+    tipos_cambio: tiposCambioUsados,
+    montos_por_moneda: montosPorMoneda,
     neto_clp: suma((l) => l.neto_clp),
     iva_clp: suma((l) => l.iva_clp),
     total_clp: suma((l) => l.total_clp),
@@ -175,14 +274,26 @@ function identidadSuficiente(o: IdentidadOferente): boolean {
   return !pendiente(o.razon_social) && !pendiente(o.rut) && !pendiente(o.contacto_email);
 }
 
+/** "dólares", "euros" o "dólares y euros" — la condición de facturación nombra lo que hay. */
+function monedasGlosa(r: SuscripcionSaaSResumen): string {
+  const nombre: Record<MonedaExtranjera, string> = { USD: "dólares", EUR: "euros" };
+  const usadas = [...new Set(r.lineas.map((l) => l.moneda))].map((m) => nombre[m]);
+  return usadas.length === 1 ? usadas[0]! : `${usadas.slice(0, -1).join(", ")} y ${usadas[usadas.length - 1]}`;
+}
+
+/** "1 mes", no "1 meses": el documento lo lee un cliente. */
+function glosaMeses(n: number): string {
+  return n === 1 ? "1 mes" : `${n} meses`;
+}
+
 /** Los meses de vigencia solo se pueden anunciar como uno si todas las líneas coinciden. */
-function mesesComunes(r: SuscripcionUsdResumen): number | null {
+function mesesComunes(r: SuscripcionSaaSResumen): number | null {
   const primera = r.lineas[0];
   if (!primera) return null;
   return r.lineas.every((l) => l.meses === primera.meses) ? primera.meses : null;
 }
 
-function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string {
+function generarHtml(e: SuscripcionSaaSEntrada, r: SuscripcionSaaSResumen): string {
   const logoBase64 = logoKeepsyncBase64();
   const mesAno = mesAnoEs(e.fecha);
   const suficiente = identidadSuficiente(e.oferente);
@@ -190,11 +301,12 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
     ? ""
     : `<div class="badge">BORRADOR — identidad del oferente sin confirmar</div>`;
 
-  const usuariosTotal = r.lineas.reduce((a, l) => a + l.usuarios, 0);
-  const plural = usuariosTotal === 1 ? "" : "s";
+  // Se cuentan suscripciones y no usuarios: una persona con una cuenta Claude y una n8n son dos
+  // suscripciones, no dos usuarios. El subtítulo decía "2 usuarios" para ese caso.
+  const suscripcionesTotal = r.lineas.reduce((a, l) => a + l.usuarios, 0);
   const meses = mesesComunes(r);
-  const glosaVigencia = meses !== null ? `${meses} meses` : "vigencia por línea";
-  const subtitulo = `${e.titulo} — ${usuariosTotal} usuario${plural}, ${glosaVigencia}`;
+  const glosaVigencia = meses !== null ? glosaMeses(meses) : "vigencia por línea";
+  const subtitulo = `${e.titulo} — ${suscripcionesTotal} suscripci${suscripcionesTotal === 1 ? "ón" : "ones"}, ${glosaVigencia}`;
 
   // "2 suscripciones Claude Max 5x" cuando hay varias del mismo producto; "1 suscripción X y 1
   // suscripción Y" cuando son distintas. Es la misma frase que encabeza la lámina de alcance.
@@ -203,7 +315,8 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
   const glosaLineas = r.lineas.map(glosaLinea).join(" y ");
 
   const condiciones = [
-    `Suscripciones nominativas: ${glosaLineas}, un usuario por suscripción, por ${glosaVigencia} corridos desde la activación.`,
+    `Suscripciones nominativas: ${glosaLineas}, un usuario por suscripción, por ${glosaVigencia} ` +
+      `${meses === null ? "según lo indicado por línea" : meses === 1 ? "corrido" : "corridos"} desde la activación.`,
     "Activación, administración de los asientos y soporte de primer nivel a cargo de KeepSync; facturación en pesos chilenos.",
     // Acá iba "Cotización comercial directa: no constituye oferta ni respuesta a ningún proceso de
     // compra pública." El usuario la sacó el 2026-08-28: es una salvedad interna, no una condición
@@ -215,10 +328,10 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
   ];
 
   const alcance = [
-    ...r.lineas.map((l) => `${glosaLinea(l)}, una por usuario, por ${l.meses} meses.`),
+    ...r.lineas.map((l) => `${glosaLinea(l)}, una por usuario, por ${glosaMeses(l.meses)}.`),
     "Alta de las cuentas y entrega de accesos a las personas que designe el cliente.",
     "Gestión de la renovación, cambios de titular y bajas durante la vigencia.",
-    "Facturación en pesos chilenos por KeepSync: el cliente no asume el pago en dólares ni la variación cambiaria dentro del período cotizado.",
+    `Facturación en pesos chilenos por KeepSync: el cliente no asume el pago en ${monedasGlosa(r)} ni la variación cambiaria dentro del período cotizado.`,
     "Soporte de primer nivel por correo durante toda la vigencia.",
   ];
 
@@ -267,8 +380,8 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
   <h2>Alcance de la suscripción</h2>
   <p class="gray" style="font-size:11pt;max-width:9in;">${esc(glosaLineas)}, un usuario por suscripción, por ${esc(glosaVigencia)}, contratadas y administradas por KeepSync para ${esc(e.cliente)}.</p>
   <div class="grid3">
-    <div class="card"><div class="num-badge">${usuariosTotal}</div><strong>${usuariosTotal === 1 ? "Suscripción" : "Suscripciones"}</strong><p class="gray" style="font-size:9.5pt;">Un asiento nominativo por usuario, sin compartir credenciales.</p></div>
-    <div class="card"><div class="num-badge">${meses ?? "—"}</div><strong>Meses de vigencia</strong><p class="gray" style="font-size:9.5pt;">Período completo cotizado por adelantado, a precio cerrado en pesos.</p></div>
+    <div class="card"><div class="num-badge">${suscripcionesTotal}</div><strong>${suscripcionesTotal === 1 ? "Suscripción" : "Suscripciones"}</strong><p class="gray" style="font-size:9.5pt;">Un asiento nominativo por usuario, sin compartir credenciales.</p></div>
+    <div class="card"><div class="num-badge">${meses ?? "—"}</div><strong>${meses === 1 ? "Mes de vigencia" : "Meses de vigencia"}</strong><p class="gray" style="font-size:9.5pt;">Período completo cotizado por adelantado, a precio cerrado en pesos.</p></div>
     <div class="card"><div class="num-badge">✓</div><strong>Gestión KeepSync</strong><p class="gray" style="font-size:9.5pt;">Alta, soporte, renovación y facturación en CLP a cargo del oferente.</p></div>
   </div>
   <h2 style="font-size:14pt;margin-top:22pt;">Qué incluye</h2>
@@ -301,7 +414,7 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
 </html>`;
 }
 
-/** Renderiza el HTML de `cotizarSuscripcionUsd` a PDF con el mismo Chromium que el resto de los nichos. */
+/** Renderiza el HTML de `cotizarSuscripcionSaaS` a PDF con el mismo Chromium que el resto de los nichos. */
 export async function generarCotizacionSuscripcionPdf(html: string, outputPdfPath: string): Promise<void> {
   await renderizarPdfDesdeHtml(html, outputPdfPath, "keepsync-suscripcion-");
 }
