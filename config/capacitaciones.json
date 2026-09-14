@@ -6,8 +6,7 @@
   "_no_cotizadas_y_por_que": "Compras Ágiles que el radar sí encontró en el nicho y que este archivo NO cubre, con el motivo. Se anota acá para que la ausencia se lea como una decisión y no como un olvido.",
   "_no_cotizadas": {
     "4491-375-COT26": "Ilustre Municipalidad de Penco - Educación, «Capacitación Estrategias de Inteligencia Artificial para el aula, Escuela Vipla». Tope $1.200.000, cierre 2026-08-28 17:00. Su único adjunto (Capacitación IA Vipla.pdf) es un PDF escaneado SIN capa de texto: no se pudo leer un solo requisito. Llenar esta ficha exigiría OCR o inventar el contenido del curso, y el cotizador no inventa. Queda sin cotizar y publicada solo en la grilla de oportunidades del radar.",
-    "1107279-199-COT26": "Instituto de Investigaciones Agropecuarias, «OpenAI ChatGPT API Créditos y Anthropic Claude API créditos». Tope $4.195.671, cierre 2026-08-28 15:45. No es capacitación: es el nicho de licencias, que se cotiza con npm run cotizar (fórmula de precio de lista + IVA + markup), no con la regla tope × 0,9 de este archivo. Hoy no se puede: config/company.json no está en el repo (es gitignored) y el cotizador de licencias se detiene antes de calcular. Sigue además pendiente el insumo bloqueante del nicho — la vía real de fulfillment y facturación de licencias Claude (ver CLAUDE.md).",
-    "2735-1089-COT26": "I. Municipalidad de Lo Barnechea, «Curso de Power BI Aplicado a la Gestión y Análisis de Datos en Atención Primaria de Salud (APS)». Tope $1.305.600, cierre 2026-09-07 16:00. Sus adjuntos se leyeron y son cotizables. Quedó sin cotizar por tiempo, por el mismo criterio con que quedó fuera 1121-56-COT26 en la corrida del 2026-09-03: el radar terminó a las 15:35 hora de Chile y el cierre era a las 16:00, sin margen para la revisión humana y el envío manual que este flujo exige. Si Lo Barnechea lo republica, la ficha de 2735-1052-COT26 (mismo organismo, mismo instrumento) sirve de base y hay que cambiar temario, horas y monto."
+    "1107279-199-COT26": "Instituto de Investigaciones Agropecuarias, «OpenAI ChatGPT API Créditos y Anthropic Claude API créditos». Tope $4.195.671, cierre 2026-08-28 15:45. No es capacitación: es el nicho de licencias, que se cotiza con npm run cotizar (fórmula de precio de lista + IVA + markup), no con la regla tope × 0,9 de este archivo. Hoy no se puede: config/company.json no está en el repo (es gitignored) y el cotizador de licencias se detiene antes de calcular. Sigue además pendiente el insumo bloqueante del nicho — la vía real de fulfillment y facturación de licencias Claude (ver CLAUDE.md)."
   },
   "cotizaciones": {
     "1618-67-COT26": {
@@ -5207,6 +5206,646 @@
           "cita": "Bases Simplificadas, numeral 4.2 b) — «Ejercicios guiados de verificación y validación manual de resultados generados por IA, con foco en trazabilidad de fuentes» y «Actividades orientadas a la aplicación de checklists de control de calidad y criterios de resguardo de información sensible»; numeral 4.2 c) vi — «Casos simulados o situaciones prácticas utilizadas durante la actividad».",
           "tipo": "alcance",
           "estado": "sin_informacion"
+        }
+      ]
+    },
+    "587-165-COT26": {
+      "curso": "Herramientas de Power BI para el análisis de datos",
+      "organismo_corto": "MINVU",
+      "organismo_nombre": "Subsecretaría del Ministerio de Vivienda y Urbanismo (MINVU)",
+      "fuente_documentos": [
+        "REQUERIMIENTOS TECNICOS.pdf"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«El presupuesto disponible para esta contratación es de $5.800.000.- (Cinco millones ochocientos mil pesos), e incluye impuestos y cualquier otro gasto asociado a la oferta. Las ofertas que excedan dicho presupuesto serán declaradas inadmisibles» — Solicitud de Cotización, apartado 3, Presupuesto disponible."
+      },
+      "objetivo": "Desarrollar las competencias necesarias para utilizar Power BI como herramienta de análisis de datos, permitiendo a los participantes importar, transformar, modelar y visualizar información de manera interactiva, con el fin de generar reportes y dashboards que faciliten la toma de decisiones basadas en datos en distintos contextos profesionales.",
+      "participantes": {
+        "maximo": 26,
+        "glosa": "26 funcionarios/as del MINVU, dentro de su Plan Anual de Capacitación 2026."
+      },
+      "duracion": {
+        "horas_cronologicas": 24,
+        "sesiones": 6,
+        "horas_por_sesion": 4,
+        "glosa": "24 horas cronológicas en 6 sesiones de 4 horas, como exige el apartado 4: «veinticuatro (24) horas cronológicas, distribuidas en sesiones de cuatro (4) horas»."
+      },
+      "modalidad": {
+        "tipo": "Online sincrónica, complementada con actividades prácticas asincrónicas dentro de las 24 horas",
+        "plataforma": "Zoom, Google Meet o Microsoft Teams, con material complementario y grabación de todas las sesiones disponible para revisión posterior.",
+        "horario": "A convenir con la Contraparte Técnica del MINVU; las fechas definitivas se formalizan en acta suscrita por ambas partes."
+      },
+      "fechas_ejecucion": "Durante 2026, idealmente entre octubre y noviembre, según el apartado 5: las fechas definitivas se acuerdan con el proveedor adjudicado y se formalizan mediante acta con la Contraparte Técnica.",
+      "contenidos_sugeridos_por_el_organismo": true,
+      "modulos": [
+        {
+          "titulo": "Arquitectura y entorno de trabajo en inteligencia de negocios (BI)",
+          "horas": 4,
+          "temas": [
+            "Qué es la inteligencia de negocios y para qué sirve en la gestión pública",
+            "Arquitectura de una solución BI: fuentes, modelo, reportes y publicación",
+            "Entorno de trabajo de Power BI Desktop y del servicio Power BI"
+          ]
+        },
+        {
+          "titulo": "Extracción y carga de datos con Power BI",
+          "horas": 4,
+          "temas": [
+            "Conexión a archivos, bases de datos y servicios en línea",
+            "Modos de conexión: importación y conexión directa",
+            "Carga, actualización y organización de conjuntos de datos"
+          ]
+        },
+        {
+          "titulo": "Modelado de datos",
+          "horas": 4,
+          "temas": [
+            "Tablas de hechos y dimensiones",
+            "Creación y administración de relaciones y cardinalidades",
+            "Buenas prácticas de un modelo que soporta el análisis institucional"
+          ]
+        },
+        {
+          "titulo": "Transformación de datos con Power Query",
+          "horas": 4,
+          "temas": [
+            "Editor de Power Query: pasos aplicados y consultas",
+            "Limpieza, tipificación y estructuración de datos",
+            "Combinación y anexado de consultas de distintas fuentes"
+          ]
+        },
+        {
+          "titulo": "Cálculos con DAX (Data Analysis Expressions)",
+          "horas": 4,
+          "temas": [
+            "Columnas calculadas, medidas y tablas calculadas",
+            "Funciones de agregación, filtro e inteligencia de tiempo",
+            "Indicadores de gestión construidos con DAX"
+          ]
+        },
+        {
+          "titulo": "Informes y dashboards, y taller aplicado",
+          "horas": 4,
+          "temas": [
+            "Visualizaciones, filtros, segmentadores e interacciones",
+            "Diseño y publicación de informes y paneles en el servicio Power BI",
+            "Taller integrador: construcción de un dashboard con datos de gestión"
+          ]
+        }
+      ],
+      "modulos_nota": "Los seis módulos cubren uno a uno los cinco contenidos mínimos del apartado 4 —arquitectura y entorno BI, extracción y carga, modelado, transformación, y cálculos DAX— y desdoblan el último, que reúne en una misma línea «Realizar cálculos con DAX» y «Crear informes y Dashboards con Power BI», en dos módulos de 4 horas para completar las 24 horas cronológicas exigidas en sesiones de 4 horas.",
+      "requisitos_metodologicos": [
+        "Actividades prácticas asincrónicas contempladas dentro de las 24 horas cronológicas.",
+        "Material complementario: presentaciones, material de estudio, ejercicios y bases de datos de ejemplo.",
+        "Grabación de todas las sesiones, disponible para revisión posterior."
+      ],
+      "exigencias_adicionales": [
+        "Estar inscrito y hábil en el Registro de Proveedores (apartado 2).",
+        "La cotización debe mencionar claramente cada característica mínima del apartado 4: si no se detallan, la oferta es inadmisible.",
+        "Individualizar al relator/a con nombre y apellidos completos en la oferta.",
+        "Entregar diploma o certificado de participación y remitir el informe de asistencia.",
+        "Ante inconsistencia de valores entre un adjunto y el portal, prima el del portal."
+      ],
+      "relator_exigido": {
+        "formacion": "Título profesional o técnico de nivel superior de institución reconocida por el Estado, acreditado con la oferta mediante certificado de título, copia del título o certificado del Registro Civil (apartado 4).",
+        "experiencia_laboral": "No se exigen años de experiencia profesional general: lo que se exige y puntúa son la certificación vigente y la experiencia en relatoría.",
+        "experiencia_relatoria": "Relatorías de Power BI ejecutadas desde 2021, acreditadas con certificados, contratos, facturas o boletas. Sin medios de verificación, 0 puntos en un criterio que pesa 35%."
+      },
+      "entregables": [
+        "24 horas cronológicas online sincrónicas para 26 funcionarios/as, en 6 sesiones de 4 horas.",
+        "Programa o temario con objetivos, contenidos, actividades y duración.",
+        "Material complementario: presentaciones, material de estudio, ejercicios y bases de datos de ejemplo.",
+        "Grabaciones de todas las sesiones, disponibles para revisión posterior.",
+        "Diploma o certificado por asistente e informe de asistencia a la Contraparte Técnica."
+      ],
+      "logistica": "Contrapartes técnicas del MINVU: Joaquina Rojas Vergara (titular) y Ángela Bravo Jara (suplente). Las fechas se formalizan en acta con la Contraparte Técnica. El documento no contempla garantías.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Cotización que detalle expresamente cada característica mínima del apartado 4",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Programa o temario del curso con objetivos, contenidos, actividades y duración",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Certificado de título, copia del título o certificado del Registro Civil del relator-a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados o credenciales de certificación vigente del relator-a en Power BI, análisis de datos, Azure o SQL",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados, contratos, facturas o boletas que acrediten relatorías de Power BI desde 2021",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "puntaje",
+        "detalle": [
+          "Certificación del relator/a 55%: certificaciones obtenidas desde 2023, vigentes al cierre, en Power BI, análisis de datos, Azure orientado a datos o bases de datos SQL (por ejemplo, Microsoft Certified: Power BI Data Analyst Associate). Cumple 100 puntos / No cumple 0. «No se considerarán certificados de asistencia, participación o aprobación de cursos de capacitación».",
+          "Experiencia del relator/a 35%: relatorías de Power BI ejecutadas desde 2021. 9,0 o más = 100 puntos; 6,0 a 8,9 = 75; 3,0 a 5,9 = 40; 1,0 a 2,9 = 10; 0,0 a 0,9 = 0.",
+          "Precio 10%: [(precio mínimo ofertado / precio de la oferta) × 100] × 0,10.",
+          "Puntaje total = Certificación × 0,55 + Experiencia × 0,35 + Precio × 0,10. «se seleccionará al proveedor que obtenga el mayor puntaje, no siendo necesariamente aquel que oferte el menor precio».",
+          "Desempate por el criterio de mayor puntaje, en el orden: Certificación, Experiencia, Precio."
+        ]
+      },
+      "multas": "4% del monto total de la contratación sin impuestos por cada día de atraso en la ejecución del servicio, con tope acumulado de 20% del monto total. El contratista tiene 2 días hábiles para efectuar descargos por correo electrónico ante la Contraparte Técnica; la multa se rebaja del estado de pago más próximo.",
+      "pago": "El documento no declara forma ni plazo de pago: fija la ejecución durante 2026 (idealmente octubre–noviembre), las contrapartes técnicas y el régimen de multas, y nada más sobre facturación.",
+      "criterios_direccionadores": [
+        {
+          "id": "certificacion-vigente-desde-2023-vale-55",
+          "tipo": "certificacion",
+          "estado": "sin_informacion",
+          "exige": "Que el relator/a acredite una certificación obtenida desde 2023 y vigente al cierre en Power BI, análisis de datos, Azure orientado al análisis de datos o bases de datos SQL. Es el criterio de mayor peso (55%) y se evalúa todo-o-nada: sin certificado vigente, la oferta obtiene 0 puntos en más de la mitad de la evaluación. Los certificados de asistencia o aprobación de cursos no sirven.",
+          "cita": "Solicitud de Cotización, apartado 6 a) — «Se evaluará que el o los relatores identificados expresamente en la oferta cuenten con certificaciones obtenidas desde el año 2023 en adelante, vigentes (…) Se considerará entre otras, la certificación Microsoft Certified: Power BI Data Analyst Associate (…) No se considerarán certificados de asistencia, participación o aprobación de cursos de capacitación». Sí Cumple 100 puntos / No Cumple 0 puntos."
+        },
+        {
+          "id": "titulo-profesional-o-tecnico-acreditado",
+          "tipo": "titulo_grado",
+          "estado": "sin_informacion",
+          "exige": "Que el relator/a esté individualizado con nombre y apellidos completos y acredite, junto con la oferta, título profesional o técnico de nivel superior otorgado por una institución reconocida por el Estado.",
+          "cita": "Solicitud de Cotización, apartado 4, Relator/es — «deberá/n contar con título profesional o técnico de nivel superior otorgado por una institución reconocida por el Estado. Esta condición deberá acreditarse mediante la presentación, junto con la oferta, de al menos uno de los siguientes documentos: certificado de título, copia del título profesional o certificado de profesionales emitido por el Servicio de Registro Civil e Identificación»."
+        },
+        {
+          "id": "nueve-relatorias-de-power-bi-para-el-puntaje-maximo",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion",
+          "exige": "Acreditar 9 o más relatorías de Power BI ejecutadas desde 2021 para obtener los 100 puntos del criterio que pesa 35%. Solo cuentan cursos de Power BI —otras materias quedan fuera— y deben acreditarse con certificados, contratos, facturas o boletas de honorarios; sin medios de verificación el puntaje es 0.",
+          "cita": "Solicitud de Cotización, apartado 6 b) — «otras áreas temáticas distintas a la señalada no serán consideradas (…) Para acreditar la experiencia, el oferente deberá adjuntar certificados, contratos, facturas o boletas de honorarios (…) En caso de no presentar estos medios de verificación, se les asignará un puntaje igual a 0 puntos». Escala: 9,0 o más = 100 puntos."
+        },
+        {
+          "id": "precio-pesa-solo-10-por-ciento",
+          "tipo": "alcance",
+          "estado": "sin_informacion",
+          "exige": "Asumir que el precio casi no mueve la adjudicación: 90% del puntaje son credenciales del relator/a y el precio pesa 10%. Cotizar más barato no compensa la falta de una certificación vigente, y el desempate vuelve a poner el precio en último lugar.",
+          "cita": "Solicitud de Cotización, apartado 6 — «Certificación del relator/a 55% | Experiencia del relator/a 35% | Precio 10%» y «se seleccionará al proveedor que obtenga el mayor puntaje, no siendo necesariamente aquel que oferte el menor precio, en atención a la especificidad del curso solicitado». Desempate: I. Certificación, II. Experiencia, III. Precio."
+        },
+        {
+          "id": "cotizacion-debe-repetir-cada-caracteristica-minima",
+          "tipo": "alcance",
+          "estado": "sin_informacion",
+          "exige": "Que la cotización mencione explícitamente cada una de las características mínimas del apartado 4 —nombre del curso, 24 horas en sesiones de 4, programa, modalidad online sincrónica con asincrónico y grabaciones, 26 participantes, relatores individualizados, diplomas e informe de asistencia, objetivo y los contenidos mínimos—. Omitir cualquiera es causal directa de inadmisibilidad, antes de toda evaluación.",
+          "cita": "Solicitud de Cotización, apartado 4 — «La oferta debe dar cumplimiento a cada una de las características establecidas en el presente punto N° 4, las cuales deben ser mencionadas claramente en la cotización, en caso de no detallarse estas características, la oferta será declarada inadmisible»."
+        },
+        {
+          "id": "habilidad-vigente-en-el-registro-de-proveedores",
+          "tipo": "identidad",
+          "estado": "cubierto",
+          "exige": "Estar inscrito y hábil en el Registro de Proveedores de ChileCompra al momento de ofertar.",
+          "cita": "Solicitud de Cotización, apartado 2, Registro Proveedores — «deberán estar inscritos en el Registro de Proveedores a cargo de la Dirección de Compras y Contratación Pública y encontrarse habilitados».",
+          "resuelto_por": "config/company.json: KEEPSYNC SPA, RUT 78.441.121-4, hábil en el Registro de Proveedores y acreditado hasta el 2027-02-03, el mismo dato de habilidad que ya publica el PDF versionado de 1618-69-COT26."
+        }
+      ]
+    },
+    "980-40-COT26": {
+      "curso": "Desarrollo de aplicaciones con inteligencia artificial utilizando la herramienta Cursor",
+      "organismo_corto": "DGOP — MOP",
+      "organismo_nombre": "Dirección General de Obras Públicas (DGOP) — Ministerio de Obras Públicas",
+      "fuente_documentos": [
+        "Terminos de Referencia - Desarrollo de aplicaciones con IA.pdf",
+        "ANEXO Nº1 y 2.docx"
+      ],
+      "tributacion": {
+        "regimen": "impuestos_incluidos",
+        "cita": "«El presupuesto disponible para la contratación, asciende a la suma total de $1.600.000.- (un millón seiscientos mil pesos), IVA incluido. Las ofertas que superen el presupuesto disponible, serán declaradas inadmisibles y por consiguiente no evaluadas» — TDR, numeral 5."
+      },
+      "objetivo": "Fortalecer las capacidades de los/as participantes para diseñar, desarrollar, validar y desplegar aplicaciones digitales mediante el uso de inteligencia artificial y la herramienta Cursor, aplicando metodologías de desarrollo de productos digitales, buenas prácticas de ingeniería de software y aprendizaje basado en proyectos, con el fin de obtener un producto mínimo viable (MVP) funcional y escalable.",
+      "participantes": {
+        "maximo": 5,
+        "glosa": "5 funcionarios/as de la DGOP de Tecnología, Transformación Digital, Innovación y Desarrollo de Software."
+      },
+      "duracion": {
+        "horas_cronologicas": 24,
+        "sesiones": 6,
+        "horas_por_sesion": 4,
+        "glosa": "24 horas cronológicas —la duración del numeral 4.6, que la inadmisibilidad exige cumplir— en 6 jornadas de 4 horas. Los datos operativos del mismo TDR anuncian 12 horas: la contradicción se consulta antes de ofertar."
+      },
+      "modalidad": {
+        "tipo": "Híbrida: sesiones prácticas en vivo (presenciales y/o remotas en tiempo real) más material asincrónico",
+        "plataforma": "Aula virtual con el material asincrónico y videoconferencia en vivo; acceso a Cursor (o equivalente autorizado) y soporte técnico básico.",
+        "horario": "09:00 a 13:00, según los datos operativos del TDR; fechas a acordar con la Contraparte Técnica."
+      },
+      "modalidad_observacion": "El TDR admite que las sesiones en vivo sean «presencial y/o remoto en tiempo real», así que la propuesta se dicta en vivo de forma remota. El material físico impreso es opcional y, de ofrecerse, se entrega en Morandé 59, Entrepiso Sur, Santiago.",
+      "fechas_ejecucion": "Septiembre u octubre de 2026, según los datos operativos del TDR. El contrato rige por el tiempo que dure el curso y comienza una vez coordinado el inicio con la Contraparte Técnica, siempre después del envío de la orden de compra.",
+      "contenidos_sugeridos_por_el_organismo": true,
+      "modulos": [
+        {
+          "titulo": "Discovery y definición del problema",
+          "horas": 4,
+          "temas": [
+            "Fundamentos de Product Discovery",
+            "Investigación de usuarios, mercado y tendencias con IA",
+            "Análisis de competidores y definición de oportunidades e hipótesis de producto"
+          ]
+        },
+        {
+          "titulo": "Estrategia de producto y MVP",
+          "horas": 4,
+          "temas": [
+            "Definición de MVP y control de alcance",
+            "User journeys y arquitectura de información con apoyo de IA",
+            "Priorización de funcionalidades y definición estratégica del MVP"
+          ]
+        },
+        {
+          "titulo": "Diseño y prototipado inteligente",
+          "horas": 4,
+          "temas": [
+            "Fundamentos de UX/UI con apoyo de IA",
+            "Diseño de flujos e interacciones",
+            "Prototipado acelerado y generación de activos visuales con herramientas de IA"
+          ]
+        },
+        {
+          "titulo": "Construcción del MVP con Cursor e IA",
+          "horas": 6,
+          "temas": [
+            "Arquitectura del producto y prompting efectivo para construir con IA",
+            "Uso práctico de Cursor: del prototipo a la aplicación funcional",
+            "Estados, navegación, backend, autenticación, bases de datos e integración de APIs",
+            "Control de versiones y flujos de despliegue"
+          ]
+        },
+        {
+          "titulo": "Validación, lanzamiento y proyecto final",
+          "horas": 6,
+          "temas": [
+            "Testing con usuarios, métricas y análisis de feedback",
+            "Automatizaciones e integraciones",
+            "Estrategia de lanzamiento y crecimiento con apoyo de IA",
+            "Entrega final integrada: producto, documentación y plan de lanzamiento"
+          ]
+        }
+      ],
+      "modulos_nota": "Los cinco módulos son los cinco del numeral 4.3 del TDR, en el mismo orden y con sus contenidos. Las 24 horas del numeral 4.6 se reparten cargando los módulos 4 y 5 (6 horas cada uno), que son los de construcción y entrega del MVP y concentran el trabajo práctico exigido: «Al menos un 75% de actividades prácticas vinculadas al uso de computador, herramienta Cursor, prompting, desarrollo y despliegue de componentes del MVP».",
+      "requisitos_metodologicos": [
+        "Aprendizaje basado en proyectos, con enfoque andragógico para el sector público.",
+        "Al menos 75% de práctica con computador, Cursor, prompting y despliegue del MVP.",
+        "Construcción progresiva del MVP con entregas parciales y una final integradora.",
+        "Material digital descargable: guías, plantillas, prompts y checklists.",
+        "Acceso a Cursor (o equivalente autorizado) y soporte técnico durante la ejecución."
+      ],
+      "exigencias_adicionales": [
+        "Adjuntar la malla metodológica: no hacerlo es inadmisibilidad (numeral 14 b).",
+        "Validez mínima de la oferta: 60 días corridos.",
+        "Informe final en 5 días hábiles, con certificados (nota 4,0 y asistencia 75%).",
+        "Prohibida la subcontratación total o parcial del servicio.",
+        "Prohibida la cesión del contrato.",
+        "Facturación al RUT 61.202.000-0, Unidad de Pago 2300, con informe final y F-30-1."
+      ],
+      "relator_exigido": {
+        "formacion": "Profesional de Informática, Ing. Civil Informática, de Software, Industrial u otra afín, CON postgrado, diplomado o formación especializada en desarrollo de software, productos digitales o IA (TDR 4.4).",
+        "experiencia_laboral": "Mínimo 5 años en la industria tecnológica y 3 años desarrollando, liderando o asesorando software. Excluyente: si no cumple, la oferta queda inadmisible (TDR 4.4 y 14 d).",
+        "experiencia_relatoria": "Uso avanzado de Cursor y experiencia instructiva acreditada con certificados, contratos u órdenes de compra que señalen que el relator/a dictó las actividades."
+      },
+      "entregables": [
+        "24 horas cronológicas híbridas para 5 funcionarios/as, con al menos 75% de práctica.",
+        "Malla metodológica detallada del curso.",
+        "Material digital descargable: guías, plantillas de MVP, prompts y checklists.",
+        "MVP funcional con documentación y plan de lanzamiento.",
+        "Informe final en 5 días hábiles, con certificados (nota 4,0 y asistencia 75%)."
+      ],
+      "logistica": "Contraparte Técnica: Jennifer Carrera Juri (jennifer.carrera@mop.gov.cl). Consultas: Pablo Ubeda Alarcón (pablo.ubeda@mop.gov.cl). Sin garantías; el contrato se formaliza con la aceptación de la orden de compra.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Anexo N°1 — Declaración jurada simple de conflictos de interés",
+          "tipo": "formulario"
+        },
+        {
+          "documento": "Anexo N°2 — Formulario de oferta técnica",
+          "tipo": "formulario"
+        },
+        {
+          "documento": "Anexo N°3 — Formulario de oferta económica",
+          "tipo": "formulario"
+        },
+        {
+          "documento": "Malla metodológica detallada del curso",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Propuesta técnica con modalidad, metodología y los contenidos mínimos del numeral 4.3",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Antecedentes que acrediten formación, especialización y experiencia del expositor-a",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Programa de integridad y ética empresarial vigente, con respaldos de ser conocido por el personal",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Documento que acredite política o prácticas de sostenibilidad del oferente",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "puntaje",
+        "detalle": [
+          "Técnico 70%: Modalidad, Contenido y Metodología 50% (100 puntos si cubre la totalidad de los contenidos del numeral 4.3; 50 puntos si cubre 3 de los 5 módulos; 0 si no cumple), Experiencia del Expositor 30% (100 ó 0 puntos), Lineamientos de Probidad 10% y Otorgamiento de Becas 10%.",
+          "Económico 25%: I = P1 × 100 / P2, solo para ofertas que pasen la evaluación administrativa y técnica y no superen el presupuesto disponible.",
+          "Sustentable 5%: 100 puntos a quien presente documentos que acrediten al menos un criterio de sustentabilidad (política institucional de sostenibilidad o prácticas sustentables declaradas); 0 puntos a quien no presente.",
+          "Puntaje Final = (Técnica × 0,70) + (Económica × 0,25) + (Sustentable × 0,05). Adjudica el mayor puntaje total.",
+          "Inadmisibilidad directa (numeral 14): no cumplir la modalidad del 4.1, no adjuntar la malla metodológica del 4.2, no incluir la totalidad de los contenidos del 4.3, no acreditar formación y experiencia del expositor del 4.4, no cumplir la duración del 4.6, exceder el presupuesto del numeral 5, o incumplir los requisitos formales de presentación."
+        ]
+      },
+      "multas": "El TDR no establece multas por atraso. Define incumplimiento grave —reiterar por tercera vez el no acatamiento de las instrucciones de la Contraparte Técnica, o no finalizar el servicio por causas injustificadas— y faculta a la DGOP a poner término anticipado cancelando la orden de compra sin comunicación previa.",
+      "pago": "Pago en una cuota, dentro de 30 días corridos desde la recepción de la factura, previa aprobación del informe final por la Contraparte Técnica. La factura solo puede emitirse después de esa aprobación; el mismo día debe enviarse por correo copia de la factura, el informe final y el certificado de obligaciones laborales y previsionales (F-30-1), sin los cuales no se cursa. Antecedentes de facturación: RUT 61.202.000-0, Unidad de Pago 2300, «2300 Nivel Central Dirección General Obras Públicas».",
+      "criterios_direccionadores": [
+        {
+          "id": "expositor-excluyente-postgrado-y-cinco-anos",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion",
+          "exige": "Que el expositor/a acredite carrera de informática, ingeniería civil informática, de software, industrial o afín, CON postgrado, diplomado o formación especializada, más 5 años de experiencia general en la industria tecnológica y 3 años desarrollando, liderando o asesorando construcción de software. No es un criterio puntuable: no cumplirlo deja la oferta inadmisible.",
+          "cita": "TDR, numeral 4.4 Expositor — «Mínimo 5 años de experiencia general en la industria tecnológica o de productos digitales, con al menos 3 años desarrollando, liderando o asesorando la construcción de aplicaciones de software (…) Nota Excluyente: Si el docente no cumple con los requisitos exigidos en este numeral su postulación quedará inadmisible». El numeral 14 d) lo repite como causal de inadmisibilidad."
+        },
+        {
+          "id": "especializacion-demostrable-en-cursor",
+          "tipo": "certificacion",
+          "estado": "sin_informacion",
+          "exige": "Demostrar conocimiento avanzado de Cursor y experiencia instructiva específica en esa herramienta, acreditada con certificados, constancias, contratos u órdenes de compra que señalen que el relator/a dictó las actividades. Es el segundo subcriterio técnico (30% del 70%) y también se evalúa todo-o-nada.",
+          "cita": "TDR, numeral 4.4 — «Conocimiento demostrable en desarrollo asistido por inteligencia artificial y uso avanzado de la herramienta IA (…) Se evaluará experiencia específica en el uso instructivo de Cursor y en la formación de equipos para adoptar prácticas de desarrollo asistido por IA (vibe coding)»; y numeral 7.1.2 — «La experiencia deberá acreditarse mediante certificados, constancias, contratos, órdenes de compra u otros documentos (…) y que señalen que el relator(a) es quien realizó las actividades de capacitación»."
+        },
+        {
+          "id": "contradiccion-12-versus-24-horas",
+          "tipo": "alcance",
+          "estado": "sin_informacion",
+          "exige": "Confirmar la duración real del curso. El mismo TDR declara 12 horas cronológicas en sus datos operativos y 24 horas cronológicas en el numeral 4.6, que es el que la inadmisibilidad exige cumplir. El doble de horas para 5 participantes dentro de un tope de $1.600.000 cambia por completo el costo de la oferta.",
+          "cita": "TDR, numeral 1, datos operativos del curso — «Duración: 12 horas cronológicas»; contra el numeral 4.6 — «La capacitación tendrá una duración total de 24 horas cronológicas». El numeral 14 e) declara inadmisible «No cumplir con la duración mínima de horas cronológicas establecida en el numeral 4.6»."
+        },
+        {
+          "id": "jornadas-y-horario-inconsistentes",
+          "tipo": "alcance",
+          "estado": "sin_informacion",
+          "exige": "Confirmar cómo se distribuyen las sesiones. Los datos operativos fijan horario de 09:00 a 13:00 —4 horas— y, en la línea siguiente, jornadas de 2 horas: ni 6 jornadas de 2 horas (12 h) ni el horario declarado calzan con las 24 horas del numeral 4.6.",
+          "cita": "TDR, numeral 1, datos operativos del curso — «Horario: 09:00 a 13:00 hrs Opción 1: 6 jornadas de 2 horas cronológicas cada una»."
+        },
+        {
+          "id": "acceso-a-cursor-para-los-participantes",
+          "tipo": "alcance",
+          "estado": "sin_informacion",
+          "exige": "Costear y proveer el acceso a Cursor (o equivalente autorizado para fines formativos) y el soporte técnico básico para los 5 participantes durante todo el curso, dentro del mismo tope de $1.600.000 que cubre la relatoría.",
+          "cita": "TDR, numeral 4.1 Modalidad — «El proveedor deberá asegurar el acceso a las herramientas tecnológicas necesarias para el desarrollo de las actividades (incluyendo el uso de la aplicación Cursor u equivalente autorizado para fines formativos), así como soporte técnico básico durante la ejecución del curso»."
+        },
+        {
+          "id": "programa-de-integridad-con-respaldos",
+          "tipo": "alcance",
+          "estado": "sin_informacion",
+          "exige": "Presentar un programa de integridad y ética empresarial vigente y respaldos de que es conocido por el personal para obtener los 100 puntos del subcriterio. Una declaración jurada de compromiso del representante legal solo obtiene 50.",
+          "cita": "TDR, numeral 7.1.3 — «Presenta programa de integridad y ética empresarial, y acompaña respaldos que acrediten ser conocido por su personal: 100 puntos. Presenta declaración jurada simple firmada por el Representate Legal, en el cual señala expresamente compromiso de implementación: 50 puntos». El numeral 13 lo exige conforme al artículo 17 del Reglamento de la Ley de Compras."
+        },
+        {
+          "id": "otorgamiento-de-becas",
+          "tipo": "alcance",
+          "estado": "sin_informacion",
+          "exige": "Decidir si se ofrecen cupos adicionales liberados. Los 100 puntos del subcriterio exigen becas completas —cupo adicional sin costo, 100% financiado por el oferente—; una beca parcial o condicionada vale 50 y no ofrecer vale 0, sobre un tope que ya cubre solo 5 participantes.",
+          "cita": "TDR, numeral 7.1.4 — «Ofrece becas completas y las detalla claramente: 100 puntos. Ofrece becas parciales o condicionadas: 50 puntos. No ofrece becas: 0 puntos (…) Beca completa: cupo adicional sin costo (100% financiado por el oferente)»."
+        },
+        {
+          "id": "documento-de-sostenibilidad",
+          "tipo": "alcance",
+          "estado": "sin_informacion",
+          "exige": "Presentar al menos un documento que acredite política institucional de sostenibilidad o prácticas sustentables declaradas para la ejecución del servicio. Sin documento, 0 puntos en el 5% sustentable.",
+          "cita": "TDR, numeral 7.3 — «La empresa deberá presentar al menos un documento que permita acreditar este criterio de evaluación (…) Se evaluará con 0 punto a quien NO presente documentos que acrediten Sustentabilidad»."
+        },
+        {
+          "id": "prohibicion-de-subcontratar-al-relator",
+          "tipo": "alcance",
+          "estado": "sin_informacion",
+          "exige": "Que el expositor/a sea parte del oferente y no un tercero subcontratado: el TDR prohíbe subcontratar total o parcialmente el servicio y sanciona hacerlo con término anticipado del contrato.",
+          "cita": "TDR, numeral 12 Subcontratación — «El contratista no podrá subcontratar total ni parcialmente el servicio contratado con la DGOP. Si así lo hiciere, se pondrá término anticipado al contrato, es decir, se procederá a cancelar la orden de compra»."
+        }
+      ]
+    },
+    "2735-1089-COT26": {
+      "curso": "Análisis, Modelamiento y Visualización de Datos con Power BI, aplicado a la gestión en Atención Primaria de Salud (APS)",
+      "organismo_corto": "Lo Barnechea",
+      "organismo_nombre": "I. Municipalidad de Lo Barnechea — Dirección de Salud",
+      "fuente_documentos": [
+        "EETT Curso de Power BI Aplicado a la Gestión y Análisis de Datos .docx",
+        "Cláusula de Desempate Compra Ágil.pdf"
+      ],
+      "tributacion": {
+        "regimen": "exento",
+        "cita": "«Presupuesto máximo y disponible exento de IVA $1.305.600» — EETT, cuadro del curso; y en Admisibilidad: «Documento de cotización que indique el valor total de la propuesta técnica del curso, expresado como valor total exento de impuestos e incluyendo relatoría, materiales, acceso al aula virtual, evaluaciones, certificación y todos los costos asociados a la ejecución»."
+      },
+      "objetivo": "Aplicar herramientas de análisis e interpretación de datos mediante su preparación, combinación y modelamiento, junto con la construcción de visualizaciones e informes interactivos de escritorio utilizando Microsoft Power BI, para apoyar la gestión y la toma de decisiones en la Dirección de Salud.",
+      "participantes": {
+        "maximo": 8,
+        "glosa": "8 profesionales de la Dirección de Salud de Lo Barnechea que analizan información y elaboran indicadores de gestión."
+      },
+      "duracion": {
+        "horas_cronologicas": 24,
+        "sesiones": 6,
+        "horas_por_sesion": 4,
+        "glosa": "24 horas dictadas como cronológicas, en 6 sesiones de 4 horas: la EETT exige «24 horas pedagógicas mínimo». La calendarización se acuerda con la contraparte."
+      },
+      "modalidad": {
+        "tipo": "E-learning, con aula virtual y sesiones guiadas de trabajo práctico",
+        "plataforma": "Aula virtual con recursos, talleres, manuales, videos tutoriales, evaluaciones en línea y comunicación con el relator/a.",
+        "horario": "Por acordar con la contraparte técnica, junto con fecha de inicio, calendario y acceso al aula virtual."
+      },
+      "fechas_ejecucion": "La EETT fija la ejecución en el «Segundo semestre de 2026, fecha por definir», mientras la ficha del portal registra un plazo de entrega de 5 días. La fecha efectiva se acuerda con la contraparte técnica.",
+      "contenidos_sugeridos_por_el_organismo": true,
+      "modulos": [
+        {
+          "titulo": "Inteligencia empresarial, visualización y el ecosistema Power BI",
+          "horas": 4,
+          "temas": [
+            "Conceptos y aplicaciones de inteligencia empresarial y análisis de datos",
+            "Introducción a la visualización de datos y consideraciones de BI de autoservicio",
+            "Herramientas Microsoft para BI de autoservicio",
+            "Power BI y sus principales elementos de software; componentes del servicio Power BI"
+          ]
+        },
+        {
+          "titulo": "Conexión a fuentes y preparación de datos",
+          "horas": 4,
+          "temas": [
+            "Conexión a fuentes de datos mediante Power BI Desktop",
+            "Preparación de datos para su utilización en Power BI",
+            "Consultas en Power BI Desktop y uso del Editor de Power Query"
+          ]
+        },
+        {
+          "titulo": "Transformación, combinación y modelamiento",
+          "horas": 4,
+          "temas": [
+            "Transformación, limpieza y estructuración de datos",
+            "Combinación y anexado de consultas provenientes de distintas fuentes",
+            "Creación y administración de relaciones entre tablas"
+          ]
+        },
+        {
+          "titulo": "Cálculos con DAX",
+          "horas": 4,
+          "temas": [
+            "Introducción a consultas y expresiones DAX",
+            "Tipos de cálculos DAX: columnas calculadas, medidas y tablas calculadas",
+            "Indicadores de gestión de APS construidos con DAX"
+          ]
+        },
+        {
+          "titulo": "Construcción de informes interactivos",
+          "horas": 4,
+          "temas": [
+            "Creación y estructura de informes en Power BI; gráficos combinados",
+            "Visualizaciones geográficas y mapas; tablas y matrices",
+            "Configuración de propiedades de gráficos y objetos visuales",
+            "Filtros, segmentadores, interacciones, navegación entre páginas y diseño del informe"
+          ]
+        },
+        {
+          "titulo": "Publicación, colaboración y taller integrador",
+          "horas": 4,
+          "temas": [
+            "Publicación de informes en el servicio Power BI y opciones para compartir informes y paneles",
+            "Configuración de actualización automática de datos",
+            "Uso y características de la aplicación móvil de Power BI",
+            "Aplicación práctica integradora: informe interactivo a partir de una base de datos"
+          ]
+        }
+      ],
+      "modulos_nota": "Los seis módulos cubren los 26 contenidos mínimos que lista la EETT, en el mismo orden en que están numerados: del 1 al 6 en el módulo 1, del 7 al 9 en el 2, del 10 al 12 en el 3, el 13 y 14 en el 4, del 15 al 21 en el 5 y del 22 al 26 en el 6, incluida la aplicación práctica integradora.",
+      "requisitos_metodologicos": [
+        "Metodología activa: teoría breve más talleres de aplicación por módulo.",
+        "Guías con procedimientos paso a paso, demostraciones y ejercicios sobre datos reales.",
+        "Trabajo práctico individual en Power BI Desktop: modelos, medidas DAX e informes.",
+        "Aula virtual disponible durante toda la ejecución.",
+        "Evaluaciones formativas y sumativas; aprueba con promedio igual o superior a 4,5."
+      ],
+      "exigencias_adicionales": [
+        "El valor ofertado se expresa exento de impuestos e incluye todos los costos de ejecución.",
+        "Estar habilitado y vigente como proveedor en Mercado Público.",
+        "La presentación de antecedentes falsos es causal de inadmisibilidad.",
+        "Informar previamente los requisitos técnicos: versión de Power BI, sistema operativo y cuentas.",
+        "Comunicar cualquier cambio de fechas, relatores, modalidad o contenidos.",
+        "Ante empate en cumplimiento y precio, adjudica la oferta ingresada primero."
+      ],
+      "relator_exigido": {
+        "formacion": "Certificados de título, especialización o certificaciones de formación y dominio en análisis de datos, inteligencia de negocios, Power BI, modelamiento, DAX o visualización, junto al currículum.",
+        "experiencia_laboral": "Experiencia práctica acreditada en Power BI Desktop, Power Query, modelamiento, DAX, informes y publicación en el servicio Power BI.",
+        "experiencia_relatoria": "Certificados, órdenes de compra o contratos que acrediten cursos iguales o similares ya ejecutados."
+      },
+      "entregables": [
+        "24 horas de capacitación e-learning para 8 profesionales, con acceso al aula virtual.",
+        "Programa completo: duración, calendarización, metodología, contenidos y evaluación.",
+        "Unidad de almacenamiento extraíble con actividades y manuales en PDF, o medio equivalente autorizado.",
+        "Archivos de ejercicios y bases de datos de práctica.",
+        "Certificado por participante con RUN, fechas, horas, asistencia y calificación.",
+        "Informe final con asistencia, evaluaciones, encuesta de reacción y productos prácticos."
+      ],
+      "logistica": "Fecha de inicio, calendario, horarios y acceso al aula virtual se acuerdan con la contraparte técnica por correo. Toda comunicación va al correo del ITS. Sin garantías ni multas.",
+      "documentos_obligatorios_oferta": [
+        {
+          "documento": "Documento de cotización con el valor total exento de impuestos, incluyendo todos los costos de ejecución",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Programa completo del curso: duración, distribución horaria, modalidad, calendarización, metodología, requisitos técnicos, contenidos, evaluación y condiciones de aprobación",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Antecedentes de la institución ejecutora",
+          "tipo": "generable"
+        },
+        {
+          "documento": "Currículum vitae del relator-a o equipo docente",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados de título, especialización o certificaciones en análisis de datos, Power BI, DAX o visualización",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Certificados, órdenes de compra o contratos que acrediten cursos iguales o similares ya ejecutados",
+          "tipo": "acopio"
+        },
+        {
+          "documento": "Acreditación de habilidad y vigencia como proveedor en Mercado Público",
+          "tipo": "acopio"
+        }
+      ],
+      "evaluacion": {
+        "tipo": "no_declarado",
+        "detalle": [
+          "La EETT no publica criterios de evaluación ni ponderaciones: enumera seis antecedentes de admisibilidad y los contenidos mínimos, y no dice cuánto pesa el precio frente a la propuesta técnica.",
+          "El presupuesto está declarado como máximo y disponible: $1.305.600 exento de IVA.",
+          "El único criterio de decisión publicado es el de desempate: «se aplicará como criterio de desempate el orden de ingreso de la oferta registrado en el archivo “Descargar resultados en Excel” del portal (…) se seleccionará la propuesta del proveedor cuya oferta figure en primer lugar».",
+          "Segundo llamado: el primero cerró el 2026-09-07 a las 16:00 con 2 ofertas recibidas y se relanzó con cierre 2026-09-17 12:23. El motivo del relanzamiento no está publicado."
+        ]
+      },
+      "multas": "La EETT no establece multas, garantías ni causales de término anticipado.",
+      "pago": "El pago se tramita contra factura o documento tributario emitido conforme a la orden de compra, acompañada de los certificados de participación y/o aprobación, el informe final del curso (asistencia, calificaciones, evaluaciones, estado final, encuesta de reacción y respaldo del cumplimiento de contenidos) y la nómina final de participantes con nombre, RUN, asistencia, calificación y condición de aprobación. La EETT no fija plazo de pago.",
+      "criterios_direccionadores": [
+        {
+          "id": "presupuesto-exento-de-iva",
+          "tipo": "tributario",
+          "estado": "no_cumple",
+          "exige": "Cotizar un valor total exento de impuestos. El tope de $1.305.600 está presupuestado exento, y la exención del artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios se apoya en la calidad de institución que imparte enseñanza o capacitación, que KeepSync no tiene acreditada. Si el servicio va afecto, el 90% del tope —$1.175.040— más 19% da $1.398.298 y no cabe bajo el tope: la oferta sería inadmisible.",
+          "cita": "EETT, cuadro del curso — «Presupuesto máximo y disponible exento de IVA $1.305.600»; y Admisibilidad — «valor total exento de impuestos e incluyendo relatoría, materiales, acceso al aula virtual, evaluaciones, certificación y todos los costos asociados a la ejecución».",
+          "resuelto_por": "El usuario confirmó el 2026-09-08 que KeepSync no está registrada como organismo técnico de capacitación, condición en la que se apoya esa exención. Queda como materia del contador y del giro ante el SII: no la resuelve el agente."
+        },
+        {
+          "id": "certificaciones-de-dominio-en-power-bi",
+          "tipo": "certificacion",
+          "estado": "sin_informacion",
+          "exige": "Adjuntar certificados de título, especialización o certificaciones que acrediten formación y dominio del relator/a en análisis de datos, inteligencia de negocios, Power BI, modelamiento de datos, DAX o visualización de información. Es requisito de admisibilidad, no un criterio puntuable.",
+          "cita": "EETT, Admisibilidad, punto 2 — «Antecedentes de la institución ejecutora y currículum vitae del relator o equipo docente, junto con certificados de título, especialización o certificaciones que acrediten formación y dominio en análisis de datos, inteligencia de negocios, Microsoft Power BI, modelamiento de datos, DAX, visualización de información u otras áreas atingentes. La presentación de antecedentes falsos será causal de inadmisibilidad»."
+        },
+        {
+          "id": "experiencia-en-cursos-iguales-o-similares",
+          "tipo": "experiencia_relator",
+          "estado": "sin_informacion",
+          "exige": "Acreditar con certificados, órdenes de compra o contratos que la institución o el equipo docente ya ejecutó cursos iguales o similares en instituciones públicas o privadas, y experiencia práctica y docente en Power BI Desktop, Power Query, modelamiento, DAX, informes y publicación en el servicio Power BI.",
+          "cita": "EETT, Admisibilidad, puntos 3 y 4 — «Certificados, órdenes de compra, contratos u otros antecedentes que acrediten experiencia de la institución o del equipo docente en la ejecución de cursos iguales o similares» y «El relator o equipo docente deberá acreditar experiencia práctica y docente en el uso de Power BI Desktop, Power Query, modelamiento de datos, lenguaje DAX, elaboración de informes y publicación de soluciones en el servicio Power BI»."
+        },
+        {
+          "id": "aula-virtual-propia",
+          "tipo": "infraestructura",
+          "estado": "sin_informacion",
+          "exige": "Disponer de un aula virtual de aprendizaje con recursos didácticos, actividades, procedimientos paso a paso, talleres, manuales, videos tutoriales, evaluaciones en línea y mecanismos de comunicación con el relator/a, operativa durante todo el curso y costeada dentro del tope.",
+          "cita": "EETT, Metodología — «La institución ejecutora deberá disponer de un aula virtual de aprendizaje que permita acceder a recursos didácticos, actividades de clase, procedimientos paso a paso, talleres prácticos, manuales de usuario, videos tutoriales, evaluaciones en línea y mecanismos de comunicación con el relator»."
+        },
+        {
+          "id": "material-en-unidad-de-almacenamiento-extraible",
+          "tipo": "alcance",
+          "estado": "sin_informacion",
+          "exige": "Entregar una unidad de almacenamiento extraíble con actividades, procedimientos y manuales en PDF, o acordar previamente con la contraparte técnica un medio digital equivalente. Es un entregable físico dentro de un curso e-learning y su reemplazo requiere autorización previa.",
+          "cita": "EETT, Material didáctico y recursos de apoyo — «Unidad de almacenamiento extraíble con actividades, procedimientos y manuales en formato PDF, o un medio digital equivalente previamente autorizado por la contraparte técnica»."
+        },
+        {
+          "id": "sin-pauta-de-evaluacion",
+          "tipo": "alcance",
+          "estado": "sin_informacion",
+          "exige": "Conocer cómo se evalúan las ofertas. La EETT enumera seis antecedentes de admisibilidad y los contenidos mínimos, pero no publica criterios de evaluación ni ponderaciones: no se puede saber cuánto pesa el precio frente a la propuesta técnica.",
+          "cita": "La EETT «Curso de Power BI Aplicado a la Gestión y Análisis de Datos» no contiene apartado de criterios de evaluación: pasa de la Admisibilidad a las especificaciones técnicas, y el único documento del proceso que fija una regla de decisión es la Cláusula de Desempate."
+        },
+        {
+          "id": "desempate-por-orden-de-ingreso",
+          "tipo": "alcance",
+          "estado": "sin_informacion",
+          "exige": "Presentar temprano: ante empate en cumplimiento técnico y precio, adjudica la oferta ingresada primero en el portal. Con el precio derivado del tope por regla fija, el empate es un escenario real.",
+          "cita": "Cláusula de Desempate Compra Ágil — «se aplicará como criterio de desempate el orden de ingreso de la oferta registrado en el archivo “Descargar resultados en Excel” del portal www.mercadopublico.cl (…) se seleccionará la propuesta del proveedor cuya oferta figure en primer lugar dentro del mencionado registro»."
+        },
+        {
+          "id": "plazo-de-entrega-contra-segundo-semestre",
+          "tipo": "alcance",
+          "estado": "sin_informacion",
+          "exige": "Confirmar cuándo se ejecuta el curso. La ficha del portal declara un plazo de entrega de 5 días y la EETT fija la ejecución en el «Segundo semestre de 2026, fecha por definir», dejando la duración total y la calendarización a acuerdo posterior con la contraparte técnica.",
+          "cita": "EETT, cuadro del curso — «Fecha de Ejecución: Segundo semestre de 2026, fecha por definir»; y «La duración total, distribución horaria y calendarización deberán ser indicadas en la oferta técnica y acordadas con la contraparte técnica». La ficha del portal registra plazo de entrega de 5 días."
+        },
+        {
+          "id": "habilidad-vigente-en-mercado-publico",
+          "tipo": "identidad",
+          "estado": "cubierto",
+          "exige": "Acreditar estar habilitado y vigente como proveedor en Mercado Público.",
+          "cita": "EETT, Admisibilidad, punto 5 — «Acreditar estar habilitado y vigente como proveedor en Mercado Público».",
+          "resuelto_por": "config/company.json: KEEPSYNC SPA, RUT 78.441.121-4, hábil en el Registro de Proveedores y acreditado hasta el 2027-02-03, el mismo dato de habilidad que ya publica el PDF versionado de 1618-69-COT26."
         }
       ]
     }

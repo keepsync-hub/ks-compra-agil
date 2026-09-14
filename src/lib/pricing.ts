@@ -32,8 +32,34 @@ export function mapearPlanAClavePricing(plan: PlanClaude): { clave: string; requ
  * `mapearPlanAClavePricing` no resuelve. Devuelve null si no reconoce un plan con confianza.
  * `requiereRevision` marca "Team" sin tramo explícito (se asume estándar).
  */
+/**
+ * Productos de IA de otros proveedores que usan los mismos nombres de plan que Anthropic. "Pro"
+ * no es de nadie: existen ChatGPT Pro, Copilot Pro y Gemini Pro. La Compra Ágil de Castro
+ * (2730-289-COT26) pide dos licencias en el mismo proceso —«Suscripción Claude Max 20X» y
+ * «Suscripción ChatGPT Pro 20X»— y `\bpro\b` cotizaba la segunda como Claude Pro a USD 17/mes:
+ * un producto que no es el pedido, al precio de otro, dentro del PDF que se le presenta al
+ * organismo. Detectado al cotizar esa compra el 2026-09-14.
+ *
+ * La guarda exige que el texto nombre a otro proveedor **y** no nombre a Claude/Anthropic, para
+ * que una descripción comparativa («Claude Team, equivalente a ChatGPT Business») siga cotizando.
+ */
+const PATRON_OTRO_PROVEEDOR =
+  /\bchat\s?gpt\b|\bopen\s?ai\b|\bcopilot\b|\bgemini\b|\bperplexity\b|\bgrok\b|\bmistral\b|\bdeepseek\b|\bllama\b/;
+const PATRON_ANTHROPIC = /\bclaude\b|\banthropic\b/;
+
+/** true si el texto describe un producto de otro proveedor y no menciona Claude/Anthropic. */
+export function esProductoDeOtroProveedor(texto: string): boolean {
+  const t = texto.toLowerCase();
+  return PATRON_OTRO_PROVEEDOR.test(t) && !PATRON_ANTHROPIC.test(t);
+}
+
 export function detectarPlanPricingDeTexto(texto: string): { clave: string; requiereRevision: boolean } | null {
   const t = texto.toLowerCase();
+  // Antes de mirar los nombres de plan: si el producto es de otro proveedor, acá no hay nada que
+  // cotizar. Devolver null detiene la corrida (`construirLineasACotizar` no adivina), que es lo
+  // correcto: una Compra Ágil se adjudica por la totalidad de lo pedido, así que una oferta que
+  // cubra solo la licencia Claude de un pedido de dos licencias tampoco sería admisible.
+  if (esProductoDeOtroProveedor(t)) return null;
   if (/\bteam\b/.test(t)) {
     if (/premium/.test(t)) return { clave: "team_premium", requiereRevision: false };
     if (/standard|est[aá]ndar/.test(t)) return { clave: "team_standard", requiereRevision: false };

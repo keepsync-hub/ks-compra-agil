@@ -69,7 +69,7 @@ Cada tarjeta encabeza con un **score de apertura (0–100%)** que ordena el foco
 que no exige ninguna característica, capacidad o certificación particular que dirija la
 adjudicación, y baja 5% por cada criterio que falte revisar (`criterios_direccionadores` en
 `config/capacitaciones.json`, cada uno con su cita; el cálculo, en `src/lib/scoring-capacitacion.ts`).
-Hoy hay **veinticinco borradores**: seis de la tanda del 2026-08-22 (Dipres 85% y 75% dos,
+Hoy hay **veintiocho borradores**: seis de la tanda del 2026-08-22 (Dipres 85% y 75% dos,
 Subtrans 65%, Concepción 60%, Hospital Padre Hurtado 45% — este último exige las últimas 12 órdenes
 de compra del mismo curso, el filtro más direccionador de todas), cuatro del 2026-08-27 (Poder
 Judicial 70%, Lo Barnechea 65%, Combarbalá 60%, DAEM Osorno 55%), ocho del 2026-09-03: MOP
@@ -81,13 +81,42 @@ y Cochilco (IA del concepto al impacto) 50%, una del 2026-09-07: Cochilco de nue
 Universidad de Atacama (IA aplicada a la actividad académica) 85%, Poder Judicial de nuevo
 (`425-339-COT26`, IA aplicada al análisis de datos con Microsoft Copilot) 65%, y cuatro que se
 comentan más abajo — Subsecretaría de Derechos Humanos con tres cursos simultáneos (50%, 50% y 45%)
-e INAPI 40%, el score más bajo fichado hasta hoy. **No es una probabilidad de
-adjudicación**: es cuánto de la admisibilidad está sin resolver.
+e INAPI 40%, el score más bajo fichado hasta hoy, y **tres del 2026-09-14**: MINVU (Power BI para
+26 funcionarios, tope $5.800.000 — el más grande fichado en el nicho) 75%, Lo Barnechea de nuevo
+(`2735-1089-COT26`, Power BI para APS) 60% y la DGOP del MOP (desarrollo de aplicaciones con IA
+usando Cursor) 55%. **No es una probabilidad de adjudicación**: es cuánto de la admisibilidad está
+sin resolver.
 
-Las quince más antiguas ya cerraron y siguen publicadas —el índice de cotizaciones se acumula y no
+Las más antiguas ya cerraron y siguen publicadas —el índice de cotizaciones se acumula y no
 borra, para que una corrida de un solo código no haga desaparecer a las demás—, así que la tarjeta
 las marca *Cerrada* y las manda al final de la grilla. Publicar un borrador de una compra en la que
 ya no se puede ofertar, sin decirlo, es el mismo defecto que la grilla de oportunidades corrigió.
+
+**Lo que enseñó la tanda del 2026-09-14.** Tres compras nuevas, y las tres dejaron algo:
+
+- **El MINVU `587-165-COT26` reparte 90% del puntaje entre credenciales del relator/a** —certificación
+  55%, experiencia en relatoría 35%— y el precio pesa 10%, con el mismo orden en el desempate. Es la
+  segunda pauta, después de INAPI, donde cotizar más barato casi no mueve la aguja. La certificación
+  se evalúa todo-o-nada y exige que sea **obtenida desde 2023 y vigente al cierre**: «No se
+  considerarán certificados de asistencia, participación o aprobación de cursos de capacitación».
+- **La apuesta de fichar sin cotizar volvió a pagarse.** Lo Barnechea `2735-1089-COT26` había quedado
+  en `_no_cotizadas` el 2026-09-07 porque cerraba veinticinco minutos después de la corrida. Volvió
+  en **segundo llamado** con cierre 2026-09-17 y se cotizó reusando la ficha que dejó anotada. Es el
+  segundo caso, después de Cochilco: anotar por qué algo no se hizo es lo que hace barato retomarlo.
+- **Su presupuesto es exento y ahí duele la aritmética de siempre**: $1.305.600 exento, el 90% son
+  $1.175.040, y con 19% encima quedan $1.398.298 — sobre el tope. Va como criterio `no_cumple`, que
+  es el estado que el score aprendió a decir el 2026-09-08.
+- **El TDR de la DGOP del MOP `980-40-COT26` se contradice dos veces sobre lo mismo**: declara 12
+  horas cronológicas en sus datos operativos y 24 en el numeral 4.6 —que es el que la inadmisibilidad
+  exige cumplir—, y en la misma línea pone «Horario: 09:00 a 13:00» junto a «6 jornadas de 2 horas
+  cronológicas». Se registran como dos criterios con su cita, no se resuelven a dedo.
+
+**Y una nota de exención que afirmaba lo que las bases no dicen.** El pendiente de IVA de
+`derivarPendientes` se escribió para Dipres, que sí invoca el artículo 13 N°4 al pie de su TDR, y
+después se lo atribuía a **toda** compra presupuestada exenta: la EETT de Lo Barnechea dice «exento
+de IVA» y nada más. Es el mismo defecto que el `includes("otec")` de más abajo —una afirmación sobre
+las bases del organismo dentro del documento que se le presenta a ese organismo— y se corrigió igual,
+mirando la cita: el artículo solo se nombra si la cita lo nombra.
 
 **El radar se puede correr más de una vez al día y conviene hacerlo.** La segunda corrida del
 2026-09-03 (17:32, seis horas después de la primera) encontró cuatro compras que a las 11:40 no
@@ -145,21 +174,21 @@ la escribe), así que no se puede saber cuánto pesa el precio: eso también baj
 
 Dos cosas condicionan el nicho y el cotizador no las resuelve solo. La primera es el **relator/a**:
 los TDR exigen título, CV y certificados verificables, y sin eso la oferta se descarta en
-admisibilidad. Dos de las veinticinco ofertas ya lo designan —Dipres `1618-69-COT26` y el SLEP Santa
+admisibilidad. Dos de las veintiocho ofertas ya lo designan —Dipres `1618-69-COT26` y el SLEP Santa
 Corina `1393495-768-COT26`, las dos con Cristian Molina Espinoza y su currículum, y las dos con
 carta de presentación—, y en ambas sigue faltando el **respaldo documental** de los cursos
-dictados: el currículum los enumera, no los acredita. Las otras veintitrés salen diciendo
+dictados: el currículum los enumera, no los acredita. Las otras veintiséis salen diciendo
 «relator/a por designar», que es lo que corresponde mientras nadie lo designe. Ver el detalle en
 `.claude/skills/compra-agil-ofertar/SKILL.md`.
 
 La segunda **dejó de ser una pregunta el 2026-09-08: el usuario confirmó que KeepSync NO es OTEC
 registrada en SENCE.** Y lo primero que hay que decir es que condicionaba bastante menos de lo que
-este archivo temía. De las veinticinco compras fichadas, solo **tres** nombran OTEC o SENCE y
+este archivo temía. De las veintiocho compras fichadas, solo **tres** nombran OTEC o SENCE y
 **ninguna lo exige como admisibilidad**: Subtrans le da 10% del puntaje final —100 puntos contra 0,
 sin puntaje parcial—, Puerto Montt pide el certificado de vigencia solo «en caso de estar
 acreditado» (al no estarlo, no hay documento que presentar ni penalización), y en el Hospital Padre
 Hurtado la palabra aparece dentro de una suposición de redacción sobre licencias de publicador de
-Power BI. No es una barrera de entrada: es un techo de puntaje en una de veinticinco.
+Power BI. No es una barrera de entrada: es un techo de puntaje en una de veintiocho.
 
 Donde sí duele es en **la exención de IVA**. Las tres compras de Dipres presupuestan *exento*
 invocando el art. 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios, que se apoya en la
@@ -192,14 +221,14 @@ le presenta a ese organismo, es el peor lugar donde puede salir un falso positiv
 `\botec\b|\bsence\b`: hoy lo llevan solo las tres que sí lo dicen (Subtrans, Hospital Padre
 Hurtado y Puerto Montt).
 
-Tres compras que el radar sí encontró quedaron **sin cotizar, y el archivo dice por qué**
+Dos compras que el radar sí encontró quedan **sin cotizar, y el archivo dice por qué**
 (`_no_cotizadas` en `config/capacitaciones.json`): la de Penco (2026-08-27) trae su único adjunto
-como PDF escaneado sin capa de texto —llenar la ficha exigiría OCR o inventar el curso—; la del INIA
-(2026-08-27) no es capacitación sino créditos de API de Claude y ChatGPT, que van por
-`npm run cotizar` y siguen frenadas por el insumo bloqueante del nicho de licencias; y la de Lo
-Barnechea `2735-1089-COT26` (2026-09-07, curso de Power BI para APS) cerraba veinticinco minutos
-después de que terminara la corrida del radar, sin margen para la revisión humana y el envío manual
-que este flujo exige.
+como PDF escaneado sin capa de texto —llenar la ficha exigiría OCR o inventar el curso—; y la del
+INIA (2026-08-27) no es capacitación sino créditos de API de Claude y ChatGPT, que van por
+`npm run cotizar` y siguen frenadas por el insumo bloqueante del nicho de licencias. Eran tres: la de
+Lo Barnechea `2735-1089-COT26` (curso de Power BI para APS) quedó fuera el 2026-09-07 porque cerraba
+veinticinco minutos después de la corrida, y salió de esa lista el 2026-09-14, cuando el municipio la
+republicó en segundo llamado con cierre el 17 y hubo margen para cotizarla.
 
 **La apuesta de dejar fichada una compra sin cotizar se pagó.** Cochilco `1121-56-COT26` quedó fuera
 por ese mismo motivo el 2026-09-03 —cerraba veinte minutos después de la corrida— y el archivo
@@ -227,6 +256,20 @@ confirmó la unificación y `cotizarLinea` (`src/lib/pricing.ts`, `npm run cotiz
 directamente en `calcularCotizacionUsd` en vez de duplicar la lógica. `markup_pct` e `iva_pct`
 dejaron de leerse de `company.json` para este cálculo — antes `markup_pct` era configurable (10%
 en el ejemplo), ahora es 15% fijo, igual que el resto de los porcentajes de la regla.
+
+**«Pro» no es de nadie, y por eso `npm run cotizar` cotizaba productos ajenos.** La Compra Ágil
+`2730-289-COT26` (Municipalidad de Castro, 2026-09-14) pide dos licencias en el mismo proceso —una
+«Suscripción Claude Max 20X» y una «Suscripción ChatGPT Pro 20X»— y `detectarPlanPricingDeTexto`
+resolvía la segunda con `\bpro\b`: la cotizaba como **Claude Pro a USD 17/mes**, un producto que no
+es el pedido al precio de otro, dentro del PDF que se le presenta al organismo. Existen ChatGPT Pro,
+Copilot Pro y Gemini Pro; el nombre de plan por sí solo no identifica al proveedor. Va una guarda en
+`src/lib/pricing.ts` (`esProductoDeOtroProveedor`) que exige que el texto nombre a otro proveedor
+**y** no nombre a Claude/Anthropic —así una descripción comparativa («Claude Team, equivalente a
+ChatGPT Business») sigue cotizando—, y el efecto es que la corrida **se detiene**: una Compra Ágil se
+adjudica por la totalidad de lo pedido, así que cotizar solo la línea Claude tampoco dejaría una
+oferta admisible. `cotizar.ts` dice qué producto la detuvo en vez del genérico «no se pudo determinar
+el plan», que mandaba a revisar un texto que estaba perfectamente claro. Cubierto por
+`test/lineas-proveedor.test.ts`.
 
 ## Estilo KeepSync único para PDF de cotización (`keepsync-pdf`)
 

@@ -532,10 +532,20 @@ export function derivarPendientes(
   }
 
   if (r.tributacion.regimen === "exento") {
+    // El artículo solo se nombra si las bases lo nombran. Este texto se escribió para Dipres, que
+    // sí lo invoca al pie de su TDR, y se lo atribuía después a cualquier compra presupuestada
+    // exenta: la EETT de Lo Barnechea dice "exento de IVA" y nada más. Es el mismo defecto que el
+    // `includes("otec")` de más arriba —una afirmación sobre las bases del organismo, dentro del
+    // documento que se le presenta a ese organismo— y se corrige igual: mirando la cita.
+    const invocaElArticulo = /art[íi]culo\s*13|art\.?\s*13/i.test(r.tributacion.cita);
     p.push(
       "Resolver la exención de IVA con el contador antes de presentar. El organismo presupuestó el " +
-        "servicio exento invocando el artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios, " +
-        "y esa exención se apoya en la calidad de institución que imparte enseñanza o capacitación: " +
+        "servicio exento" +
+        (invocaElArticulo
+          ? " invocando el artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios, y esa exención"
+          : ", y la exención que corresponde a estos servicios (artículo 13 N°4 de la Ley sobre Impuesto a " +
+            "las Ventas y Servicios)") +
+        " se apoya en la calidad de institución que imparte enseñanza o capacitación: " +
         "KeepSync no es OTEC registrada en SENCE (confirmado el 2026-09-08), así que no puede darse por " +
         "aplicable. Si el servicio va afecto, el 19% no cabe bajo el tope y la oferta sería inadmisible.",
     );

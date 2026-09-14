@@ -1,6 +1,12 @@
 import type { CompraAgilDetalle } from "./api.js";
 import type { Condiciones } from "./condiciones.js";
-import { cotizarLinea, mapearPlanAClavePricing, detectarPlanPricingDeTexto, type LineaCotizada } from "./pricing.js";
+import {
+  cotizarLinea,
+  mapearPlanAClavePricing,
+  detectarPlanPricingDeTexto,
+  esProductoDeOtroProveedor,
+  type LineaCotizada,
+} from "./pricing.js";
 import type { CompanyConfig } from "./config.js";
 
 export interface LineaPlan {
@@ -41,6 +47,18 @@ export function construirLineasACotizar(
   const planMapeado = mapearPlanAClavePricing(condiciones.plan_detectado);
   if (!planMapeado || !condiciones.cantidad_usuarios) return null;
   return [{ clave: planMapeado.clave, cantidad: condiciones.cantidad_usuarios, meses, requiereRevision: planMapeado.requiereRevision }];
+}
+
+/**
+ * Los productos del pedido que son de otro proveedor (ChatGPT, Copilot, Gemini…). Existe para que
+ * quien detiene la corrida pueda decir POR QUÉ se detuvo: "no se pudo determinar el plan" y "esta
+ * compra pide además una licencia que KeepSync no provee" son dos situaciones distintas y la
+ * segunda no se arregla revisando el texto con más cuidado.
+ */
+export function productosDeOtroProveedor(detalle: CompraAgilDetalle): string[] {
+  return (detalle.productos_solicitados ?? [])
+    .map((p) => `${p.nombre} ${p.descripcion}`.trim())
+    .filter((t) => esProductoDeOtroProveedor(t));
 }
 
 export interface ResultadoCotizacion {

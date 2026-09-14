@@ -4,7 +4,7 @@ import { ROOT_DIR, loadCompanyConfig } from "../../../../src/lib/config.js";
 import { obtenerDetalleCompraAgil, type CompraAgilDetalle } from "../../../../src/lib/api.js";
 import { extraerCondiciones } from "../../../../src/lib/condiciones.js";
 import { obtenerTipoCambioUsdClp } from "../../../../src/lib/pricing.js";
-import { construirLineasACotizar, calcularCotizacion } from "../../../../src/lib/lineas.js";
+import { construirLineasACotizar, productosDeOtroProveedor, calcularCotizacion } from "../../../../src/lib/lineas.js";
 import { generarCotizacionPptx, type LineaCotizacionDisplay } from "../../../../src/lib/cotizacion-pptx.js";
 import { generarCotizacionPdf } from "../../../../src/lib/cotizacion-pdf.js";
 import { nombreArchivoCotizacion } from "../../../../src/lib/nombre-archivo.js";
@@ -55,10 +55,16 @@ async function main() {
 
   const lineasPlan = construirLineasACotizar(detalle, condiciones, meses);
   if (!lineasPlan) {
+    const ajenos = productosDeOtroProveedor(detalle);
     console.error(
-      `No se pudo determinar automáticamente el plan y la cantidad a cotizar en ${codigo} ` +
-        `(plan detectado: "${condiciones.plan_detectado}", cantidad: ${condiciones.cantidad_usuarios ?? "?"}). ` +
-        `Revisar manualmente — el agente no adivina.`,
+      ajenos.length > 0
+        ? `${codigo} pide productos que no están en el catálogo de KeepSync: ${ajenos.join(" | ")}. ` +
+            `Una Compra Ágil se adjudica por la totalidad de lo pedido, así que cotizar solo la parte ` +
+            `Claude no deja una oferta admisible. No se genera nada — resolver con el usuario si hay ` +
+            `vía para proveer esas licencias.`
+        : `No se pudo determinar automáticamente el plan y la cantidad a cotizar en ${codigo} ` +
+            `(plan detectado: "${condiciones.plan_detectado}", cantidad: ${condiciones.cantidad_usuarios ?? "?"}). ` +
+            `Revisar manualmente — el agente no adivina.`,
     );
     process.exitCode = 1;
     return;
