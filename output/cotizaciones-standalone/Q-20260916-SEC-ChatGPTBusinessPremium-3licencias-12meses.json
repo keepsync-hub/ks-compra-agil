@@ -1,0 +1,76 @@
+{
+  "id": "Q-20260916-SEC",
+  "titulo": "ChatGPT Business – Premium Seat",
+  "cliente": "Superintendencia de Electricidad y Combustibles (SEC)",
+  "fuente_tipo_cambio": "dólar observado publicado por el SII (sii.cl/valores_y_fechas/dolar/dolar2026.htm), 15-09-2026 — último publicado al 16-09-2026; mindicador.cl no responde desde este entorno",
+  "tipo_cambio_observado": 957.53,
+  "monto_usd_total": 4500,
+  "neto_clp": 6221028,
+  "iva_clp": 1181995,
+  "total_clp": 7403023,
+  "lineas": [
+    {
+      "producto": "ChatGPT Business – Premium Seat",
+      "usuarios": 3,
+      "meses": 12,
+      "precio_lista_usd_mes": 125,
+      "fuente_precio_lista": "Precio publicado por OpenAI: USD 125/usuario/mes por asiento Premium de ChatGPT Business con facturación mensual (la tarifa con facturación anual es USD 100/usuario/mes) — anuncio \"Premium seats are coming to ChatGPT Business\", openai.com, agosto 2026",
+      "monto_usd": 4500,
+      "neto_unitario_mensual_clp": 172806,
+      "neto_clp": 6221028,
+      "iva_clp": 1181995,
+      "total_clp": 7403023,
+      "calculo": {
+        "monto_usd": 4500,
+        "tipo_cambio_observado": 957.53,
+        "recargo_tipo_cambio_pct": 5.5,
+        "tipo_cambio_ajustado": 1010.19,
+        "costo_clp": 4545874,
+        "impuesto_no_recuperable_pct": 19,
+        "costo_con_impuesto_clp": 5409590,
+        "markup_pct": 15,
+        "precio_cotizacion_clp": 6221028,
+        "iva_venta_pct": 19,
+        "valor_final_clp": 7403023,
+        "pasos": [
+          {
+            "paso": "1. Tipo de cambio ajustado",
+            "descripcion": "Tipo de cambio observado ($957.53) + 5.5%",
+            "valor_clp": 1010.19
+          },
+          {
+            "paso": "2. Costo",
+            "descripcion": "USD 4500 × tipo de cambio ajustado",
+            "valor_clp": 4545874
+          },
+          {
+            "paso": "3. Costo con impuesto no recuperable",
+            "descripcion": "Costo + 19% (impuesto que KeepSync no puede recuperar, se trata como costo)",
+            "valor_clp": 5409590
+          },
+          {
+            "paso": "4. Precio de cotización (neto)",
+            "descripcion": "Costo con impuesto + 15% de markup — este es el precio a utilizar en la cotización",
+            "valor_clp": 6221028
+          },
+          {
+            "paso": "5. Valor final (con IVA de venta)",
+            "descripcion": "Precio de cotización + 19% de IVA — valor final a presentar",
+            "valor_clp": 7403023
+          }
+        ]
+      }
+    }
+  ],
+  "oferente": {
+    "razon_social": "KEEPSYNC SPA",
+    "rut": "78.441.121-4",
+    "contacto_email": "cristian.molina@keepsync.ai",
+    "campos_por_confirmar": [
+      "domicilio legal",
+      "representante legal (nombre completo y RUN)",
+      "giro declarado ante el SII"
+    ]
+  },
+  "emitida_en": "2026-09-16T16:53:33.857Z"
+}
