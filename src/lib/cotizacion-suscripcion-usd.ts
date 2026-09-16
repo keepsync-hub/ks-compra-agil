@@ -7,13 +7,24 @@ import {
   mesAnoEs,
   renderizarPdfDesdeHtml,
 } from "./estilo-keepsync.js";
-import { calcularCotizacionUsd, type CotizacionUsdResultado } from "./pricing-usd.js";
+import {
+  calcularCotizacionClp,
+  calcularCotizacionUsd,
+  type CotizacionClpResultado,
+  type CotizacionUsdResultado,
+} from "./pricing-usd.js";
 import type { IdentidadOferente } from "./capacitaciones.js";
 
 /**
  * Cotización comercial directa (fuera de Compra Ágil y de licitaciones) para una o varias
- * suscripciones SaaS con precio de lista en USD por usuario y por mes: Perplexity Pro, ChatGPT
- * Plus, un par de cuentas Claude Max con tarifas distintas, cualquier combinación.
+ * suscripciones SaaS por usuario y por mes: Perplexity Pro, ChatGPT Plus, un par de cuentas Claude
+ * Max con tarifas distintas, cualquier combinación.
+ *
+ * El precio de lista puede venir en USD (lo habitual) o **en pesos**, cuando el proveedor publica
+ * precio local: OpenAI cobra CLP 108.000/mes por asiento Premium de ChatGPT Business en Chile. Una
+ * línea CLP no pasa por conversión y por eso no necesita tipo de cambio; una cotización de puras
+ * líneas CLP no lo pide en absoluto. Mezclar ambas en un mismo documento está permitido y entonces
+ * el tipo de cambio sí hace falta, para las líneas en dólares.
  *
  * Por qué existe como módulo y no como un script de una sola vez: la cotización de Perplexity Pro
  * para INIA se generó primero a mano y quedó solo como PDF en Drive — sin código en el repo, no se
@@ -35,11 +46,9 @@ import type { IdentidadOferente } from "./capacitaciones.js";
  * finales en CLP"). El desglose completo de los cinco pasos, línea por línea, sí queda en el
  * `resumen` que devuelve `cotizarSuscripcionUsd`, para el registro interno en `output/`.
  */
-export interface LineaSuscripcionUsd {
+interface LineaSuscripcionBase {
   /** Nombre comercial del producto tal como se factura, p.ej. "Claude Max 5x". */
   producto: string;
-  /** Precio de lista publicado por el proveedor, en USD por usuario y por mes. */
-  precioListaUsdMes: number;
   /** Cuántas suscripciones de este producto (una por usuario). */
   usuarios: number;
   /** Duración del compromiso, en meses. */
@@ -48,6 +57,26 @@ export interface LineaSuscripcionUsd {
   fuentePrecioLista: string;
 }
 
+export interface LineaSuscripcionUsd extends LineaSuscripcionBase {
+  moneda: "USD";
+  /** Precio de lista publicado por el proveedor, en USD por usuario y por mes. */
+  precioListaUsdMes: number;
+}
+
+export interface LineaSuscripcionClp extends LineaSuscripcionBase {
+  moneda: "CLP";
+  /** Precio de lista publicado por el proveedor, en CLP por usuario y por mes. */
+  precioListaClpMes: number;
+  /**
+   * Si se aplica el 5,5% como colchón por reajuste del precio local. Va en la línea y no en la
+   * cotización porque depende de la modalidad contratada: con facturación mensual el proveedor
+   * puede reajustar durante la vigencia, con facturación anual el precio queda bloqueado.
+   */
+  aplicarRecargo: boolean;
+}
+
+export type LineaSuscripcion = LineaSuscripcionUsd | LineaSuscripcionClp;
+
 export interface SuscripcionUsdEntrada {
   /** Identificador de la cotización, p.ej. "Q-20260828-INIA". Va en la carátula y en el archivo. */
   id: string;
@@ -55,11 +84,14 @@ export interface SuscripcionUsdEntrada {
   titulo: string;
   /** A quién se dirige la cotización. */
   cliente: string;
-  lineas: LineaSuscripcionUsd[];
-  /** Dólar observado SIN el recargo de 5,5% — el recargo lo aplica la regla. */
-  tipoCambioObservado: number;
+  lineas: LineaSuscripcion[];
+  /**
+   * Dólar observado SIN el recargo de 5,5% — el recargo lo aplica la regla. Sólo se necesita si
+   * hay alguna línea en USD; una cotización de puras líneas CLP lo deja en null.
+   */
+  tipoCambioObservado?: number | null;
   /** De dónde salió el tipo de cambio (queda en el resumen interno, no en el PDF). */
-  fuenteTipoCambio: string;
+  fuenteTipoCambio?: string | null;
   oferente: IdentidadOferente;
   fecha: Date;
   /** Condiciones extra, además de las que este módulo agrega siempre. */
@@ -68,25 +100,35 @@ export interface SuscripcionUsdEntrada {
 
 export interface LineaSuscripcionUsdResumen {
   producto: string;
+  moneda: "USD" | "CLP";
   usuarios: number;
   meses: number;
-  precio_lista_usd_mes: number;
+  /** Precio de lista en USD por usuario/mes; null en las líneas con precio local en pesos. */
+  precio_lista_usd_mes: number | null;
+  /** Precio de lista en CLP por usuario/mes; null en las líneas cotizadas desde dólares. */
+  precio_lista_clp_mes: number | null;
   fuente_precio_lista: string;
-  monto_usd: number;
+  /** Monto en dólares que entró a la regla; null en las líneas CLP, que no convierten nada. */
+  monto_usd: number | null;
+  /** Precio de lista del período completo, en pesos y antes de cualquier recargo. */
+  monto_lista_clp: number;
   neto_unitario_mensual_clp: number;
   neto_clp: number;
   iva_clp: number;
   total_clp: number;
-  calculo: CotizacionUsdResultado;
+  calculo: CotizacionUsdResultado | CotizacionClpResultado;
 }
 
 export interface SuscripcionUsdResumen {
   id: string;
   titulo: string;
   cliente: string;
-  fuente_tipo_cambio: string;
-  tipo_cambio_observado: number;
-  monto_usd_total: number;
+  fuente_tipo_cambio: string | null;
+  tipo_cambio_observado: number | null;
+  /** Suma de las líneas en dólares; null cuando ninguna línea se cotizó desde USD. */
+  monto_usd_total: number | null;
+  /** Suma de los precios de lista en pesos, de todas las líneas, antes de recargos. */
+  monto_lista_clp_total: number;
   neto_clp: number;
   iva_clp: number;
   total_clp: number;
@@ -117,18 +159,35 @@ export function cotizarSuscripcionUsd(e: SuscripcionUsdEntrada): SuscripcionUsdC
     }
   }
 
+  const tipoCambio = e.tipoCambioObservado ?? null;
+  if (e.lineas.some((l) => l.moneda === "USD") && !(tipoCambio && tipoCambio > 0)) {
+    throw new Error("Hay líneas en USD: falta el tipo de cambio observado para convertirlas.");
+  }
+
   const lineas: LineaSuscripcionUsdResumen[] = e.lineas.map((l) => {
-    const montoUsd = l.precioListaUsdMes * l.usuarios * l.meses;
-    const calculo = calcularCotizacionUsd(montoUsd, e.tipoCambioObservado);
+    // Las dos variantes de la regla devuelven los mismos dos campos que la cotización necesita
+    // (neto y valor final); lo que cambia es de dónde parten y qué pasos registran.
+    const calculo =
+      l.moneda === "USD"
+        ? calcularCotizacionUsd(l.precioListaUsdMes * l.usuarios * l.meses, tipoCambio as number)
+        : calcularCotizacionClp(l.precioListaClpMes * l.usuarios * l.meses, {
+            aplicarRecargo: l.aplicarRecargo,
+          });
     const netoClp = calculo.precio_cotizacion_clp;
     const totalClp = calculo.valor_final_clp;
     return {
       producto: l.producto,
+      moneda: l.moneda,
       usuarios: l.usuarios,
       meses: l.meses,
-      precio_lista_usd_mes: l.precioListaUsdMes,
+      precio_lista_usd_mes: l.moneda === "USD" ? l.precioListaUsdMes : null,
+      precio_lista_clp_mes: l.moneda === "CLP" ? l.precioListaClpMes : null,
       fuente_precio_lista: l.fuentePrecioLista,
-      monto_usd: montoUsd,
+      monto_usd: l.moneda === "USD" ? l.precioListaUsdMes * l.usuarios * l.meses : null,
+      monto_lista_clp:
+        l.moneda === "CLP"
+          ? l.precioListaClpMes * l.usuarios * l.meses
+          : (calculo as CotizacionUsdResultado).costo_clp,
       neto_unitario_mensual_clp: Math.round(netoClp / (l.usuarios * l.meses)),
       neto_clp: netoClp,
       iva_clp: totalClp - netoClp,
@@ -143,9 +202,10 @@ export function cotizarSuscripcionUsd(e: SuscripcionUsdEntrada): SuscripcionUsdC
     id: e.id,
     titulo: e.titulo,
     cliente: e.cliente,
-    fuente_tipo_cambio: e.fuenteTipoCambio,
-    tipo_cambio_observado: e.tipoCambioObservado,
-    monto_usd_total: suma((l) => l.monto_usd),
+    fuente_tipo_cambio: e.fuenteTipoCambio ?? null,
+    tipo_cambio_observado: tipoCambio,
+    monto_usd_total: lineas.some((l) => l.monto_usd !== null) ? suma((l) => l.monto_usd ?? 0) : null,
+    monto_lista_clp_total: suma((l) => l.monto_lista_clp),
     neto_clp: suma((l) => l.neto_clp),
     iva_clp: suma((l) => l.iva_clp),
     total_clp: suma((l) => l.total_clp),
@@ -190,6 +250,7 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
     ? ""
     : `<div class="badge">BORRADOR — identidad del oferente sin confirmar</div>`;
 
+  const hayLineasUsd = r.lineas.some((l) => l.moneda === "USD");
   const usuariosTotal = r.lineas.reduce((a, l) => a + l.usuarios, 0);
   const plural = usuariosTotal === 1 ? "" : "s";
   const meses = mesesComunes(r);
@@ -210,7 +271,12 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
     // comercial, y no aporta nada al cliente que recibe el documento. Que este cotizador no sirva
     // para ofertar en Compra Ágil (no respeta tope ni admisibilidad) sigue dicho donde corresponde:
     // el encabezado de este módulo, el de `src/scripts/cotizar-suscripcion.ts` y CLAUDE.md.
-    "Válida por 30 días desde la fecha de emisión. El valor puede cambiar de acuerdo al tipo de cambio vigente al momento de la facturación.",
+    // La salvedad de tipo de cambio sólo corresponde si alguna línea se cotizó desde dólares. En
+    // una cotización de precio local en pesos sería falsa, y además contradiría el "precio cerrado
+    // en pesos" que promete la lámina de alcance.
+    hayLineasUsd
+      ? "Válida por 30 días desde la fecha de emisión. El valor puede cambiar de acuerdo al tipo de cambio vigente al momento de la facturación."
+      : "Válida por 30 días desde la fecha de emisión. Valores en pesos chilenos, a precio cerrado por todo el período cotizado.",
     ...(e.condicionesExtra ?? []),
   ];
 
@@ -218,7 +284,9 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
     ...r.lineas.map((l) => `${glosaLinea(l)}, una por usuario, por ${l.meses} meses.`),
     "Alta de las cuentas y entrega de accesos a las personas que designe el cliente.",
     "Gestión de la renovación, cambios de titular y bajas durante la vigencia.",
-    "Facturación en pesos chilenos por KeepSync: el cliente no asume el pago en dólares ni la variación cambiaria dentro del período cotizado.",
+    hayLineasUsd
+      ? "Facturación en pesos chilenos por KeepSync: el cliente no asume el pago en dólares ni la variación cambiaria dentro del período cotizado."
+      : "Facturación en pesos chilenos por KeepSync, a precio cerrado: el cliente no asume reajustes del proveedor dentro del período cotizado.",
     "Soporte de primer nivel por correo durante toda la vigencia.",
   ];
 

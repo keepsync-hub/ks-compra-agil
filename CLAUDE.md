@@ -779,12 +779,13 @@ de arriba aplican tal cual a ese dominio. Lo que hay que saber para operarlo:
   usuario es lo único que queda por probar. Ver "Acceso a los antecedentes" en
   `licitaciones/PLAN.md`. El cotizador sigue bloqueado por falta de catálogo de costos reales.
 
-## Cotización comercial directa de una suscripción en USD (`cotizar-suscripcion`)
+## Cotización comercial directa de una suscripción SaaS (`cotizar-suscripcion`)
 
 `npm run cotizar-suscripcion` cubre un caso que ninguno de los cuatro cotizadores tenía: una
 cotización **fuera de un proceso de compra pública** —sin código de Compra Ágil, sin tope
-presupuestario que respetar— para una suscripción SaaS cuyo precio de lista está en USD por usuario
-y por mes. Nació de la cotización de Perplexity Pro para INIA (`Q-20260828-INIA`), que se había
+presupuestario que respetar— para una suscripción SaaS con precio de lista por usuario y por mes,
+en USD (`--linea`) o en pesos cuando el proveedor publica precio local (`--linea-clp`, ver más
+abajo). Nació de la cotización de Perplexity Pro para INIA (`Q-20260828-INIA`), que se había
 generado a mano y quedó solo como PDF en Drive: sin código en el repo no se podía regenerar ni
 auditar el cálculo.
 
@@ -810,6 +811,25 @@ vivo falla (en el entorno de los agentes en la nube el proxy tumba el `fetch` de
 sí llegue a mindicador.cl), y una cotización del mismo día al mismo cliente saldría con otro tipo de
 cambio. El script imprime siempre la fuente del tipo de cambio: revisarla antes de dar el PDF por
 bueno.
+
+**El precio de lista no siempre está en USD, y suponerlo cuesta plata ajena.** La cotización a SEC
+del 2026-09-16 (3 asientos ChatGPT Business Premium, 12 meses) salió primero convirtiendo los USD
+125/usuario/mes de la tarifa publicada por OpenAI. El usuario mandó la captura del checkout: OpenAI
+cobra en Chile **CLP 108.000 por asiento Premium con facturación mensual** (CLP 21.600 el estándar,
+19% de descuento con facturación anual). Convertir la tarifa en dólares daba $119.691 por asiento al
+dólar observado del 15-09 — **11% de sobrecosto inventado**, que con markup e IVA encima eran
+$1.071.357 de más en el total. Por eso `--linea-clp` existe: los pasos 1 y 2 de la regla
+(tipo de cambio ajustado y conversión) no aplican cuando no hay conversión, y una cotización de
+puras líneas CLP ni siquiera consulta el dólar. Antes de cotizar una suscripción, **revisar si el
+proveedor publica precio local** en vez de convertir el de su página en inglés.
+
+El 5,5% sí se mantuvo, y con otro significado: ahí no cubre riesgo cambiario sino que OpenAI
+reajuste su precio en pesos durante los 12 meses, porque la cotización a SEC es a precio cerrado y
+la facturación es mensual (decisión del usuario el 2026-09-16). Con facturación anual el precio
+queda bloqueado y el colchón no tiene sustento: ese caso va con `--sin-recargo`. Quedan dos cosas
+por verificar en el checkout que mueven el total y no se leen de la pantalla: **si los $108.000 son
+netos o ya llevan IVA** —si lo llevan, el paso del impuesto no recuperable estaría cobrando dos
+veces el mismo 19%— y **el precio anual exacto**, que la pantalla solo anuncia como «SAVE 19%».
 
 **El PDF no muestra el tipo de cambio, el impuesto no recuperable ni el markup**, por la misma razón
 por la que se sacaron de la cotización de licencias Claude el 2026-08-28 (commit a84c1bf): es un

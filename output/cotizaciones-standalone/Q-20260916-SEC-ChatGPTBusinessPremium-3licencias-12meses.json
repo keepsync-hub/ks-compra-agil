@@ -2,61 +2,63 @@
   "id": "Q-20260916-SEC",
   "titulo": "ChatGPT Business – Premium Seat",
   "cliente": "Superintendencia de Electricidad y Combustibles (SEC)",
-  "fuente_tipo_cambio": "dólar observado publicado por el SII (sii.cl/valores_y_fechas/dolar/dolar2026.htm), 15-09-2026 — último publicado al 16-09-2026; mindicador.cl no responde desde este entorno",
-  "tipo_cambio_observado": 957.53,
-  "monto_usd_total": 4500,
-  "neto_clp": 6221028,
-  "iva_clp": 1181995,
-  "total_clp": 7403023,
+  "fuente_tipo_cambio": null,
+  "tipo_cambio_observado": null,
+  "monto_usd_total": null,
+  "monto_lista_clp_total": 3888000,
+  "neto_clp": 5613368,
+  "iva_clp": 1066540,
+  "total_clp": 6679908,
   "lineas": [
     {
       "producto": "ChatGPT Business – Premium Seat",
+      "moneda": "CLP",
       "usuarios": 3,
       "meses": 12,
-      "precio_lista_usd_mes": 125,
-      "fuente_precio_lista": "Precio publicado por OpenAI: USD 125/usuario/mes por asiento Premium de ChatGPT Business con facturación mensual (la tarifa con facturación anual es USD 100/usuario/mes) — anuncio \"Premium seats are coming to ChatGPT Business\", openai.com, agosto 2026",
-      "monto_usd": 4500,
-      "neto_unitario_mensual_clp": 172806,
-      "neto_clp": 6221028,
-      "iva_clp": 1181995,
-      "total_clp": 7403023,
+      "precio_lista_usd_mes": null,
+      "precio_lista_clp_mes": 108000,
+      "fuente_precio_lista": "Precio local publicado por OpenAI en el checkout de ChatGPT Business para Chile: CLP 108.000 por asiento Premium con facturación mensual (pantalla Configure your plan, 16-09-2026; la opción de facturación anual descuenta 19%)",
+      "monto_usd": null,
+      "monto_lista_clp": 3888000,
+      "neto_unitario_mensual_clp": 155927,
+      "neto_clp": 5613368,
+      "iva_clp": 1066540,
+      "total_clp": 6679908,
       "calculo": {
-        "monto_usd": 4500,
-        "tipo_cambio_observado": 957.53,
-        "recargo_tipo_cambio_pct": 5.5,
-        "tipo_cambio_ajustado": 1010.19,
-        "costo_clp": 4545874,
+        "monto_lista_clp": 3888000,
+        "recargo_reajuste_pct": 5.5,
+        "costo_clp": 4101840,
         "impuesto_no_recuperable_pct": 19,
-        "costo_con_impuesto_clp": 5409590,
+        "costo_con_impuesto_clp": 4881190,
         "markup_pct": 15,
-        "precio_cotizacion_clp": 6221028,
+        "precio_cotizacion_clp": 5613368,
         "iva_venta_pct": 19,
-        "valor_final_clp": 7403023,
+        "valor_final_clp": 6679908,
         "pasos": [
           {
-            "paso": "1. Tipo de cambio ajustado",
-            "descripcion": "Tipo de cambio observado ($957.53) + 5.5%",
-            "valor_clp": 1010.19
+            "paso": "1. Costo de lista",
+            "descripcion": "Precio publicado por el proveedor en pesos, por el período completo",
+            "valor_clp": 3888000
           },
           {
-            "paso": "2. Costo",
-            "descripcion": "USD 4500 × tipo de cambio ajustado",
-            "valor_clp": 4545874
+            "paso": "2. Costo con colchón de reajuste",
+            "descripcion": "Costo de lista + 5.5% (el proveedor puede reajustar su precio local durante la vigencia; la cotización es a precio cerrado)",
+            "valor_clp": 4101840
           },
           {
             "paso": "3. Costo con impuesto no recuperable",
             "descripcion": "Costo + 19% (impuesto que KeepSync no puede recuperar, se trata como costo)",
-            "valor_clp": 5409590
+            "valor_clp": 4881190
           },
           {
             "paso": "4. Precio de cotización (neto)",
             "descripcion": "Costo con impuesto + 15% de markup — este es el precio a utilizar en la cotización",
-            "valor_clp": 6221028
+            "valor_clp": 5613368
           },
           {
             "paso": "5. Valor final (con IVA de venta)",
             "descripcion": "Precio de cotización + 19% de IVA — valor final a presentar",
-            "valor_clp": 7403023
+            "valor_clp": 6679908
           }
         ]
       }
@@ -72,5 +74,5 @@
       "giro declarado ante el SII"
     ]
   },
-  "emitida_en": "2026-09-16T16:53:33.857Z"
+  "emitida_en": "2026-09-16T20:01:31.945Z"
 }
