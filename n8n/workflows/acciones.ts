@@ -16,7 +16,11 @@ const CRED_GITHUB = { githubOAuth2Api: { id: 'RpMUyc4ecL1CPsy3', name: 'GitHub O
 const REPO_OWNER = { __rl: true, mode: 'name', value: 'keepsync-hub' };
 const REPO_NOMBRE = { __rl: true, mode: 'name', value: 'ks-compra-agil' };
 const WORKFLOW_MP = { __rl: true, mode: 'filename', value: 'mp.yml' };
-const RAMA = { __rl: true, mode: 'name', value: 'claude/n8n-radar-cotizaciones-08vr00' };
+// La rama que el dispatch corre Y a la que `mp.yml` empuja de vuelta. Tiene que ser la que
+// publica Pages: el entorno `github-pages` del repo solo admite despliegues desde esta
+// (ver la cabecera de .github/workflows/pages.yml). Apuntada a otra, cada clic del panel
+// dejaba el resultado en una rama que nadie lee y el panel se servía sin estilo.
+const RAMA = { __rl: true, mode: 'name', value: 'claude/mercadopublico-agente-compras-pgyedf' };
 
 // Todas las rutas de escritura llevan el mismo par: responder por nodo y exigir el login de n8n.
 // Va repetido en cada webhook porque el SDK no admite Object.assign ni spread — el builder es un
@@ -138,6 +142,10 @@ const marcarCotizando = node({
   version: 1.1,
   config: {
     name: 'Marcar cotizando',
+    // Un `update` que no matchea ninguna fila devuelve 0 items, y un nodo sin items no corre:
+    // sin esto el nodo siguiente nunca se ejecuta y el webhook NUNCA responde — el navegador
+    // queda colgando sin error. Los nodos de lectura de panel.ts ya lo llevan por lo mismo.
+    alwaysOutputData: true,
     parameters: {
       resource: 'row',
       operation: 'update',
@@ -171,9 +179,13 @@ const dispararCotizar = node({
       repository: REPO_NOMBRE,
       workflowId: WORKFLOW_MP,
       ref: RAMA,
-      // "ambos": el cotizador necesita data/<codigo>/detalle.json, que es efímero y lo repuebla
-      // el radar en el mismo job.
-      inputs: expr('{{ JSON.stringify({ accion: "ambos", codigos: $(\'POST /mp/cotizar\').first().json.body.codigo, corrida_id: $execution.id }) }}'),
+      // "cotizar", no "ambos". El cotizador necesita data/<codigo>/detalle.json, que es efímero,
+      // pero reponerlo NO cuesta una corrida de radar: el paso "Traer el detalle" de mp.yml lo trae
+      // con UN request por código (`traer-detalle`, que delega en obtenerDetalleConCache). Con
+      // "ambos" este clic barría las 12 variantes `q` de las 5 categorías activas —contra una cuota
+      // con un 429 documentado a las 9 requests— y además se saltaba ese paso, que está condicionado
+      // a `cotizar || generar` y excluye `ambos`.
+      inputs: expr('{{ JSON.stringify({ accion: "cotizar", codigos: $(\'POST /mp/cotizar\').first().json.body.codigo, corrida_id: $execution.id }) }}'),
     },
     credentials: CRED_GITHUB,
   },
@@ -212,6 +224,10 @@ const marcarGenerando = node({
   version: 1.1,
   config: {
     name: 'Marcar generando',
+    // Un `update` que no matchea ninguna fila devuelve 0 items, y un nodo sin items no corre:
+    // sin esto el nodo siguiente nunca se ejecuta y el webhook NUNCA responde — el navegador
+    // queda colgando sin error. Los nodos de lectura de panel.ts ya lo llevan por lo mismo.
+    alwaysOutputData: true,
     parameters: {
       resource: 'row',
       operation: 'update',
@@ -294,6 +310,10 @@ const guardarDecision = node({
   version: 1.1,
   config: {
     name: 'Guardar la decisión',
+    // Un `update` que no matchea ninguna fila devuelve 0 items, y un nodo sin items no corre:
+    // sin esto el nodo siguiente nunca se ejecuta y el webhook NUNCA responde — el navegador
+    // queda colgando sin error. Los nodos de lectura de panel.ts ya lo llevan por lo mismo.
+    alwaysOutputData: true,
     parameters: {
       resource: 'row',
       operation: 'update',

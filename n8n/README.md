@@ -58,5 +58,13 @@ archivo es el cuerpo de una función con `$json`, `$input` y `$()` inyectados). 
 donde estos nueve archivos son ejecutables sin desplegar: no los ve el typecheck ni ningún import.
 Un cambio en `n8n/chunks/` se prueba ahí antes de publicarlo.
 
+Cobertura real, para no creerla más amplia de lo que es: **ocho de los nueve**. Tienen tests
+`ingesta`, `cooldown`, `faltantes`, `pedido-drive`, `decision`, `query-hijos`, `render-expediente` y
+`resumen-drive`. El único sin ninguno es **`render-panel.js`**.
+
+Y `test/construir-workflows.test.ts` corre `construir.mjs` sobre los tres workflows: un marcador
+`__CHUNK:` con typo o un chunk renombrado falla en `npm test` en vez de descubrirse al publicar.
+También delata un chunk en disco que ningún workflow incrusta.
+
 Ojo: un chunk corregido en el repo **no llega solo a producción**. Hay que publicarlo con el
 procedimiento de arriba, con `setNodeParameter` sobre `/jsCode` del nodo Code que lo usa.

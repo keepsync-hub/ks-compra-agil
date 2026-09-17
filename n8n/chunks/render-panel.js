@@ -30,9 +30,11 @@ const html = `<!doctype html>
 <main class="wrap">
   <div class="aviso">
     <b>Dos cosas bloquean cualquier expediente de capacitación, y este panel no las resuelve.</b><br>
-    (1) Ninguna oferta designa relator/a, y los seis TDR exigen título, CV y certificados
-    verificables. (2) Sigue sin confirmarse si KeepSync es OTEC registrada en SENCE, de lo que
-    dependen puntaje directo en Subtransportes y la exención de IVA con que Dipres presupuesta.
+    (1) Ninguna oferta designa relator/a, y los TDR exigen título, CV y certificados verificables:
+    sin eso la oferta se cae en admisibilidad. (2) KeepSync <b>no</b> es OTEC registrada en SENCE.
+    No es barrera de entrada —ninguna compra fichada lo exige como admisibilidad— pero cuesta el
+    puntaje donde se pondera, y sobre todo deja sin sustento la exención de IVA del art. 13 N°4
+    con que varios organismos presupuestan: cotizar el 90% de un tope, más 19%, no cabe bajo el tope.
   </div>
   <div class="grid" id="grid">Cargando…</div>
 </main>

@@ -209,18 +209,25 @@ El panel lista las solicitudes con su estado y, por tarjeta: **Cotizar**, **Avan
 `KeepSync - Mercado Público - Panchito / <codigo> — <organismo> /` con `_ENTREGABLES` y una carpeta
 por documento exigido. La página de expediente es donde se **cargan los antecedentes** de cada
 documento y donde un botón **Generar** produce los que KeepSync puede producir; muestra además, por
-documento, `sin insumos` / `con insumos (N)` / `listo`.
+documento, `sin insumos` / `con insumos (N)` / `listo` — con una distinción que importa: para un
+documento de **acopio** (título, CV, certificado, orden de compra) el archivo que sube la persona
+**es** el documento, así que cuenta como listo; no hay entregable que generar, y exigirlo topeaba el
+contador en la mitad de los documentos.
 
 El reparto: n8n orquesta, guarda estado y habla con Drive; `.github/workflows/mp.yml` corre el radar,
 el cotizador y el generador **reales del repo**. Los tres workflows están versionados en
 `n8n/workflows/`. **Nada de esto envía una oferta**: el envío al portal lo hace siempre una persona,
 y `_ENTREGABLES` es bandeja de revisión, no de salida.
 
-Para que funcione hacen falta tres cosas que no puede hacer el agente: los secretos del repo
-(`COMPRA_AGIL_TICKET`, `N8N_BASE_URL`, `N8N_CLAVE`), una credencial `httpHeaderAuth` en n8n con la
-cabecera `X-KS-Clave` apuntada al webhook de ingesta, y habilitar esta rama en
-Settings → Environments → github-pages (si no, `docs/panel/*.css|js` no se sirve y el panel se ve sin
-estilo).
+**Hoy el panel está apagado, y no por un bug.** Faltan tres cosas que el agente no puede hacer, y
+sin ellas ningún botón produce datos: los secretos del repo (`COMPRA_AGIL_TICKET`, `N8N_BASE_URL`,
+`N8N_CLAVE`) —medido en la primera corrida de `mp.yml`: llegan **vacíos** al job, y un secreto que
+existe se enmascara como `***`, no en blanco—, la credencial `httpHeaderAuth` «KS Ingesta MP» con la
+cabecera `X-KS-Clave`, que **no existe** en la instancia (la única de ese tipo se llama «Header Auth
+account»), y habilitar la rama en Settings → Environments → github-pages, cuya regla de protección
+hoy sólo admite `claude/mercadopublico-agente-compras-pgyedf` (si no, `docs/panel/*.css|js` no se
+sirve y el panel se ve sin estilo). Ver la sección del panel en `CLAUDE.md` para el detalle de lo
+medido y lo que queda pendiente.
 
 Subir archivos a la carpeta del expediente también se puede hacer desde la terminal con
 `npm run subir-documento -- <codigo> --prefijo=<NN> <archivo…>` (skill `subir-documento-drive`),
@@ -368,7 +375,33 @@ Detalle del diseño y de lo medido: la sección "Cuarto frente" de `CLAUDE.md`.
   sin que intervenga nadie. Lo que sigue diferido a **Claude Cowork en una máquina local** es el
   llenado y envío del formulario de oferta (`form-fill.ts`), cuyos selectores nunca se vieron contra
   el DOM real — están marcados `TODO(verificar en vivo)`; revisarlos con `page.pause()` en esa
-  sesión. Ver `docs/flujo.html` para el diagrama de dónde exactamente entra la persona.
+  sesión. `docs/flujo.html` diagrama dónde entra la persona en **este** tramo, pero es anterior al
+  panel operativo y no lo incluye: el tramo «de la cotización lista al expediente» se lee en la
+  sección de arriba y en `CLAUDE.md`, no ahí.
+- **Panel operativo (n8n + `mp.yml` + `docs/panel/`): construido, probado una vez contra
+  producción, y hoy apagado por insumos externos.** Se ejecutó de punta a punta el 2026-09-05 —hasta
+  entonces tenía `mp_solicitudes` en 0 filas y los workflows en 0 ejecuciones— y esa única corrida
+  encontró siete defectos, tres de ellos invisibles leyendo el código. Lo que sigue bloqueado no lo
+  puede resolver el agente: los tres secretos del repo y la credencial `httpHeaderAuth` «KS Ingesta
+  MP», detallados arriba.
+  Lo que **sí** se arregló en la evaluación del 2026-09-17, y que estaba vivo en la fuente:
+  1. `/mp/cotizar` despachaba `accion: "ambos"`, así que un clic en Cotizar seguía barriendo el
+     radar completo — la optimización a un request se había aplicado a `mp.yml` y a
+     `traer-detalle.ts`, pero no al llamador, y el paso `traer-detalle` excluye `ambos`.
+  2. `postear-n8n -- error` tomaba el texto de `--motivo` y la URL de `--run` por códigos de compra,
+     así que el paso que destraba una fila colgada creaba dos filas fantasma. Las banderas pasaron a
+     `--flag=valor`, la convención de los otros seis scripts, que vuelve el bug imposible.
+  3. `RAMA` apuntaba a una rama desde la que Pages no publica y a la que nadie lee.
+  4. «Listo» exigía un entregable generado incluso para los documentos de acopio, que por diseño
+     no lo tienen.
+  5. Los avisos del panel seguían preguntando si KeepSync es OTEC en SENCE, ya respondido (no lo es).
+  6. Tres nodos de escritura sin `alwaysOutputData`: un `update` sin match dejaba el webhook sin
+     responder.
+  **Pendiente y deliberadamente diferido** a una sesión con el MCP de n8n autenticado, porque pide
+  seis nodos nuevos y `n8n/README.md` es explícito en que un nodo escrito de memoria es lo que
+  produjo tres de los siete bugs: cerrar el hueco del entregable (nada sube a `_ENTREGABLES` lo que
+  genera el repo) y el freno de cuota, que hoy mide el último `actualizado` de cualquier fila en vez
+  de la última corrida del radar, así que un clic en «Avanzar» lo reinicia.
 - **`output/` se versiona en el repo a propósito** (cotizaciones `.pptx`/`.pdf`, resúmenes,
   notas, informes) — es el respaldo completo para la sesión local de Cowork y para cualquiera
   que necesite revisar el trabajo sin correr nada.

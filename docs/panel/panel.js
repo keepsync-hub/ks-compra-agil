@@ -16,6 +16,18 @@
   function clp(n) { return n ? '$' + Number(n).toLocaleString('es-CL') : '—'; }
   function banda(s) { return s >= 75 ? 'ok' : s >= 60 ? 'warn' : 'bad'; }
 
+  var MIN_COLGADA = 30;
+
+  /** Trabajo realmente en curso: en `cotizando`/`generando` y actualizado hace poco. */
+  function enCurso(f) {
+    if (f.estado !== 'cotizando' && f.estado !== 'generando') return false;
+    var t = Date.parse(f.actualizado || '');
+    // Sin fecha legible no se puede saber, y ante la duda conviene NO atrapar la fila: el costo de
+    // equivocarse acá es un dispatch de más, que `concurrency: mp-repo` de mp.yml serializa igual.
+    if (isNaN(t)) return false;
+    return (Date.now() - t) / 60000 < MIN_COLGADA;
+  }
+
   function dias(cierre) {
     if (!cierre) return null;
     var d = new Date(String(cierre).replace(' ', 'T'));
@@ -41,6 +53,9 @@
 
   function tarjeta(f) {
     var g = GLOSA[f.estado] || [f.estado || 'Sin revisar', ''];
+    if ((f.estado === 'cotizando' || f.estado === 'generando') && !enCurso(f)) {
+      g = ['Sin respuesta hace más de ' + MIN_COLGADA + ' min', 'bad'];
+    }
     var d = dias(f.fechaCierre);
     var docs = [];
     try { docs = JSON.parse(f.documentosJson || '[]'); } catch (e) { docs = []; }
@@ -89,7 +104,11 @@
     }
 
     h += '<div class="cta">';
-    if (f.estado !== 'cotizando' && f.estado !== 'generando') {
+    // Ocultar "Cotizar" mientras hay trabajo en curso evita el doble clic, pero convierte una
+    // corrida caída en una fila muerta: el paso que la destraba (mp.yml "Avisar el fallo a n8n")
+    // necesita N8N_BASE_URL y N8N_CLAVE, los mismos secretos cuya ausencia cuelga la corrida.
+    // Pasados 30 min no hay nadie trabajando en esa fila: el botón vuelve.
+    if (!enCurso(f)) {
       h += '<button class="btn sec" data-accion="cotizar">Cotizar</button>';
     }
     if (f.pdfUrl) {
