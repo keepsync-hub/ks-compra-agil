@@ -13,7 +13,7 @@ import { cierreYaPaso } from "../lib/tiempo.js";
  *   npm run postear-n8n -- radar [--dry-run]
  *   npm run postear-n8n -- cotizacion <codigo> [--dry-run]
  *   npm run postear-n8n -- expediente <codigo> [--dry-run]
- *   npm run postear-n8n -- error <codigo…> --motivo "…" --run <url>
+ *   npm run postear-n8n -- error <codigo…> --motivo="…" --run=<url>
  *
  * No se le pide a `radar.ts` que emita un JSON nuevo para esto: el índice versionado
  * (`historico/observaciones.jsonl`) ya es la proyección de cada oportunidad, y `ultimaPorCodigo()`
@@ -103,6 +103,10 @@ function documentosParaDrive(codigo: string) {
       documento: d.documento,
       carpeta: nombreCarpeta(d),
       tipo: d.tipo,
+      // Solo si hay plantilla el generador puede rellenar un `formulario`; sin ella lo deja en
+      // `bloqueado` (generar-documento.ts). Va el booleano y no el slug: el expediente necesita
+      // saber si se puede generar, no con qué archivo.
+      plantilla: Boolean(d.plantilla),
       provisional: d.provisional,
     })),
   };
@@ -195,10 +199,13 @@ async function main(): Promise<void> {
   const positional = args.filter((a) => !a.startsWith("--"));
   const modo = positional[0];
 
-  const valorDe = (bandera: string): string => {
-    const i = args.indexOf(bandera);
-    return i >= 0 ? (args[i + 1] ?? "") : "";
-  };
+  // Banderas con valor en la forma `--k=v`, que es la del resto del repo (estudio-mercado.ts,
+  // mercado.ts, kompu.ts, leads.ts). No es cosmético: con `--motivo "texto"` el valor no empieza
+  // con "--", así que el filtro de posicionales de arriba lo tomaba por un código y `error` posteaba
+  // el motivo y la URL de la corrida como si fueran compras. Con `=` el filtro es correcto por
+  // construcción y no queda nada que se pueda volver a confundir.
+  const valorDe = (bandera: string): string =>
+    args.find((a) => a.startsWith(`${bandera}=`))?.slice(bandera.length + 1) ?? "";
 
   let payload: unknown;
   switch (modo) {

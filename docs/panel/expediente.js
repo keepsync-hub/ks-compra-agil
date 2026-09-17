@@ -22,9 +22,19 @@
     clearTimeout(m._t); m._t = setTimeout(function () { m.style.display = 'none'; }, 7000);
   }
 
+  // `puedeGenerarse` lo calcula render-expediente.js, que es el que conoce la plantilla. El
+  // fallback cubre el intervalo entre el merge —esta página queda viva en Pages al instante— y la
+  // publicación del chunk en n8n, que es manual: sin él la nota diría "0 documentos".
+  function puedeGenerarse(doc) {
+    return typeof doc.puedeGenerarse === 'boolean' ? doc.puedeGenerarse : doc.tipo !== 'acopio';
+  }
+
   function estadoDoc(doc) {
-    if (doc.listo) return ['ok', 'Listo'];
+    // Para un acopio el archivo subido ES el documento: decir "Listo" sugeriría que lo produjo
+    // KeepSync. Es lo mismo para el KPI, distinto para quien lee la fila.
+    if (doc.listo) return ['ok', doc.tipo === 'acopio' ? 'Subido' : 'Listo'];
     if ((doc.archivos || []).length) return ['warn', 'Con insumos (' + doc.archivos.length + ')'];
+    if (doc.tipo === 'formulario' && !puedeGenerarse(doc)) return ['warn', 'Falta rellenarlo a mano'];
     return ['bad', 'Sin insumos'];
   }
 
@@ -97,15 +107,29 @@
     document.getElementById('docs').innerHTML = h ||
       '<p class="sub">No hay documentos registrados para esta oportunidad.</p>';
 
-    var generables = 0, acopios = 0;
+    // Tres cubetas, no dos. Antes los `formulario` sin plantilla se contaban como generables, así
+    // que el botón prometía producir documentos que el generador deja en `bloqueado`.
+    var generables = 0, acopios = 0, sinPlantilla = 0;
     for (var j = 0; j < docs.length; j++) {
-      if (docs[j].tipo === 'acopio') acopios++; else generables++;
+      if (docs[j].tipo === 'acopio') acopios++;
+      else if (puedeGenerarse(docs[j])) generables++;
+      else sinPlantilla++;
     }
-    var nota = 'Generar produce los ' + generables + ' documento(s) que KeepSync puede armar ' +
-      '(propuestas y anexos con plantilla).';
+    // Cero generables es un caso real —en Dipres, de 6 documentos exigidos sólo 1 lo es— y el
+    // botón tiene que decirlo en vez de ofrecer "los 0 documento(s)".
+    var nota = generables
+      ? 'Generar produce los ' + generables + ' documento(s) que KeepSync puede armar ' +
+        '(propuestas y anexos con plantilla).'
+      : 'Acá no hay nada que «Generar» pueda producir: ningún documento de esta compra es una ' +
+        'propuesta propia ni un anexo con plantilla declarada.';
     if (acopios) {
-      nota += ' Los otros ' + acopios + ' no se generan: son evidencia emitida por terceros ' +
+      nota += ' Los ' + acopios + ' de acopio no se generan: son evidencia emitida por terceros ' +
         '(títulos, certificados, órdenes de compra) y hay que subirlos.';
+    }
+    if (sinPlantilla) {
+      nota += ' Y ' + sinPlantilla + ' formulario(s) del organismo no declaran plantilla en ' +
+        'config/capacitaciones.json: «Generar» los deja bloqueados, hay que rellenarlos a mano y ' +
+        'subirlos.';
     }
     if (d.catalogoProvisional) {
       nota += ' Ojo: la lista de documentos es PROVISIONAL — salió de la detección automática, ' +
@@ -166,7 +190,8 @@
       body: JSON.stringify({ codigo: d.codigo })
     }).then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
-      aviso('Generación pedida. Tarda unos minutos; recargá esta página para ver los entregables.');
+      aviso('Generación pedida. Tarda unos minutos. Ojo: hoy los documentos generados quedan en el ' +
+        'repo, no en _ENTREGABLES de Drive — esa subida sigue siendo manual.');
     }).catch(function (e) {
       aviso('No se pudo: ' + e.message);
       b.disabled = false;

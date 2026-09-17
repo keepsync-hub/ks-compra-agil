@@ -195,7 +195,10 @@ jobs:
         run: |
           LISTA=$(echo "$CODIGOS" | tr ',' ' ')
           if [ -z "$LISTA" ]; then LISTA="-"; fi
+          # Las banderas van en la forma `--k=v`. Con `--motivo "texto"` el valor no empezaba con
+          # "--" y postear-n8n lo tomaba por un código: este paso creaba filas fantasma en
+          # mp_solicitudes con el motivo y la URL de la corrida como `codigo`.
           npm run postear-n8n -- error $LISTA \
-            --motivo "Falló la acción '$ACCION' en GitHub Actions" \
-            --run "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --motivo="Falló la acción '$ACCION' en GitHub Actions" \
+            --run="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
           || echo "::warning::Tampoco se pudo avisar el fallo a n8n."

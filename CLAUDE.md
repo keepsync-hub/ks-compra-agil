@@ -406,12 +406,19 @@ catálogo de documentos, que es el contrato que comparten `postear-n8n.ts`, `car
 `render-expediente.js` sin verse entre sí. Antes esos nueve archivos no los veía ni el typecheck y su
 único ambiente de ejecución era producción.
 
-**Un clic en "Cotizar" costaba 12+N requests para obtener uno que cuesta 1.** `/mp/cotizar`
-despachaba `accion: "ambos"` y barría las 12 variantes `q` de las 5 categorías activas sólo para
-reponer `data/<codigo>/detalle.json`. `npm run traer-detalle -- <codigo>` lo trae con **un** request
-delegando en `obtenerDetalleConCache()`. También: `mp.yml` corre `typecheck` y `test` antes de gastar
-cuota, y Chromium se instala sólo si el catálogo tiene algún documento `generable`
-(`generar-documento --solo-listar`) — en Dipres, de 6 documentos exigidos sólo 1 lo es.
+**Un clic en "Cotizar" costaba 12+N requests para obtener uno que cuesta 1 — y el arreglo tardó
+doce días en llegar a quien llama.** `/mp/cotizar` despachaba `accion: "ambos"` y barría las 12
+variantes `q` de las 5 categorías activas sólo para reponer `data/<codigo>/detalle.json`.
+`npm run traer-detalle -- <codigo>` lo trae con **un** request delegando en
+`obtenerDetalleConCache()`. Eso se escribió el 2026-09-05 y este archivo lo dio por hecho, **pero el
+diff de ese día sobre `acciones.ts` tocó únicamente `workflowInputs`**: el dispatch siguió pidiendo
+`"ambos"` hasta el 2026-09-17. Peor que no ahorrar nada: el paso «Traer el detalle» de `mp.yml` está
+condicionado a `cotizar || generar` y **excluye `ambos`**, así que el clic pagaba el radar completo
+*y* se salteaba el request barato. Vale como recordatorio de que una optimización no está hecha
+hasta que la pide el llamador, y que el mensaje del commit no es evidencia de eso.
+También, esas sí completas: `mp.yml` corre `typecheck` y `test` antes de gastar cuota, y Chromium se
+instala sólo si el catálogo tiene algún documento `generable` (`generar-documento --solo-listar`) —
+en Dipres, de 6 documentos exigidos sólo 1 lo es.
 
 **El radar borraba el informe de la corrida anterior cuando no llegaba a la API.** La grilla de
 `docs/index.html` tenía el guard; `output/radar-ultima-corrida.md` no, porque `huboAlgunListado` se
@@ -430,12 +437,89 @@ corrida de `mp.yml`: llegan vacíos al job —un secreto que existe se enmascara
 blanco—, el radar reportó *"Falta COMPRA_AGIL_API_TICKET"* en su única consulta y `postear-n8n` se
 negó a enviar. Hasta que estén, ningún botón del panel produce datos. Tampoco existe todavía la
 credencial `httpHeaderAuth` de n8n llamada "KS Ingesta MP" con la cabecera `X-KS-Clave`: la única de
-ese tipo en la instancia se llama "Header Auth account". Y sigue abierto el hueco del entregable
-(nada sube el documento generado a `_ENTREGABLES`) y el repunte de `RAMA` en `acciones.ts`, hoy
-apuntada a `claude/n8n-radar-cotizaciones-08vr00`, desde donde Pages no publica.
+ese tipo en la instancia se llama "Header Auth account". Hasta que existan, nada de lo de abajo se
+puede probar contra producción.
 
 **Freno de cuota de 15 minutos** en `/mp/radar`: cada corrida barre todas las categorías activas y el
 repo tiene un 429 documentado a las 9 requests.
+
+### Lo que encontró la evaluación completa del 2026-09-17
+
+El panel llevaba doce días sin tocarse y seguía apagado por los insumos de arriba. Evaluarlo entero
+encontró que **estar apagado escondía defectos vivos en la fuente**, y el más caro es el de "Cotizar"
+de más arriba: una optimización que este archivo afirmaba en pasado y que en el código no estaba.
+Los otros cinco, todos arreglados y con test donde se podía:
+
+- **`postear-n8n -- error` mandaba basura como códigos.** `positional` filtra sólo lo que empieza con
+  `--`, y el modo `error` usaba `--motivo "texto"`: el texto del motivo y la URL de la corrida
+  entraban como si fueran compras, y `ingesta.js` sólo descarta vacíos y `"-"`. El paso que existe
+  para destrabar una fila colgada creaba **dos filas fantasma** con `estado: "error"`, y el panel las
+  pintaba como tarjetas. Está en el camino de falla, el menos probado de todos. Se arregla pasando a
+  `--flag=valor`, la convención de los otros seis scripts del repo: con `=` el filtro es correcto por
+  construcción y no queda nada que se pueda volver a confundir. Parchear el filtro habría dejado la
+  clase de bug viva.
+- **`RAMA` apuntaba a `claude/n8n-radar-cotizaciones-08vr00`.** Cada clic disparaba `mp.yml` contra
+  una rama que Pages no publica y a la que nadie lee; el `git push` de vuelta iba ahí. Va a
+  `claude/mercadopublico-agente-compras-pgyedf`, la única que el entorno `github-pages` admite — con
+  la consecuencia de que `mp.yml` corre el código **de esa rama**, así que ahí tienen que estar estos
+  cambios.
+- **"Listo" no podía aplicarse a la mitad de los documentos.** `render-expediente.js` exigía un
+  entregable en `_ENTREGABLES` para cualquier documento, y un `acopio` —título, CV, certificado,
+  orden de compra— lo emite un tercero: ese entregable no puede existir. Como 15 de los 30 documentos
+  exigidos son de acopio, el KPI "X de N listos" estaba topeado por diseño. Ahora un acopio con
+  archivo en su carpeta está listo, y la fila dice *Subido* en vez de *Listo* para no sugerir que lo
+  produjo KeepSync. Va en el chunk y no en `docs/panel/expediente.js` porque es el único de los dos
+  que `npm test` puede ejecutar, y arregla de un tiro el badge, el KPI y lo que ve el skill
+  `subir-documento-drive`.
+- **El botón "Generar" prometía de más.** La nota contaba como generables todos los que no son
+  acopio, incluidos los `formulario` sin `plantilla` declarada, que `generar-documento.ts` deja en
+  `bloqueado`. Va un `puedeGenerarse` calculado con el mismo criterio del generador, y la nota pasa a
+  tres cubetas. `docs/panel/expediente.js` lo lee **con fallback**: esa página queda viva en Pages al
+  mergear y el chunk espera publicación manual, así que sin el fallback diría "0 documentos" en el
+  intervalo.
+- **Tres nodos de escritura sin `alwaysOutputData`.** `marcarCotizando`, `marcarGenerando` y
+  `guardarDecision`: un `update` que no matchea ninguna fila devuelve 0 items, y un nodo sin items no
+  corre, así que el webhook **nunca responde** y el navegador queda colgando sin error. Los de
+  lectura de `panel.ts` ya lo llevaban.
+- **Los avisos del panel seguían preguntando lo ya respondido.** Decían *"sigue sin confirmarse si
+  KeepSync es OTEC registrada en SENCE"* cuando el 2026-09-08 quedó confirmado que **no** lo es. La
+  nota de `docs/index.html` se había corregido ese día; el copy del panel quedó fuera. Y hablaban de
+  "los seis TDR" con veinticinco cotizaciones fichadas: el aviso no necesita un número que envejece.
+- **Nada ejecutaba `construir.mjs`.** Los workflows no son TypeScript válido —llevan los marcadores
+  `__CHUNK:`— así que el typecheck no los ve, y un chunk renombrado se descubría al publicar en n8n.
+  Va `npm run n8n:construir` y `test/construir-workflows.test.ts`, que construye los tres y además
+  delata un chunk en disco que ningún workflow incrusta. `resumen-drive.js` pasó de 0 tests a 3.
+
+**Lo que se dejó pendiente a propósito, y por qué.** Dos cosas piden nodos de n8n nuevos, y
+`n8n/README.md` es explícito en que escribir un parámetro de nodo de memoria es lo que produjo tres
+de los siete bugs del 2026-09-05: *"una muestra escrita a mano no es una medición"*. Sin el MCP de
+n8n autenticado no se puede correr `get_node_types`, así que escribirlos acá sería repetir el error a
+mayor escala. Van a una sesión que pueda validarlos:
+
+1. **El hueco del entregable**: nada sube a `_ENTREGABLES` lo que genera el repo, y
+   `docs/panel/expediente.js` dejó de prometerlo mientras siga así. El diseño ya está decidido:
+   persistir `entregablesId` en `guardarDrive` —lo calcula `resumen-drive.js` y hoy se tira, y ya
+   tiene test—, dos rutas nuevas con `headerAuth` y la credencial *ya existente* `KS Ingesta MP`
+   (ningún secreto nuevo: `N8N_CLAVE` ya está en `mp.yml`), un modo `entregables` en `postear-n8n.ts`
+   y una línea en el `case generar)` de "Avisar a n8n". Son **dos** rutas y no una porque el binario
+   de un webhook no sobrevive a un nodo `dataTable`: resolver el destino y subir son dos requests,
+   igual que ya lo hace el skill `subir-documento-drive`. Y no se extiende `/mp/subir` porque un
+   webhook admite una sola `authentication`, y pasarlo a `headerAuth` pondría `X-KS-Clave` dentro de
+   `docs/panel/expediente.js`, que es asset **público** de Pages. Dato que lo hace barato: los
+   nombres que ya genera `generar-documento.ts` (`NN - <documento>.pdf|.docx`) calzan exactamente con
+   lo que `render-expediente.js` busca — no hay convención que inventar.
+2. **El freno de cuota mide la cosa equivocada.** `cooldown.js` maximiza `actualizado` sobre las
+   filas con `corridaId`, pero `actualizado` lo bumpea **cualquier** acción: un clic en "Avanzar"
+   reinicia los 15 minutos sin que el radar haya corrido. Arreglarlo bien pide una columna `radarEn`
+   escrita sólo por la rama `radar` de `ingesta.js` —o sea, publicar la ruta compartida por radar,
+   cotización, expediente y error—, y el defecto falla hacia el lado seguro, que es no gastar cuota.
+
+**Y una trampa que el panel todavía tiene, mitigada pero no cerrada.** El paso «Avisar el fallo a
+n8n» existe para que una corrida caída no deje la fila en `cotizando` para siempre, pero llama a
+`postear-n8n`, que necesita `N8N_BASE_URL` y `N8N_CLAVE`: los mismos secretos cuya ausencia cuelga la
+corrida. El rescate depende de lo que lo bloquea. Como `panel.js` ocultaba "Cotizar" justamente
+mientras la fila está `cotizando`, no había salida; ahora el botón vuelve pasados 30 minutos sin
+actualización y la tarjeta lo dice. Es una mitigación en la página, no un arreglo del circuito.
 
 ## Generar documentos: tres naturalezas, no una
 

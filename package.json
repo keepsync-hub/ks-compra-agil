@@ -37,6 +37,7 @@
     "login-portal": "tsx licitaciones/src/scripts/login-portal.ts",
     "traer-detalle": "tsx src/scripts/traer-detalle.ts",
     "postear-n8n": "tsx src/scripts/postear-n8n.ts",
+    "n8n:construir": "node n8n/construir.mjs",
     "generar-documento": "tsx src/scripts/generar-documento.ts",
     "subir-documento": "tsx .claude/skills/subir-documento-drive/scripts/subir-documento.ts"
   },
