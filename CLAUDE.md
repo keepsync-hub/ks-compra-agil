@@ -904,3 +904,22 @@ El sello de BORRADOR acá **no** se rige por `identidad_confirmada`: ese flag es
 falten domicilio, giro SII y representante legal, que son datos para firmar anexos de una compra
 pública y no aparecen en esta cotización. Se sella cuando falta lo que el documento sí afirma —razón
 social, RUT o correo—, que es el defecto real.
+
+**`--unidad=servicio`, y por qué la plantilla necesitaba enterarse (2026-09-20).** La primera
+cotización de este script que no era de asientos nominativos —tres servicios que KeepSync paga en
+dólares y refactura a Kompu (`INSUMOS DE COMPUTACION JOSE ENRIQUE URREA ROSALES E.I.R.L.`,
+`Q-20260920-KOMPU`): Anthropic USD 5,95, Hostinger USD 13,08 y GitHub USD 4,00, un mes cada uno—
+sacó a la luz que todo el texto del PDF daba por hecho el caso de Claude Max: la carátula habría
+dicho «3 usuarios», el alcance «un usuario por suscripción, sin compartir credenciales» y las
+condiciones «administración de los asientos», que describen mal una cuenta de hosting o un
+repositorio. `unidad` es un campo opcional de la entrada (`--unidad=servicio` en el script) y el
+default sigue siendo `usuario`, así que las cotizaciones ya emitidas no cambian de texto — hay un
+test que lo fija.
+
+Y dos defectos de castellano que solo se veían con estos números, del mismo tipo que el
+`computacionales?` del radar de Kompu: `${meses} meses` imprimía **«1 meses»** tres veces en un
+documento de cliente (toda cotización anterior era de 12 o 24 meses), y `join(" y ")` daba «A y B y
+C» (ninguna anterior tenía tres líneas). Van con `glosaMeses()` y `listaEs()` en
+`src/lib/cotizacion-suscripcion-usd.ts`, y `test/cotizacion-suscripcion.test.ts` cubre los tres
+casos más el default por usuario. Los tres salieron de **mirar las láminas renderizadas a PNG**, no
+de leer el HTML: en la fuente `${meses} meses` se lee bien.

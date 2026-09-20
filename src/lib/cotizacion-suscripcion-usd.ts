@@ -62,6 +62,14 @@ export interface SuscripcionUsdEntrada {
   fuenteTipoCambio: string;
   oferente: IdentidadOferente;
   fecha: Date;
+  /**
+   * Qué se cuenta en la carátula y en el alcance. "usuario" (el default) es el caso de asiento
+   * nominativo de SaaS — Claude Max, ChatGPT Plus —, donde cada suscripción es de una persona.
+   * "servicio" es el caso de una cuenta por producto que no se reparte entre personas — hosting,
+   * repositorios, créditos de API —: ahí "3 usuarios, un usuario por suscripción, sin compartir
+   * credenciales" describe mal lo que se está vendiendo, que son 3 servicios.
+   */
+  unidad?: "usuario" | "servicio";
   /** Condiciones extra, además de las que este módulo agrega siempre. */
   condicionesExtra?: string[];
 }
@@ -175,6 +183,23 @@ function identidadSuficiente(o: IdentidadOferente): boolean {
   return !pendiente(o.razon_social) && !pendiente(o.rut) && !pendiente(o.contacto_email);
 }
 
+/**
+ * "A, B y C", no "A y B y C". Con una o dos líneas el `join(" y ")` anterior daba lo mismo; con
+ * tres, que es cuando se cotiza un paquete de servicios, sale mal escrito en las tres láminas.
+ */
+function listaEs(partes: string[]): string {
+  if (partes.length <= 1) return partes[0] ?? "";
+  return `${partes.slice(0, -1).join(", ")} y ${partes[partes.length - 1]}`;
+}
+
+/**
+ * "1 mes", no "1 meses". El plural fijo no se notaba mientras toda cotización fuera de 12 o 24
+ * meses; una de un solo mes lo pone tres veces en la carátula de un documento de cliente.
+ */
+function glosaMeses(n: number): string {
+  return `${n} ${n === 1 ? "mes" : "meses"}`;
+}
+
 /** Los meses de vigencia solo se pueden anunciar como uno si todas las líneas coinciden. */
 function mesesComunes(r: SuscripcionUsdResumen): number | null {
   const primera = r.lineas[0];
@@ -190,21 +215,25 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
     ? ""
     : `<div class="badge">BORRADOR — identidad del oferente sin confirmar</div>`;
 
+  const porServicio = e.unidad === "servicio";
   const usuariosTotal = r.lineas.reduce((a, l) => a + l.usuarios, 0);
   const plural = usuariosTotal === 1 ? "" : "s";
+  const unidadTotal = `${usuariosTotal} ${porServicio ? "servicio" : "usuario"}${plural}`;
   const meses = mesesComunes(r);
-  const glosaVigencia = meses !== null ? `${meses} meses` : "vigencia por línea";
-  const subtitulo = `${e.titulo} — ${usuariosTotal} usuario${plural}, ${glosaVigencia}`;
+  const glosaVigencia = meses !== null ? glosaMeses(meses) : "vigencia por línea";
+  const subtitulo = `${e.titulo} — ${unidadTotal}, ${glosaVigencia}`;
 
   // "2 suscripciones Claude Max 5x" cuando hay varias del mismo producto; "1 suscripción X y 1
   // suscripción Y" cuando son distintas. Es la misma frase que encabeza la lámina de alcance.
   const glosaLinea = (l: { usuarios: number; producto: string }) =>
     `${l.usuarios} ${l.usuarios === 1 ? "suscripción" : "suscripciones"} ${l.producto}`;
-  const glosaLineas = r.lineas.map(glosaLinea).join(" y ");
+  const glosaLineas = listaEs(r.lineas.map(glosaLinea));
 
   const condiciones = [
-    `Suscripciones nominativas: ${glosaLineas}, un usuario por suscripción, por ${glosaVigencia} corridos desde la activación.`,
-    "Activación, administración de los asientos y soporte de primer nivel a cargo de KeepSync; facturación en pesos chilenos.",
+    porServicio
+      ? `Servicios contratados y administrados por KeepSync para el cliente: ${glosaLineas}, por ${glosaVigencia} corrido${meses === 1 ? "" : "s"} desde la activación.`
+      : `Suscripciones nominativas: ${glosaLineas}, un usuario por suscripción, por ${glosaVigencia} corrido${meses === 1 ? "" : "s"} desde la activación.`,
+    `Activación, administración de ${porServicio ? "las cuentas" : "los asientos"} y soporte de primer nivel a cargo de KeepSync; facturación en pesos chilenos.`,
     // Acá iba "Cotización comercial directa: no constituye oferta ni respuesta a ningún proceso de
     // compra pública." El usuario la sacó el 2026-08-28: es una salvedad interna, no una condición
     // comercial, y no aporta nada al cliente que recibe el documento. Que este cotizador no sirva
@@ -215,7 +244,9 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
   ];
 
   const alcance = [
-    ...r.lineas.map((l) => `${glosaLinea(l)}, una por usuario, por ${l.meses} meses.`),
+    ...r.lineas.map(
+      (l) => `${glosaLinea(l)}, ${porServicio ? "" : "una por usuario, "}por ${glosaMeses(l.meses)}.`,
+    ),
     "Alta de las cuentas y entrega de accesos a las personas que designe el cliente.",
     "Gestión de la renovación, cambios de titular y bajas durante la vigencia.",
     "Facturación en pesos chilenos por KeepSync: el cliente no asume el pago en dólares ni la variación cambiaria dentro del período cotizado.",
@@ -226,7 +257,7 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
     .map(
       (l) => `
       <tr>
-        <td>Suscripción ${esc(l.producto)}${l.usuarios > 1 ? " (1 usuario c/u)" : ""}</td>
+        <td>Suscripción ${esc(l.producto)}${l.usuarios > 1 && !porServicio ? " (1 usuario c/u)" : ""}</td>
         <td class="c">${l.usuarios}</td>
         <td class="c">${l.meses}</td>
         <td class="r">${formatoClp(l.neto_unitario_mensual_clp)}</td>
@@ -265,10 +296,10 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
 <div class="slide">
   ${sello}
   <h2>Alcance de la suscripción</h2>
-  <p class="gray" style="font-size:11pt;max-width:9in;">${esc(glosaLineas)}, un usuario por suscripción, por ${esc(glosaVigencia)}, contratadas y administradas por KeepSync para ${esc(e.cliente)}.</p>
+  <p class="gray" style="font-size:11pt;max-width:9in;">${esc(glosaLineas)}, ${porServicio ? "" : "un usuario por suscripción, "}por ${esc(glosaVigencia)}, contratadas y administradas por KeepSync para ${esc(e.cliente)}.</p>
   <div class="grid3">
-    <div class="card"><div class="num-badge">${usuariosTotal}</div><strong>${usuariosTotal === 1 ? "Suscripción" : "Suscripciones"}</strong><p class="gray" style="font-size:9.5pt;">Un asiento nominativo por usuario, sin compartir credenciales.</p></div>
-    <div class="card"><div class="num-badge">${meses ?? "—"}</div><strong>Meses de vigencia</strong><p class="gray" style="font-size:9.5pt;">Período completo cotizado por adelantado, a precio cerrado en pesos.</p></div>
+    <div class="card"><div class="num-badge">${usuariosTotal}</div><strong>${usuariosTotal === 1 ? "Suscripción" : "Suscripciones"}</strong><p class="gray" style="font-size:9.5pt;">${porServicio ? "Una cuenta por servicio, a nombre de KeepSync." : "Un asiento nominativo por usuario, sin compartir credenciales."}</p></div>
+    <div class="card"><div class="num-badge">${meses ?? "—"}</div><strong>${meses === 1 ? "Mes" : "Meses"} de vigencia</strong><p class="gray" style="font-size:9.5pt;">Período completo cotizado por adelantado, a precio cerrado en pesos.</p></div>
     <div class="card"><div class="num-badge">✓</div><strong>Gestión KeepSync</strong><p class="gray" style="font-size:9.5pt;">Alta, soporte, renovación y facturación en CLP a cargo del oferente.</p></div>
   </div>
   <h2 style="font-size:14pt;margin-top:22pt;">Qué incluye</h2>

@@ -1,0 +1,180 @@
+{
+  "id": "Q-20260920-KOMPU",
+  "titulo": "Anthropic, Hostinger y GitHub",
+  "cliente": "INSUMOS DE COMPUTACION JOSE ENRIQUE URREA ROSALES E.I.R.L. (Kompu.cl) — RUT 76.358.238-8",
+  "fuente_tipo_cambio": "dólar observado del 17-09-2026 (último publicado al 20-09-2026), mindicador.cl — verificado con curl; el fetch de Node no sale por el proxy de este entorno",
+  "tipo_cambio_observado": 954.85,
+  "monto_usd_total": 23.03,
+  "neto_clp": 31749,
+  "iva_clp": 6032,
+  "total_clp": 37781,
+  "lineas": [
+    {
+      "producto": "Anthropic (Claude)",
+      "usuarios": 1,
+      "meses": 1,
+      "precio_lista_usd_mes": 5.95,
+      "fuente_precio_lista": "Cargo internacional en la tarjeta de KeepSync del 18-09-2026, glosa \"Anthropic compras intma\" (San Francisco), USD 5,95 — estado de cuenta aportado por el usuario el 20-09-2026",
+      "monto_usd": 5.95,
+      "neto_unitario_mensual_clp": 8203,
+      "neto_clp": 8203,
+      "iva_clp": 1558,
+      "total_clp": 9761,
+      "calculo": {
+        "monto_usd": 5.95,
+        "tipo_cambio_observado": 954.85,
+        "recargo_tipo_cambio_pct": 5.5,
+        "tipo_cambio_ajustado": 1007.37,
+        "costo_clp": 5994,
+        "impuesto_no_recuperable_pct": 19,
+        "costo_con_impuesto_clp": 7133,
+        "markup_pct": 15,
+        "precio_cotizacion_clp": 8203,
+        "iva_venta_pct": 19,
+        "valor_final_clp": 9761,
+        "pasos": [
+          {
+            "paso": "1. Tipo de cambio ajustado",
+            "descripcion": "Tipo de cambio observado ($954.85) + 5.5%",
+            "valor_clp": 1007.37
+          },
+          {
+            "paso": "2. Costo",
+            "descripcion": "USD 5.95 × tipo de cambio ajustado",
+            "valor_clp": 5994
+          },
+          {
+            "paso": "3. Costo con impuesto no recuperable",
+            "descripcion": "Costo + 19% (impuesto que KeepSync no puede recuperar, se trata como costo)",
+            "valor_clp": 7133
+          },
+          {
+            "paso": "4. Precio de cotización (neto)",
+            "descripcion": "Costo con impuesto + 15% de markup — este es el precio a utilizar en la cotización",
+            "valor_clp": 8203
+          },
+          {
+            "paso": "5. Valor final (con IVA de venta)",
+            "descripcion": "Precio de cotización + 19% de IVA — valor final a presentar",
+            "valor_clp": 9761
+          }
+        ]
+      }
+    },
+    {
+      "producto": "Hostinger (hosting web)",
+      "usuarios": 1,
+      "meses": 1,
+      "precio_lista_usd_mes": 13.08,
+      "fuente_precio_lista": "Cargo internacional en la tarjeta de KeepSync del 18-09-2026, glosa \"Wwwhostingercom compras intma\" (Larnaca), USD 13,08 — estado de cuenta aportado por el usuario el 20-09-2026",
+      "monto_usd": 13.08,
+      "neto_unitario_mensual_clp": 18032,
+      "neto_clp": 18032,
+      "iva_clp": 3426,
+      "total_clp": 21458,
+      "calculo": {
+        "monto_usd": 13.08,
+        "tipo_cambio_observado": 954.85,
+        "recargo_tipo_cambio_pct": 5.5,
+        "tipo_cambio_ajustado": 1007.37,
+        "costo_clp": 13176,
+        "impuesto_no_recuperable_pct": 19,
+        "costo_con_impuesto_clp": 15680,
+        "markup_pct": 15,
+        "precio_cotizacion_clp": 18032,
+        "iva_venta_pct": 19,
+        "valor_final_clp": 21458,
+        "pasos": [
+          {
+            "paso": "1. Tipo de cambio ajustado",
+            "descripcion": "Tipo de cambio observado ($954.85) + 5.5%",
+            "valor_clp": 1007.37
+          },
+          {
+            "paso": "2. Costo",
+            "descripcion": "USD 13.08 × tipo de cambio ajustado",
+            "valor_clp": 13176
+          },
+          {
+            "paso": "3. Costo con impuesto no recuperable",
+            "descripcion": "Costo + 19% (impuesto que KeepSync no puede recuperar, se trata como costo)",
+            "valor_clp": 15680
+          },
+          {
+            "paso": "4. Precio de cotización (neto)",
+            "descripcion": "Costo con impuesto + 15% de markup — este es el precio a utilizar en la cotización",
+            "valor_clp": 18032
+          },
+          {
+            "paso": "5. Valor final (con IVA de venta)",
+            "descripcion": "Precio de cotización + 19% de IVA — valor final a presentar",
+            "valor_clp": 21458
+          }
+        ]
+      }
+    },
+    {
+      "producto": "GitHub",
+      "usuarios": 1,
+      "meses": 1,
+      "precio_lista_usd_mes": 4,
+      "fuente_precio_lista": "Cargo internacional en la tarjeta de KeepSync del 17-09-2026, glosa \"Github inc compras intma\" (San Francisco), USD 4,00 — estado de cuenta aportado por el usuario el 20-09-2026",
+      "monto_usd": 4,
+      "neto_unitario_mensual_clp": 5514,
+      "neto_clp": 5514,
+      "iva_clp": 1048,
+      "total_clp": 6562,
+      "calculo": {
+        "monto_usd": 4,
+        "tipo_cambio_observado": 954.85,
+        "recargo_tipo_cambio_pct": 5.5,
+        "tipo_cambio_ajustado": 1007.37,
+        "costo_clp": 4029,
+        "impuesto_no_recuperable_pct": 19,
+        "costo_con_impuesto_clp": 4795,
+        "markup_pct": 15,
+        "precio_cotizacion_clp": 5514,
+        "iva_venta_pct": 19,
+        "valor_final_clp": 6562,
+        "pasos": [
+          {
+            "paso": "1. Tipo de cambio ajustado",
+            "descripcion": "Tipo de cambio observado ($954.85) + 5.5%",
+            "valor_clp": 1007.37
+          },
+          {
+            "paso": "2. Costo",
+            "descripcion": "USD 4 × tipo de cambio ajustado",
+            "valor_clp": 4029
+          },
+          {
+            "paso": "3. Costo con impuesto no recuperable",
+            "descripcion": "Costo + 19% (impuesto que KeepSync no puede recuperar, se trata como costo)",
+            "valor_clp": 4795
+          },
+          {
+            "paso": "4. Precio de cotización (neto)",
+            "descripcion": "Costo con impuesto + 15% de markup — este es el precio a utilizar en la cotización",
+            "valor_clp": 5514
+          },
+          {
+            "paso": "5. Valor final (con IVA de venta)",
+            "descripcion": "Precio de cotización + 19% de IVA — valor final a presentar",
+            "valor_clp": 6562
+          }
+        ]
+      }
+    }
+  ],
+  "oferente": {
+    "razon_social": "KEEPSYNC SPA",
+    "rut": "78.441.121-4",
+    "contacto_email": "cristian.molina@keepsync.ai",
+    "campos_por_confirmar": [
+      "domicilio legal",
+      "representante legal (nombre completo y RUN)",
+      "giro declarado ante el SII"
+    ]
+  },
+  "emitida_en": "2026-09-20T21:35:38.070Z"
+}

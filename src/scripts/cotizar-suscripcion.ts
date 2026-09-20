@@ -26,10 +26,15 @@ import {
  *     --linea="Claude Max 5x|100|1|12|Precio publicado por Anthropic: USD 100/mes" \
  *     --linea="Claude Max 20x|200|1|12|Precio publicado por Anthropic: USD 200/mes" \
  *     [--tc=925.25] [--tc-fuente="dólar observado, mindicador.cl, 28-08-2026"] \
- *     [--slug=ClaudeMax] [--salida=output/cotizaciones-standalone]
+ *     [--unidad=servicio] [--slug=ClaudeMax] [--salida=output/cotizaciones-standalone]
  *
  * `--linea` se repite una vez por producto y lleva cinco campos separados por `|`:
  * producto, USD por usuario/mes, usuarios, meses, fuente del precio de lista.
+ *
+ * `--unidad=servicio` cambia lo que se cuenta en la carátula y en el alcance cuando lo cotizado no
+ * son asientos nominativos sino una cuenta por producto (hosting, repositorios, créditos de API):
+ * ahí "3 usuarios, un usuario por suscripción" describe mal lo que se vende. El default sigue
+ * siendo `usuario`, que es el caso de Claude Max o ChatGPT Plus.
  */
 interface Args {
   simples: Map<string, string>;
@@ -148,6 +153,12 @@ async function main() {
     fuenteTipoCambio = fx.fuente;
   }
 
+  const unidad = m.get("unidad")?.trim() || "usuario";
+  if (unidad !== "usuario" && unidad !== "servicio") {
+    console.error(`--unidad debe ser "usuario" o "servicio" (recibí "${unidad}").`);
+    process.exit(1);
+  }
+
   const oferente = cargarIdentidadOferente();
   const fecha = new Date();
 
@@ -160,6 +171,7 @@ async function main() {
     fuenteTipoCambio,
     oferente,
     fecha,
+    unidad,
   });
 
   const dirSalida = path.resolve(ROOT_DIR, m.get("salida") ?? "output/cotizaciones-standalone");
