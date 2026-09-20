@@ -1,21 +1,15 @@
 name: Publicar página de estado (GitHub Pages)
 
 # OJO: agregar una rama acá NO basta para que se publique. El entorno `github-pages` del repo
-# tiene una regla de protección que solo admite despliegues desde
-# `claude/mercadopublico-agente-compras-pgyedf`; desde cualquier otra rama la corrida arranca y
-# falla en ~1 segundo en el paso de deploy (así fallaron las de `claude/revisar-contexto-plan-ttaumn`
-# y `claude/array-agile-purchases-page-det2d4`, que siguen listadas abajo). Para publicar un cambio
-# de docs/, mergearlo a esa rama — o habilitar la nueva en Settings → Environments → github-pages.
+# tiene una regla de protección que limita desde qué rama se despliega; desde cualquier otra la
+# corrida arranca y falla en ~1 segundo en el paso de deploy (así fallaron las de
+# `claude/revisar-contexto-plan-ttaumn` y `claude/array-agile-purchases-page-det2d4`). Para publicar
+# un cambio de docs/, mergearlo a `main` — y tener `main` habilitada en
+# Settings → Environments → github-pages.
 on:
   push:
     branches:
-      - claude/mercadopublico-agente-compras-pgyedf
-      - claude/revisar-contexto-plan-ttaumn
-      - claude/array-agile-purchases-page-det2d4
-      - claude/n8n-radar-cotizaciones-08vr00
-      - claude/agile-purchases-leads-list-m1o3jq
       - main
-      - master
     paths:
       - "docs/**"
       - ".github/workflows/pages.yml"

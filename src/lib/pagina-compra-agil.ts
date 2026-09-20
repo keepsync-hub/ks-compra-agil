@@ -27,10 +27,11 @@ const MARCA_KEYWORDS_INICIO = "<!-- KEYWORDS:INICIO (generado por `npm run radar
 const MARCA_KEYWORDS_FIN = "<!-- KEYWORDS:FIN -->";
 
 /**
- * Enlace "editar en GitHub" del overlay de palabras clave. La rama va explícita y **no es `main`**:
- * este repositorio no tiene `main` — su rama por defecto es la que sirve GitHub Pages.
+ * Enlace "editar en GitHub" del overlay de palabras clave. La rama va explícita porque el enlace
+ * se construye a mano: es la rama por defecto del repo, que es también la que sirve GitHub Pages.
+ * Si alguna vez deja de ser `main`, hay que cambiarla acá.
  */
-const REPO_RAMA_POR_DEFECTO = "claude/mercadopublico-agente-compras-pgyedf";
+const REPO_RAMA_POR_DEFECTO = "main";
 const REPO_CATEGORIAS_EXTRA_URL =
   `https://github.com/keepsync-hub/ks-compra-agil/edit/${REPO_RAMA_POR_DEFECTO}/config/categorias-extra.json`;
 

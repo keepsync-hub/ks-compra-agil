@@ -20,7 +20,7 @@ const WORKFLOW_MP = { __rl: true, mode: 'filename', value: 'mp.yml' };
 // publica Pages: el entorno `github-pages` del repo solo admite despliegues desde esta
 // (ver la cabecera de .github/workflows/pages.yml). Apuntada a otra, cada clic del panel
 // dejaba el resultado en una rama que nadie lee y el panel se servía sin estilo.
-const RAMA = { __rl: true, mode: 'name', value: 'claude/mercadopublico-agente-compras-pgyedf' };
+const RAMA = { __rl: true, mode: 'name', value: 'main' };
 
 // Todas las rutas de escritura llevan el mismo par: responder por nodo y exigir el login de n8n.
 // Va repetido en cada webhook porque el SDK no admite Object.assign ni spread — el builder es un

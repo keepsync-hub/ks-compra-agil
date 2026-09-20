@@ -462,7 +462,10 @@ Los otros cinco, todos arreglados y con test donde se podía:
   una rama que Pages no publica y a la que nadie lee; el `git push` de vuelta iba ahí. Va a
   `claude/mercadopublico-agente-compras-pgyedf`, la única que el entorno `github-pages` admite — con
   la consecuencia de que `mp.yml` corre el código **de esa rama**, así que ahí tienen que estar estos
-  cambios.
+  cambios. *(Al 2026-09-20 ese nombre ya no aplica: el repo tiene `main` y todo el código y los
+  enlaces apuntan ahí. Queda pendiente que alguien con acceso a Settings ponga `main` como rama por
+  defecto y la habilite en Settings → Environments → github-pages; hasta entonces el deploy de Pages
+  falla en el último paso.)*
 - **"Listo" no podía aplicarse a la mitad de los documentos.** `render-expediente.js` exigía un
   entregable en `_ENTREGABLES` para cualquier documento, y un `acopio` —título, CV, certificado,
   orden de compra— lo emite un tercero: ese entregable no puede existir. Como 15 de los 30 documentos

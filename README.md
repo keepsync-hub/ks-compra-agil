@@ -17,10 +17,10 @@ para [Array](http://www.array.cl/) (no para el nicho Claude de KeepSync) — ver
 `npm run array-radar` (solo lectura) y `npm run array-cotizar` (agrega cotización PDF preliminar
 por oportunidad, oferente KeepSync) más abajo. Se publica vía `.github/workflows/pages.yml`.
 
-**Ojo con la publicación**: el entorno `github-pages` del repo solo acepta despliegues desde
-`claude/mercadopublico-agente-compras-pgyedf`. Agregar otra rama al `on.push.branches` del
-workflow hace que la corrida *arranque*, pero el deploy falla en ~1 segundo por la regla de
-protección del entorno (así fallaron las corridas de `claude/array-agile-purchases-page-det2d4` y
+**Ojo con la publicación**: el entorno `github-pages` del repo tiene una regla de protección que
+limita desde qué rama se puede desplegar. Agregar otra rama al `on.push.branches` del
+workflow hace que la corrida *arranque*, pero el deploy falla en ~1 segundo por esa regla
+(así fallaron las corridas de `claude/array-agile-purchases-page-det2d4` y
 `claude/revisar-contexto-plan-ttaumn`). Para que un cambio en `docs/` llegue al sitio público hay
 que mergearlo a esa rama, o habilitar la rama nueva en Settings → Environments → `github-pages`.
 
@@ -224,8 +224,8 @@ sin ellas ningún botón produce datos: los secretos del repo (`COMPRA_AGIL_TICK
 `N8N_CLAVE`) —medido en la primera corrida de `mp.yml`: llegan **vacíos** al job, y un secreto que
 existe se enmascara como `***`, no en blanco—, la credencial `httpHeaderAuth` «KS Ingesta MP» con la
 cabecera `X-KS-Clave`, que **no existe** en la instancia (la única de ese tipo se llama «Header Auth
-account»), y habilitar la rama en Settings → Environments → github-pages, cuya regla de protección
-hoy sólo admite `claude/mercadopublico-agente-compras-pgyedf` (si no, `docs/panel/*.css|js` no se
+account»), y habilitar `main` en Settings → Environments → github-pages, cuya regla de protección
+todavía apunta a la rama de sesión anterior (si no, `docs/panel/*.css|js` no se
 sirve y el panel se ve sin estilo). Ver la sección del panel en `CLAUDE.md` para el detalle de lo
 medido y lo que queda pendiente.
 
