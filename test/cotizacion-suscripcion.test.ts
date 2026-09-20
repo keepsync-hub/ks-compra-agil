@@ -76,3 +76,32 @@ test("el default sigue siendo por usuario: las cotizaciones ya emitidas no cambi
   assert.ok(h.includes("un usuario por suscripción"));
   assert.ok(h.includes("Un asiento nominativo por usuario"));
 });
+
+test("impuesto no recuperable incluido: el paso 3 no suma y el resultado lo declara", () => {
+  // El caso de cotizar sobre el cargo real de la tarjeta (Kompu, 2026-09-20): el impuesto ya está
+  // adentro del monto en USD y sumarlo otra vez lo cobraría dos veces.
+  const base = {
+    id: "Q-TEST",
+    titulo: "Prueba",
+    cliente: "Cliente de prueba",
+    lineas: [linea("Hostinger", 13.08)],
+    tipoCambioObservado: 954.85,
+    fuenteTipoCambio: "fijo para el test",
+    oferente: OFERENTE,
+    fecha: new Date("2026-09-20T12:00:00Z"),
+  };
+  const conRegla = cotizarSuscripcionUsd(base).resumen;
+  const conImpuestoDentro = cotizarSuscripcionUsd({ ...base, impuestoNoRecuperableIncluido: true }).resumen;
+
+  const calc = conImpuestoDentro.lineas[0]!.calculo;
+  assert.equal(calc.costo_con_impuesto_clp, calc.costo_clp, "el paso 3 no debería multiplicar");
+  assert.equal(calc.impuesto_no_recuperable_pct, 0);
+  assert.equal(calc.impuesto_no_recuperable_incluido_en_costo, true);
+  assert.equal(conImpuestoDentro.impuesto_no_recuperable_incluido_en_costo, true);
+  assert.match(calc.pasos[2]!.descripcion, /ya viene con el 19% adentro/);
+
+  // Sacar un 19% del costo deja el neto en 1/1,19 del de la regla completa, salvo redondeo al peso.
+  assert.ok(Math.abs(conImpuestoDentro.neto_clp - conRegla.neto_clp / 1.19) <= 1);
+  assert.equal(conRegla.impuesto_no_recuperable_incluido_en_costo, false);
+  assert.equal(conRegla.lineas[0]!.calculo.impuesto_no_recuperable_pct, 19);
+});

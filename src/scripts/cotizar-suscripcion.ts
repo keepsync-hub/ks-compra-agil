@@ -26,7 +26,8 @@ import {
  *     --linea="Claude Max 5x|100|1|12|Precio publicado por Anthropic: USD 100/mes" \
  *     --linea="Claude Max 20x|200|1|12|Precio publicado por Anthropic: USD 200/mes" \
  *     [--tc=925.25] [--tc-fuente="dólar observado, mindicador.cl, 28-08-2026"] \
- *     [--unidad=servicio] [--slug=ClaudeMax] [--salida=output/cotizaciones-standalone]
+ *     [--unidad=servicio] [--impuesto-no-recuperable=incluido] \
+ *     [--slug=ClaudeMax] [--salida=output/cotizaciones-standalone]
  *
  * `--linea` se repite una vez por producto y lleva cinco campos separados por `|`:
  * producto, USD por usuario/mes, usuarios, meses, fuente del precio de lista.
@@ -35,6 +36,10 @@ import {
  * son asientos nominativos sino una cuenta por producto (hosting, repositorios, créditos de API):
  * ahí "3 usuarios, un usuario por suscripción" describe mal lo que se vende. El default sigue
  * siendo `usuario`, que es el caso de Claude Max o ChatGPT Plus.
+ *
+ * `--impuesto-no-recuperable=incluido` se usa cuando el monto en USD de las líneas no es un precio
+ * de lista sino el cargo real de la tarjeta, que ya trae ese impuesto adentro: el paso 3 de la
+ * regla entonces no vuelve a sumarlo. El default, `aparte`, es la regla completa.
  */
 interface Args {
   simples: Map<string, string>;
@@ -153,6 +158,12 @@ async function main() {
     fuenteTipoCambio = fx.fuente;
   }
 
+  const impuesto = m.get("impuesto-no-recuperable")?.trim() || "aparte";
+  if (impuesto !== "aparte" && impuesto !== "incluido") {
+    console.error(`--impuesto-no-recuperable debe ser "aparte" o "incluido" (recibí "${impuesto}").`);
+    process.exit(1);
+  }
+
   const unidad = m.get("unidad")?.trim() || "usuario";
   if (unidad !== "usuario" && unidad !== "servicio") {
     console.error(`--unidad debe ser "usuario" o "servicio" (recibí "${unidad}").`);
@@ -172,6 +183,7 @@ async function main() {
     oferente,
     fecha,
     unidad,
+    impuestoNoRecuperableIncluido: impuesto === "incluido",
   });
 
   const dirSalida = path.resolve(ROOT_DIR, m.get("salida") ?? "output/cotizaciones-standalone");
@@ -186,6 +198,11 @@ async function main() {
   const clp = (n: number) => "$" + n.toLocaleString("es-CL");
   console.log(`${id} — ${titulo} — ${cliente}`);
   console.log(`Tipo de cambio observado: ${clp(tipoCambioObservado)} (${fuenteTipoCambio})`);
+  if (impuesto === "incluido") {
+    console.log(
+      "Impuesto no recuperable: YA INCLUIDO en el monto en USD (paso 3 no suma; los montos vienen del cargo de la tarjeta).",
+    );
+  }
   console.log("");
   for (const l of resumen.lineas) {
     console.log(

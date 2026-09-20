@@ -18,6 +18,12 @@
  *      organismo comprador.
  *
  * Es decir: valor_final = monto_usd × tc_observado × 1,055 × 1,19 × 1,15 × 1,19.
+ *
+ * Única excepción, y hay que pedirla explícitamente (`impuestoNoRecuperableIncluido`): cuando el
+ * monto en USD no es un precio de lista sino el **cargo real de la tarjeta**, el impuesto del
+ * paso 3 ya está adentro y volver a sumarlo lo cobraría dos veces. Ahí el paso 3 no multiplica y
+ * el resultado lo declara, con lo que `valor_final = monto_usd × tc_observado × 1,055 × 1,15 ×
+ * 1,19`. El default sigue siendo la regla completa.
  */
 
 export const RECARGO_TIPO_CAMBIO_PCT = 5.5;
@@ -40,6 +46,12 @@ export interface CotizacionUsdResultado {
   impuesto_no_recuperable_pct: number;
   costo_con_impuesto_clp: number;
   markup_pct: number;
+  /**
+   * `true` cuando el monto en USD ya venía con el impuesto no recuperable adentro y por eso el
+   * paso 3 no sumó nada. Queda explícito en el JSON: un costo con impuesto igual al costo pelado
+   * es indistinguible de un bug si el resultado no dice que fue a propósito.
+   */
+  impuesto_no_recuperable_incluido_en_costo: boolean;
   /** Precio neto a utilizar en la cotización (antes del IVA de venta). */
   precio_cotizacion_clp: number;
   iva_venta_pct: number;
@@ -54,7 +66,21 @@ export interface CotizacionUsdResultado {
  * `tipoCambioObservado` — `obtenerTipoCambioUsdClp` en `src/lib/pricing.ts` ya sabe pedirlo en
  * vivo a mindicador.cl con fallback fijo.
  */
-export function calcularCotizacionUsd(montoUsd: number, tipoCambioObservado: number): CotizacionUsdResultado {
+export interface CotizacionUsdOpciones {
+  /**
+   * El monto en USD ya trae el impuesto no recuperable incluido, así que el paso 3 no vuelve a
+   * sumarlo. Es el caso de un costo tomado del **cargo real de la tarjeta** en vez del precio de
+   * lista del proveedor: lo que el banco cobró ya lleva el impuesto encima, y aplicarle otro 19%
+   * lo cobraría dos veces. Por defecto es `false`, que es la regla tal como está documentada.
+   */
+  impuestoNoRecuperableIncluido?: boolean;
+}
+
+export function calcularCotizacionUsd(
+  montoUsd: number,
+  tipoCambioObservado: number,
+  opciones: CotizacionUsdOpciones = {},
+): CotizacionUsdResultado {
   if (!(montoUsd > 0)) {
     throw new Error(`monto_usd debe ser mayor que 0 (recibido: ${montoUsd})`);
   }
@@ -62,9 +88,11 @@ export function calcularCotizacionUsd(montoUsd: number, tipoCambioObservado: num
     throw new Error(`tipo_cambio_observado debe ser mayor que 0 (recibido: ${tipoCambioObservado})`);
   }
 
+  const impuestoIncluido = opciones.impuestoNoRecuperableIncluido === true;
+  const impuestoPct = impuestoIncluido ? 0 : IMPUESTO_NO_RECUPERABLE_PCT;
   const tipoCambioAjustado = tipoCambioObservado * (1 + RECARGO_TIPO_CAMBIO_PCT / 100);
   const costoClp = montoUsd * tipoCambioAjustado;
-  const costoConImpuestoClp = costoClp * (1 + IMPUESTO_NO_RECUPERABLE_PCT / 100);
+  const costoConImpuestoClp = costoClp * (1 + impuestoPct / 100);
   const precioCotizacionClp = costoConImpuestoClp * (1 + MARKUP_USD_PCT / 100);
   const valorFinalClp = precioCotizacionClp * (1 + IVA_VENTA_PCT / 100);
 
@@ -74,9 +102,10 @@ export function calcularCotizacionUsd(montoUsd: number, tipoCambioObservado: num
     recargo_tipo_cambio_pct: RECARGO_TIPO_CAMBIO_PCT,
     tipo_cambio_ajustado: round2(tipoCambioAjustado),
     costo_clp: round0(costoClp),
-    impuesto_no_recuperable_pct: IMPUESTO_NO_RECUPERABLE_PCT,
+    impuesto_no_recuperable_pct: impuestoPct,
     costo_con_impuesto_clp: round0(costoConImpuestoClp),
     markup_pct: MARKUP_USD_PCT,
+    impuesto_no_recuperable_incluido_en_costo: impuestoIncluido,
     precio_cotizacion_clp: round0(precioCotizacionClp),
     iva_venta_pct: IVA_VENTA_PCT,
     valor_final_clp: round0(valorFinalClp),
@@ -93,7 +122,9 @@ export function calcularCotizacionUsd(montoUsd: number, tipoCambioObservado: num
       },
       {
         paso: "3. Costo con impuesto no recuperable",
-        descripcion: `Costo + ${IMPUESTO_NO_RECUPERABLE_PCT}% (impuesto que KeepSync no puede recuperar, se trata como costo)`,
+        descripcion: impuestoIncluido
+          ? `Sin cambio: el monto en USD ya viene con el ${IMPUESTO_NO_RECUPERABLE_PCT}% adentro, sumarlo acá lo cobraría dos veces`
+          : `Costo + ${IMPUESTO_NO_RECUPERABLE_PCT}% (impuesto que KeepSync no puede recuperar, se trata como costo)`,
         valor_clp: round0(costoConImpuestoClp),
       },
       {

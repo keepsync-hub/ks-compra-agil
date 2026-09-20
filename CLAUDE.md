@@ -923,3 +923,19 @@ C» (ninguna anterior tenía tres líneas). Van con `glosaMeses()` y `listaEs()`
 `src/lib/cotizacion-suscripcion-usd.ts`, y `test/cotizacion-suscripcion.test.ts` cubre los tres
 casos más el default por usuario. Los tres salieron de **mirar las láminas renderizadas a PNG**, no
 de leer el HTML: en la fuente `${meses} meses` se lee bien.
+
+**Y una excepción a la regla de precio, pedida para esta misma cotización: el costo en USD ya traía
+el impuesto no recuperable adentro.** Los tres montos no son precios de lista sino **cargos reales
+de la tarjeta**, y sobre eso el paso 3 de `cotizar-usd` (+19% de impuesto no recuperable) lo habría
+cobrado dos veces: el total pasaba de $31.749 a $37.781 por un impuesto ya pagado. Va
+`impuestoNoRecuperableIncluido` en `calcularCotizacionUsd` (`--impuesto-no-recuperable=incluido` en
+el script), **opcional y apagado por defecto**, así que la regla documentada más arriba sigue siendo
+la de producción para licencias Claude y para cualquier cotización desde precio de lista. Cuando se
+activa, `valor_final = monto_usd × tc_observado × 1,055 × 1,15 × 1,19` y el paso 3 sigue apareciendo
+en el `.json` diciendo por qué no multiplicó — un costo con impuesto igual al costo pelado, sin esa
+línea, es indistinguible de un bug. El resumen lleva además
+`impuesto_no_recuperable_incluido_en_costo`, y el script lo avisa en consola.
+
+Regla práctica para elegir: **precio de lista del proveedor → la regla completa; cargo de la tarjeta
+o factura ya pagada → `incluido`.** Lo que decide no es el nicho sino de dónde salió el número, y
+eso lo dice la fuente que cada `--linea` obliga a escribir.

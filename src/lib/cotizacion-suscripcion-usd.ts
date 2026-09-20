@@ -60,6 +60,12 @@ export interface SuscripcionUsdEntrada {
   tipoCambioObservado: number;
   /** De dónde salió el tipo de cambio (queda en el resumen interno, no en el PDF). */
   fuenteTipoCambio: string;
+  /**
+   * El monto en USD de cada línea ya trae el impuesto no recuperable adentro, así que la regla no
+   * lo vuelve a sumar. Es el caso de cotizar sobre el **cargo real de la tarjeta** en vez del
+   * precio de lista del proveedor. Ver `CotizacionUsdOpciones` en `pricing-usd.ts`.
+   */
+  impuestoNoRecuperableIncluido?: boolean;
   oferente: IdentidadOferente;
   fecha: Date;
   /**
@@ -94,6 +100,8 @@ export interface SuscripcionUsdResumen {
   cliente: string;
   fuente_tipo_cambio: string;
   tipo_cambio_observado: number;
+  /** Se repite en el `calculo` de cada línea; acá arriba para que se lea sin abrir una línea. */
+  impuesto_no_recuperable_incluido_en_costo: boolean;
   monto_usd_total: number;
   neto_clp: number;
   iva_clp: number;
@@ -127,7 +135,9 @@ export function cotizarSuscripcionUsd(e: SuscripcionUsdEntrada): SuscripcionUsdC
 
   const lineas: LineaSuscripcionUsdResumen[] = e.lineas.map((l) => {
     const montoUsd = l.precioListaUsdMes * l.usuarios * l.meses;
-    const calculo = calcularCotizacionUsd(montoUsd, e.tipoCambioObservado);
+    const calculo = calcularCotizacionUsd(montoUsd, e.tipoCambioObservado, {
+      impuestoNoRecuperableIncluido: e.impuestoNoRecuperableIncluido,
+    });
     const netoClp = calculo.precio_cotizacion_clp;
     const totalClp = calculo.valor_final_clp;
     return {
@@ -153,6 +163,7 @@ export function cotizarSuscripcionUsd(e: SuscripcionUsdEntrada): SuscripcionUsdC
     cliente: e.cliente,
     fuente_tipo_cambio: e.fuenteTipoCambio,
     tipo_cambio_observado: e.tipoCambioObservado,
+    impuesto_no_recuperable_incluido_en_costo: e.impuestoNoRecuperableIncluido === true,
     monto_usd_total: suma((l) => l.monto_usd),
     neto_clp: suma((l) => l.neto_clp),
     iva_clp: suma((l) => l.iva_clp),
