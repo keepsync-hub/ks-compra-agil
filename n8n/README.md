@@ -26,15 +26,18 @@ La resolución es recursiva: un chunk puede incrustar otro.
 5. publish_workflow
 ```
 
-**Jamás `create_workflow_from_code`.** Crearía workflows nuevos con URLs de webhook nuevas, y con
-eso se rompen el botón de `docs/index.html`, el skill `subir-documento-drive` y el dispatch de
-`.github/workflows/mp.yml`.
+**Jamás `create_workflow_from_code` sobre los tres del panel.** Crearía workflows nuevos con URLs
+de webhook nuevas, y con eso se rompen el botón de `docs/index.html`, el skill
+`subir-documento-drive` y el dispatch de `.github/workflows/mp.yml`. Un workflow **nuevo y sin
+webhook** sí se crea (así nació `KS · Cotización por correo` el 2026-09-20): no hay URL que romper
+y el disparador es manual.
 
 | Workflow | ID |
 |---|---|
 | MP · Panel | `6TTvRQZrzmrW3Oa6` |
 | MP · Acciones | `wJbA7Fq4pHtUAwjz` |
 | MP · Carpetas Drive | `do3woax6AGPYxEAN` |
+| KS · Cotización por correo | `tyla40LSUSXQAIju` |
 | Data Table `mp_solicitudes` | `hZ7iJZTkt01XfRUc` |
 
 ## El paso 2 no es burocracia
@@ -68,3 +71,22 @@ También delata un chunk en disco que ningún workflow incrusta.
 
 Ojo: un chunk corregido en el repo **no llega solo a producción**. Hay que publicarlo con el
 procedimiento de arriba, con `setNodeParameter` sobre `/jsCode` del nodo Code que lo usa.
+
+## Mandar una cotización por correo (`cotizacion-correo.ts`)
+
+`KS · Cotización por correo` (`tyla40LSUSXQAIju`) manda un PDF de `output/` al cliente, con el
+archivo adjunto. Existe porque **el MCP de Gmail no adjunta archivos**, y está acá y no en el panel
+porque no comparte nada con él: disparador manual, sin webhook, sin Data Table.
+
+El PDF no se sube a ningún lado: ya está versionado en el repo (`output/` se versiona a propósito)
+y el nodo GitHub lo trae con `file:get` + `asBinaryProperty`, usando la **misma credencial OAuth2**
+con la que el panel dispara `mp.yml`. Ojo con dos cosas al tocarlo:
+
+- El nodo GitHub reemplaza el `json` del item por el del archivo, así que el asunto, el cuerpo y el
+  destinatario se leen con `$('Datos del envío').first().json.…` y no con `$json`.
+- `options.appendAttribution: false` en el nodo Gmail. Por defecto Gmail agrega *"This email was
+  sent automatically with n8n"* al pie — dentro de una cotización formal a un cliente, no va.
+
+Para mandar otra cotización se edita **solo** el nodo "Datos del envío" (destinatario, asunto,
+cuerpo, ruta del PDF en el repo, rama). Primer envío real: `Q-20260920-KOMPU` a Kompu, 2026-09-20,
+ejecución `653`, verificado en la casilla con el adjunto.

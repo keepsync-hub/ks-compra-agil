@@ -939,3 +939,17 @@ línea, es indistinguible de un bug. El resumen lleva además
 Regla práctica para elegir: **precio de lista del proveedor → la regla completa; cargo de la tarjeta
 o factura ya pagada → `incluido`.** Lo que decide no es el nicho sino de dónde salió el número, y
 eso lo dice la fuente que cada `--linea` obliga a escribir.
+
+**Y el PDF se entrega por correo desde n8n, no desde el MCP de Gmail (2026-09-20).** El MCP de
+Gmail de esta sesión **no adjunta archivos**, así que formalizar una cotización con su PDF pasa por
+el workflow `KS · Cotización por correo` (`n8n/workflows/cotizacion-correo.ts`, id
+`tyla40LSUSXQAIju`): trae el PDF del repo con el nodo GitHub —`output/` está versionado, así que no
+hay que subir el binario a ninguna parte ni abrir una ruta pública— y lo manda con el nodo Gmail.
+Disparador **manual**, sin webhook: por eso se creó nuevo en vez de tocar los tres del panel, y por
+eso no aplica la regla «jamás `create_workflow_from_code`» de `n8n/README.md`, que protege URL de
+webhook que acá no existen. El detalle de operación está en ese README.
+
+Sigue valiendo el guardrail de siempre, y conviene decir dónde queda ahora: **el agente no manda
+correo por su cuenta**. Acá lo mandó porque el usuario lo pidió con destinatario y todo, y aun así
+el cuerpo se le mostró completo antes de ejecutar. Lo que el flujo automatiza es armar el correo y
+adjuntar el archivo correcto; decidir que salga sigue siendo de una persona.
