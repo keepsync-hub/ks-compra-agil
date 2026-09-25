@@ -2750,5 +2750,366 @@
       }
     ],
     "generado": "2026-09-08"
+  },
+  "711841-77-COT26": {
+    "codigo": "711841-77-COT26",
+    "curso": "Capacitación en Claude.ai aplicada a la gestión pública",
+    "organismo": "Subsecretaría de Servicios Sociales",
+    "topeClp": 4200000,
+    "totalClp": 3780000,
+    "descuentoPct": 10,
+    "regimenTributario": "no_declarado",
+    "citaTributaria": "«Presupuesto máximo disponible: $4.200.000.-» — Términos de Referencia, sin indicar si es neto, con impuestos incluidos o exento. La pauta evalúa «el valor neto de la propuesta, independiente del régimen tributario del oferente», y el Anexo N°6 pide declarar «Valor Neto de la Propuesta», «Régimen Tributario Aplicable», «Impuestos (si corresponde)» y «Valor Total de la Propuesta».",
+    "criterioEvaluacion": "puntaje",
+    "fechaCierre": "2026-09-28 09:00",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/711841-77-COT26/Q-20260925-SubsecretariaDeServiciosSociales.pdf",
+    "fuenteDocumentos": [
+      "Terminos de Referencia IA 21-09.docx"
+    ],
+    "requisitosPorConfirmar": 5,
+    "pendientes": [
+      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+      "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
+      "Consultar al organismo si el presupuesto informado es neto, con impuestos incluidos o exento: sus bases no lo declaran y eso cambia el valor a ingresar en el portal.",
+      "Confirmar la modalidad con el organismo mediante consulta formal. El TDR exige «envío de enlaces de conexión» —sesiones remotas— y a la vez describe el Módulo 1 como «Cada participante trae su tarea más repetitiva y la resuelve en sala»; la ficha consigna dirección de entrega en Catedral 1575. La propuesta se presenta sincrónica por videoconferencia y consulta formalmente si alguna sesión debe ser presencial."
+    ],
+    "score": {
+      "score": 45,
+      "sinInformacion": 11,
+      "noCumple": 0,
+      "cubiertos": 0,
+      "total": 11,
+      "porTipo": [
+        {
+          "tipo": "alcance",
+          "n": 6
+        },
+        {
+          "tipo": "certificacion",
+          "n": 1
+        },
+        {
+          "tipo": "experiencia_relator",
+          "n": 1
+        },
+        {
+          "tipo": "historial_portal",
+          "n": 1
+        },
+        {
+          "tipo": "infraestructura",
+          "n": 1
+        },
+        {
+          "tipo": "tributario",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "diez-cursos-ia-generativa-del-relator",
+        "exige": "Acreditar 10 o más cursos de capacitación en IA generativa dictados por la persona relatora en los últimos cinco años para obtener el puntaje máximo de un criterio que pesa 40%; con 4 a 9 cursos obtiene la mitad. La experiencia se acredita con documentos emitidos por la entidad receptora —la sola declaración no basta— y una actividad repetida para la misma institución cuenta una sola vez.",
+        "cita": "Términos de Referencia, Criterios de evaluación, 2. Experiencia Relator/a (40%) — «100 | 10 cursos o más en la temática solicitada; 50 | De 4 a 9 cursos en la temática solicitada»; «La sola declaración del oferente no constituirá un medio suficiente de acreditación»; «Si una misma actividad fue ejecutada en más de una oportunidad para una misma institución, se contabilizará como una única experiencia».",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "diez-cursos-ia-generativa-del-proveedor",
+        "exige": "Acreditar 10 o más cursos de IA generativa ejecutados por el proveedor en los últimos cinco años para el puntaje máximo de un criterio que pesa 35%. La escala castiga fuerte bajo ese umbral: de 5 a 9 cursos da solo 30 puntos. Cada actividad se acredita con certificados, órdenes de compra, contratos o cartas de conformidad del receptor.",
+        "cita": "Términos de Referencia, Criterios de evaluación, 3. Experiencia del Proveedor (35%) — «100 | 10 cursos o más; 30 | De 5 a 9 cursos; 10 | De 1 a 4 cursos; 0 | No posee o no informa» y «La sola declaración del oferente no constituirá un medio suficiente de acreditación».",
+        "tipo": "historial_portal",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "politica-de-sustentabilidad-con-respaldo",
+        "exige": "Presentar un programa o política de sustentabilidad medioambiental conocida y difundida entre el personal, con documentación de respaldo verificable. Sin respaldo, 0 puntos en un criterio de 5%.",
+        "cita": "Términos de Referencia, Criterios de evaluación, 4. Sustentabilidad Medioambiental (5%) — «Presenta programas y/o políticas de sustentabilidad con respaldo verificable | 100» y «Sin la documentación de respaldo respectiva, la información no será considerada para efectos de evaluación».",
+        "tipo": "certificacion",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "anexo-5-completo-so-pena-de-inadmisibilidad",
+        "exige": "La propuesta técnica debe incluir objetivos de aprendizaje, bibliografía o recursos de consulta y valor agregado atingente, en el Anexo N°5. Omitir cualquiera de esos antecedentes hace inadmisible la oferta.",
+        "cita": "Términos de Referencia, Propuesta Técnica — «Objetivos de aprendizaje. Bibliografía y/o recursos de consulta. Valor agregado atingente a la actividad (…) La omisión de cualquiera de estos antecedentes implicará que la oferta sea declarada inadmisible. Para dar cumplimiento a este requisito, el proveedor deberá adjuntar el Anexo N°5».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "nivelacion-con-horas-contradictorias",
+        "exige": "Definir cuántas horas y de qué modalidad tiene la nivelación. La tabla de modalidad fija 4 horas asincrónicas; las especificaciones técnicas dicen 3 asincrónicas más 2 sincrónicas; la duración de los dos cursos suma 3 a 5 horas; y el mismo TDR dice que la nivelación se hace «sin consumir horas contratadas» pese a contarla en las 35.",
+        "cita": "Términos de Referencia — tabla Modalidad y cantidad de horas: «Nivelación previa en Claude (…) Asincrónica 4 horas»; Especificaciones técnicas: «Módulo 0 — Nivelación | Asincrónico-2Cursos introductorios | 3 horas modalidad asincrónica más 2 modalidad sincrónica»; tabla de cursos: «1–2 h» y «2–3 h»; y «Esto nivela la heterogeneidad digital del grupo sin consumir horas contratadas».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "acompanamiento-con-horas-contradictorias",
+        "exige": "Definir cuántas horas de acompañamiento se contratan. La tabla fija 10 horas sincrónicas en grupos de hasta 5 participantes, y las especificaciones dicen «2 sesiones de 2 horas por grupo»: con 25 participantes son 5 grupos y 20 horas de relatoría, el doble de lo declarado.",
+        "cita": "Términos de Referencia — tabla Modalidad y cantidad de horas: «Acompañamiento y seguimiento de proyectos (grupos de hasta 5 participantes) | Sincrónica | 10 horas»; Especificaciones técnicas, Período de aplicación: «2 sesiones de 2 horas por grupo»; «Para un total de 25 personas».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "cronograma-que-no-cabe-en-30-dias",
+        "exige": "Aclarar el período de aplicación y si el programa completo cabe en el plazo de entrega. El TDR escribe «2 s 4 semanas» (ilegible), habla de un proyecto «entre ambos niveles» cuando solo se contrata el Nivel 1, y suma 2 semanas de nivelación, 20 horas del Nivel 1 y 4 semanas de aplicación, más 5 días hábiles para el informe final; la ficha fija 30 días de plazo de entrega.",
+        "cita": "Términos de Referencia — «Período de aplicación | 2 s 4 semanas + 2 sesiones de acompañamiento técnico»; Módulo 0: «tiempo de ejecucion 2 semanas»; «desarrollar un proyecto de aplicación en su puesto de trabajo durante un período de cuatro semanas»; «Entre ambos niveles, los participantes desarrollarán su proyecto de aplicación»; Informe final: «plazo máximo de 5 días de hábiles posterior a la finalización del curso». Ficha de la Compra Ágil: plazo de entrega 30 días.",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "licencias-claude-team-no-asignadas",
+        "exige": "Confirmar que la Subsecretaría aporta las cuentas de Claude. El programa se dicta sobre la licencia Team —Proyectos compartidos, «economía de la licencia», activación de cuentas en la inducción— y el TDR no dice quién provee las licencias ni las incluye entre los servicios a contratar.",
+        "cita": "Términos de Referencia — Nivel 1, Módulo 2: «Proyectos y uso eficiente de la licencia Team»; inducción: «activación de cuentas, organización de los Proyectos del servicio» con producto «Cuenta activa + regla de datos firmada».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "trabajo-sobre-documentos-y-casos-reales",
+        "exige": "Definir con qué material institucional se trabaja y bajo qué condiciones de tratamiento de datos. Los productos exigidos se construyen con documentos reales del área y un Artifact probado contra 10 casos históricos reales, lo que depende de que la Subsecretaría entregue ese material.",
+        "cita": "Términos de Referencia — Nivel 1: Módulo 2 «Construcción del Proyecto del área con documentos reales»; Módulo 3 «1 Artifact funcionando, probado contra 10 casos históricos reales»; Módulo 1 «1 plantilla de análisis documental aplicada a un documento real».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "modalidad-remota-o-en-sala",
+        "exige": "Confirmar si las sesiones sincrónicas son remotas o presenciales. El TDR exige enviar enlaces de conexión, pero describe el Módulo 1 como una tarea que se resuelve «en sala», y la ficha consigna dirección de entrega en Catedral 1575.",
+        "cita": "Términos de Referencia — «envío de enlaces de conexión»; Módulo 1: «Cada participante trae su tarea más repetitiva y la resuelve en sala». Ficha de la Compra Ágil: dirección de entrega «Catedral 1575».",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "regimen-tributario-no-declarado",
+        "exige": "Saber si el tope de $4.200.000 es neto o total. El TDR no lo dice; evalúa el precio sobre el valor neto y pide declarar valor neto, impuestos y valor total en el Anexo N°6. Si el tope rige sobre el total, el 19% de IVA reduce el neto ofertable.",
+        "cita": "Términos de Referencia — «Presupuesto máximo disponible: $4.200.000.-»; Propuesta económica: «considerando para su evaluación el valor neto de la propuesta, independiente del régimen tributario del oferente»; Anexo N°6: «Valor Neto de la Propuesta», «Impuestos (si corresponde)», «Valor Total de la Propuesta».",
+        "tipo": "tributario",
+        "estado": "sin_informacion"
+      }
+    ],
+    "generado": "2026-09-25"
+  },
+  "918434-252-COT26": {
+    "codigo": "918434-252-COT26",
+    "curso": "Inteligencia Artificial (IA), análisis de datos y transformación digital",
+    "organismo": "Ministerio de la Mujer y la Equidad de Género — División de Políticas de Igualdad",
+    "topeClp": 500000,
+    "totalClp": 450000,
+    "descuentoPct": 10,
+    "regimenTributario": "exento",
+    "citaTributaria": "«Presupuesto Monto $500.000 (quinientos mil pesos), exento de IVA.» — TDR, apartado Presupuesto.",
+    "criterioEvaluacion": "no_declarado",
+    "fechaCierre": "2026-09-30 10:00",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/918434-252-COT26/Q-20260925-MinisterioDeLaMujerYLaEquidadDeGeneroDivisionDePol.pdf",
+    "fuenteDocumentos": [
+      "TDR Inteligencia Artificial.pdf",
+      "Ficha de la compra en la API (data/918434-252-COT26/detalle.json) en versión reducida: el detalle devolvió 504, así que no trae descripción ni productos solicitados; tope, cierre y organismo sí vienen de ahí."
+    ],
+    "requisitosPorConfirmar": 5,
+    "pendientes": [
+      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+      "Resolver la exención de IVA con el contador antes de presentar. El organismo presupuestó el servicio exento invocando el artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios, y esa exención se apoya en la calidad de institución que imparte enseñanza o capacitación: KeepSync no es OTEC registrada en SENCE (confirmado el 2026-09-08), así que no puede darse por aplicable. Si el servicio va afecto, el 19% no cabe bajo el tope y la oferta sería inadmisible.",
+      "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
+      "Confirmar la modalidad con el organismo mediante consulta formal. El TDR exige jornadas «de manera online sincrónica» por Teams o Zoom y, a la vez, fija «Lugar de entrega Agustinas 1269, Santiago». La propuesta se presenta íntegramente online, según el apartado de horas y plataforma, y consulta si la dirección se refiere solo a la entrega de certificados, actas y material."
+    ],
+    "score": {
+      "score": 55,
+      "sinInformacion": 9,
+      "noCumple": 0,
+      "cubiertos": 0,
+      "total": 9,
+      "porTipo": [
+        {
+          "tipo": "alcance",
+          "n": 3
+        },
+        {
+          "tipo": "experiencia_relator",
+          "n": 2
+        },
+        {
+          "tipo": "historial_portal",
+          "n": 1
+        },
+        {
+          "tipo": "identidad",
+          "n": 1
+        },
+        {
+          "tipo": "titulo_grado",
+          "n": 1
+        },
+        {
+          "tipo": "tributario",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "relator-titulo-profesional",
+        "exige": "Adjuntar el título profesional del relator/a. Ninguna oferta de la cartera nombra relator/a para esta compra, así que hoy no hay título que presentar.",
+        "cita": "TDR, Acreditar experiencia del proveedor y relator/a — «deberá adjuntarse la siguiente documentación: • Currículum Vitae actualizado del relator/a. • Título Profesional del relator/a»",
+        "tipo": "titulo_grado",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-experiencia-acreditada-en-la-materia",
+        "exige": "Acreditar con documentos de terceros (órdenes de compra, certificados de ejecución, constancias) la experiencia del relator/a dictando cursos de IA, análisis de datos y transformación digital. El currículum no basta: el TDR pide que la documentación «permita verificar» la experiencia efectiva.",
+        "cita": "TDR — «Documentación que acredite su experiencia como relator/a en la materia, tales como órdenes de compra, certificados de ejecución, constancias de prestación de servicios u otros documentos equivalentes.» y «La documentación presentada deberá permitir verificar tanto la especialización como la experiencia efectiva del relator/a en la temática objeto de la contratación.»",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relatorias-cloud-devops-ajenas-al-curso",
+        "exige": "Presentar antecedentes de relatorías sobre Arquitectura e Infraestructura Cloud, Administración de Sistemas y Redes y DevOps en los últimos tres años. Ninguna de esas materias aparece en el objetivo ni en los contenidos del curso: parece arrastrada de otro TDR, pero está escrita como documentación exigida y no se puede dar por no escrita. Hay que consultarlo antes de cerrar la oferta.",
+        "cita": "TDR, Acreditar experiencia del proveedor y relator/a — «• Antecedentes que demuestren la realización de relatorías sobre Arquitectura e Infraestructura Cloud, Administración de Sistemas y Redes, Metodologías y Herramientas DevOps durante los últimos tres (3) años, ya sea en organismos del sector público o privado.»",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "experiencia-institucional-del-oferente",
+        "exige": "Acreditar que KeepSync, como empresa, ya ejecutó cursos de IA, análisis de datos y transformación digital, con certificados de correcta ejecución, facturas, órdenes de compra o contratos, de forma independiente de la experiencia del relator/a. Excluye a un oferente sin historial documentado de capacitación en la materia.",
+        "cita": "TDR — «el proveedor o empresa oferente deberá acreditar su experiencia institucional en la ejecución de cursos relacionados con \" Inteligencia Artificial (IA), análisis de datos y transformación digital\"» y «La documentación deberá demostrar la experiencia del proveedor en la ejecución de actividades de capacitación en la temática señalada, independiente de la experiencia específica del relator/a propuesto.»",
+        "tipo": "historial_portal",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "exento-de-iva-sin-acreditacion-como-capacitador",
+        "exige": "Poder facturar exento de IVA, que es como el Ministerio presupuestó el servicio. KeepSync no está acreditado como organismo de capacitación (confirmado el 2026-09-08) y la exención no puede darse por aplicable sin revisar el giro con el contador: si el servicio es afecto, el 90% del tope ($450.000) con 19% encima son $535.500 y no cabe bajo los $500.000; el neto máximo afecto sería $420.168.",
+        "cita": "TDR, apartado Presupuesto — «Monto $500.000 (quinientos mil pesos), exento de IVA.»",
+        "tipo": "tributario",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "sin-pauta-de-evaluacion",
+        "exige": "Conocer cómo se evaluarán las ofertas. El TDR enumera documentos de acreditación pero no publica criterios, ponderaciones ni puntaje: no se sabe cuánto pesa el precio frente a la experiencia del relator/a y del oferente.",
+        "cita": "El TDR (único adjunto) pasa de «Acreditar experiencia del proveedor y relator/a» a «Criterio estado verde No», «Presupuesto», «Plazo de publicación», «Facturación», «Plazo de entrega», «Multas» y «Datos Bancarios», sin apartado alguno de evaluación de ofertas.",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "plazo-de-entrega-vs-octubre",
+        "exige": "Aclarar cuándo se ejecuta el curso. El TDR fija el periodo de realización en octubre de 2026 y, en otro apartado, un plazo de entrega de 7 días hábiles desde la orden de compra; si la OC sale a inicios de octubre, los dos plazos pueden no calzar con un horario que además se acuerda con los/as participantes. Y el TDR descarta las ofertas que no se ajusten a la periodicidad requerida.",
+        "cita": "TDR — «4 horas totales distribuidas en 2 jornadas, con un periodo de realización al mes de octubre 2026»; «Plazo de entrega 7 días hábiles posterior a la emisión de la orden de compra»; «(No se considerarán las ofertas que no se ajusten a la periodicidad requerida ni el tiempo indicado para las jornadas).»",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "online-con-lugar-de-entrega-fisico",
+        "exige": "Confirmar si el servicio es íntegramente online o si algo debe entregarse o dictarse en Agustinas 1269. El TDR exige jornadas online sincrónicas por Teams o Zoom y a la vez consigna un lugar de entrega físico.",
+        "cita": "TDR — «Se requiere que las jornadas se efectúen de manera online sincrónica», «La plataforma que se requiere utilizar es vía teams o zoom» y «Lugar de entrega Agustinas 1269, Santiago.»",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "identidad-y-datos-bancarios",
+        "exige": "Razón social, RUT, banco, número y tipo de cuenta y correo del oferente, sugeridos junto con la cotización y exigidos antes de facturar.",
+        "cita": "TDR, Datos Bancarios — «Se sugiere adjuntar los antecedentes bancarios junto con la cotización, indicando: razón social, RUT, nombre del banco, número y tipo de cuenta, y correo electrónico. De no realizar esta gestión y ser adjudicado, debe enviar esta información al correo finanzas@minmujeryeg.gob.cl previa facturación.»",
+        "tipo": "identidad",
+        "estado": "sin_informacion"
+      }
+    ],
+    "generado": "2026-09-25"
+  },
+  "3755-113-COT26": {
+    "codigo": "3755-113-COT26",
+    "curso": "Curso de Inteligencia Artificial Aplicada a la Fiscalización en el Sector Público",
+    "organismo": "Subsecretaría de Transportes — División de Fiscalización y Centro Automatizado de Infracciones",
+    "topeClp": 500000,
+    "totalClp": 450000,
+    "descuentoPct": 10,
+    "regimenTributario": "impuestos_incluidos",
+    "citaTributaria": "«cuenta con un presupuesto máximo disponible de $500.000, impuestos incluidos. Este monto incluye todos los costos asociados a la contratación» — Requerimiento, numeral 3. Y: «La cotización que exceda el presupuesto máximo anteriormente indicado no será aceptada».",
+    "criterioEvaluacion": "puntaje",
+    "fechaCierre": "2026-09-29 14:00",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/3755-113-COT26/Q-20260925-SubsecretariaDeTransportesDivisionDeFiscalizacionY.pdf",
+    "fuenteDocumentos": [
+      "Requerimiento_Información Digital - copia.pdf"
+    ],
+    "requisitosPorConfirmar": 4,
+    "pendientes": [
+      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+      "KeepSync NO es OTEC registrada en SENCE (confirmado por el usuario el 2026-09-08). Estas bases nombran esa condición: revisar en el cuadro de criterios si acá la puntúan, la exigen o solo la piden cuando el oferente ya está acreditado, porque el efecto es distinto en cada caso.",
+      "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo."
+    ],
+    "score": {
+      "score": 65,
+      "sinInformacion": 7,
+      "noCumple": 0,
+      "cubiertos": 0,
+      "total": 7,
+      "porTipo": [
+        {
+          "tipo": "alcance",
+          "n": 3
+        },
+        {
+          "tipo": "historial_portal",
+          "n": 2
+        },
+        {
+          "tipo": "experiencia_relator",
+          "n": 1
+        },
+        {
+          "tipo": "titulo_grado",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "postgrado-exigido-en-admisibilidad",
+        "exige": "El relator/a debe tener título profesional Y grado académico de postgrado en tecnologías de la información, ciencias de la computación, gestión de datos, IA, sistemas o afines. Es causal de admisibilidad, y además la pauta le asigna 0 puntos por sí solo: el postgrado se exige, no se valora.",
+        "cita": "Requerimiento, numeral 4 c) — «El/a relator/a deberá contar con un título profesional y grado académico de postgrado en áreas vinculadas a las tecnologías de la información, ciencias de la computación, gestión de datos, inteligencia artificial, sistemas o disciplinas afines»; y numeral 5 a), criterio Experiencia profesional de/a relator/a — ese mismo enunciado vale «0 Pts.».",
+        "tipo": "titulo_grado",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-experiencia-profesional-y-academica",
+        "exige": "Para los 30 puntos del criterio del relator/a hay que acreditar experiencia profesional en instituciones públicas y/o privadas en TI Y experiencia académica en TI, gestión de datos, IA o transformación digital; con solo una de las dos son 20. Se respalda con CV, carta de recomendación, boleta de honorarios y/o enlace institucional.",
+        "cita": "Requerimiento, numeral 5 a) — «cuenta con experiencia profesional en instituciones públicas y/o privadas en materias relacionadas con tecnologías de la información y experiencia académica en materias relacionadas con tecnologías de la información, gestión de datos, inteligencia artificial, transformación digital y/o áreas afines. 30 Pts.»; y numeral 2.4 — «Dicha experiencia deberá encontrarse debidamente respaldada mediante la presentación de al menos uno de los siguientes documentos: currículum vitae, carta de recomendación, boleta de honorarios y/o enlace institucional oficial».",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "proveedor-5-anos-impartiendo-cursos-verificable-en-web",
+        "exige": "El PROVEEDOR —no el relator/a— debe acreditar al menos 5 años de experiencia impartiendo cursos, verificada en el link de su página web institucional. Es causal de admisibilidad: sin ella la oferta no se evalúa.",
+        "cita": "Requerimiento, numeral 4 d) — «El proveedor acredita al menos 5 años de experiencia y acreditación impartiendo cursos (se verificará mediante link de página web institucional del proveedor)».",
+        "tipo": "historial_portal",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "proveedor-mas-de-8-anos-para-40-puntos",
+        "exige": "El criterio de mayor peso técnico (40 de 100) premia la antigüedad del proveedor impartiendo cursos: 0 puntos con 5 años, 20 con 6 a 7, 40 con más de 8. Quien apenas cumple la admisibilidad parte con 0 en el 40% de la nota técnica.",
+        "cita": "Requerimiento, numeral 5 a), criterio Experiencia del proveedor — «El proveedor acredita al menos 5 años de experiencia y acreditación impartiendo cursos… 0 Pts.», «de 6 a 7 años… 20 Pts.» y «más de 8 años de experiencia y acreditación impartiendo cursos, lo cual se verificará mediante link de página web institucional del proveedor. 40 Pts.».",
+        "tipo": "historial_portal",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "umbral-tecnico-60-puntos",
+        "exige": "Alcanzar 60 puntos técnicos para ser evaluado en precio. Con 0 en experiencia del proveedor, el umbral solo se alcanza con el máximo en los otros dos criterios (30 del relator/a con experiencia profesional y académica + 30 por incorporar contenidos nuevos): no hay margen para perder un punto.",
+        "cita": "Requerimiento, numeral 5 — «Se entenderá que las propuestas cumplen con los requisitos técnicos cuando obtengan un puntaje igual o superior a 60 puntos. Las ofertas que obtengan un puntaje menor serán descalificadas y no serán evaluadas económicamente».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "plazo-de-termino-contradictorio",
+        "exige": "Confirmar la fecha límite de ejecución. El mismo documento dice 30 de octubre en un apartado y 30 de noviembre de 2026 en otro, y la ficha del portal declara un plazo de entrega de 5 días. La propuesta se ajusta al más estricto hasta que se aclare.",
+        "cita": "Requerimiento, numeral 2.3 — «se hace presente que el curso deberá impartirse en su integridad, a más tardar, el 30 de octubre de 2026»; frente a la nota de la tabla del segundo numeral 2.4 — «*El curso debe realizarse completamente, a más tardar el 30 de noviembre de 2026»; y ficha de la Compra Ágil — «plazo_entrega_dias: 5».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "requerimiento-reutilizado-de-otra-compra",
+        "exige": "Consultar qué partes del requerimiento aplican. El único adjunto se llama «Requerimiento_Información Digital - copia» y, aunque su objeto, contenidos, tope y cupo sí corresponden a este curso, arrastra texto de un requerimiento de varios cursos: habla de «uno de los cursos», «el primer curso» y «20 horas cronológicas para cada curso respectivamente»; numera dos apartados 2.4; el numeral 6 remite a numerales (2, 2.1, 2.2, 2.3) que no calzan con los del propio documento; y la fórmula final anuncia criterios «de entidad certificada» que la pauta no define ni pondera. En otra compra de la misma Subsecretaría (577290-82-COT26) ese criterio valía 10% y era de OTEC/SENCE, que KeepSync no cumple.",
+        "cita": "Nombre del adjunto: «Requerimiento_Información Digital - copia.pdf». Numeral 1 — «Uno de los cursos deberá entregar conocimientos…» y «El primer curso denominado “Curso de Inteligencia Artificial Aplicada a la Fiscalización en el Sector Público”»; numeral 2.3 — «con al menos 20 horas cronológicas para cada curso respectivamente»; numeral 6 — «2.3 Antecedentes del docente que permitan acreditar el título y el grado académico requeridos en el primer párrafo del numeral 2.3»; numeral 5 c) — «El puntaje final se obtendrá con la suma ponderada de los criterios técnicos, económicos y de entidad certificada, de acuerdo a la siguiente formula: PF= Criterio Técnico*70% +Criterio Económico*30%».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      }
+    ],
+    "generado": "2026-09-25"
   }
 }
