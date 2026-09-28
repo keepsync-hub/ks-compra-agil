@@ -8,27 +8,27 @@
   "tipo_cambio_observado": 964.1,
   "suscripcion": {
     "producto": "Claude Pro",
-    "usuarios": 12,
+    "usuarios": 1,
     "meses": 12,
     "precio_lista_usd_mes": 17,
     "fuente_precio_lista": "precio publicado por Anthropic con facturación anual",
-    "monto_usd": 2448,
-    "neto_clp": 3407460,
-    "iva_clp": 647417,
-    "total_clp": 4054877,
-    "veces_el_tope": 22.1,
+    "monto_usd": 204,
+    "neto_clp": 283955,
+    "iva_clp": 53951,
+    "total_clp": 337906,
+    "veces_el_tope": 1.8,
     "calculo": {
-      "monto_usd": 2448,
+      "monto_usd": 204,
       "tipo_cambio_observado": 964.1,
       "recargo_tipo_cambio_pct": 5.5,
       "tipo_cambio_ajustado": 1017.13,
-      "costo_clp": 2489923,
+      "costo_clp": 207494,
       "impuesto_no_recuperable_pct": 19,
-      "costo_con_impuesto_clp": 2963009,
+      "costo_con_impuesto_clp": 246917,
       "markup_pct": 15,
-      "precio_cotizacion_clp": 3407460,
+      "precio_cotizacion_clp": 283955,
       "iva_venta_pct": 19,
-      "valor_final_clp": 4054877,
+      "valor_final_clp": 337906,
       "pasos": [
         {
           "paso": "1. Tipo de cambio ajustado",
@@ -37,28 +37,29 @@
         },
         {
           "paso": "2. Costo",
-          "descripcion": "USD 2448 × tipo de cambio ajustado",
-          "valor_clp": 2489923
+          "descripcion": "USD 204 × tipo de cambio ajustado",
+          "valor_clp": 207494
         },
         {
           "paso": "3. Costo con impuesto no recuperable",
           "descripcion": "Costo + 19% (impuesto que KeepSync no puede recuperar, se trata como costo)",
-          "valor_clp": 2963009
+          "valor_clp": 246917
         },
         {
           "paso": "4. Precio de cotización (neto)",
           "descripcion": "Costo con impuesto + 15% de markup — este es el precio a utilizar en la cotización",
-          "valor_clp": 3407460
+          "valor_clp": 283955
         },
         {
           "paso": "5. Valor final (con IVA de venta)",
           "descripcion": "Precio de cotización + 19% de IVA — valor final a presentar",
-          "valor_clp": 4054877
+          "valor_clp": 337906
         }
       ]
     }
   },
   "api": {
+    "usuarios": 12,
     "creditos_usd": 99.49,
     "neto_clp": 138494,
     "iva_clp": 26314,
@@ -105,5 +106,5 @@
       "giro declarado ante el SII"
     ]
   },
-  "emitida_en": "2026-09-28T20:21:36.284Z"
+  "emitida_en": "2026-09-28T20:24:14.013Z"
 }

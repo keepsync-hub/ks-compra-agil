@@ -69,6 +69,12 @@ export interface ApiVsSuscripcionEntrada {
   factorTope: number;
   plazoEntregaDiasHabiles: number | null;
   suscripcion: SuscripcionComparada;
+  /**
+   * Usuarios a los que se habilita el acceso por API. Puede diferir de los de la suscripción: en
+   * 5178-4851-COT26 el usuario pidió valorizar la suscripción para 1 usuario (lo mínimo que se
+   * puede comprar) y mantener la API para los 12 que pide la compra. Por defecto, los mismos.
+   */
+  usuariosApi?: number;
   modelos: ModeloApi[];
   perfil: PerfilConsulta;
   tipoCambioObservado: number;
@@ -107,6 +113,7 @@ export interface ApiVsSuscripcionResumen {
     calculo: CotizacionUsdResultado;
   };
   api: {
+    usuarios: number;
     creditos_usd: number;
     neto_clp: number;
     iva_clp: number;
@@ -154,7 +161,9 @@ export function cotizarApiVsSuscripcion(e: ApiVsSuscripcionEntrada): { resumen: 
   if (totalApi > e.topeClp) throw new Error("El valor final de la opción API supera el tope.");
   const netoApi = Math.round(totalApi / (1 + IVA_VENTA_PCT / 100));
   const creditos = creditosUsdParaValorFinal(totalApi, e.tipoCambioObservado);
-  const usuariosMes = s.usuarios * s.meses;
+  const usuariosApi = e.usuariosApi ?? s.usuarios;
+  if (!(usuariosApi > 0) || !Number.isInteger(usuariosApi)) throw new Error(`usuariosApi debe ser un entero mayor que 0 (recibido: ${usuariosApi})`);
+  const usuariosMes = usuariosApi * s.meses;
 
   const uso: UsoEstimadoModelo[] = e.modelos.map((m) => {
     const usdConsulta =
@@ -191,6 +200,7 @@ export function cotizarApiVsSuscripcion(e: ApiVsSuscripcionEntrada): { resumen: 
       calculo: calc,
     },
     api: {
+      usuarios: usuariosApi,
       creditos_usd: creditos,
       neto_clp: netoApi,
       iva_clp: totalApi - netoApi,
@@ -229,6 +239,9 @@ function generarHtml(e: ApiVsSuscripcionEntrada, r: ApiVsSuscripcionResumen): st
   const s = r.suscripcion;
   const a = r.api;
   const pctTope = Math.round(e.factorTope * 100);
+  const ua = a.usuarios;
+  const pl = (n: number, uno: string, varios: string) => `${n} ${n === 1 ? uno : varios}`;
+  const glosaSus = pl(s.usuarios, "usuario", "usuarios");
   const plazo =
     e.plazoEntregaDiasHabiles !== null
       ? `${e.plazoEntregaDiasHabiles} días hábiles desde la emisión de la orden de compra`
@@ -247,9 +260,9 @@ function generarHtml(e: ApiVsSuscripcionEntrada, r: ApiVsSuscripcionResumen): st
     .join("");
 
   const condiciones = [
-    `Forma propuesta por KeepSync para entregar las capacidades de ${s.producto} a ${s.usuarios} usuarios durante ${s.meses} meses con el presupuesto publicado en la Compra Ágil ${e.codigo}.`,
+    `Forma propuesta por KeepSync para entregar las capacidades de ${s.producto} a ${ua} usuarios durante ${s.meses} meses con el presupuesto publicado en la Compra Ágil ${e.codigo}.`,
     `Plazo de entrega: ${plazo}.`,
-    `Garantía por toda la duración del servicio (${s.meses} meses): KeepSync responde por la habilitación y continuidad del acceso de los ${s.usuarios} usuarios y por el saldo de créditos contratado.`,
+    `Garantía por toda la duración del servicio (${s.meses} meses): KeepSync responde por la habilitación y continuidad del acceso de los ${ua} usuarios y por el saldo de créditos contratado.`,
     "Facturación en pesos chilenos por KeepSync, una vez entregado el servicio: el organismo no asume pagos en dólares ni variación cambiaria.",
     "Válida por 30 días desde la emisión.",
   ];
@@ -275,7 +288,7 @@ function generarHtml(e: ApiVsSuscripcionEntrada, r: ApiVsSuscripcionResumen): st
   <div style="position:absolute;top:0.75in;left:1.5in;font-size:16pt;font-weight:bold;">KeepSync</div>
   <div style="margin-top:1.6in;">
     <h1>PROPUESTA</h1>
-    <div class="accent" style="font-size:16pt;margin-bottom:10pt;">Capacidades de ${esc(s.producto)} a través de la API de Anthropic — ${s.usuarios} usuarios, ${s.meses} meses</div>
+    <div class="accent" style="font-size:16pt;margin-bottom:10pt;">Capacidades de ${esc(s.producto)} a través de la API de Anthropic — ${ua} usuarios, ${s.meses} meses</div>
     <div class="gray" style="font-size:11pt;">Dirigida a ${esc(e.cliente)} — Compra Ágil ${esc(e.codigo)}</div>
   </div>
   <div class="card" style="margin-top:22pt;">
@@ -293,16 +306,16 @@ function generarHtml(e: ApiVsSuscripcionEntrada, r: ApiVsSuscripcionResumen): st
   <h2>Suscripción o API: la comparación</h2>
   <p class="gray" style="font-size:10.5pt;max-width:10in;margin:0 0 10pt;">Ambas opciones valorizadas con el mismo tipo de cambio y la misma regla de precios de KeepSync. La suscripción individual no cabe en el presupuesto publicado; la API sí, y es la forma que KeepSync propone para entregar las capacidades de ${esc(s.producto)} con ese presupuesto.</p>
   <table class="card cmp">
-    <thead><tr><th style="width:24%"></th><th style="width:38%">Suscripción ${esc(s.producto)}</th><th style="width:38%">Créditos API de Anthropic (propuesta)</th></tr></thead>
+    <thead><tr><th style="width:24%"></th><th style="width:38%">Suscripción ${esc(s.producto)} (${glosaSus})</th><th style="width:38%">Créditos API de Anthropic (propuesta)</th></tr></thead>
     <tbody>
-      <tr><td class="gray">Qué se entrega</td><td>${s.usuarios} suscripciones individuales, una por usuario, por ${s.meses} meses.</td><td>Saldo prepagado de ${usd(a.creditos_usd)} en créditos de la API, con acceso para los ${s.usuarios} usuarios durante ${s.meses} meses.</td></tr>
+      <tr><td class="gray">Qué se entrega</td><td>${s.usuarios === 1 ? "1 suscripción individual" : `${s.usuarios} suscripciones individuales, una por usuario,`} por ${s.meses} meses${s.usuarios < ua ? `: cubre ${glosaSus} de los ${ua} que pide la compra` : ""}.</td><td>Saldo prepagado de ${usd(a.creditos_usd)} en créditos de la API, con acceso para los ${ua} usuarios durante ${s.meses} meses.</td></tr>
       <tr><td class="gray">Cómo se usa</td><td>Aplicación claude.ai (web, escritorio y móvil).</td><td>Acceso a los modelos de Claude por la API de Anthropic, con cuentas habilitadas por KeepSync.</td></tr>
       <tr><td class="gray">Límite de uso</td><td>Los límites de uso del plan, por usuario.</td><td>El saldo de créditos, compartido: se consume por tokens según el modelo que se use.</td></tr>
       <tr><td class="gray">Valor total (IVA incl.)</td><td class="warn">${formatoClp(s.total_clp)}</td><td class="ok">${formatoClp(a.total_clp)}</td></tr>
       <tr><td class="gray">Frente al presupuesto de ${formatoClp(e.topeClp)}</td><td class="warn">${s.veces_el_tope.toLocaleString("es-CL")} veces el presupuesto — no cabe</td><td class="ok">${pctTope}% del presupuesto — cabe</td></tr>
     </tbody>
   </table>
-  <div class="nota">Suscripción: precio de lista USD ${s.precio_lista_usd_mes}/usuario/mes × ${s.usuarios} usuarios × ${s.meses} meses (${esc(s.fuente_precio_lista)}). Tipo de cambio: dólar observado del Banco Central de Chile a la fecha de emisión.</div>
+  <div class="nota">Suscripción: precio de lista USD ${s.precio_lista_usd_mes}/usuario/mes × ${glosaSus} × ${s.meses} meses (${esc(s.fuente_precio_lista)}). Tipo de cambio: dólar observado del Banco Central de Chile a la fecha de emisión.</div>
 </div>
 
 <div class="slide">
@@ -317,7 +330,7 @@ function generarHtml(e: ApiVsSuscripcionEntrada, r: ApiVsSuscripcionResumen): st
   <div class="grid2" style="margin-top:12pt;">
     <div class="card">
       <strong>Qué incluye</strong>
-      <div style="font-size:9.5pt;padding-top:4pt;"><span class="check">✓</span>Habilitación del acceso de los ${s.usuarios} usuarios y carga del saldo de créditos.</div>
+      <div style="font-size:9.5pt;padding-top:4pt;"><span class="check">✓</span>Habilitación del acceso de los ${ua} usuarios y carga del saldo de créditos.</div>
       <div style="font-size:9.5pt;"><span class="check">✓</span>Seguimiento del consumo y aviso al organismo antes de agotar el saldo.</div>
       <div style="font-size:9.5pt;"><span class="check">✓</span>Taller de buenas prácticas de 3 horas y acceso a la comunidad de usuarios de Claude en Chile, sin costo.</div>
       <div style="font-size:9.5pt;"><span class="check">✓</span>Soporte de primer nivel por correo durante los ${s.meses} meses.</div>
@@ -340,7 +353,7 @@ function generarHtml(e: ApiVsSuscripcionEntrada, r: ApiVsSuscripcionResumen): st
     <tbody>
       <tr>
         <td>Acceso a las capacidades de ${esc(s.producto)} mediante créditos prepagados de la API de Anthropic (${usd(a.creditos_usd)}), habilitación, taller y soporte KeepSync</td>
-        <td class="c">${s.usuarios}</td>
+        <td class="c">${ua}</td>
         <td class="c">${s.meses}</td>
         <td class="r">${formatoClp(a.neto_clp)}</td>
       </tr>

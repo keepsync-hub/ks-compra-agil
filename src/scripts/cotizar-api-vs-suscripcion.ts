@@ -25,7 +25,7 @@ import {
  *     --suscripcion="Claude Pro|17|12|12|Precio publicado por Anthropic, facturación anual" \
  *     --modelo="Claude Sonnet 5.5|2|10|USD 2 entrada / USD 10 salida por millón" \
  *     --modelo="Claude Haiku 4.5|1|5|USD 1 entrada / USD 5 salida por millón" \
- *     [--factor-tope=0.9] [--tokens-entrada=2000] [--tokens-salida=1000] \
+ *     [--usuarios-api=12] [--factor-tope=0.9] [--tokens-entrada=2000] [--tokens-salida=1000] \
  *     [--tc=964.1 --tc-fuente="dólar observado, mindicador.cl, 28-09-2026"]
  *
  * Nunca cotiza sobre el tope (el factor se valida en (0, 1]) y nunca envía nada.
@@ -119,6 +119,7 @@ async function main() {
     factorTope: numero(m.get("factor-tope"), "factor-tope", 0.9),
     plazoEntregaDiasHabiles: Number(d?.entrega?.plazo_entrega_dias) > 0 ? Number(d.entrega.plazo_entrega_dias) : null,
     suscripcion,
+    usuariosApi: m.get("usuarios-api") ? numero(m.get("usuarios-api"), "usuarios-api") : undefined,
     modelos,
     perfil: {
       tokensEntrada: numero(m.get("tokens-entrada"), "tokens-entrada", 2000),
@@ -143,7 +144,7 @@ async function main() {
   console.log(`${codigo} — ${resumen.cliente} — tope ${clp(tope)}`);
   console.log(`Tipo de cambio observado: ${tipoCambioObservado} (${fuenteTipoCambio})\n`);
   console.log(`Suscripción ${s.producto}: USD ${s.monto_usd} → neto ${clp(s.neto_clp)} + IVA = ${clp(s.total_clp)} (${s.veces_el_tope}× el tope)`);
-  console.log(`API: ${clp(a.total_clp)} (neto ${clp(a.neto_clp)} + IVA ${clp(a.iva_clp)}) → USD ${a.creditos_usd} en créditos (USD ${a.creditos_usd_por_usuario_mes}/usuario/mes)`);
+  console.log(`API: ${clp(a.total_clp)} (neto ${clp(a.neto_clp)} + IVA ${clp(a.iva_clp)}) → USD ${a.creditos_usd} en créditos para ${a.usuarios} usuarios (USD ${a.creditos_usd_por_usuario_mes}/usuario/mes)`);
   for (const u of a.uso_estimado) {
     console.log(`   ${u.modelo}: USD ${u.usd_por_consulta}/consulta → ${u.consultas_totales} consultas, ${u.consultas_por_usuario_mes}/usuario/mes`);
   }
