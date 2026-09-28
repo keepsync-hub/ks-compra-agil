@@ -95,16 +95,14 @@
     ]
   },
   "oferente": {
-    "razon_social": "KeepSync (razón social por confirmar)",
-    "rut": "por confirmar",
-    "contacto_email": "por confirmar",
+    "razon_social": "KeepSync SpA",
+    "rut": "78.441.121-4",
+    "contacto_email": "cristian.molina@keepsync.ai",
     "campos_por_confirmar": [
-      "razón social",
-      "RUT",
       "domicilio legal",
       "representante legal (nombre completo y RUN)",
       "giro declarado ante el SII"
     ]
   },
-  "emitida_en": "2026-09-28T20:31:02.438Z"
+  "emitida_en": "2026-09-28T20:33:51.988Z"
 }
