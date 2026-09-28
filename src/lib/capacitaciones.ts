@@ -532,10 +532,18 @@ export function derivarPendientes(
   }
 
   if (r.tributacion.regimen === "exento") {
+    // Esto se afirma sobre las bases del organismo dentro del PDF que se le presenta: decir que
+    // "invocan el artículo 13 N°4" solo cuando la cita lo muestra. El TDR de 918434-252-COT26 dice
+    // «exento de IVA» a secas, sin norma, y la frase fija le atribuía una cita que no escribió.
+    const invocaArt13N4 = /13\s*N\s*[°º]?\s*4/i.test(r.tributacion.cita);
     p.push(
       "Resolver la exención de IVA con el contador antes de presentar. El organismo presupuestó el " +
-        "servicio exento invocando el artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios, " +
-        "y esa exención se apoya en la calidad de institución que imparte enseñanza o capacitación: " +
+        (invocaArt13N4
+          ? "servicio exento invocando el artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios, " +
+            "y esa exención se apoya en la calidad de institución que imparte enseñanza o capacitación: "
+          : "servicio exento de IVA sin citar la norma que lo respalda; la exención propia de la enseñanza y " +
+            "la capacitación (artículo 13 N°4 de la Ley sobre Impuesto a las Ventas y Servicios) se apoya en " +
+            "la calidad de institución que imparte enseñanza o capacitación: ") +
         "KeepSync no es OTEC registrada en SENCE (confirmado el 2026-09-08), así que no puede darse por " +
         "aplicable. Si el servicio va afecto, el 19% no cabe bajo el tope y la oferta sería inadmisible.",
     );
