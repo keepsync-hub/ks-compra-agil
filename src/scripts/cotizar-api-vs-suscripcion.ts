@@ -25,7 +25,7 @@ import {
  *     --suscripcion="Claude Pro|17|12|12|Precio publicado por Anthropic, facturación anual" \
  *     --modelo="Claude Sonnet 5.5|2|10|USD 2 entrada / USD 10 salida por millón" \
  *     --modelo="Claude Haiku 4.5|1|5|USD 1 entrada / USD 5 salida por millón" \
- *     [--usuarios-api=12] [--factor-tope=0.9] [--tokens-entrada=2000] [--tokens-salida=1000] \
+ *     [--usuarios-api=12] [--factor-tope=0.9 | --creditos-usd=100] [--tokens-entrada=2000] [--tokens-salida=1000] \
  *     [--tc=964.1 --tc-fuente="dólar observado, mindicador.cl, 28-09-2026"]
  *
  * Nunca cotiza sobre el tope (el factor se valida en (0, 1]) y nunca envía nada.
@@ -117,6 +117,7 @@ async function main() {
     cliente: String(d?.institucion?.organismo_comprador ?? "").trim() || "Organismo comprador",
     topeClp: tope,
     factorTope: numero(m.get("factor-tope"), "factor-tope", 0.9),
+    creditosUsd: m.get("creditos-usd") ? numero(m.get("creditos-usd"), "creditos-usd") : undefined,
     plazoEntregaDiasHabiles: Number(d?.entrega?.plazo_entrega_dias) > 0 ? Number(d.entrega.plazo_entrega_dias) : null,
     suscripcion,
     usuariosApi: m.get("usuarios-api") ? numero(m.get("usuarios-api"), "usuarios-api") : undefined,

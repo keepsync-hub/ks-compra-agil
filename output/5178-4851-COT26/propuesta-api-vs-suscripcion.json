@@ -3,7 +3,7 @@
   "codigo": "5178-4851-COT26",
   "cliente": "UNIVERSIDAD DE CHILE",
   "tope_clp": 183120,
-  "factor_tope": 0.9,
+  "factor_tope": null,
   "fuente_tipo_cambio": "dólar observado 28-09-2026, mindicador.cl (verificado con curl)",
   "tipo_cambio_observado": 964.1,
   "suscripcion": {
@@ -60,11 +60,11 @@
   },
   "api": {
     "usuarios": 1,
-    "creditos_usd": 99.49,
-    "neto_clp": 138494,
-    "iva_clp": 26314,
-    "total_clp": 164808,
-    "creditos_usd_por_usuario_mes": 8.29,
+    "creditos_usd": 100,
+    "neto_clp": 139194,
+    "iva_clp": 26446,
+    "total_clp": 165640,
+    "creditos_usd_por_usuario_mes": 8.33,
     "factor_regla": 1.718083,
     "perfil_consulta": {
       "tokensEntrada": 2000,
@@ -74,22 +74,22 @@
       {
         "modelo": "Claude Opus 5.5",
         "usd_por_consulta": 0.028,
-        "consultas_totales": 3553,
-        "consultas_por_usuario_mes": 296,
+        "consultas_totales": 3571,
+        "consultas_por_usuario_mes": 297,
         "fuente_precio": "USD 4 / USD 20"
       },
       {
         "modelo": "Claude Sonnet 5.5",
         "usd_por_consulta": 0.014,
-        "consultas_totales": 7106,
-        "consultas_por_usuario_mes": 592,
+        "consultas_totales": 7142,
+        "consultas_por_usuario_mes": 595,
         "fuente_precio": "USD 2 / USD 10"
       },
       {
         "modelo": "Claude Haiku 4.5",
         "usd_por_consulta": 0.007,
-        "consultas_totales": 14212,
-        "consultas_por_usuario_mes": 1184,
+        "consultas_totales": 14285,
+        "consultas_por_usuario_mes": 1190,
         "fuente_precio": "USD 1 / USD 5"
       }
     ]
@@ -104,5 +104,5 @@
       "giro declarado ante el SII"
     ]
   },
-  "emitida_en": "2026-09-28T20:33:51.988Z"
+  "emitida_en": "2026-09-28T20:52:05.856Z"
 }

@@ -67,6 +67,13 @@ export interface ApiVsSuscripcionEntrada {
   topeClp: number;
   /** Fracción del tope que se fija como valor final de la opción API (0,9 = 10% bajo el tope). */
   factorTope: number;
+  /**
+   * Fija los créditos en vez del precio: el valor en CLP sale de aplicarles la regla `cotizar-usd`
+   * tal cual (en 5178-4851-COT26 el usuario pidió USD 100 redondos en vez de los 99,49 que paga el
+   * 90% del tope). Si se pasa, `factorTope` no fija el precio; el resultado igual se rechaza si
+   * supera el tope.
+   */
+  creditosUsd?: number;
   plazoEntregaDiasHabiles: number | null;
   suscripcion: SuscripcionComparada;
   /**
@@ -96,7 +103,7 @@ export interface ApiVsSuscripcionResumen {
   codigo: string;
   cliente: string;
   tope_clp: number;
-  factor_tope: number;
+  factor_tope: number | null;
   fuente_tipo_cambio: string;
   tipo_cambio_observado: number;
   suscripcion: {
@@ -157,10 +164,23 @@ export function cotizarApiVsSuscripcion(e: ApiVsSuscripcionEntrada): { resumen: 
   const montoUsd = s.precioListaUsdMes * s.usuarios * s.meses;
   const calc = calcularCotizacionUsd(montoUsd, e.tipoCambioObservado);
 
-  const totalApi = Math.floor(e.topeClp * e.factorTope);
-  if (totalApi > e.topeClp) throw new Error("El valor final de la opción API supera el tope.");
-  const netoApi = Math.round(totalApi / (1 + IVA_VENTA_PCT / 100));
-  const creditos = creditosUsdParaValorFinal(totalApi, e.tipoCambioObservado);
+  let totalApi: number;
+  let netoApi: number;
+  let creditos: number;
+  if (e.creditosUsd !== undefined) {
+    if (!(e.creditosUsd > 0)) throw new Error(`creditosUsd debe ser mayor que 0 (recibido: ${e.creditosUsd})`);
+    const calcApi = calcularCotizacionUsd(e.creditosUsd, e.tipoCambioObservado);
+    creditos = e.creditosUsd;
+    totalApi = calcApi.valor_final_clp;
+    netoApi = calcApi.precio_cotizacion_clp;
+  } else {
+    totalApi = Math.floor(e.topeClp * e.factorTope);
+    netoApi = Math.round(totalApi / (1 + IVA_VENTA_PCT / 100));
+    creditos = creditosUsdParaValorFinal(totalApi, e.tipoCambioObservado);
+  }
+  if (totalApi > e.topeClp) {
+    throw new Error(`El valor final de la opción API (${totalApi}) supera el tope (${e.topeClp}): no se cotiza.`);
+  }
   const usuariosApi = e.usuariosApi ?? s.usuarios;
   if (!(usuariosApi > 0) || !Number.isInteger(usuariosApi)) throw new Error(`usuariosApi debe ser un entero mayor que 0 (recibido: ${usuariosApi})`);
   const usuariosMes = usuariosApi * s.meses;
@@ -183,7 +203,7 @@ export function cotizarApiVsSuscripcion(e: ApiVsSuscripcionEntrada): { resumen: 
     codigo: e.codigo,
     cliente: e.cliente,
     tope_clp: e.topeClp,
-    factor_tope: e.factorTope,
+    factor_tope: e.creditosUsd !== undefined ? null : e.factorTope,
     fuente_tipo_cambio: e.fuenteTipoCambio,
     tipo_cambio_observado: e.tipoCambioObservado,
     suscripcion: {
@@ -238,7 +258,7 @@ function generarHtml(e: ApiVsSuscripcionEntrada, r: ApiVsSuscripcionResumen): st
   const sello = suficiente ? "" : `<div class="badge">BORRADOR — identidad del oferente sin confirmar</div>`;
   const s = r.suscripcion;
   const a = r.api;
-  const pctTope = Math.round(e.factorTope * 100);
+  const pctTope = (Math.round((a.total_clp / e.topeClp) * 1000) / 10).toLocaleString("es-CL");
   const ua = a.usuarios;
   const pl = (n: number, uno: string, varios: string) => `${n} ${n === 1 ? uno : varios}`;
   const glosaSus = pl(s.usuarios, "usuario", "usuarios");
