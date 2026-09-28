@@ -59,12 +59,12 @@
     }
   },
   "api": {
-    "usuarios": 12,
+    "usuarios": 1,
     "creditos_usd": 99.49,
     "neto_clp": 138494,
     "iva_clp": 26314,
     "total_clp": 164808,
-    "creditos_usd_por_usuario_mes": 0.69,
+    "creditos_usd_por_usuario_mes": 8.29,
     "factor_regla": 1.718083,
     "perfil_consulta": {
       "tokensEntrada": 2000,
@@ -75,21 +75,21 @@
         "modelo": "Claude Opus 5.5",
         "usd_por_consulta": 0.028,
         "consultas_totales": 3553,
-        "consultas_por_usuario_mes": 24,
+        "consultas_por_usuario_mes": 296,
         "fuente_precio": "USD 4 / USD 20"
       },
       {
         "modelo": "Claude Sonnet 5.5",
         "usd_por_consulta": 0.014,
         "consultas_totales": 7106,
-        "consultas_por_usuario_mes": 49,
+        "consultas_por_usuario_mes": 592,
         "fuente_precio": "USD 2 / USD 10"
       },
       {
         "modelo": "Claude Haiku 4.5",
         "usd_por_consulta": 0.007,
         "consultas_totales": 14212,
-        "consultas_por_usuario_mes": 98,
+        "consultas_por_usuario_mes": 1184,
         "fuente_precio": "USD 1 / USD 5"
       }
     ]
@@ -106,5 +106,5 @@
       "giro declarado ante el SII"
     ]
   },
-  "emitida_en": "2026-09-28T20:24:14.013Z"
+  "emitida_en": "2026-09-28T20:31:02.438Z"
 }
