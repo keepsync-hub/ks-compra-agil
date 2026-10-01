@@ -13,7 +13,8 @@
  *                     `historico/fortinet-listado.json` porque `data/` es efímero.
  *   Fase 2  detalle   1 request por compra relevante (Fortinet primero, después firewall genérico):
  *                     el listado no trae descripción ni productos, y el modelo vive ahí.
- *   Fase 3  informe   `output/estudio-fortinet.md`, 0 requests. `--solo-informe` corre solo esta.
+ *   Fase 3  informe   `output/estudio-fortinet.md`, 0 requests. `--solo-informe` corre solo esta;
+ *                     `--pdf` agrega `output/estudio-fortinet.pdf` (estilo KeepSync).
  *
  * Éxito = estado `cerrada`. `proveedor_seleccionado` devuelve 0 siempre en esta API, para cualquier
  * `q` y también sin `q` (medido de nuevo el 2026-10-01; ver `PLAN-VOLUMEN.md` §4), así que es el
@@ -31,6 +32,7 @@ import {
   type EstadoCompraAgil,
 } from "../lib/api.js";
 import { configurarCuota, CuotaLocalAgotadaError, ledgerHoy } from "../lib/cuota.js";
+import { generarPdfEstudioFortinet } from "../lib/estudio-fortinet-pdf.js";
 
 const LISTADO_PATH = path.join(ROOT_DIR, "historico", "fortinet-listado.json");
 const DETALLES_PATH = path.join(ROOT_DIR, "historico", "fortinet-detalles.json");
@@ -38,6 +40,8 @@ const INFORME_PATH = path.join(ROOT_DIR, "output", "estudio-fortinet.md");
 
 const ARGS = process.argv.slice(2);
 const SOLO_INFORME = ARGS.includes("--solo-informe");
+const PDF = ARGS.includes("--pdf");
+const PDF_PATH = path.join(ROOT_DIR, "output", "estudio-fortinet.pdf");
 const opcion = (n: string) => ARGS.find((a) => a.startsWith(`--${n}=`))?.slice(n.length + 3);
 const PRESUPUESTO = Number(opcion("presupuesto") ?? 200);
 const MAX_DETALLES = Number(opcion("max-detalles") ?? 90);
@@ -416,6 +420,10 @@ async function main() {
   const corte = cuerpo.indexOf("## Resumen por segmento");
   writeFileSync(INFORME_PATH, cuerpo.slice(0, corte) + conclusiones + "\n\n" + cuerpo.slice(corte));
   console.log(`Informe: ${path.relative(ROOT_DIR, INFORME_PATH)}`);
+  if (PDF) {
+    await generarPdfEstudioFortinet(construirFilas(listado, detalles), listado.medido_en.slice(0, 10), PDF_PATH);
+    console.log(`PDF: ${path.relative(ROOT_DIR, PDF_PATH)}`);
+  }
 }
 
 main().catch((e) => {
