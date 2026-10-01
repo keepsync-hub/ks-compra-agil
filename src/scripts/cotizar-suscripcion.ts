@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT_DIR } from "../lib/config.js";
 import { cargarIdentidadOferente } from "../lib/capacitaciones.js";
@@ -6,6 +6,9 @@ import { obtenerTipoCambioUsdClp } from "../lib/pricing.js";
 import {
   cotizarSuscripcionUsd,
   generarCotizacionSuscripcionPdf,
+  laminasDesbordadasSuscripcion,
+  validarLaminaCumplimiento,
+  type LaminaCumplimiento,
   type LineaSuscripcionUsd,
 } from "../lib/cotizacion-suscripcion-usd.js";
 
@@ -27,11 +30,15 @@ import {
  *     --linea="Claude Max 20x|200|1|12|Precio publicado por Anthropic: USD 200/mes" \
  *     [--tc=925.25] [--tc-fuente="dólar observado, mindicador.cl, 28-08-2026"] \
  *     [--slug=ClaudeMax] [--salida=output/cotizaciones-standalone] \
- *     [--condicion="texto"…] [--validez="texto"] [--tope=6000000]
+ *     [--condicion="texto"…] [--validez="texto"] [--validez-corta="texto"] [--tope=6000000] \
+ *     [--titular=cliente] [--lamina=ruta/a/lamina-cumplimiento.json]
  *
  * `--condicion` (repetible) agrega condiciones comerciales; `--validez` reemplaza la frase de
  * validez por defecto. `--tope` sirve cuando la misma suscripción se cotiza para una Compra Ágil:
  * si el total con IVA lo supera, no se genera nada — mismo guardrail que `npm run cotizar`.
+ * `--titular=cliente` deja dicho en el documento que la cuenta queda a nombre del cliente y no de
+ * KeepSync. `--lamina` agrega una lámina de cumplimiento (requisito, artículo citado, cómo se
+ * cumple, y el procedimiento de implementación) leída de un JSON versionado junto a la cotización.
  *
  * `--linea` se repite una vez por producto y lleva cinco campos separados por `|`:
  * producto, USD por usuario/mes, usuarios, meses, fuente del precio de lista.
@@ -156,6 +163,18 @@ async function main() {
     fuenteTipoCambio = fx.fuente;
   }
 
+  const titular = m.get("titular");
+  if (titular !== undefined && titular !== "cliente") {
+    console.error(`--titular solo admite "cliente" (recibí "${titular}").`);
+    process.exit(1);
+  }
+  const rutaLamina = m.get("lamina");
+  let laminaCumplimiento: LaminaCumplimiento | undefined;
+  if (rutaLamina) {
+    laminaCumplimiento = JSON.parse(readFileSync(path.resolve(ROOT_DIR, rutaLamina), "utf-8")) as LaminaCumplimiento;
+    validarLaminaCumplimiento(laminaCumplimiento);
+  }
+
   const oferente = cargarIdentidadOferente();
   const fecha = new Date();
 
@@ -170,6 +189,9 @@ async function main() {
     fecha,
     condicionesExtra,
     validez: m.get("validez")?.trim() || undefined,
+    validezCorta: m.get("validez-corta")?.trim() || undefined,
+    titularCliente: m.get("titular") === "cliente",
+    laminaCumplimiento,
   });
 
   const topeTxt = m.get("tope");
@@ -195,6 +217,11 @@ async function main() {
   const pdfPath = path.join(dirSalida, `${id}-${slug}.pdf`);
   const jsonPath = path.join(dirSalida, `${id}-${slug}.json`);
 
+  const desbordadas = await laminasDesbordadasSuscripcion(html);
+  if (desbordadas.length > 0) {
+    console.error(`La(s) lámina(s) ${desbordadas.join(", ")} desbordan su alto: el PDF cortaría texto. No se genera.`);
+    process.exit(1);
+  }
   await generarCotizacionSuscripcionPdf(html, pdfPath);
   writeFileSync(jsonPath, JSON.stringify(resumen, null, 2) + "\n", "utf-8");
 

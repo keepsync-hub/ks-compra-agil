@@ -1,7 +1,7 @@
 {
   "id": "Q-20261001-AltoHospicio",
-  "titulo": "ChatGPT Business (OpenAI)",
-  "cliente": "Municipalidad de Alto Hospicio — Compra Ágil 3447-431-COT26",
+  "titulo": "ChatGPT Business (OpenAI) — Compra Ágil 3447-431-COT26",
+  "cliente": "Municipalidad de Alto Hospicio",
   "fuente_tipo_cambio": "mindicador.cl (dólar observado, 2026-10-01)",
   "tipo_cambio_observado": 972.6,
   "monto_usd_total": 960,
@@ -72,5 +72,5 @@
       "giro declarado ante el SII"
     ]
   },
-  "emitida_en": "2026-10-01T18:43:11.301Z"
+  "emitida_en": "2026-10-01T20:18:31.613Z"
 }

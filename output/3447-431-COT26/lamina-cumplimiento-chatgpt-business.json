@@ -1,0 +1,31 @@
+{
+  "_fuente": "TÉRMINO DE REFERENCIA (MEMO 1248).pdf, adjunto de la Compra Ágil 3447-431-COT26 (Municipalidad de Alto Hospicio), leído el 2026-10-01. Funcionalidades de ChatGPT Business según el centro de ayuda y la página de precios para empresas de OpenAI (help.openai.com/en/articles/8792536, help.openai.com/en/articles/11487775, openai.com/business/pricing), consultados el 2026-10-01.",
+  "titulo": "Cumplimiento de los Términos de Referencia — ChatGPT Business",
+  "intro": "Cada exigencia de los Términos de Referencia, con el artículo que la fija y cómo la cumple la solución ofertada: ChatGPT Business (OpenAI), 4 asientos estándar, suscripción anual por 12 meses continuos.",
+  "filas": [
+    { "requisito": "Generación y tratamiento de contenidos", "referencia": "Art. 11 f)", "cumplimiento": "Generar, analizar, sintetizar, revisar y transformar textos a partir de instrucciones en lenguaje natural, con los modelos incluidos en el plan." },
+    { "requisito": "Procesamiento de archivos y entregables", "referencia": "Art. 11 f)", "cumplimiento": "Carga y análisis de PDF, documentos de texto y hojas de cálculo; creación y modificación de documentos y planillas, entregados en formatos editables y descargables." },
+    { "requisito": "Programación y ejecución de código", "referencia": "Art. 11 f)", "cumplimiento": "Análisis de datos con ejecución de código en entorno aislado mostrando resultados, y Codex (agente de programación) incluido en el asiento estándar." },
+    { "requisito": "Investigación y búsqueda", "referencia": "Art. 11 f)", "cumplimiento": "Búsqueda web con referencias citadas e investigación en profundidad (deep research) sobre múltiples fuentes." },
+    { "requisito": "Ejecución agéntica de tareas", "referencia": "Art. 11 f)", "cumplimiento": "Modo agente y agentes del workspace: planifican y ejecutan secuencias de acciones con herramientas, conservan el contexto y ajustan la ejecución sin instrucciones paso a paso." },
+    { "requisito": "Interacción con recursos autorizados", "referencia": "Art. 11 f)", "cumplimiento": "Más de 60 aplicaciones y conectores (Google Drive, SharePoint, Teams, GitHub, entre otros), habilitados por el administrador municipal." },
+    { "requisito": "Supervisión y control", "referencia": "Art. 11 f)", "cumplimiento": "Avance visible e interrumpible; confirmación del usuario antes de enviar, eliminar o publicar; consola de administración con actividad y uso del workspace." },
+    { "requisito": "Disponibilidad y plan no promocional", "referencia": "Art. 11 f) y g)", "cumplimiento": "Plan pagado por 12 meses con facturación anual, con las actualizaciones del plan; no es plan gratuito, de prueba ni promocional." },
+    { "requisito": "Plataforma para organizaciones", "referencia": "Art. 11 a) y h); Art. 28", "cumplimiento": "ChatGPT Business es el plan de OpenAI para equipos (2 a 200 usuarios); no es una licencia de uso personal." },
+    { "requisito": "Cantidad, acceso y usuarios", "referencia": "Art. 11 b) y d); Art. 37 N°2 y N°4", "cumplimiento": "4 asientos nominativos, acceso individual por web, escritorio y móvil; sin cuentas compartidas." },
+    { "requisito": "Vigencia", "referencia": "Art. 11 c); Arts. 22 y 23", "cumplimiento": "12 meses continuos desde la recepción conforme de la activación; el tiempo de activación no se descuenta." },
+    { "requisito": "Cuentas institucionales", "referencia": "Art. 11 e); Art. 25", "cumplimiento": "Workspace creado a nombre de la Municipalidad, con un correo institucional como propietario; sin cuentas a nombre de terceros ni credenciales de KeepSync." },
+    { "requisito": "Licencias válidas", "referencia": "Arts. 27 y 28", "cumplimiento": "Suscripción comercial de OpenAI contratada para la Municipalidad, conforme a las condiciones de uso del fabricante." },
+    { "requisito": "Plazo de activación", "referencia": "Arts. 19 a 21", "cumplimiento": "30 días hábiles desde la aceptación de la Orden de Compra, hasta que las 4 suscripciones estén operativas para los usuarios designados." }
+  ],
+  "titulo_procedimiento": "Procedimiento de implementación — todo queda a nombre de la Municipalidad",
+  "pasos": [
+    "Aceptación de la Orden de Compra en Mercado Público: desde ahí corre el plazo de activación (Arts. 20 y 54).",
+    "Coordinación con la Unidad Técnica: correo institucional del administrador y de los 4 usuarios designados (Art. 24).",
+    "Creación del workspace ChatGPT Business a nombre de la Municipalidad de Alto Hospicio, con el correo institucional del administrador como propietario. KeepSync no crea cuentas a su nombre ni solicita contraseñas institucionales (Arts. 11 e y 25).",
+    "Contratación de los 4 asientos estándar con facturación anual por 12 meses, pagada por KeepSync al fabricante.",
+    "Invitación de los 4 usuarios desde la consola del workspace; cada persona activa su acceso con su propio correo institucional.",
+    "Verificación conjunta con la Unidad Técnica y acta de recepción conforme: desde esa fecha corren los 12 meses (Arts. 21 y 22); factura única posterior a la recepción (Arts. 46 y 47)."
+  ],
+  "nota": "Referencias técnicas del fabricante: openai.com/business/pricing y help.openai.com (ChatGPT Business). La referencia «ChatGPT-Work-Codex o equivalente» del TDR corresponde al producto ofertado."
+}

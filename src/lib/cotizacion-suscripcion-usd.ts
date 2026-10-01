@@ -1,5 +1,6 @@
 import {
   PALETA_KEEPSYNC as COLOR,
+  conPaginaHtml,
   cssLaminasKeepsync,
   escaparHtml as esc,
   formatoClp,
@@ -70,6 +71,39 @@ export interface SuscripcionUsdEntrada {
    * valor total final, como el TDR de Alto Hospicio 3447-431-COT26 (Arts. 26 y 42).
    */
   validez?: string;
+  /** Texto corto para la fila VALIDEZ de la portada cuando `validez` reemplaza la de 30 días. */
+  validezCorta?: string;
+  /**
+   * El cliente es el titular: la cuenta o workspace se crea a su nombre y lo administra él, y
+   * KeepSync activa, soporta y factura. Cambia las frases que de otro modo afirman que KeepSync
+   * "contrata y administra" — en Alto Hospicio 3447-431-COT26 eso contradiría el Art. 11 e) del
+   * TDR, que rechaza cuentas a nombre de terceros o atadas a correos del proveedor.
+   */
+  titularCliente?: boolean;
+  /** Lámina de cumplimiento: requisito por requisito con su cita, y el procedimiento de alta. */
+  laminaCumplimiento?: LaminaCumplimiento;
+}
+
+export interface LaminaCumplimiento {
+  titulo: string;
+  intro: string;
+  /** Una fila por exigencia de las bases. `referencia` es el artículo citado: no hay fila sin cita. */
+  filas: { requisito: string; referencia: string; cumplimiento: string }[];
+  titulo_procedimiento: string;
+  pasos: string[];
+  nota?: string;
+}
+
+/** Valida la lámina antes de imprimir: el documento afirma cumplimiento, cada fila debe citar su artículo. */
+export function validarLaminaCumplimiento(l: LaminaCumplimiento): void {
+  if (!l.titulo?.trim() || !l.titulo_procedimiento?.trim()) throw new Error("Lámina de cumplimiento sin título.");
+  if (!Array.isArray(l.filas) || l.filas.length === 0) throw new Error("Lámina de cumplimiento sin filas.");
+  l.filas.forEach((f, i) => {
+    if (!f.requisito?.trim() || !f.referencia?.trim() || !f.cumplimiento?.trim()) {
+      throw new Error(`Lámina de cumplimiento, fila ${i + 1}: requisito, referencia y cumplimiento son obligatorios.`);
+    }
+  });
+  if (!Array.isArray(l.pasos) || l.pasos.length === 0) throw new Error("Lámina de cumplimiento sin pasos de procedimiento.");
 }
 
 export interface LineaSuscripcionUsdResumen {
@@ -210,7 +244,9 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
 
   const condiciones = [
     `Suscripciones nominativas: ${glosaLineas}, un usuario por suscripción, por ${glosaVigencia} corridos desde la activación.`,
-    "Activación, administración de los asientos y soporte de primer nivel a cargo de KeepSync; facturación en pesos chilenos.",
+    e.titularCliente
+      ? `La cuenta y su administración quedan a nombre de ${e.cliente}; activación asistida y soporte de primer nivel a cargo de KeepSync; facturación en pesos chilenos.`
+      : "Activación, administración de los asientos y soporte de primer nivel a cargo de KeepSync; facturación en pesos chilenos.",
     // Acá iba "Cotización comercial directa: no constituye oferta ni respuesta a ningún proceso de
     // compra pública." El usuario la sacó el 2026-08-28: es una salvedad interna, no una condición
     // comercial, y no aporta nada al cliente que recibe el documento. Que este cotizador no sirva
@@ -223,8 +259,12 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
 
   const alcance = [
     ...r.lineas.map((l) => `${glosaLinea(l)}, una por usuario, por ${l.meses} meses.`),
-    "Alta de las cuentas y entrega de accesos a las personas que designe el cliente.",
-    "Gestión de la renovación, cambios de titular y bajas durante la vigencia.",
+    e.titularCliente
+      ? "Alta asistida: el cliente es titular y administrador; los usuarios activan su acceso con su propio correo institucional."
+      : "Alta de las cuentas y entrega de accesos a las personas que designe el cliente.",
+    e.titularCliente
+      ? "Apoyo en altas, bajas y reasignación de usuarios durante la vigencia."
+      : "Gestión de la renovación, cambios de titular y bajas durante la vigencia.",
     "Facturación en pesos chilenos por KeepSync: el cliente no asume el pago en dólares ni la variación cambiaria dentro del período cotizado.",
     "Soporte de primer nivel por correo durante toda la vigencia.",
   ];
@@ -264,7 +304,7 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
     <div class="info-row"><span class="lbl">N° COTIZACIÓN</span><span>${esc(e.id)}</span></div>
     <div class="info-row"><span class="lbl">CLIENTE</span><span>${esc(e.cliente)}</span></div>
     <div class="info-row"><span class="lbl">OFERENTE</span><span>${esc(e.oferente.razon_social)} — RUT ${esc(e.oferente.rut)}</span></div>
-    <div class="info-row"><span class="lbl">VALIDEZ</span><span>30 días desde la emisión</span></div>
+    <div class="info-row"><span class="lbl">VALIDEZ</span><span>${esc(e.validez ? (e.validezCorta ?? e.validez) : "30 días desde la emisión")}</span></div>
   </div>
   <div class="footer">Presentado por KeepSync — ${mesAno}</div>
 </div>
@@ -272,15 +312,17 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
 <div class="slide">
   ${sello}
   <h2>Alcance de la suscripción</h2>
-  <p class="gray" style="font-size:11pt;max-width:9in;">${esc(glosaLineas)}, un usuario por suscripción, por ${esc(glosaVigencia)}, contratadas y administradas por KeepSync para ${esc(e.cliente)}.</p>
+  <p class="gray" style="font-size:11pt;max-width:9in;">${esc(glosaLineas)}, un usuario por suscripción, por ${esc(glosaVigencia)}, ${e.titularCliente ? `a nombre de ${esc(e.cliente)}, con activación, soporte y facturación de KeepSync` : `contratadas y administradas por KeepSync para ${esc(e.cliente)}`}.</p>
   <div class="grid3">
     <div class="card"><div class="num-badge">${usuariosTotal}</div><strong>${usuariosTotal === 1 ? "Suscripción" : "Suscripciones"}</strong><p class="gray" style="font-size:9.5pt;">Un asiento nominativo por usuario, sin compartir credenciales.</p></div>
     <div class="card"><div class="num-badge">${meses ?? "—"}</div><strong>Meses de vigencia</strong><p class="gray" style="font-size:9.5pt;">Período completo cotizado por adelantado, a precio cerrado en pesos.</p></div>
-    <div class="card"><div class="num-badge">✓</div><strong>Gestión KeepSync</strong><p class="gray" style="font-size:9.5pt;">Alta, soporte, renovación y facturación en CLP a cargo del oferente.</p></div>
+    <div class="card"><div class="num-badge">✓</div><strong>Gestión KeepSync</strong><p class="gray" style="font-size:9.5pt;">${e.titularCliente ? "Titularidad del cliente; activación asistida, soporte y facturación en CLP a cargo del oferente." : "Alta, soporte, renovación y facturación en CLP a cargo del oferente."}</p></div>
   </div>
   <h2 style="font-size:14pt;margin-top:22pt;">Qué incluye</h2>
   ${alcance.map((a) => `<div style="font-size:10.5pt;padding:3.5pt 0;"><span class="check">✓</span>${esc(a)}</div>`).join("")}
 </div>
+
+${e.laminaCumplimiento ? laminaCumplimientoHtml(e.laminaCumplimiento, sello) : ""}
 
 <div class="slide">
   ${sello}
@@ -306,6 +348,47 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
 
 </body>
 </html>`;
+}
+
+function laminaCumplimientoHtml(l: LaminaCumplimiento, sello: string): string {
+  const filas = l.filas
+    .map(
+      (f) =>
+        `<tr><td style="width:23%;font-weight:bold;">${esc(f.requisito)}</td><td style="width:12%;" class="gray">${esc(f.referencia)}</td><td>${esc(f.cumplimiento)}</td><td class="c" style="width:7%;"><span class="check">✓</span></td></tr>`,
+    )
+    .join("");
+  return `<div class="slide cumplimiento">
+  ${sello}
+  <style>
+    .cumplimiento table { font-size: 7.6pt; }
+    .cumplimiento th, .cumplimiento td { padding: 2.6pt 6pt; vertical-align: top; }
+    .cumplimiento tbody tr { border-top: 1px solid rgba(255,255,255,0.07); }
+    .cumplimiento ol { margin: 4pt 0 0; padding-left: 15pt; font-size: 7.8pt; }
+    .cumplimiento ol li { margin-bottom: 2pt; }
+  </style>
+  <h2 style="font-size:17pt;margin-bottom:3pt;">${esc(l.titulo)}</h2>
+  <p class="gray" style="font-size:8.5pt;margin:0 0 6pt;">${esc(l.intro)}</p>
+  <table class="card" style="padding:0;">
+    <thead><tr><th>Requisito</th><th>TDR</th><th>Cómo se cumple</th><th class="c">Cumple</th></tr></thead>
+    <tbody>${filas}</tbody>
+  </table>
+  <h2 style="font-size:11.5pt;margin:9pt 0 0;">${esc(l.titulo_procedimiento)}</h2>
+  <ol>${l.pasos.map((p) => `<li>${esc(p)}</li>`).join("")}</ol>
+  ${l.nota ? `<p class="gray" style="font-size:7.4pt;margin:5pt 0 0;">${esc(l.nota)}</p>` : ""}
+</div>`;
+}
+
+/**
+ * Láminas cuyo contenido no cabe en su alto fijo. Las láminas llevan `overflow:hidden`, así que el
+ * modo de falla natural es que una fila se corte en silencio — mismo control que el cotizador de
+ * cursos (`generarCotizacionCapacitacionPdf`).
+ */
+export async function laminasDesbordadasSuscripcion(html: string): Promise<number[]> {
+  return conPaginaHtml(html, "keepsync-suscripcion-mide-", (page) =>
+    page.$$eval(".slide", (els) =>
+      els.map((el, i) => (el.scrollHeight > el.clientHeight + 1 ? i + 1 : 0)).filter((n) => n > 0),
+    ),
+  );
 }
 
 /** Renderiza el HTML de `cotizarSuscripcionUsd` a PDF con el mismo Chromium que el resto de los nichos. */
