@@ -60,15 +60,28 @@ const TAMANO = 25;
 const RE_FORTINET =
   /\bforti(?:net|gate|switch|ap|care|analyzer|token|client|manager|wifi|guard|edr|mail|web|sandbox)\b|\bf(?:g|gt|s|ap|n)-?\d{2,4}[a-z]\b|\bfn-tran/i;
 
-export type Familia = "firewall" | "switch" | "access_point" | "transceptor" | "licencia_soporte" | "otro";
+export type Familia = "servicio" | "licencia_soporte" | "transceptor" | "switch" | "access_point" | "firewall" | "otro";
 
+/** El orden importa: «licencias para FortiGate» es licencia, no equipo; «SFP para FortiGate» es transceptor. */
 const FAMILIAS: [Familia, RegExp][] = [
-  ["licencia_soporte", /\blicencia|forticare|renovaci[oó]n|suscripci[oó]n|soporte\b|\butp\b|\butm bundle/i],
-  ["firewall", /firewall|cortafuego|fortigate|\bfgt?-?\d|seguridad perimetral|\bngfw\b/i],
+  ["servicio", /\bcurso|capacitaci[oó]n|\bservicio|configuraci[oó]n|migraci[oó]n|assessment|administraci[oó]n|an[aá]lisis y optimizaci/i],
+  ["licencia_soporte", /\blicencia|forticare|fortitoken|fortianalyzer|renovaci[oó]n|suscripci[oó]n|soporte\b|\butp\b/i],
+  ["transceptor", /\bsfp|transceiver|transceptor|gbic|qsfp|fn-tran|m[oó]dulo [oó]ptico/i],
   ["switch", /\bswitch(?:es)?\b|fortiswitch|\bfs-?\d|conmutador/i],
   ["access_point", /access ?point|punto(?:s)? de acceso|fortiap|\bfap-?\d|\bap\b|antena wi-?fi/i],
-  ["transceptor", /\bsfp|transceiver|transceptor|gbic|qsfp|fn-tran|m[oó]dulo [oó]ptico/i],
+  ["firewall", /firewall|cortafuego|fortigate|\bfgt?-?\d|seguridad perimetral|\bngfw\b/i],
 ];
+
+/**
+ * «cortafuego» en Compra Ágil es casi siempre forestal o de construcción. Casos reales del barrido
+ * del 2026-10-01: `5509-33-COT26` PUERTAS CORTAFUEGO, `945256-39-COT26` FALDON CORTAFUEGO,
+ * `1062807-146-COT25` cortafuego perimetral con motoniveladora, `745712-13-COT26` mini cargador
+ * frontal… cortafuego, `2771-634-COT25` maquinarias para cortafuego. Y `firewall` en la
+ * descripción trae compras de EPP (`2324-301-COT26`) o enlaces de internet (`2776-665-COT25`).
+ * Por eso el segmento firewall exige la materia en el NOMBRE y descarta este vocabulario.
+ */
+const RE_FIREWALL_NOMBRE = /firewall|firewal\b|seguridad perimetral|\bngfw\b|\bwaf\b|\butm\b.*seguridad/i;
+const RE_NO_FIREWALL = /puerta|fald[oó]n|motoniveladora|cargador|maquinaria|predio|forestal|incendio|internet de fi|suministro de internet/i;
 
 /**
  * Ruido medido en los nombres: «switch» trae consolas Nintendo y switches de transferencia
@@ -205,14 +218,15 @@ function construirFilas(l: Listado, det: Record<string, CompraAgilDetalle>): Fil
     const productos = d?.productos_solicitados?.map((p) => `${p.nombre} ${p.descripcion}`).join(" \n ") ?? "";
     const texto = `${item.nombre} \n ${d?.descripcion ?? ""} \n ${productos}`;
     const fortinet = RE_FORTINET.test(texto);
-    const familia = familiaDe(fortinet ? texto : item.nombre);
+    const porNombre = familiaDe(item.nombre);
+    const familia = porNombre !== "otro" || !fortinet ? porNombre : familiaDe(texto);
     // Fuera de Fortinet solo se mira el NOMBRE: el `q` también busca en la descripción, donde
     // «switch» o «wifi» aparecen como accesorio de cualquier cosa (ver `precisionEnNombre`).
     let segmento: Fila["segmento"] = "fuera";
     if (fortinet) segmento = "fortinet";
     else if (!RE_RUIDO.test(item.nombre)) {
-      const fn = familiaDe(item.nombre);
-      if (fn === "firewall" || (fn === "licencia_soporte" && /firewall|cortafuego/i.test(item.nombre))) segmento = "firewall";
+      const fn = porNombre;
+      if (RE_FIREWALL_NOMBRE.test(item.nombre) && !RE_NO_FIREWALL.test(item.nombre)) segmento = "firewall";
       else if (fn === "switch" || fn === "access_point" || fn === "transceptor") segmento = fn;
       else if (/wi-?fi|inal[aá]mbric/i.test(item.nombre) && /red|router|antena|cobertura|conectividad/i.test(item.nombre)) segmento = "access_point";
     }
@@ -393,7 +407,14 @@ async function main() {
   }
   if (!listado) throw new Error(`No existe ${LISTADO_PATH}: correr sin --solo-informe primero.`);
   mkdirSync(path.dirname(INFORME_PATH), { recursive: true });
-  writeFileSync(INFORME_PATH, informe(listado, detalles));
+  // Las conclusiones las escribe una persona: se conservan entre corridas, como los bloques con
+  // marcadores de `docs/index.html`.
+  const previo = existsSync(INFORME_PATH) ? readFileSync(INFORME_PATH, "utf8") : "";
+  const conclusiones = previo.match(/<!-- CONCLUSIONES:INICIO -->[\s\S]*?<!-- CONCLUSIONES:FIN -->/)?.[0] ??
+    "<!-- CONCLUSIONES:INICIO -->\n## Conclusiones\n\n_Pendiente: se escriben a mano después de leer las tablas._\n<!-- CONCLUSIONES:FIN -->";
+  const cuerpo = informe(listado, detalles);
+  const corte = cuerpo.indexOf("## Resumen por segmento");
+  writeFileSync(INFORME_PATH, cuerpo.slice(0, corte) + conclusiones + "\n\n" + cuerpo.slice(corte));
   console.log(`Informe: ${path.relative(ROOT_DIR, INFORME_PATH)}`);
 }
 
