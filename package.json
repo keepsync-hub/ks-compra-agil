@@ -12,6 +12,7 @@
     "keywords": "tsx src/scripts/keywords.ts",
     "leads": "tsx src/scripts/leads.ts",
     "kompu": "tsx src/scripts/kompu.ts",
+    "estudio-fortinet": "tsx src/scripts/estudio-fortinet.ts",
     "mercado": "tsx src/scripts/mercado.ts",
     "estudio": "tsx src/scripts/estudio-mercado.ts",
     "criterios": "tsx src/scripts/proponer-criterios.ts",
