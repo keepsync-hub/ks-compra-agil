@@ -26,7 +26,12 @@ import {
  *     --linea="Claude Max 5x|100|1|12|Precio publicado por Anthropic: USD 100/mes" \
  *     --linea="Claude Max 20x|200|1|12|Precio publicado por Anthropic: USD 200/mes" \
  *     [--tc=925.25] [--tc-fuente="dólar observado, mindicador.cl, 28-08-2026"] \
- *     [--slug=ClaudeMax] [--salida=output/cotizaciones-standalone]
+ *     [--slug=ClaudeMax] [--salida=output/cotizaciones-standalone] \
+ *     [--condicion="texto"…] [--validez="texto"] [--tope=6000000]
+ *
+ * `--condicion` (repetible) agrega condiciones comerciales; `--validez` reemplaza la frase de
+ * validez por defecto. `--tope` sirve cuando la misma suscripción se cotiza para una Compra Ágil:
+ * si el total con IVA lo supera, no se genera nada — mismo guardrail que `npm run cotizar`.
  *
  * `--linea` se repite una vez por producto y lleva cinco campos separados por `|`:
  * producto, USD por usuario/mes, usuarios, meses, fuente del precio de lista.
@@ -34,20 +39,23 @@ import {
 interface Args {
   simples: Map<string, string>;
   lineas: string[];
+  condiciones: string[];
 }
 
 function args(): Args {
   const simples = new Map<string, string>();
   const lineas: string[] = [];
+  const condiciones: string[] = [];
   for (const a of process.argv.slice(2)) {
     const eq = a.indexOf("=");
     if (!a.startsWith("--") || eq === -1) continue;
     const clave = a.slice(2, eq);
     const valor = a.slice(eq + 1);
     if (clave === "linea") lineas.push(valor);
+    else if (clave === "condicion") condiciones.push(valor);
     else simples.set(clave, valor);
   }
-  return { simples, lineas };
+  return { simples, lineas, condiciones };
 }
 
 function requerido(m: Map<string, string>, clave: string): string {
@@ -114,7 +122,7 @@ function slugify(s: string): string {
 }
 
 async function main() {
-  const { simples: m, lineas: lineasCrudas } = args();
+  const { simples: m, lineas: lineasCrudas, condiciones: condicionesExtra } = args();
   const id = requerido(m, "id");
   const titulo = requerido(m, "titulo");
   const cliente = requerido(m, "cliente");
@@ -160,7 +168,26 @@ async function main() {
     fuenteTipoCambio,
     oferente,
     fecha,
+    condicionesExtra,
+    validez: m.get("validez")?.trim() || undefined,
   });
+
+  const topeTxt = m.get("tope");
+  if (topeTxt !== undefined) {
+    const tope = Number(topeTxt);
+    if (!Number.isFinite(tope) || tope <= 0) {
+      console.error(`--tope inválido: "${topeTxt}"`);
+      process.exit(1);
+    }
+    if (resumen.total_clp > tope) {
+      console.error(
+        `INADMISIBLE: el total ($${resumen.total_clp.toLocaleString("es-CL")}) supera el tope de ` +
+          `$${tope.toLocaleString("es-CL")}. No se genera la cotización.`,
+      );
+      process.exit(1);
+    }
+    console.log(`Total $${resumen.total_clp.toLocaleString("es-CL")} bajo el tope de $${tope.toLocaleString("es-CL")}.`);
+  }
 
   const dirSalida = path.resolve(ROOT_DIR, m.get("salida") ?? "output/cotizaciones-standalone");
   mkdirSync(dirSalida, { recursive: true });

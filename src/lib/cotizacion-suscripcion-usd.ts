@@ -64,6 +64,12 @@ export interface SuscripcionUsdEntrada {
   fecha: Date;
   /** Condiciones extra, además de las que este módulo agrega siempre. */
   condicionesExtra?: string[];
+  /**
+   * Reemplaza la frase de validez por defecto (30 días desde la emisión, con el valor sujeto al
+   * tipo de cambio de la facturación). Hace falta cuando las bases fijan otra vigencia y exigen un
+   * valor total final, como el TDR de Alto Hospicio 3447-431-COT26 (Arts. 26 y 42).
+   */
+  validez?: string;
 }
 
 export interface LineaSuscripcionUsdResumen {
@@ -210,7 +216,8 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
     // comercial, y no aporta nada al cliente que recibe el documento. Que este cotizador no sirva
     // para ofertar en Compra Ágil (no respeta tope ni admisibilidad) sigue dicho donde corresponde:
     // el encabezado de este módulo, el de `src/scripts/cotizar-suscripcion.ts` y CLAUDE.md.
-    "Válida por 30 días desde la fecha de emisión. El valor puede cambiar de acuerdo al tipo de cambio vigente al momento de la facturación.",
+    e.validez ??
+      "Válida por 30 días desde la fecha de emisión. El valor puede cambiar de acuerdo al tipo de cambio vigente al momento de la facturación.",
     ...(e.condicionesExtra ?? []),
   ];
 
@@ -293,7 +300,7 @@ function generarHtml(e: SuscripcionUsdEntrada, r: SuscripcionUsdResumen): string
   <h2 style="font-size:13pt;margin-top:16pt;">Condiciones comerciales</h2>
   <ul class="cond">${condiciones.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>
   <div class="footer" style="color:${suficiente ? COLOR.gray : COLOR.warn};font-weight:${suficiente ? "normal" : "bold"};">
-    ${esc(e.oferente.razon_social)} — RUT ${esc(e.oferente.rut)} — ${esc(e.oferente.contacto_email)} — Válido por 30 días
+    ${esc(e.oferente.razon_social)} — RUT ${esc(e.oferente.rut)} — ${esc(e.oferente.contacto_email)}${e.validez ? "" : " — Válido por 30 días"}
   </div>
 </div>
 

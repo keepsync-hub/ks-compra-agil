@@ -1,0 +1,76 @@
+{
+  "id": "Q-20261001-AltoHospicio",
+  "titulo": "ChatGPT Business (OpenAI)",
+  "cliente": "Municipalidad de Alto Hospicio — Compra Ágil 3447-431-COT26",
+  "fuente_tipo_cambio": "mindicador.cl (dólar observado, 2026-10-01)",
+  "tipo_cambio_observado": 972.6,
+  "monto_usd_total": 960,
+  "neto_clp": 1348040,
+  "iva_clp": 256128,
+  "total_clp": 1604168,
+  "lineas": [
+    {
+      "producto": "ChatGPT Business (asiento estándar, facturación anual)",
+      "usuarios": 4,
+      "meses": 12,
+      "precio_lista_usd_mes": 20,
+      "fuente_precio_lista": "OpenAI Help Center, Manage billing and seats in ChatGPT Business (help.openai.com/en/articles/8792536): asiento estándar USD 20/usuario/mes con facturación anual, mínimo 2 asientos; consultado 2026-10-01",
+      "monto_usd": 960,
+      "neto_unitario_mensual_clp": 28084,
+      "neto_clp": 1348040,
+      "iva_clp": 256128,
+      "total_clp": 1604168,
+      "calculo": {
+        "monto_usd": 960,
+        "tipo_cambio_observado": 972.6,
+        "recargo_tipo_cambio_pct": 5.5,
+        "tipo_cambio_ajustado": 1026.09,
+        "costo_clp": 985049,
+        "impuesto_no_recuperable_pct": 19,
+        "costo_con_impuesto_clp": 1172209,
+        "markup_pct": 15,
+        "precio_cotizacion_clp": 1348040,
+        "iva_venta_pct": 19,
+        "valor_final_clp": 1604168,
+        "pasos": [
+          {
+            "paso": "1. Tipo de cambio ajustado",
+            "descripcion": "Tipo de cambio observado ($972.6) + 5.5%",
+            "valor_clp": 1026.09
+          },
+          {
+            "paso": "2. Costo",
+            "descripcion": "USD 960 × tipo de cambio ajustado",
+            "valor_clp": 985049
+          },
+          {
+            "paso": "3. Costo con impuesto no recuperable",
+            "descripcion": "Costo + 19% (impuesto que KeepSync no puede recuperar, se trata como costo)",
+            "valor_clp": 1172209
+          },
+          {
+            "paso": "4. Precio de cotización (neto)",
+            "descripcion": "Costo con impuesto + 15% de markup — este es el precio a utilizar en la cotización",
+            "valor_clp": 1348040
+          },
+          {
+            "paso": "5. Valor final (con IVA de venta)",
+            "descripcion": "Precio de cotización + 19% de IVA — valor final a presentar",
+            "valor_clp": 1604168
+          }
+        ]
+      }
+    }
+  ],
+  "oferente": {
+    "razon_social": "KEEPSYNC SPA",
+    "rut": "78.441.121-4",
+    "contacto_email": "cristian.molina@keepsync.ai",
+    "campos_por_confirmar": [
+      "domicilio legal",
+      "representante legal (nombre completo y RUN)",
+      "giro declarado ante el SII"
+    ]
+  },
+  "emitida_en": "2026-10-01T18:43:11.301Z"
+}
