@@ -21,10 +21,37 @@ async function cargarDetalle(codigo: string): Promise<CompraAgilDetalle> {
   return obtenerDetalleCompraAgil(codigo);
 }
 
+/**
+ * Banderas `--flag=valor` (convención del repo) para cuando el texto de la compra no basta:
+ * - `--linea=<clave>:<cantidad>` (repetible) fija los tramos a mano, con las claves de
+ *   `pricing.planes` de company.json. Hace falta cuando la ficha no nombra a Claude
+ *   ("tipo ChatGPT o equivalente") o cuando su `cantidad` no son usuarios sino meses.
+ * - `--meses=<n>` fija la vigencia si el texto no la trae o la trae mal.
+ * - `--condicion=<texto>` (repetible) agrega una condición comercial que exigen los adjuntos.
+ * Sin banderas, el comportamiento es el de siempre: todo sale del texto de la compra.
+ */
+function leerBanderas(args: string[]) {
+  const valores = (nombre: string) =>
+    args.filter((a) => a.startsWith(`--${nombre}=`)).map((a) => a.slice(nombre.length + 3));
+  const lineas = valores("linea").map((v) => {
+    const m = /^([a-z0-9_]+):(\d+)$/.exec(v);
+    if (!m) throw new Error(`--linea=${v} no tiene la forma <clave>:<cantidad> (ej. --linea=team_standard:4).`);
+    return { clave: m[1]!, cantidad: Number(m[2]) };
+  });
+  const mesesTxt = valores("meses").at(-1);
+  const meses = mesesTxt === undefined ? undefined : Number(mesesTxt);
+  if (meses !== undefined && !(Number.isInteger(meses) && meses > 0)) {
+    throw new Error(`--meses=${mesesTxt} no es un número entero de meses.`);
+  }
+  return { lineas, meses, condiciones: valores("condicion") };
+}
+
 async function main() {
-  const codigo = process.argv[2];
+  const args = process.argv.slice(2);
+  const codigo = args.find((a) => !a.startsWith("--"));
+  const banderas = leerBanderas(args);
   if (!codigo) {
-    console.error("Uso: npm run cotizar -- <codigo>  (ej. npm run cotizar -- 1614-47-COT26)");
+    console.error("Uso: npm run cotizar -- <codigo> [--linea=<clave>:<n>…] [--meses=<n>] [--condicion=<texto>…]");
     process.exitCode = 1;
     return;
   }
@@ -48,12 +75,25 @@ async function main() {
 
   const condiciones = extraerCondiciones(detalle);
 
-  const meses = condiciones.meses_vigencia ?? 12;
-  if (!condiciones.meses_vigencia) {
+  const meses = banderas.meses ?? condiciones.meses_vigencia ?? 12;
+  if (!banderas.meses && !condiciones.meses_vigencia) {
     console.warn(`No se detectó la duración explícita en el texto — asumiendo 12 meses. Confirmar manualmente.`);
   }
 
-  const lineasPlan = construirLineasACotizar(detalle, condiciones, meses);
+  for (const l of banderas.lineas) {
+    if (!company.pricing.planes[l.clave]) {
+      console.error(`--linea: "${l.clave}" no está en pricing.planes de company.json (${Object.keys(company.pricing.planes).join(", ")}).`);
+      process.exitCode = 1;
+      return;
+    }
+  }
+  const lineasPlan =
+    banderas.lineas.length > 0
+      ? banderas.lineas.map((l) => ({ ...l, meses, requiereRevision: false }))
+      : construirLineasACotizar(detalle, condiciones, meses);
+  if (banderas.lineas.length > 0) {
+    console.log(`Tramos fijados a mano con --linea (no detectados del texto): ${banderas.lineas.map((l) => `${l.cantidad}×${l.clave}`).join(", ")}.`);
+  }
   if (!lineasPlan) {
     console.error(
       `No se pudo determinar automáticamente el plan y la cantidad a cotizar en ${codigo} ` +
@@ -134,6 +174,7 @@ async function main() {
     "Valor de despacho / entrega digital incluido en el monto total.",
     "Proveedor con habilidad vigente en el Sistema de Información (Mercado Público).",
     ...condiciones.documentos_exigidos.map((d) => `Documento exigido: ${d} — adjuntar junto con la oferta.`),
+    ...banderas.condiciones,
   ];
   if (condiciones.excluyentes.length > 0) {
     condicionesComerciales.push(`Condiciones excluyentes detectadas en las bases: ${condiciones.excluyentes.join(" | ")}`);
