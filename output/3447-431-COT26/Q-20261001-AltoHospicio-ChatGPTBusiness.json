@@ -14,7 +14,7 @@
       "usuarios": 4,
       "meses": 12,
       "precio_lista_usd_mes": 20,
-      "fuente_precio_lista": "OpenAI Help Center, Manage billing and seats in ChatGPT Business (help.openai.com/en/articles/8792536): asiento estándar USD 20/usuario/mes con facturación anual, mínimo 2 asientos; consultado 2026-10-01",
+      "fuente_precio_lista": "OpenAI Help Center, Manage billing and seats in ChatGPT Business (help.openai.com/en/articles/8792536) y ChatGPT Business - Overview (8792828): asiento estándar USD 20/usuario/mes con facturación anual, mínimo 2 asientos; consultado 2026-10-01",
       "monto_usd": 960,
       "neto_unitario_mensual_clp": 28084,
       "neto_clp": 1348040,
@@ -72,5 +72,5 @@
       "giro declarado ante el SII"
     ]
   },
-  "emitida_en": "2026-10-01T20:18:31.613Z"
+  "emitida_en": "2026-10-01T22:50:53.662Z"
 }
