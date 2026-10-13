@@ -3243,5 +3243,99 @@
       }
     ],
     "generado": "2026-09-28"
+  },
+  "1098710-186-COT26": {
+    "codigo": "1098710-186-COT26",
+    "curso": "Inteligencia Artificial para la Gestión Pública: uso práctico de Claude en el trabajo diario y el análisis de datos",
+    "organismo": "Subsecretaría de Ciencia, Tecnología, Conocimiento e Innovación",
+    "topeClp": 1200000,
+    "totalClp": 1080000,
+    "descuentoPct": 10,
+    "regimenTributario": "impuestos_incluidos",
+    "citaTributaria": "«El monto máximo disponible es de $1.200.000 impuestos incluidos, por la ejecución completa del servicio (dos grupos, 24 horas cronológicas). Las ofertas pueden ser afectas o exentas de IVA, pero el monto total no podrá exceder el señalado» — numeral 6. Y numeral 4 c): «La cotización debe indicar si el valor es afecto o exento de IVA, lo que se informará en el Anexo Técnico N°1».",
+    "criterioEvaluacion": "puntaje",
+    "fechaCierre": "2026-10-14 14:00",
+    "archivoPdfRelativo": "capacitaciones-cotizaciones/1098710-186-COT26/Q-20261013-SubsecretariaDeCienciaTecnologiaConocimientoEInnov.pdf",
+    "fuenteDocumentos": [
+      "Capacitación curso.docx",
+      "data/1098710-186-COT26/detalle.json (ficha del portal)"
+    ],
+    "requisitosPorConfirmar": 5,
+    "pendientes": [
+      "Designar al relator/a y adjuntar título, currículum y certificados de los cursos dictados. Sin esos antecedentes la oferta se descarta en admisibilidad, cualquiera sea el precio.",
+      "Completar la identidad del oferente para la carátula y los anexos firmados: razón social, RUT, domicilio legal, representante legal (nombre completo y RUN), giro declarado ante el SII. Ya confirmados contra el Registro de Proveedores: KeepSync (razón social por confirmar), RUT por confirmar.",
+      "Validar el precio: se ofertó un 10% bajo el tope por regla del usuario, no desde un costo real. Verificar que el valor cubra los costos de ejecución antes de comprometerlo.",
+      "Confirmar la modalidad con el organismo mediante consulta formal. La ficha del portal declara un plazo de entrega de 3 días, y el TDR exige 24 horas de ejecución en dos grupos con fechas distintas —18 sincrónicas, 6 asincrónicas y ejercicios autónomos revisados entre módulos— sin fijar fechas. Se proponen fechas en el Anexo N°1 y se consulta el plazo efectivo a la contraparte."
+    ],
+    "score": {
+      "score": 70,
+      "sinInformacion": 6,
+      "noCumple": 0,
+      "cubiertos": 0,
+      "total": 6,
+      "porTipo": [
+        {
+          "tipo": "alcance",
+          "n": 2
+        },
+        {
+          "tipo": "historial_portal",
+          "n": 2
+        },
+        {
+          "tipo": "experiencia_relator",
+          "n": 1
+        },
+        {
+          "tipo": "infraestructura",
+          "n": 1
+        }
+      ]
+    },
+    "criterios": [
+      {
+        "id": "cursos-de-claude-valen-40",
+        "exige": "Acreditar cursos de capacitación cuyo programa identifique a Claude como la herramienta central, dictados por el oferente en los últimos 36 meses, con documento formal y programa de cada uno. Es el criterio más pesado (40%): sin ningún curso de Claude se obtienen 10 de 100 puntos, y más de 9 da el máximo. Cursos de otras herramientas de IA no cuentan.",
+        "cita": "TDR, numeral 5, Criterio 2 — «Se evaluará exclusivamente la experiencia en cursos de Claude… Más de 9 cursos de Claude 100; Entre 5 y 9 70; Entre 1 y 4 30; No acredita ningún curso de Claude (solo otros cursos de IA generativa) 10». Y: «No se contabilizarán experiencias sin el programa del curso».",
+        "tipo": "historial_portal",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "experiencia-ia-generativa-3-anios",
+        "exige": "Acreditar como oferente experiencia en cursos de IA generativa en los últimos 3 años, con contratos, órdenes de compra, boletas de honorarios o ID de Mercado Público, más el programa de cada curso. Es requisito de admisibilidad, no solo puntaje.",
+        "cita": "TDR, numeral 4 g) — «El oferente debe acreditar experiencia en la ejecución de cursos de capacitación en inteligencia artificial generativa en los últimos 3 años»; y causal de inadmisibilidad (c): «no acompañen documentos que acrediten la experiencia exigida en la letra g)».",
+        "tipo": "historial_portal",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "relator-y-cv-en-anexo-1",
+        "exige": "Informar en el Anexo N°1 al relator/a con su título profesional e institución, y adjuntar su CV. Sin eso la oferta es inadmisible.",
+        "cita": "TDR, numeral 4, causal (b) — «no informen en el Anexo Técnico N°1 al relator(a) del curso o no adjunten su CV»; Anexo N°1, sección B — «Se debe adjuntar el CV del relator(a) de forma obligatoria».",
+        "tipo": "experiencia_relator",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "plataforma-asincronica-con-registro",
+        "exige": "Ofertar una plataforma propia o Google Classroom que aloje el módulo 4 (cápsulas, guías, ejercicios, foro de consultas y evaluación final) con registro del avance de cada participante, y las clases grabadas a las 24 horas. Hay que tener los recursos del módulo 4 producidos y la plataforma lista para los dos grupos.",
+        "cita": "TDR, numeral 4 e) — «Ofertar una plataforma propia o Google Classroom que aloje el módulo asincrónico (cápsulas, guías, ejercicios, foro de consultas y evaluación final) con registro del avance de cada participante, y las clases grabadas, disponibles 24 horas después de cada sesión sincrónica».",
+        "tipo": "infraestructura",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "plazo-de-3-dias-frente-a-24-horas-en-dos-grupos",
+        "exige": "Aclarar el plazo de ejecución: la ficha declara 3 días de plazo de entrega y el TDR no fija fechas, pero exige dos grupos en fechas distintas, tres sesiones sincrónicas por grupo con ejercicios autónomos revisados entre una y otra, y un módulo asincrónico.",
+        "cita": "Ficha del portal (detalle.json) — «plazo_entrega_dias: 3»; frente al TDR, resumen del requerimiento — «Se deben separar a los funcionarios en dos grupos de participantes, a los que se les debe impartir el curso en fechas distintas», y numeral 2 — «al cierre de los módulos 1, 2 y 3 se asignará un ejercicio breve… que será revisado».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      },
+      {
+        "id": "funcionalidades-habilitadas-en-enterprise",
+        "exige": "Confirmar con la contraparte qué funcionalidades están habilitadas en las licencias Claude Enterprise de la Subsecretaría —conectores con Google Drive o Microsoft 365, Claude en Excel/Word/PowerPoint, skills y plugins, Claude en Chrome, tareas programadas, búsqueda web—, porque el módulo 4 y el Anexo N°3 tienen que nombrar qué se enseña y el TDR condiciona los contenidos a lo habilitado.",
+        "cita": "TDR, numeral 3.1, Módulo 4 — «Los contenidos se ajustarán a las funcionalidades habilitadas en las licencias institucionales»; Anexo N°3, Módulo 4 — «indicar qué videos o instructivos se presentarán, qué conectores, skills o plugins se enseñarán de forma asincrónica».",
+        "tipo": "alcance",
+        "estado": "sin_informacion"
+      }
+    ],
+    "generado": "2026-10-13"
   }
 }
